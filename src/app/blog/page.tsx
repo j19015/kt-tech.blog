@@ -1,33 +1,24 @@
-// pages/index.js
 import Link from "next/link";
 import { client } from "@/../libs/client"
-
-// 型定義
-interface HomeProps {
-  blog: { id: string; title: string; body: string; }[];
-}
+import { Blog, Blogs } from "@/../interface/blog"
 
 
-export default function Home({ blog }: HomeProps) {
+export default async () => {
+  //APIリクエスト
+  const data = await client.get({ endpoint: "blog" });
+  //コンテンツ抽出
+  const blogs: Blogs = data.contents;
+  //表示内容
   return (
     <div>
       <ul>
-        {blog.map((blog) => (
+        {blogs.map((blog :Blog) => (
           <li key={blog.id}>
             <Link href={`/blog/${blog.id}`}>{blog.title}</Link>
+            <Link href={`/blog/${blog.id}`}>{blog.body}</Link>
           </li>
         ))}
       </ul>
     </div>
   );
 }
-
-// データをテンプレートに受け渡す部分の処理を記述します
-export const getStaticProps = async () => {
-  const data = await client.get({ endpoint: "blog" });
-  return {
-    props: {
-      blog: data.contents,
-    },
-  };
-};
