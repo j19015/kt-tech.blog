@@ -8,6 +8,8 @@ export default async () => {
   const data = await client.get({ endpoint: "blog" });
   //コンテンツ抽出
   const blogs: Blogs = data.contents;
+  //取得内容
+  console.log(blogs);
   //表示内容
   return (
     <div>
