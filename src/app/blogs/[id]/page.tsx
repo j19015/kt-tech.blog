@@ -1,8 +1,8 @@
 "use client"
 import Link from "next/link";
 import { client } from "@/../libs/client"
-import { Blog} from "@/../interface/blog"
-import { useParams} from 'next/navigation';
+import { Blog } from "@/../interface/blog"
+import { useParams } from 'next/navigation';
 import { useEffect,useState } from "react";
 
 export default () => {
@@ -29,6 +29,7 @@ export default () => {
       setBlog(data);
 
     }catch(e){
+      //エラー出力
       console.log(e);
     }
   }
