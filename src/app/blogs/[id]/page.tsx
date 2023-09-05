@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link";
-import { client } from "@/../libs/client"
+import { client } from "@/../libs/microcms"
 import { Blog } from "@/../interface/blog"
 import { useParams } from 'next/navigation';
 import { useEffect,useState } from "react";

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { client } from "@/../libs/client"
+import { client } from "@/../libs/microcms"
 import { Blog, Blogs } from "@/../interface/blog"
 
 
