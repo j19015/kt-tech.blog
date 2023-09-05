@@ -1,26 +1,30 @@
 import Link from "next/link";
-import { client } from "@/../libs/microcms"
-import { Blog, Blogs } from "@/../interface/blog"
+import { getList } from "../../../libs/microcms";
 
+export default async function StaticPage(){
+  const { contents } =await getList();
 
-export default async () => {
-  //APIリクエスト
-  const data = await client.get({ endpoint: "blog" });
-  //コンテンツ抽出
-  const blogs: Blogs = data.contents;
-  //取得内容
-  console.log(blogs);
-  //表示内容
+  //ページの生成された時間を取得
+  const time = new Date().toString();
+
+  if (!contents || contents.length ===0 ){
+    return <h1>No Contents</h1>;
+  }
+
   return (
-    <div>
-      <ul>
-        {blogs.map((blog :Blog) => (
-          <li key={blog.id}>
-            <Link href={`/blog/${blog.id}`}>{blog.title}</Link>
-            <Link href={`/blog/${blog.id}`}>{blog.body}</Link>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+    <>
+      <div>
+        <h1>{time}</h1>
+        <ul>
+          {contents.map((blog)=>{
+            return (
+              <li key={blog.id}>
+                <Link href={`/blogs/${blog.id}`}>{blog.title}</Link>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+    </>
+  )
 }
