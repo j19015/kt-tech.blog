@@ -24,14 +24,14 @@ export const Header = () => {
         className={
           isOpen
             ? "z-40 bg-blue-100 fixed top-0 right-0 bottom-0 left-0 h-screen flex flex-col"
-            : "fixed right-[-100%] md:right-4"
+            : "right-[-100%] md:right-4"
         }
       >
         <ul
           className={
             isOpen
               ? "flex h-screen justify-center items-center flex-col gap-6 text-xl"
-              : "block md:flex md:gap-8"
+              : " hidden block md:flex md:gap-8"
           }
         >
           <li>
