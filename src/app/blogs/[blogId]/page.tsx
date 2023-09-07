@@ -50,7 +50,9 @@ export default async function StaticDetailPage({
           </div>
           <div className="p-4">
             <h1>{blog.title}</h1>
-            <p className="truncate" style={{ "width":"600px"}}>{blog.body}</p>
+            <div>
+            {parse(blog.body)}
+            </div>
           </div>
         </div>
         <div className='col-span-12 md:col-span-4 m-4 rounded-lg bg-gray-300'>
