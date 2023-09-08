@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getList } from "../../../libs/microcms";
 import Image from 'next/image';
+import Sidebar from '@/components/SIdebar/Sidebar';
 
 export default async function StaticPage(){
   const { contents } =await getList();
@@ -57,24 +58,7 @@ export default async function StaticPage(){
               );
             })}
           </div>
-          <div className='h-screen col-span-12 md:col-span-4 m-4 rounded-lg bg-gray-300'>
-            Sidebar
-            <div className='bg-gray-500 h-1/6 rounded-lg m-4'>
-              検索Form
-            </div>
-            <div className='bg-gray-500 h-1/6 rounded-lg m-4'>
-              注目記事
-            </div>
-            <div className='bg-gray-500 h-1/6 rounded-lg m-4'>
-              最新記事
-            </div>
-            <div className='bg-gray-500 h-1/6 rounded-lg m-4'>
-              カテゴリー
-            </div>
-            <div className='bg-gray-500 h-1/6 rounded-lg m-4'>
-              アーカイブ
-            </div>
-          </div>
+          <Sidebar/>
         </div>
       </div>
     </>
