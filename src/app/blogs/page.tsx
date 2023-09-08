@@ -16,34 +16,48 @@ export default async function StaticPage(){
   return (
     <>
       <h1>{time}</h1>
-      <div className='h-screen'>
-        <div className="h-full grid grid-cols-12 gap-2 grid-flow-row">
+      <div>
+        <div className="grid grid-cols-12 gap-2 grid-flow-row">
           <div className='col-span-12 md:col-span-8 m-4 rounded-lg bg-gray-300'>
             main
             {contents.map((blog)=>{
               return (
-                <>
-                  <div className='bg-gray-500 h-1/6 rounded-lg m-4' id={blog.id}>
-                    <div className="flex flex-wrap">
+                <div className="bg-gray-500 rounded-lg m-4 p-4" id={blog.id}>
+                  <div className="md:flex md:flex-row md:items-center">
+                    <div className="md:pr-4 w-full md:w-1/3">
                       <Link href={`/blogs/${blog.id}`}>
-                        <Image 
-                          src={ blog.eyecatch?.url ? blog.eyecatch?.url : `../../../public/images/no_image`}
+                        <Image
+                          src={blog.eyecatch?.url ? blog.eyecatch?.url : `../../../public/images/no_image`}
                           alt="画像"
-                          width={200}
-                          height={200}
+                          width={300} // 同じ値を設定
+                          height={300} // 同じ値を設定
+                          className="rounded-lg w-full" // 画像を横幅いっぱいにする
+                          style={{ minWidth: "180px" }}
                         />
                       </Link>
-                      <div>
-                        <h1>{blog.title}</h1>
-                        <p className="truncate" style={{ "width":"600px"}}>{blog.body}</p>
+                    </div>
+                    <div className="w-full md:w-2/3 mt-4 md:mt-0">
+                      <h1 className="text-2xl md:text-xl font-bold text-gray-800 my-2 md:mt-0 truncate">
+                        {blog.title}
+                      </h1>
+                      <div className="flex flex-wrap space-x-2 mt-2">
+                        <span className="text-gray-600 text-sm md:text-base">タグ1</span>
+                        <span className="text-gray-600 text-sm md:text-base">タグ2</span>
+                      </div>
+                      <div className="mt-4 flex items-center space-x-2">
+                        <button className="bg-blue-500 text-white px-4 py-2 rounded text-sm md:text-base">
+                          いいね
+                        </button>
+                        <span className="text-gray-600 text-sm md:text-base">いいね数: 100</span>
                       </div>
                     </div>
                   </div>
-                </>
-              )
+                </div>
+
+              );
             })}
           </div>
-          <div className='col-span-12 md:col-span-4 m-4 rounded-lg bg-gray-300'>
+          <div className='h-screen col-span-12 md:col-span-4 m-4 rounded-lg bg-gray-300'>
             Sidebar
             <div className='bg-gray-500 h-1/6 rounded-lg m-4'>
               検索Form
