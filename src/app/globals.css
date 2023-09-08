@@ -1,3 +1,116 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    font-family: 'Helvetica Neue', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7; /* Light grey background */
+    color: #333; /* Dark grey text color */
+}
+
+/* Apply base styles to the whole document */
+.markdown {
+    line-height: 1.6;
+}
+
+/* Headings */
+.markdown h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    border-left: 5px solid #3498db; /* Blue border */
+    padding-left: 0.5rem;
+    color: #444; /* Dark grey text color */
+}
+
+.markdown h2 {
+    font-size: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    border-left: 5px solid #2ecc71; /* Green border */
+    padding-left: 0.5rem;
+    color: #444;
+}
+
+.markdown h3 {
+    font-size: 1.8rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #444;
+}
+
+.markdown h4 {
+    font-size: 1.6rem;
+    margin-top: 1.2rem;
+    margin-bottom: 0.3rem;
+    color: #555; /* Slightly darker grey text color */
+}
+
+/* Lists */
+.markdown ul {
+    list-style-type: disc;
+    margin-left: 2rem;
+}
+
+.markdown ol {
+    list-style-type: decimal;
+    margin-left: 2rem;
+}
+
+/* Links */
+.markdown a {
+    color: #3498db; /* Blue link color */
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.markdown a:hover {
+    color: #2574a9; /* Hover color */
+    text-decoration: underline;
+}
+
+/* Code blocks */
+.markdown pre {
+    background-color: #f0f0f0; /* Light grey background */
+    padding: 1rem;
+    border-radius: 5px;
+    overflow-x: auto;
+    color: #444;
+}
+
+/* Inline code */
+.markdown code {
+    background-color: #f0f0f0;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Fira Code', monospace; /* Monospace font for code */
+    color: #555;
+}
+
+/* Blockquotes */
+.markdown blockquote {
+    border-left: 5px solid #ccc; /* Light grey border */
+    padding-left: 1rem;
+    margin: 0;
+    margin-left: 2rem;
+    color: #666; /* Grey text color */
+    font-style: italic;
+}
+
+/* Horizontal rule */
+.markdown hr {
+    border: none;
+    border-top: 2px solid #eee; /* Light grey border */
+    margin: 1.5rem 0;
+}
+
+/* Images */
+.markdown img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1.5rem auto;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
+}
