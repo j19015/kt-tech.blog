@@ -45,8 +45,8 @@ export default async function StaticDetailPage({
   return(
     <>
     <h1>{time}</h1>
-    <div className='h-screen'>
-      <div className="h-full grid grid-cols-12 gap-2 grid-flow-row">
+    <div>
+      <div className="grid grid-cols-12 gap-2 grid-flow-row">
         <div className='col-span-12 md:col-span-8 m-4 rounded-lg bg-gray-300'>
           
           main
@@ -67,7 +67,7 @@ export default async function StaticDetailPage({
             </div>
           </div>
         </div>
-        <div className='col-span-12 md:col-span-4 m-4 rounded-lg bg-gray-300'>
+        <div className='h-screen col-span-12 md:col-span-4 m-4 rounded-lg bg-gray-300'>
           Sidebar
           <div className='bg-gray-500 h-1/6 rounded-lg m-4'>
             検索Form
