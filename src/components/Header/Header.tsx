@@ -42,7 +42,7 @@ export const Header = () => {
             </Link>
           </li>
           <li>
-            <Link onClick={handleMenuClose} href="/blogs">
+            <Link onClick={handleMenuClose} href="/blogs/page/1">
               <span className="font-serif">
                 Blog
               </span>
