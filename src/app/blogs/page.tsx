@@ -29,7 +29,7 @@ export default async function StaticPage() {
                     </a>
                     <div className="p-5">
                       <a href={`/blogs/${blog.id}`}>
-                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 truncate">
+                        <h5 className="mb-2 lg:text-lg font-bold tracking-tight text-gray-900 truncate md:text-base sm:text-base">
                           {blog.title}
                         </h5>
                       </a>
