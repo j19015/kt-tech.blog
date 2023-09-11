@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getList } from "../../libs/microcms";
-import Image from 'next/image';
+import Image from "next/image";
 import Sidebar from "@/components/SIdebar/Sidebar"; // Sidebarのimportを修正
 
 export default async function StaticPage() {
@@ -14,33 +14,45 @@ export default async function StaticPage() {
     return <h1>No Contents</h1>;
   }
 
+  // 最新の4つの記事を取得
+  const latestBlogs = contents.slice(0, 4);
+
   return (
     <>
-    <h1>{time}</h1>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4"> {/* グリッドを設定 */}
-        <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
+      <h1>{time}</h1>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {contents.map((blog) => {
+            {latestBlogs.map((blog) => {
               return (
                 <div key={blog.id} className="w-full p-2 md:w-full lg:w-full">
                   <div className="bg-white border border-gray-200 rounded-lg shadow-md">
-                    <a href={`/blogs/${blog.id}`}>
-                      <img className="rounded-t-lg w-full  max-w-full" src={blog.eyecatch?.url} alt="" /> {/* 画像の高さと幅を指定 */}
-                    </a>
-                    <div className="p-5">
                       <a href={`/blogs/${blog.id}`}>
-                        <h5 className="mb-2 lg:text-lg font-bold tracking-tight text-gray-900 truncate md:text-base sm:text-base">
-                          {blog.title}
-                        </h5>
+                        <img
+                          className="rounded-t-lg w-full max-w-full"
+                          src={blog.eyecatch?.url}
+                          alt=""
+                        />
                       </a>
+                    <div className="p-5">
+                        <a href={`/blogs/${blog.id}`}>
+                          <h5 className="mb-2 lg:text-lg font-bold tracking-tight text-gray-900 truncate md:text-base sm:text-base">
+                            {blog.title}
+                          </h5>
+                        </a>
                     </div>
                   </div>
                 </div>
               );
             })}
           </div>
+          <div className="mt-8 flex justify-center lg:justify-center"> {/* 中央寄せまたは右寄せ */}
+            <a href="/blogs/page/1" className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
+              すべての記事を見る
+            </a>
+          </div>
         </div>
-        <div className="lg:col-span-1"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
+        <div className="lg:col-span-1">
           <Sidebar />
         </div>
       </div>
