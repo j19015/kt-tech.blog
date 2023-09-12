@@ -37,11 +37,11 @@ export const Sidebar = async () => {
 
             <div className="mb-6">
                 <h3 className="text-xl font-bold mb-4">最新記事</h3>
-                <ul className="list-disc list-inside text-gray-300">
+                <ul className="list-disc text-black">
                     {latestArticles.map((article) => (
-                        <li key={article.id} className="mb-2">
-                            <Link href={`/`} className="text-indigo-500 hover:text-indigo-700">
-                                {article.title}
+                        <li key={article.id} className="mb-2 truncate">
+                            <Link href={`/blogs/${article.id}`} className="text-indigo-500 hover:text-indigo-700">
+                                <strong>・</strong>{article.title}
                             </Link>
                         </li>
                     ))}
@@ -92,11 +92,11 @@ export const Sidebar = async () => {
 
             <div className="mb-6">
                 <h3 className="text-xl font-bold mb-4">アーカイブ</h3>
-                <ul className="list-disc list-inside text-gray-300">
+                <ul className="text-gray-300">
                     {archives.map((archive) => (
                         <li key={archive} className="mb-2">
-                            <Link href={`/`} className="text-indigo-500 hover:text-indigo-700">
-                                {archive}
+                            <Link href={`/`} className="text-indigo-500 hover:text-indigo-700 truncate">
+                                <strong>・</strong>{archive}
                             </Link>
                         </li>
                     ))}
