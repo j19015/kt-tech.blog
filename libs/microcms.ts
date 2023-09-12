@@ -13,8 +13,8 @@ export type Blog = {
  title: string;
  body: string;
  eyecatch?: MicroCMSImage;
- category? : MicroCMSQueries;
- tags? : MicroCMSQueries;
+ category? : Category;
+ tags? : Tag;
 
 } & MicroCMSDate;
 
