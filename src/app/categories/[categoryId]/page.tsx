@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation"
-import { getList,getTagList } from "../../../../libs/microcms"
+import { getList,getCategoryList } from "../../../../libs/microcms"
 import Sidebar from "@/components/SIdebar/Sidebar"
 import Link from "next/link";
 
 export async function generateStaticParams(){
-  const { contents } = await getTagList();
+  const { contents } = await getCategoryList();
 
   const paths = contents.map((category)=>{
     return {
