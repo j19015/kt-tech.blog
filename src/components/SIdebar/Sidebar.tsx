@@ -82,7 +82,7 @@ export const Sidebar = async () => {
                 <ul className="list-disc list-inside text-gray-300">
                 {tagList.map((tag) => (
                     <span key={tag.id} className="inline-block bg-indigo-500 text-white px-2 py-1 rounded-full text-sm mr-2 mb-2">
-                        <Link href="/">
+                        <Link href={`/tags/${tag.id}`}>
                             {tag.name}
                         </Link>
                     </span>
