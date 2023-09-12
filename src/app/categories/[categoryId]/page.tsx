@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import { getList,getTagList } from "../../../../libs/microcms"
 import Sidebar from "@/components/SIdebar/Sidebar"
+import Link from "next/link";
 
 export async function generateStaticParams(){
   const { contents } = await getTagList();
@@ -42,15 +43,15 @@ export default async function StaticDetailPage({
               return (
                 <div key={blog.id} className="w-full p-2 md:w-full lg:w-full">
                   <div className="bg-white border border-gray-200 rounded-lg shadow-md">
-                    <a href={`/blogs/${blog.id}`}>
+                    <Link href={`/blogs/${blog.id}`}>
                       <img className="rounded-t-lg w-full  max-w-full" src={blog.eyecatch?.url} alt="" /> {/* 画像の高さと幅を指定 */}
-                    </a>
+                    </Link>
                     <div className="p-5">
-                      <a href={`/blogs/${blog.id}`}>
+                      <Link href={`/blogs/${blog.id}`}>
                         <h5 className="mb-2 lg:text-lg font-bold tracking-tight text-gray-900 truncate md:text-base sm:text-base">
                           {blog.title}
                         </h5>
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>
