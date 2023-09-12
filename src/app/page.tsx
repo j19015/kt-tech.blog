@@ -31,19 +31,19 @@ export default async function StaticPage() {
               return (
                 <div key={blog.id} className="w-full p-2 md:w-full lg:w-full">
                   <div className="bg-white border border-gray-200 rounded-lg shadow-md">
-                      <a href={`/blogs/${blog.id}`}>
+                      <Link href={`/blogs/${blog.id}`}>
                         <img
                           className="rounded-t-lg w-full max-w-full"
                           src={blog.eyecatch?.url}
                           alt=""
                         />
-                      </a>
+                      </Link>
                     <div className="p-5">
-                        <a href={`/blogs/${blog.id}`}>
+                        <Link href={`/blogs/${blog.id}`}>
                           <h5 className="mb-2 lg:text-lg font-bold tracking-tight text-gray-900 truncate md:text-base sm:text-base">
                             {blog.title}
                           </h5>
-                        </a>
+                        </Link>
                     </div>
                   </div>
                 </div>
@@ -51,9 +51,9 @@ export default async function StaticPage() {
             })}
           </div>
           <div className="mt-8 flex justify-center lg:justify-center"> {/* 中央寄せまたは右寄せ */}
-            <a href="/blogs/page/1" className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
+            <Link href="/blogs/page/1" className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
               すべての記事を見る
-            </a>
+            </Link>
           </div>
         </div>
         <div className="lg:col-span-1">
