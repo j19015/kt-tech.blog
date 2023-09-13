@@ -43,26 +43,30 @@ export default async function StaticDetailPage({
   return(
     <>
     <div>
-      <div className="grid grid-cols-12 gap-2 grid-flow-row">
-        <div className='col-span-12 md:col-span-8 m-4 rounded-lg bg-gray-300'>
-          <div className="p-4">
-            <Link href={`/blogs/${blog.id}`}>
-              <Image 
-                src={ blog.eyecatch?.url ? blog.eyecatch?.url : `../../../public/images/no_image`}
-                alt="画像"
-                width={10000}
-                height={10000}
-                className="rounded-lg"
-              />
-            </Link>
-          </div>
-          <div className="p-4 markdown">
-            <h1>{blog.title}</h1>
-            <div dangerouslySetInnerHTML={{ __html: body.html() }}>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4"> {/* グリッドを設定 */}
+        <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
+          <div>
+            <div className="p-4">
+              <Link href={`/blogs/${blog.id}`}>
+                <Image 
+                  src={ blog.eyecatch?.url ? blog.eyecatch?.url : `../../../public/images/no_image`}
+                  alt="画像"
+                  width={10000}
+                  height={10000}
+                  className="rounded-lg"
+                />
+              </Link>
+            </div>
+            <div className="p-4 markdown">
+              <h1>{blog.title}</h1>
+              <div dangerouslySetInnerHTML={{ __html: body.html() }}>
+              </div>
             </div>
           </div>
         </div>
-        <Sidebar/>
+        <div className="lg:col-span-1"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
+          <Sidebar />
+        </div>
       </div>
     </div>
   </>
