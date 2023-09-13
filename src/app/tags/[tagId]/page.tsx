@@ -42,10 +42,10 @@ export default async function StaticDetailPage({
   return (
     <>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4"> {/* グリッドを設定 */}
-        <div className="text-center mt-1 w-full col-span-2">
-          <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-900 mb-6 underline">{tag_show.name}</h2>
-        </div>
         <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
+          <div className="text-center mt-1 w-full col-span-2">
+            <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-900 mb-6 underline">{tag_show.name}</h2>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filteredContents.map((blog) => {
               return (
