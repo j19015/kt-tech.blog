@@ -27,7 +27,11 @@ export default async function StaticDetailPage({
   const { contents } = await getList();
 
   //リストを指定のタグで絞り込み
-  const filteredContents = contents.filter((blog) => blog.category?.id === tagId);
+  //const filteredContents = contents.filter((blog) => blog.category?.id === tagId);
+
+  const filteredContents = contents.filter((blog) =>
+    blog.tags?.some((tag) => tag.id === tagId)
+  );
 
   if(!filteredContents){
     notFound();
