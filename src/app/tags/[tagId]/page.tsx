@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation"
-import { getList,getTagList } from "../../../../libs/microcms"
+import { getList,getTagList,getTagDetail } from "../../../../libs/microcms"
 import Sidebar from "@/components/SIdebar/Sidebar"
 import Link from "next/link";
 
@@ -26,21 +26,25 @@ export default async function StaticDetailPage({
   //リスト一覧を取得
   const { contents } = await getList();
 
-  //リストを指定のタグで絞り込み
-  //const filteredContents = contents.filter((blog) => blog.category?.id === tagId);
+  //タグの詳細情報を取得
+  const tag_show = await getTagDetail(tagId);
 
+  //リストを指定のタグで絞り込み
   const filteredContents = contents.filter((blog) =>
     blog.tags?.some((tag) => tag.id === tagId)
   );
 
+  //コンテンツがない場合
   if(!filteredContents){
     notFound();
   }
 
   return (
     <>
-      <h1>{time}</h1>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4"> {/* グリッドを設定 */}
+        <div className="text-center mt-1 w-full col-span-2">
+          <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-900 mb-6">{tag_show.name}</h2>
+        </div>
         <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filteredContents.map((blog) => {
