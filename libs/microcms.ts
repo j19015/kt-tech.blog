@@ -14,7 +14,7 @@ export type Blog = {
  body: string;
  eyecatch?: MicroCMSImage;
  category? : Category;
- tags? : Tag;
+ tags? : Tag[];
 
 } & MicroCMSDate;
 
