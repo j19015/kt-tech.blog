@@ -34,8 +34,6 @@ export default async function StaticDetailPage({
   console.log(blog.body)
   console.log(body.html())
 
-  //ページの生成された時間を取得
-  const time = new Date().toLocaleString();
 
   if(!blog){
     notFound();
@@ -44,12 +42,9 @@ export default async function StaticDetailPage({
 
   return(
     <>
-    <h1>{time}</h1>
     <div>
       <div className="grid grid-cols-12 gap-2 grid-flow-row">
         <div className='col-span-12 md:col-span-8 m-4 rounded-lg bg-gray-300'>
-          
-          main
           <div className="p-4">
             <Link href={`/blogs/${blog.id}`}>
               <Image 
