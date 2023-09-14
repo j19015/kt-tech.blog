@@ -18,7 +18,7 @@ body {
 
 .markdown h1 {
     margin-top: 50px;
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     font-weight: bold;
     margin-bottom: 1rem;
     border-left: 5px solid #3498db; /* Blue border */
@@ -28,7 +28,7 @@ body {
 
 .markdown h2 {
     margin-top: 30px;
-    font-size: 1.0rem;
+    font-size: 1.3rem;
     font-weight: bold;
     margin-top: 2rem;
     margin-bottom: 1rem;
@@ -39,7 +39,7 @@ body {
 
 .markdown h3 {
     margin-top: 20px;
-    font-size: 0.8rem;
+    font-size: 1.0rem;
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
     color: #444;
@@ -119,15 +119,15 @@ body {
 /* メディアクエリを追加 */
 @media (max-width: 768px) {
     .markdown h1 {
-        font-size: 1rem;
+        font-size: 1.2rem;
     }
 
     .markdown h2 {
-        font-size: 0.8rem;
+        font-size: 1.0rem;
     }
 
     .markdown h3 {
-        font-size: 0.5rem;
+        font-size: 0.7rem;
     }
 
     .markdown h4 {
