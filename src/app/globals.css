@@ -80,6 +80,7 @@ body {
     border-radius: 5px;
     overflow-x: auto;
     color: #f0f0f0;
+
 }
 
 .markdown code {
@@ -88,6 +89,21 @@ body {
     border-radius: 4px;
     font-family: 'Fira Code', monospace; /* Monospace font for code */
     color: #f0f0f0;
+}
+.markdown div{
+    position: relative;
+}
+
+.markdown div div[data-filename]::before {
+    content: attr(data-filename); /* data-filename属性の値を表示 */
+    color: #000; /* テキスト色 */
+    background-color: #fff;
+    padding: 0.25rem 0.5rem;
+    border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    position: absolute;
 }
 
 .markdown blockquote {
