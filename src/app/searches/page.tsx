@@ -2,14 +2,23 @@
 import Link from "next/link";
 import { getList } from "../../../libs/microcms";
 import Sidebar from "@/components/SIdebar/Sidebar"; // Sidebarのimportを修正
+import { useSearchParams } from "next/navigation";
 
 export default async function StaticPage() {
-  const { contents } = await getList();
-  console.log(contents);
+  
+  const searchParams = useSearchParams();
 
-  if (!contents || contents.length === 0) {
-    return <h1>No Contents</h1>;
+  const text = searchParams.get("text");
+  
+  let { contents } = await getList();
+
+  if (text){
+    const filteredContents = contents.filter(content => content.body.includes(text));
+    contents = filteredContents
   }
+
+  
+  console.log(contents);
 
   return (
     <>
@@ -17,7 +26,7 @@ export default async function StaticPage() {
         <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="text-center mt-1 w-full col-span-2">
-              <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-900 mb-6 underline">Search</h2>
+              <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-900 mb-6 underline">Search: {text} </h2>
             </div>
             {contents.map((blog) => {
               return (
