@@ -1,24 +1,49 @@
-"use client"
+'use client'
 import Link from "next/link";
-import { getList } from "../../../libs/microcms";
+import { useEffect,useState } from 'react';
 import Sidebar from "@/components/SIdebar/Sidebar"; // Sidebarのimportを修正
 import { useSearchParams } from "next/navigation";
+import { Blog, getList } from "../../../libs/microcms";
 
-export default async function StaticPage() {
-  
-  const searchParams = useSearchParams();
+export default function StaticPage() {
+//   const searchParams = useSearchParams();
+//   const text = searchParams.get("text");
+//   const [blogContents, setBlogContents] = useState<Blog[] | null>(null);
 
-  const text = searchParams.get("text");
-  
-  let { contents } = await getList();
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const { contents } = await getList();
 
-  if (text){
-    const filteredContents = contents.filter(content => content.body.includes(text));
-    contents = filteredContents
-  }
+//         if (text) {
+//           const filteredContents = await filterData(contents)
+//           await console.log("filter結果",filteredContents)
+//           await setBlogContents(filteredContents);
+//         } else {
+//           setBlogContents(contents);
+//         }
+//       } catch (error) {
+//         console.error('Error fetching data:', error);
+//       }
+//     };
 
-  
-  console.log(contents);
+//     const filterData= async(contents: Blog[])=>{
+//         if(text){
+//             const filteredContents = contents.filter(content => content.body.includes(text));
+//             return filteredContents
+//         }
+//         else{
+//             return null;
+//         }
+//     }
+
+//     fetchData();
+//     setBlogContents(null)
+//   }, [text]);
+
+//   useEffect(() => {
+//     console.log("検索結果", blogContents);
+//   }, [blogContents]);
 
   return (
     <>
@@ -26,26 +51,8 @@ export default async function StaticPage() {
         <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="text-center mt-1 w-full col-span-2">
-              <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-900 mb-6 underline">Search: {text} </h2>
+              <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-900 mb-6 underline">開発中 </h2>
             </div>
-            {contents.map((blog) => {
-              return (
-                <div key={blog.id} className="w-full p-2 md:w-full lg:w-full">
-                  <div className="bg-white border border-gray-200 rounded-lg shadow-md">
-                    <Link href={`/blogs/${blog.id}`}>
-                      <img className="rounded-t-lg w-full  max-w-full" src={blog.eyecatch?.url} alt="" /> {/* 画像の高さと幅を指定 */}
-                    </Link>
-                    <div className="p-5">
-                      <Link href={`/blogs/${blog.id}`}>
-                        <h5 className="mb-2 lg:text-lg font-bold tracking-tight text-gray-900 truncate md:text-base sm:text-base">
-                          {blog.title}
-                        </h5>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
           </div>
         </div>
         <div className="lg:col-span-1"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
