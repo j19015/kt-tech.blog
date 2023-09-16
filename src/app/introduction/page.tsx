@@ -2,9 +2,9 @@ import Sidebar from '@/components/SIdebar/Sidebar';
 
 export default function Home() {
   return (
-    <div className="grid grid-cols-12 gap-2 grid-flow-row">
-      <div className="col-span-12 md:col-span-8 m-4 rounded-lg bg-gray-100 p-6 shadow-md">
-        <div className="bg-white text-black p-8 rounded-lg">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4"> {/* グリッドを設定 */}
+        <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
+        <div className="bg-white text-black p-8 m-4 rounded-lg">
           <div className="text-center mt-1 w-full col-span-2">
             <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-900 mb-6">Introduction</h2>
           </div>
@@ -73,7 +73,9 @@ export default function Home() {
           </ul>
         </div>
       </div>
-      <Sidebar />
+      <div className="lg:col-span-1"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
+          <Sidebar />
+        </div>
     </div>
   );
 }
