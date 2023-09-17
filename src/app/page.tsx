@@ -2,9 +2,9 @@ import Link from "next/link";
 import { getList } from "../../libs/microcms";
 import Sidebar from "@/components/SIdebar/Sidebar"; // Sidebarのimportを修正
 import { Blog } from "../../libs/microcms";
-import Index from "@/components/Index";
+import Index from "@/components/Index/Index";
 
-export default async function StaticPage() {
+export default async function StaticPage () {
   const { contents } = await getList();
   console.log(contents);
 
