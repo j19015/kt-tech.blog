@@ -18,6 +18,12 @@ export type Blog = {
 
 } & MicroCMSDate;
 
+//props用
+
+export type BlogProps = {
+    contents: Blog[]
+}
+
 //タグの型定義
 export type Tag = {
     id: string;
