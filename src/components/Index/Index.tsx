@@ -1,4 +1,4 @@
-import { Blog,BlogProps} from "../../../libs/microcms";
+import {BlogProps} from "../../../libs/microcms";
 import Link from "next/link";
 
 export  const Index = ({contents} :BlogProps) => {
