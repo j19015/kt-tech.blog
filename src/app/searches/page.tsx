@@ -1,4 +1,4 @@
-'use client'
+
 import Link from "next/link";
 import { useEffect,useState } from 'react';
 import Sidebar from "@/components/SIdebar/Sidebar"; // Sidebarのimportを修正
