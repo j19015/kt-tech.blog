@@ -27,9 +27,7 @@ export default async function StaticPage () {
             <h1 className="lg:text-6xl md:text-5xl text-4xl font-bold text-blue-700 mb-2">Welcome to</h1>
             <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-900 mb-6">Kt Tech Blog</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Index contents = {latestBlogs}/>
-          </div>
+          <Index contents = {latestBlogs}/>
           <div className="mt-8 flex justify-center lg:justify-center"> {/* 中央寄せまたは右寄せ */}
             <Link href="/blogs/page/1" className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">
               すべての記事を見る
