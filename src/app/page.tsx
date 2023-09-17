@@ -21,14 +21,13 @@ export default async function StaticPage () {
 
   return (
     <>
-    
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 pb-5">
         <div className="lg:col-span-2">
+          <div className="text-center mt-1 w-full col-span-2">
+            <h1 className="lg:text-6xl md:text-5xl text-4xl font-bold text-blue-700 mb-2">Welcome to</h1>
+            <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-900 mb-6">Kt Tech Blog</h2>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="text-center mt-1 w-full col-span-2">
-              <h1 className="lg:text-6xl md:text-5xl text-4xl font-bold text-blue-700 mb-2">Welcome to</h1>
-              <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-900 mb-6">Kt Tech Blog</h2>
-            </div>
             <Index contents = {latestBlogs}/>
           </div>
           <div className="mt-8 flex justify-center lg:justify-center"> {/* 中央寄せまたは右寄せ */}
