@@ -63,7 +63,7 @@ export default async function StaticPaginationPage({
             <div className="text-center mt-1 w-full col-span-2">
               <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-900 mb-6 underline">Blog</h2>
             </div>
-            <Index contents={contents}/>
+            <Index contents={contentSlice}/>
             <Paginate currentPage={Number(pageId)} totalPage={Math.ceil(contents.length/6)}></Paginate>
           </div>
           <div className="lg:col-span-1"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
