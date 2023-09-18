@@ -78,7 +78,7 @@ export const Sidebar = async () => {
                 <ul className="text-gray-300">
                     {archives.map((archive) => (
                         <li key={archive} className="mb-2">
-                            <Link href={`/`} className="text-indigo-500 hover:text-indigo-700 truncate">
+                            <Link href={`/archives/${archive}`} className="text-indigo-500 hover:text-indigo-700 truncate">
                                 <strong>・</strong>{archive}
                             </Link>
                         </li>
