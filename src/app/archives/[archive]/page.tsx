@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation"
-import { getList } from "../../../libs/microcms";
+import { getList } from "../../../../libs/microcms";
 import Sidebar from "@/components/SIdebar/Sidebar"
 import Index from "@/components/Index/Index";
 import Link from "next/link";
@@ -27,7 +27,8 @@ export default async function StaticDetailPage({
   //リスト一覧を取得
   const { contents } = await getList();
 
-  const filteredContents = contents.filter((item) => item.createdAt.startsWith(archive));
+  //コンテンツを日付でフィルター
+  const filteredContents = contents.filter((item) => item.createdAt.slice(0, 7)===archive);
 
   //コンテンツがない場合
   if(!filteredContents){
