@@ -19,7 +19,7 @@ export const Sidebar = async () => {
             <Form/>
 
             <div className="mb-10">
-                <h3 className="text-xl font-bold mb-4">最新記事</h3>
+                <h3 className="text-xl font-bold mb-4 underline">最新記事</h3>
                 <ul className="list-disc text-black">
                     {latestArticles.map((article) => (
                         <li key={article.id} className="mb-4 truncate">
@@ -32,7 +32,7 @@ export const Sidebar = async () => {
             </div>
 
             <div className="mb-10">
-                <h3 className="text-xl font-bold mb-4">カテゴリー</h3>
+                <h3 className="text-xl font-bold mb-4 underline">カテゴリー</h3>
                 <div className="flex flex-wrap gap-2">
                     {categoryList.map((category) => (
                         <Link key={category.id} href={`/categories/${category.id}`} className="text-indigo-500">
@@ -61,7 +61,7 @@ export const Sidebar = async () => {
 
 
             <div className="mb-10">
-                <h3 className="text-xl font-bold mb-4">タグ</h3>
+                <h3 className="text-xl font-bold mb-4 underline">タグ</h3>
                 <ul className="list-disc list-inside text-gray-300">
                 {tagList.map((tag) => (
                     <span key={tag.id} className="inline-block bg-indigo-500 text-white px-2 py-1 rounded-full text-sm mr-2 mb-2">
@@ -74,7 +74,7 @@ export const Sidebar = async () => {
             </div>
 
             <div className="mb-10 bg-white rounded-lg">
-                <h3 className="text-xl font-bold mb-4">アーカイブ</h3>
+                <h3 className="text-xl font-bold mb-4 underline">アーカイブ</h3>
                 <ul className="text-gray-500">
                     {archives.map((archive) => (
                         <li key={archive} className="mb-2">
