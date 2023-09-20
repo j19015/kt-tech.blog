@@ -58,7 +58,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className='bg-gray-100'>
           <Header/>
-          <div className='m-4 rounded-lg bg-gray-200'>
+          <div className='m-4 rounded-lg'>
             {children}
           </div>
           <Footer/>
