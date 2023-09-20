@@ -2,7 +2,7 @@ import React from 'react';
 
 export const Form = async () => {
     return (
-        <div className="mb-6">
+        <div className="mb-10">
             <h3 className="text-xl font-bold mb-4">検索フォーム</h3>
             <form className="bg-gray-100 rounded-lg shadow-md p-4" action={`/searches`} method='get'>
                 <div className="flex items-center border-b border-b-2 border-gray-300 py-2">
