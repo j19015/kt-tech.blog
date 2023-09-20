@@ -55,6 +55,14 @@ export const Index = ({ contents }: BlogProps) => {
                             ))}
                         </ul>
                     </div>
+                    <div className="text-gray-500 text-sm float-right ">
+                        <span className="mr-2">
+                            投稿日時:
+                        </span>
+                        {new Date(blog.createdAt).toLocaleString("ja-JP", {
+                            timeZone: "Asia/Tokyo",
+                        })}
+                    </div>
                 </div>
                 </div>
             </div>
