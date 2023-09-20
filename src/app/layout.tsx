@@ -56,11 +56,13 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={inter.className}>
-        <Header/>
-        <div className='m-4 rounded-lg bg-gray-200'>
-          {children}
+        <div className='bg-gray-100'>
+          <Header/>
+          <div className='m-4 rounded-lg bg-gray-200'>
+            {children}
+          </div>
+          <Footer/>
         </div>
-        <Footer/>
       </body>
     </html>
   )
