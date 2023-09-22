@@ -6,7 +6,7 @@ export default function Home() {
         <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
         <div className="bg-white text-black p-8 m-4 rounded-lg">
           <div className="text-center mt-1 w-full col-span-2">
-            <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-900 mb-6">Introduction</h2>
+            <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-900 mb-6 underline">Introduction</h2>
           </div>
           <div className="text-center">
             <img
