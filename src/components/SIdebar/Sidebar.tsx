@@ -15,7 +15,7 @@ export const Sidebar = async () => {
     const archives = Array.from(new Set(contents.map((item) => item.createdAt.slice(0, 7))));
 
     return (
-        <div className="col-span-12 md:col-span-4 m-4 rounded-lg bg-white p-6 shadow-md">
+        <div className="col-span-12 md:col-span-4 m-1 rounded-lg bg-white p-6 shadow-md">
             <Form/>
 
             <div className="mb-10">

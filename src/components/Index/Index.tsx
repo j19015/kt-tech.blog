@@ -9,7 +9,7 @@ export const Index = ({ contents }: BlogProps) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {contents.map((blog) => {
             return (
-            <div key={blog.id} className="w-full p-2 md:w-full lg:w-full">
+            <div key={blog.id} className="w-full p-1 md:w-full lg:w-full">
                 <div className="bg-white border border-gray-200 rounded-lg shadow-md">
                     <Link href={`/blogs/${blog.id}`}>
                         <img
