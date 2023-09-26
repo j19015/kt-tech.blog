@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-siteUrl: process.env.SITE_URL || 'https://kt-tech.blog',
+siteUrl: process.env.SITE_URL || 'https://www.kt-tech.blog',
 generateRobotsTxt: true, // (optional)
 // ...other options
 }
