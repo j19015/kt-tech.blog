@@ -46,6 +46,7 @@ export const metadata = {
     
   },
   alternates: {
+    alternate: url,
     canonical: url,
   },
 };
