@@ -39,7 +39,8 @@ export default function Home() {
           </div>
           <h2 className="text-2xl font-semibold mt-8 underline">自己紹介</h2>
           <p className="text-gray-800 mt-2 pl-3">
-            初めまして、<strong>Koki</strong> と申します。
+            初めまして、Webエンジニアの<strong>Koki</strong> と申します。<br/>
+            都内のIT企業に所属しつつ、地方に移住しており、フルリモートで働いています。
           </p>
           <h2 className="text-2xl font-semibold mt-8 underline">エンジニアとしての自己紹介</h2>
           <p className="text-gray-800 mt-2 pl-3">
