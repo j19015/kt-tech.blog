@@ -60,6 +60,11 @@ body {
     padding-left: 10px;
 }
 
+.markdown li {
+    font-weight: bold;
+    padding: 3px;
+}
+
 .markdown ol {
     list-style-type: decimal;
     margin-left: 2rem;
