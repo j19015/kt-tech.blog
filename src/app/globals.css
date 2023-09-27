@@ -84,6 +84,8 @@ body {
 .markdown pre {
     background-color: #555; /* Light grey background */
     padding: 1rem;
+    padding-top: 1.0rem;
+    padding-bottom: 0.1rem;
     border-radius: 5px;
     overflow-x: auto;
     color: #f0f0f0;
@@ -137,9 +139,7 @@ body {
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
 }
-.markdown p{
-    padding-left:10px
-}
+
 /* メディアクエリを追加 */
 @media (max-width: 768px) {
     .markdown h1 {
