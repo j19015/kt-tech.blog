@@ -1,6 +1,6 @@
 import Sidebar from '@/components/SIdebar/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSquareGithub } from '@fortawesome/free-brands-svg-icons';
+import { faSquareGithub,faSquareTwitter } from '@fortawesome/free-brands-svg-icons';
 
 export default function Home() {
   return (
@@ -37,7 +37,10 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="text-blue-500 hover:text-blue-700"
               >
-                Twitter
+                <FontAwesomeIcon 
+                  icon={faSquareTwitter}
+                  size="3x"
+                />
               </a>
               {/* Add other social media links here */}
             </div>
