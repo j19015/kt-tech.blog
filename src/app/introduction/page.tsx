@@ -1,4 +1,6 @@
 import Sidebar from '@/components/SIdebar/Sidebar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSquareGithub } from '@fortawesome/free-brands-svg-icons';
 
 export default function Home() {
   return (
@@ -24,7 +26,10 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-gray-800"
               >
-                GitHub
+                <FontAwesomeIcon 
+                  icon={faSquareGithub}
+                  size="3x"
+                />
               </a>
               <a
                 href="https://twitter.com/tech_koki"
