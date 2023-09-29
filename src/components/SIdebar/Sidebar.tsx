@@ -2,6 +2,8 @@ import Link from 'next/link';
 import React from 'react';
 import Form from '../Form/Form';
 import { getList, getTagList, getCategoryList } from '../../../libs/microcms';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTag } from '@fortawesome/free-solid-svg-icons';
 
 export const Sidebar = async () => {
     const { contents } = await getList();
@@ -64,7 +66,7 @@ export const Sidebar = async () => {
                     {tagList.map((tag) => (
                         <span key={tag.id} className="inline-block bg-indigo-700 text-white px-2 py-1 rounded-full text-sm mr-2 mb-2">
                             <Link href={`/tags/${tag.id}`}>
-                                {tag.name}
+                            <FontAwesomeIcon icon={faTag} /> {tag.name}
                             </Link>
                         </span>
                     ))}
