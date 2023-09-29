@@ -3,6 +3,7 @@ import Link from "next/link";
 type PaginateProps = {
   currentPage: number;
   totalPage: number;
+  kind :string;
 };
 
 const Paginate = ({ currentPage, totalPage }: PaginateProps) => {
