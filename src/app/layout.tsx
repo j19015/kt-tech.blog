@@ -59,8 +59,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body className={inter.className}>
-        <div className='bg-gray-100'>
+      <body className="bg-gray-900" >
+        <div className='bg-gray-900'>
           <Header/>
           <div className='m-1 mt-5 rounded-lg'>
             {children}

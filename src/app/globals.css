@@ -8,7 +8,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f0f0f0; /* Slightly darker grey background */
-    color: #2C3E50; /* Matching text color */
+    color: #f0f0f0; /* Light text color */
     word-break: break-all;
 }
 
@@ -16,6 +16,7 @@ body {
 .markdown {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     line-height: 1.7;
+    color: white;
 }
 
 .markdown h1 {
@@ -23,15 +24,14 @@ body {
     font-size: 1.9rem;
     font-weight: bold;
     margin-bottom: 3rem;
-    color: #2C3E50; /* Maintaining the sophisticated look */
+    color: white;
 }
 
 .markdown h2 {
-    margin-top: 30px;
     font-size: 1.5rem;
     font-weight: bold;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+    margin-top: 5rem;
+    margin-bottom: 3rem;
     border-left: 5px solid #3498DB; /* Vibrant blue border */
     padding-left: 0.5rem;
     color: #2C3E50; /* Matching color */
@@ -45,7 +45,7 @@ body {
     font-size: 1.3rem;
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
-    color: #2C3E50; /* Matching color */
+    color: white;
 }
 
 .markdown h4 {
@@ -53,23 +53,26 @@ body {
     font-size: 1.1rem;
     margin-top: 1.2rem;
     margin-bottom: 0.3rem;
-    color: #2C3E50; /* Matching color */
+    color: white;
 }
 
 .markdown ul {
     list-style-type: disc;
     margin-left: 2rem;
     padding-left: 10px;
+    color: white;
 }
 
 .markdown li {
     font-weight: bold;
     padding: 3px;
+    color: white;
 }
 
 .markdown ol {
     list-style-type: decimal;
     margin-left: 2rem;
+    color: white;
 }
 
 .markdown a {
@@ -108,7 +111,7 @@ body {
 }
 
 .markdown code {
-    background-color: #EAECEE;
+    background-color: #d9dcdf;
     padding: 0.2rem 0.4rem;
     border-radius: 4px;
     font-family: 'Fira Code', monospace; /* Monospace font for code */
@@ -132,7 +135,7 @@ body {
     padding-left: 1rem;
     margin: 10px;
     margin-left: 2rem;
-    color: #7F8C8D; /* Slightly darker grey text color */
+    color: #ffffff; /* Slightly darker grey text color */
     font-style: italic;
 }
 
