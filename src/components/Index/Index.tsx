@@ -1,6 +1,6 @@
 import { BlogProps } from "../../../libs/microcms";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarAlt,faTag } from '@fortawesome/free-solid-svg-icons'
 import Link from "next/link";
 export const Index = ({ contents }: BlogProps) => {
 
@@ -56,7 +56,7 @@ export const Index = ({ contents }: BlogProps) => {
                                     {blog.tags?.map((tag) => (
                                         <span key={tag.id} className="inline-block bg-indigo-700 text-white px-2 py-1 rounded-full text-sm mr-2 mb-2">
                                             <Link href={`/tags/${tag.id}`}>
-                                                {tag.name}
+                                            <FontAwesomeIcon icon={faTag} /> {tag.name}
                                             </Link>
                                         </span>
                                     ))}
