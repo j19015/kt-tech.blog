@@ -6,7 +6,7 @@ import Sidebar from "@/components/SIdebar/Sidebar"; // Sidebarのimportを修正
 
 export default async function StaticPage() {
   const { contents } = await getList();
-  console.log(contents);
+  //console.log(contents);
 
   if (!contents || contents.length === 0) {
     return <h1>No Contents</h1>;

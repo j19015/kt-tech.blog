@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getList } from "../../../../../libs/microcms";
+import { getList,getCategoryList,getCategoryDetail } from "../../../../../../libs/microcms";
 import Sidebar from "@/components/SIdebar/Sidebar"; // Sidebarのimportを修正
 import Paginate from "@/components/Pagination/Paginate";
 import Index from "@/components/Index/Index";
@@ -7,24 +7,36 @@ import Link from "next/link"
 
 const ITEMS_PER_PAGE = 6; // 1ページあたりのアイテム数
 
-export async function generateStaticParams() {
+export async function generateStaticParams({
+    params: { categoryId },
+  }: {
+    params: { categoryId: string};
+  }) {
   try {
     //ブログ取得
     const { contents } = await getList();
-    //ブログ件数を取得
-    const totalItems = contents.length;
-    // ページ数を計算
-    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
-    //path入れる用の変数
-    const paths = [];
+
+    const categoryList = await getCategoryList();
+    
+    console.log(categoryList)
+
+    const paths: { categoryId: string; pageId: string; }[] = [];
 
     // 各ページのパスを生成
-    for (let page = 1; page <= totalPages; page++) {
-      paths.push({
-         pageId: page.toString() ,
-      });
-    }
-    //console.log(paths)
+    categoryList.contents.map((category)=>{
+        const filteredContents = contents.filter((blog) => blog.category?.id === category.id);
+        console.log(category.name,filteredContents.length)
+        const totalPages = Math.ceil(filteredContents.length / ITEMS_PER_PAGE);
+        for (let page = 1; page <= totalPages; page++) {
+            paths.push({
+                categoryId: category.id,
+                pageId: String(page)
+            });
+        }
+
+    });
+    
+    console.log(paths)
 
     return [...paths];
   } catch (error) {
@@ -34,9 +46,9 @@ export async function generateStaticParams() {
 }
 
 export default async function StaticPaginationPage({
-  params: { pageId },
+  params: { categoryId ,pageId},
 }: {
-  params: { pageId: string };
+  params: { categoryId: string,pageId: string };
 }) {
 
   if (!pageId) {
@@ -50,9 +62,17 @@ export default async function StaticPaginationPage({
 
   // コンテンツを取得
   try {
+    //listAll
     const { contents } = await getList();
 
-    const contentSlice = contents.slice(startIndex, endIndex);
+    //fileter
+    const filteredContents = contents.filter((blog) => blog.category?.id === categoryId);
+
+    //silce
+    const contentSlice = filteredContents.slice(startIndex, endIndex);
+
+    //category取得
+    const category = await getCategoryDetail(categoryId)
 
     // コンテンツを表示するロジックをここに追加
 
@@ -61,10 +81,10 @@ export default async function StaticPaginationPage({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 pb-8"> {/* グリッドを設定 */}
           <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
             <div className="text-center mt-1 w-full col-span-2">
-              <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-900 mb-6 underline">Blog</h2>
+              <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-900 mb-6 underline">{category.name}</h2>
             </div>
             <Index contents={contentSlice}/>
-            <Paginate currentPage={Number(pageId)} totalPage={Math.ceil(contents.length/6)} kind={`/blogs`}></Paginate>
+            <Paginate currentPage={Number(pageId)} totalPage={Math.ceil(filteredContents.length/6)} kind={`/categories/${categoryId}`}></Paginate>
           </div>
           <div className="lg:col-span-1"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
             <Sidebar />
