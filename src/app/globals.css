@@ -13,7 +13,8 @@ body {
 
 /* Markdownクラス内のスタイル */
 .markdown {
-    line-height: 1.6;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    line-height: 1.7;
 }
 
 .markdown h1 {
@@ -125,7 +126,7 @@ body {
 }
 
 .markdown blockquote {
-    border-left: 5px solid #ccc; /* Light grey border */
+    border-left: 5px solid #e4d170; /* Light grey border */
     padding-left: 1rem;
     margin: 10px;
     margin-left: 2rem;
@@ -151,6 +152,7 @@ body {
 .markdown p{
     padding-left: 10px;
 }
+
 
 /* メディアクエリを追加 */
 @media (max-width: 768px) {
