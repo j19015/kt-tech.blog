@@ -31,8 +31,8 @@ export default async function StaticDetailPage({
     body(elm).html(result.value);
     body(elm).addClass("hljs");
   });
-  console.log(blog.body)
-  console.log(body.html())
+  //console.log(blog.body)
+  //console.log(body.html())
 
 
   if(!blog){
