@@ -32,10 +32,10 @@ body {
     font-weight: bold;
     margin-top: 5rem;
     margin-bottom: 3rem;
-    border-left: 5px solid #3498DB; /* Vibrant blue border */
+    border-left: 1px solid rgb(129 140 248); /* Vibrant blue border */
+    border-bottom: 1px solid rgb(129 140 248); /* Vibrant blue border */
     padding-left: 0.5rem;
-    color: #2C3E50; /* Matching color */
-    background-color: #ffffff; /* Subtle grey background */
+    color: #ffffff; /* Matching color */
 }
 
 .markdown h3 {
@@ -45,6 +45,7 @@ body {
     font-size: 1.3rem;
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
+    padding-left: 10px;
     color: white;
 }
 
@@ -72,6 +73,7 @@ body {
 .markdown ol {
     list-style-type: decimal;
     margin-left: 2rem;
+    padding-left: 10px;
     color: white;
 }
 
@@ -131,7 +133,7 @@ body {
 }
 
 .markdown blockquote {
-    border-left: 5px solid #3498DB; /* Matching blue border */
+    border-left: 5px solid #b6c9d6; /* Matching blue border */
     padding-left: 1rem;
     margin: 10px;
     margin-left: 2rem;
