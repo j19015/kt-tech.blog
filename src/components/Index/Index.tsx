@@ -17,9 +17,9 @@ export const Index = ({ contents }: BlogProps) => {
                             src={blog.eyecatch?.url}
                             alt=""
                             style={{ 
-                                width: '500px',
-                                height: '300px',
-                                objectFit: 'cover',
+                                width: '700px',
+                                height: '270px',
+                                objectFit: 'fill',
                                 boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.1)" 
                             }}
                             />
