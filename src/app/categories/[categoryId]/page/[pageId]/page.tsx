@@ -19,15 +19,20 @@ export async function generateStaticParams({
     const filteredContents = contents.filter((blog) => blog.category?.id === categoryId);
     // ページ数を計算
     const totalPages = Math.ceil(filteredContents.length / ITEMS_PER_PAGE);
-    //path入れる用の変数
-    const paths = [];
 
     // 各ページのパスを生成
-    for (let page = 1; page <= totalPages; page++) {
-      paths.push({
-         pageId: page.toString() ,
-      });
-    }
+    const paths = contents.map((category)=>{
+        const filteredContents = contents.filter((blog) => blog.category?.id === categoryId);
+        const totalPages = Math.ceil(filteredContents.length / ITEMS_PER_PAGE);
+        for (let page = 1; page <= totalPages; page++) {
+            return {
+                categoryId: category.id,
+                pageId: page
+            };
+        }
+
+    });
+    
     console.log(paths)
 
     return [...paths];
@@ -73,7 +78,7 @@ export default async function StaticPaginationPage({
               <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-900 mb-6 underline">Blog</h2>
             </div>
             <Index contents={contentSlice}/>
-            <Paginate currentPage={Number(pageId)} totalPage={Math.ceil(filteredContents.length/6)} kind={`categories/${categoryId}`}></Paginate>
+            <Paginate currentPage={Number(pageId)} totalPage={Math.ceil(filteredContents.length/6)} kind={`/categories/${categoryId}`}></Paginate>
           </div>
           <div className="lg:col-span-1"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
             <Sidebar />
