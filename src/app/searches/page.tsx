@@ -51,7 +51,7 @@ export default function StaticPage() {
         <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="text-center mt-1 w-full col-span-2">
-              <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-900 mb-6 underline">開発中 </h2>
+              <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-gray-100 mb-6 underline">開発中 </h2>
             </div>
           </div>
         </div>
