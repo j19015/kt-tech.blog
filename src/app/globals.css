@@ -148,6 +148,10 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
 }
 
+.markdown p{
+    padding-left: 10px;
+}
+
 /* メディアクエリを追加 */
 @media (max-width: 768px) {
     .markdown h1 {
