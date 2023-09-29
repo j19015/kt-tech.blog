@@ -16,7 +16,12 @@ export const Index = ({ contents }: BlogProps) => {
                             className="rounded-t-lg w-full max-w-full"
                             src={blog.eyecatch?.url}
                             alt=""
-                            style={{ boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.1)" }}
+                            style={{ 
+                                width: '500px',
+                                height: '300px',
+                                objectFit: 'cover',
+                                boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.1)" 
+                            }}
                             />
                         </Link>
                         <div className="p-5">
