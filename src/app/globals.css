@@ -2,18 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+
 body {
     font-family: 'Helvetica Neue', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f7f7f7; /* Light grey background */
-    color: #333; /* Dark grey text color */
+    background-color: #f0f0f0; /* Slightly darker grey background */
+    color: #2C3E50; /* Matching text color */
     word-break: break-all;
 }
 
 /* Markdownクラス内のスタイル */
 .markdown {
-    line-height: 1.6;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    line-height: 1.7;
 }
 
 .markdown h1 {
@@ -21,7 +23,7 @@ body {
     font-size: 1.9rem;
     font-weight: bold;
     margin-bottom: 3rem;
-    color: #444; /* Dark grey text color */
+    color: #2C3E50; /* Maintaining the sophisticated look */
 }
 
 .markdown h2 {
@@ -30,10 +32,10 @@ body {
     font-weight: bold;
     margin-top: 2rem;
     margin-bottom: 2rem;
-    border-left: 5px solid #2ecc71; /* Green border */
+    border-left: 5px solid #3498DB; /* Vibrant blue border */
     padding-left: 0.5rem;
-    color: #444;
-    background-color: white;
+    color: #2C3E50; /* Matching color */
+    background-color: #ffffff; /* Subtle grey background */
 }
 
 .markdown h3 {
@@ -43,7 +45,7 @@ body {
     font-size: 1.3rem;
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
-    color: #444;
+    color: #2C3E50; /* Matching color */
 }
 
 .markdown h4 {
@@ -51,7 +53,7 @@ body {
     font-size: 1.1rem;
     margin-top: 1.2rem;
     margin-bottom: 0.3rem;
-    color: #555; /* Slightly darker grey text color */
+    color: #2C3E50; /* Matching color */
 }
 
 .markdown ul {
@@ -71,51 +73,52 @@ body {
 }
 
 .markdown a {
-    color: #3498db; /* Blue link color */
+    color: #3498DB; /* Blue link color */
     text-decoration: none;
     transition: color 0.2s;
 }
 
 .markdown a:hover {
-    color: #2574a9; /* Hover color */
+    color: #2980B9; /* Slightly darker blue on hover */
     text-decoration: underline;
 }
 
 .markdown pre {
-    background-color: #555; /* Light grey background */
+    background-color: #2C3E50; /* Darker grey background */
     padding: 1rem;
     padding-top: 1.0rem;
     padding-bottom: 0.1rem;
     border-radius: 5px;
     overflow-x: auto;
-    color: #f0f0f0;
+    color: #ECF0F1; /* Light text color */
     margin-bottom: 30px;
     margin-top: 30px;
 }
 
 .markdown pre > code {
-    background-color: #555;
+    background-color: #2C3E50;
     padding: 0.2rem 0.4rem;
     border-radius: 4px;
     font-family: 'Fira Code', monospace; /* Monospace font for code */
-    color: #f0f0f0;
+    color: #ECF0F1; /* Light text color */
 }
-.markdown div{
+
+.markdown div {
     position: relative;
 }
 
-.markdown code{
-    background-color: #dde1e3;
+.markdown code {
+    background-color: #EAECEE;
     padding: 0.2rem 0.4rem;
     border-radius: 4px;
     font-family: 'Fira Code', monospace; /* Monospace font for code */
-    color: #c13b3b;
+    color: #C0392B; /* Red text color */
 }
 
 .markdown div div[data-filename]::before {
     content: attr(data-filename); /* data-filename属性の値を表示 */
-    color: #000; /* テキスト色 */
-    background-color: #fff;
+    color: #2C3E50; /* Matching text color */
+    background-color: #ECF0F1; /* Subtle grey background */
     padding: 0.25rem 0.5rem;
     border-top-left-radius: 5px;
     border-bottom-right-radius: 5px;
@@ -125,17 +128,17 @@ body {
 }
 
 .markdown blockquote {
-    border-left: 5px solid #ccc; /* Light grey border */
+    border-left: 5px solid #3498DB; /* Matching blue border */
     padding-left: 1rem;
     margin: 10px;
     margin-left: 2rem;
-    color: #666; /* Grey text color */
+    color: #7F8C8D; /* Slightly darker grey text color */
     font-style: italic;
 }
 
 .markdown hr {
     border: none;
-    border-top: 2px solid #eee; /* Light grey border */
+    border-top: 2px solid #ECF0F1; /* Light grey border */
     margin: 1.5rem 0;
 }
 
@@ -148,7 +151,7 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
 }
 
-.markdown p{
+.markdown p {
     padding-left: 10px;
 }
 
