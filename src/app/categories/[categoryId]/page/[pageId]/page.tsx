@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getList } from "../../../../../../libs/microcms";
+import { getList,getCategoryList } from "../../../../../../libs/microcms";
 import Sidebar from "@/components/SIdebar/Sidebar"; // Sidebarのimportを修正
 import Paginate from "@/components/Pagination/Paginate";
 import Index from "@/components/Index/Index";
@@ -15,20 +15,23 @@ export async function generateStaticParams({
   try {
     //ブログ取得
     const { contents } = await getList();
-    //fileter
-    const filteredContents = contents.filter((blog) => blog.category?.id === categoryId);
-    // ページ数を計算
-    const totalPages = Math.ceil(filteredContents.length / ITEMS_PER_PAGE);
+
+    const categoryList = await getCategoryList();
+    
+    console.log(categoryList)
+
+    const paths: { categoryId: string; pageId: string; }[] = [];
 
     // 各ページのパスを生成
-    const paths = contents.map((category)=>{
-        const filteredContents = contents.filter((blog) => blog.category?.id === categoryId);
+    categoryList.contents.map((category)=>{
+        const filteredContents = contents.filter((blog) => blog.category?.id === category.id);
+        console.log(category.name,filteredContents.length)
         const totalPages = Math.ceil(filteredContents.length / ITEMS_PER_PAGE);
         for (let page = 1; page <= totalPages; page++) {
-            return {
+            paths.push({
                 categoryId: category.id,
-                pageId: page
-            };
+                pageId: String(page)
+            });
         }
 
     });
