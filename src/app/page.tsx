@@ -6,7 +6,7 @@ import Index from "@/components/Index/Index";
 
 export default async function StaticPage () {
   const { contents } = await getList();
-  console.log(contents);
+  //console.log(contents);
 
   // ページの生成された時間を取得
   const time = new Date().toString();

@@ -24,7 +24,7 @@ export async function generateStaticParams() {
          pageId: page.toString() ,
       });
     }
-    console.log(paths)
+    //console.log(paths)
 
     return [...paths];
   } catch (error) {
