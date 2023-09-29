@@ -160,6 +160,7 @@ body {
     padding-left: 10px;
 }
 
+
 /* メディアクエリを追加 */
 @media (max-width: 768px) {
     .markdown h1 {
@@ -205,6 +206,16 @@ body {
 }
 .timeline > li {
     margin-bottom: 60px;
+}
+.introduction > h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 5rem;
+    margin-bottom: 3rem;
+    border-left: 1px solid rgb(129 140 248); /* Vibrant blue border */
+    border-bottom: 1px solid rgb(129 140 248); /* Vibrant blue border */
+    padding-left: 0.5rem;
+    color: #ffffff; /* Matching color */
 }
 
 /* for Desktop */
