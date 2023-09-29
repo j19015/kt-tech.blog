@@ -73,7 +73,7 @@ export default async function StaticPaginationPage({
               <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-900 mb-6 underline">Blog</h2>
             </div>
             <Index contents={contentSlice}/>
-            <Paginate currentPage={Number(pageId)} totalPage={Math.ceil(filteredContents.length/6)}></Paginate>
+            <Paginate currentPage={Number(pageId)} totalPage={Math.ceil(filteredContents.length/6)} kind={`categories/${categoryId}`}></Paginate>
           </div>
           <div className="lg:col-span-1"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
             <Sidebar />
