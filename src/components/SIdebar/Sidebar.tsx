@@ -35,7 +35,7 @@ export const Sidebar = async () => {
                 <h3 className="text-xl font-bold mb-4 underline">カテゴリー</h3>
                 <div className="flex flex-wrap gap-2">
                     {categoryList.map((category) => (
-                        <Link key={category.id} href={`/categories/${category.id}`} className="text-indigo-500">
+                        <Link key={category.id} href={`/categories/${category.id}/page/1`} className="text-indigo-500">
                             <div className="group bg-gray-100 p-2 rounded-lg flex items-center transition duration-300 ease-in-out transform hover:bg-indigo-100 hover:text-indigo-500 hover:scale-105">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
