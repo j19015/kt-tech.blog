@@ -2,6 +2,7 @@ import { notFound } from "next/navigation"
 import { getList,getCategoryList,getCategoryDetail } from "../../../../libs/microcms"
 import Sidebar from "@/components/SIdebar/Sidebar"
 import Index from "@/components/Index/Index";
+import Title from "@/components/Title/Title";
 import Link from "next/link";
 
 export async function generateStaticParams(){
@@ -39,7 +40,7 @@ export default async function StaticDetailPage({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4"> {/* グリッドを設定 */}
         <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
           <div className="text-center mt-1 w-full col-span-2">
-            <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-gray-100 mb-6 underline">{category_show.name}</h2>
+            <Title title={category_show.name}/>
           </div>
           <Index contents={filteredContents}/>
         </div>

@@ -1,6 +1,7 @@
 import Sidebar from '@/components/SIdebar/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquareGithub,faSquareTwitter } from '@fortawesome/free-brands-svg-icons';
+import Title from '@/components/Title/Title';
 
 export default function Home() {
   return (
@@ -8,7 +9,7 @@ export default function Home() {
         <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
         <div className="text-white text-black p-8 m-1 rounded-lg introduction">
           <div className="text-center mt-1 w-full col-span-2">
-            <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-gray-100 mb-6">Introduction</h2>
+            <Title title={`introduction`} />
           </div>
           <div className="text-center">
             <img

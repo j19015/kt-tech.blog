@@ -4,6 +4,7 @@ import { useEffect,useState } from 'react';
 import Sidebar from "@/components/SIdebar/Sidebar"; // Sidebarのimportを修正
 import { useSearchParams } from "next/navigation";
 import { Blog, getList } from "../../../libs/microcms";
+import Title from "@/components/Title/Title";
 
 export default function StaticPage() {
 //   const searchParams = useSearchParams();
@@ -51,7 +52,7 @@ export default function StaticPage() {
         <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="text-center mt-1 w-full col-span-2">
-              <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-gray-100 mb-6 underline">開発中 </h2>
+              <Title title={`開発中`}/>
             </div>
           </div>
         </div>
