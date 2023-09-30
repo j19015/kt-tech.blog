@@ -43,8 +43,8 @@ export default async function StaticDetailPage({
   return(
     <>
     <div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4"> {/* グリッドを設定 */}
-        <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
+      <div className="grid grid-cols-1 lg:grid-cols-3"> {/* グリッドを設定 */}
+        <div className="lg:col-span-3 lg:p-10 p-5"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
           <div>
             <div className="p-1">
               <Link href={`/blogs/${blog.id}`}>
@@ -64,7 +64,7 @@ export default async function StaticDetailPage({
             </div>
           </div>
         </div>
-        <div className="lg:col-span-1"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
+        <div className="col-span-3 lg:p-10 p-3"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
           <Sidebar />
         </div>
       </div>
