@@ -12,7 +12,7 @@ const Paginate = ({ currentPage, totalPage,kind }: PaginateProps) => {
       <nav className="inline-flex">
         {currentPage > 1 && (
           <Link href={`${kind}/page/${currentPage - 1}`}>
-            <span className="bg-blue-500 text-white px-4 py-2 rounded-l hover:bg-blue-600 cursor-pointer">
+            <span className="bg-indigo-500 text-white px-4 py-2 rounded-l hover:bg-indigo-600 cursor-pointer">
               前へ
             </span>
           </Link>
@@ -22,9 +22,9 @@ const Paginate = ({ currentPage, totalPage,kind }: PaginateProps) => {
             <span
               className={`${
                 currentPage === page
-                  ? "bg-blue-600 text-white"
-                  : "bg-white text-blue-500"
-              } px-4 py-2 hover:bg-blue-200 cursor-pointer`}
+                  ? "bg-indigo-600 text-white"
+                  : "bg-indigo-200 text-indigo-500"
+              } px-4 py-2 hover:bg-indigo-200 cursor-pointer`}
             >
               {page}
             </span>
@@ -32,7 +32,7 @@ const Paginate = ({ currentPage, totalPage,kind }: PaginateProps) => {
         ))}
         {currentPage < totalPage && (
           <Link href={`${kind}/page/${currentPage + 1}`}>
-            <span className="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600 cursor-pointer">
+            <span className="bg-indigo-500 text-white px-4 py-2 rounded-r hover:bg-indigo-600 cursor-pointer">
               次へ
             </span>
           </Link>
