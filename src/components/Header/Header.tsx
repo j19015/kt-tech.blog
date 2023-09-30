@@ -17,7 +17,7 @@ export const Header = () => {
   return (
     <header className="py-6 px-4 flex justify-between items-center bg-gray-900 rounded-lg shadow-md m-1">
       <Link className="z-50" href="/" onClick={handleMenuClose}>
-        <h1 className="text-3xl font-serif hover:text-blue-500 transition duration-300">kt-tech.blog</h1>
+        <h1 className="text-3xl font-serif hover:text-indigo-500 transition duration-300">kt-tech.blog</h1>
       </Link>
 
       <nav
@@ -36,28 +36,28 @@ export const Header = () => {
         >
           <li>
             <Link onClick={handleMenuClose} href="/">
-              <span className="font-serif hover:text-blue-500 transition duration-300">
+              <span className="font-serif hover:text-indigo-500 transition duration-300">
                 Home
               </span>
             </Link>
           </li>
           <li>
             <Link onClick={handleMenuClose} href="/blogs/page/1">
-              <span className="font-serif hover:text-blue-500 transition duration-300">
+              <span className="font-serif hover:text-indigo-500 transition duration-300">
                 Blog
               </span>
             </Link>
           </li>
           <li>
             <Link onClick={handleMenuClose} href="/dev">
-              <span className="font-serif hover:text-blue-500 transition duration-300">
+              <span className="font-serif hover:text-indigo-500 transition duration-300">
                 Dev
               </span>
             </Link>
           </li>
           <li>
             <Link onClick={handleMenuClose} href="/introduction">
-              <span className="font-serif hover:text-blue-500 transition duration-300">
+              <span className="font-serif hover:text-indigo-500 transition duration-300">
                 Introduction
               </span>
             </Link>
