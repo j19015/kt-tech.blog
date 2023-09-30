@@ -3,6 +3,7 @@ import { getList,getCategoryList,getCategoryDetail } from "../../../../../../lib
 import Sidebar from "@/components/SIdebar/Sidebar"; // Sidebarのimportを修正
 import Paginate from "@/components/Pagination/Paginate";
 import Index from "@/components/Index/Index";
+import Title from "@/components/Title/Title";
 import Link from "next/link"
 
 const ITEMS_PER_PAGE = 6; // 1ページあたりのアイテム数
@@ -81,7 +82,7 @@ export default async function StaticPaginationPage({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 pb-8"> {/* グリッドを設定 */}
           <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
             <div className="text-center mt-1 w-full col-span-2">
-              <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-gray-100 mb-6 underline">{category.name}</h2>
+              <Title title={category.name} />
             </div>
             <Index contents={contentSlice}/>
             <Paginate currentPage={Number(pageId)} totalPage={Math.ceil(filteredContents.length/6)} kind={`/categories/${categoryId}`}></Paginate>
