@@ -18,7 +18,7 @@ export const Index = ({ contents }: BlogProps) => {
                             alt=""
                             style={{ 
                                 width: '700px',
-                                height: '270px',
+                                height: '260px',
                                 objectFit: 'fill',
                                 boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.1)" 
                             }}
