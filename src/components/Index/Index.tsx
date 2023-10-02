@@ -13,7 +13,7 @@ export const Index = ({ contents }: BlogProps) => {
                     <div className="bg-gray-800 border-gray-700 rounded-lg shadow-md text-white">
                         <Link href={`/blogs/${blog.id}`}>
                             <img
-                            className="rounded-t-lg w-full max-w-full index_img"
+                            className="rounded-t-lg w-full max-w-full"
                             src={blog.eyecatch?.url}
                             alt=""
                             />
