@@ -44,7 +44,7 @@ export default async function StaticDetailPage({
     <>
     <div>
       <div className="grid grid-cols-1 lg:grid-cols-3"> {/* グリッドを設定 */}
-        <div className="lg:col-span-3 lg:p-10 p-5"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
+        <div className="lg:col-span-3 lg:p-10"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
           <div>
             <div className="p-1">
               <Link href={`/blogs/${blog.id}`}>
