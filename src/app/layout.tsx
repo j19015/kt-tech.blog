@@ -59,9 +59,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <head>
-      <script src="//cdn.iframe.ly/embed.js"></script>
-      </head>
       <body className="bg-gray-900" >
         <div className='bg-gray-900'>
           <Header/>
