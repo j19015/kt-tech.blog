@@ -24,8 +24,8 @@ export const Sidebar = async () => {
                 <h3 className="text-xl font-bold mb-4 border-b border-gray-600 pb-2">最新記事</h3>
                 <ul className="list-disc text-white">
                     {latestArticles.map((article) => (
-                        <li key={article.id} className="mb-4 truncate">
-                            <Link href={`/blogs/${article.id}`} className="text-indigo-400 hover:text-indigo-300">
+                        <li key={article.id} className="mb-4 truncate text-indigo-400 hover:text-indigo-300">
+                            <Link href={`/blogs/${article.id}`}>
                                 <strong>・</strong>{article.title}
                             </Link>
                         </li>
