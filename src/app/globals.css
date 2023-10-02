@@ -40,7 +40,6 @@ body {
 
 .markdown h3 {
     font-weight: bold;
-    text-decoration: underline;
     margin-top: 20px;
     font-size: 1.3rem;
     margin-top: 1.5rem;
@@ -54,6 +53,7 @@ body {
     font-size: 1.1rem;
     margin-top: 1.2rem;
     margin-bottom: 0.3rem;
+    padding-left: 10px;
     color: white;
 }
 
@@ -64,7 +64,7 @@ body {
     color: white;
 }
 
-.markdown li {
+.markdown ol > li {
     font-weight: bold;
     padding: 3px;
     color: white;
@@ -113,11 +113,11 @@ body {
 }
 
 .markdown code {
-    background-color: #d9dcdf;
+    background-color: #1c2834;
     padding: 0.2rem 0.4rem;
     border-radius: 4px;
     font-family: 'Fira Code', monospace; /* Monospace font for code */
-    color: #C0392B; /* Red text color */
+    color: #ffffff; /* Red text color */
 }
 
 .markdown div div[data-filename]::before {
@@ -148,16 +148,17 @@ body {
 }
 
 .markdown img {
-    max-width: 100%;
+    max-width: 70%;
     height: auto;
     display: block;
-    margin: 1.5rem auto;
+    margin: 3rem 0;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
 }
 
 .markdown p {
     padding-left: 10px;
+    padding-bottom: 10px;
     line-height: 1.8;
 }
 
@@ -165,18 +166,22 @@ body {
 /* メディアクエリを追加 */
 @media (max-width: 768px) {
     .markdown h1 {
-        font-size: 1.3rem;
+        font-size: 1.6rem;
     }
 
     .markdown h2 {
-        font-size: 1.1rem;
+        font-size: 1.5rem;
     }
 
     .markdown h3 {
-        font-size: 0.9rem;
+        font-size: 1.4rem;
     }
 
     .markdown h4 {
+        font-size: 1.0rem;
+    }
+
+    .markdown p {
         font-size: 0.8rem;
     }
 
@@ -198,6 +203,9 @@ body {
 
     .markdown blockquote {
         font-size: 1rem;
+    }
+    .markdown img{
+        max-width: 100%;
     }
 }
 
