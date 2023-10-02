@@ -6,6 +6,8 @@ import cheerio from "cheerio";
 import hljs from "highlight.js";
 import "highlight.js/styles/hybrid.css";
 import Sidebar from "@/components/SIdebar/Sidebar"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCalendarAlt,faTag } from '@fortawesome/free-solid-svg-icons'
 
 export async function generateStaticParams(){
   const { contents } = await getList();
@@ -56,6 +58,49 @@ export default async function StaticDetailPage({
                   className="rounded-lg"
                 />
               </Link>
+            </div>
+            <div className="text-gray-500 text-lg p-1">
+                <FontAwesomeIcon icon={faCalendarAlt} className="mr-1 text-gray-400" />
+                <span className="mr-2 text-gray-400">
+                    投稿日時:
+                </span>
+                <span className="text-gray-400">
+                    {new Date(blog.createdAt).toLocaleDateString("ja-JP", {
+                        timeZone: "Asia/Tokyo",
+                    })}
+                </span>
+            </div>
+            <div className="mt-2" style={{width: "130px"}}>
+                <Link key={blog.category?.id} href={`/categories/${blog.category?.id}`} className="text-indigo-400 hover:text-indigo-300">
+                    <span className="group bg-gray-700 text-gray-100 p-2 rounded-lg flex items-center transition duration-300 ease-in-out transform hover:bg-indigo-700 hover:text-gray-300 hover:scale-105">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 text-gray-400 mr-2 group-hover:text-indigo-400"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M5 13l4 4L19 7"
+                            />
+                        </svg>
+                        {blog.category?.name}
+                    </span>
+                </Link>
+            </div>
+            <div className="mt-2 p-1">
+                <ul className="list-disc list-inside text-gray-400">
+                    {blog.tags?.map((tag) => (
+                        <span key={tag.id} className="inline-block bg-indigo-700 text-white px-2 py-1 rounded-full text-sm mr-2 mb-2">
+                            <Link href={`/tags/${tag.id}`}>
+                            <FontAwesomeIcon icon={faTag} /> {tag.name}
+                            </Link>
+                        </span>
+                    ))}
+                </ul>
             </div>
             <div className="p-4 markdown">
               <h1>{blog.title}</h1>
