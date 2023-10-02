@@ -244,6 +244,15 @@ body {
     color: #ffffff; /* Matching color */
 }
 
+.introduction > p{
+    line-height: 2.5;
+}
+
+.introduction > ul{
+    line-height: 2.5;
+}
+
+
 /* for Desktop */
 @media ( min-width : 640px ){
     .timeline > li {
