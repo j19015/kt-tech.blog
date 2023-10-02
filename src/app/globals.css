@@ -76,6 +76,10 @@ body {
     padding-left: 10px;
     color: white;
 }
+.markdown li {
+    font-size: 0.9rem;
+    padding: 5px 0;
+}
 
 .markdown a {
     color: #3498DB; /* Blue link color */
@@ -161,6 +165,7 @@ body {
     padding-bottom: 10px;
     line-height: 1.8;
 }
+
 
 
 /* メディアクエリを追加 */
