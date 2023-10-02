@@ -13,15 +13,9 @@ export const Index = ({ contents }: BlogProps) => {
                     <div className="bg-gray-800 border-gray-700 rounded-lg shadow-md text-white">
                         <Link href={`/blogs/${blog.id}`}>
                             <img
-                            className="rounded-t-lg w-full max-w-full"
+                            className="rounded-t-lg w-full max-w-full index_img"
                             src={blog.eyecatch?.url}
                             alt=""
-                            style={{ 
-                                width: '700px',
-                                height: '260px',
-                                objectFit: 'fill',
-                                boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.1)" 
-                            }}
                             />
                         </Link>
                         <div className="p-5">
