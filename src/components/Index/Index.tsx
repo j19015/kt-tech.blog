@@ -64,7 +64,7 @@ export const Index = ({ contents }: BlogProps) => {
                                 <span className="text-gray-400">
                                     {new Date(blog.createdAt).toLocaleDateString("ja-JP", {
                                         timeZone: "Asia/Tokyo",
-                                    })}
+                                    }).replace(/\//g, '-')}
                                 </span>
                             </div>
                         </div>
