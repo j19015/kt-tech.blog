@@ -51,6 +51,11 @@ export default function Home() {
             初めまして、Webエンジニアの<strong>Koki</strong> と申します。<br/>
             都内のIT企業に所属しつつ、地方に移住しており、フルリモートで働いています。
           </p>
+          <h2 className="text-2xl font-semibold mt-8 ">趣味</h2>
+          <p className=" mt-2 pl-3">
+            ドライブがかなり好きです。<strong>CX-3</strong>が愛車です。<br/>
+            ドライブでよく行く場所は岐阜の山奥だったり、富士の朝霧高原だったりと自然が好きです。
+          </p>
           <h2 className="text-2xl font-semibold mt-8">エンジニアとしての自己紹介</h2>
           <p className=" mt-2 pl-3">
             Webアプリケーションエンジニアとして、Webアプリケーションの開発に携わっています。<br/>
