@@ -94,7 +94,7 @@ export default function Home() {
               <div className="timeline-content">
                 <h3 className='font-bold'>I株式会社(現職:副業)</h3>
                 <p className='mt-3 pl-3'>HTML,CSS,Ruby,Rails,Git,AWSの教育、PF作成などにメンターとして携わっています。</p>
-                <p className='mt-3 pl-3'>在籍は二年になり、2023/10/1付で、四段階あるメンターランクの一番上に位置するメンターランクである「JE」に到達いたしました。</p>
+                <p className='mt-3 pl-3'>在籍は二年になり、2023/10/1付で、四段階あるメンターランクの一番上に位置するメンターランクである「JE」に到達しました。</p>
               </div>
             </li>
             <li>
@@ -117,8 +117,8 @@ export default function Home() {
           </ul>
           <h2 className="text-2xl font-semibold mt-8">勉強中の分野</h2>
           <p className=" mt-2 pl-3">
-            サーバレスアーキテクチャの概念理解を深めようと、記事を漁ってベストプラクティスを模索しています<br/>
-            個人では、Next.js×MicroCMS×Vercelを使ってブログを作成しています。<br/>
+            サーバレスアーキテクチャの概念理解を深めようと、記事を漁ってベストプラクティスを模索しています。<br/>
+            Next.js×MicroCMS×Vercelを使ってブログを作成しています。<br/>
             それ以外にも、Ruby on Railsを用いてアプリの作成も行なっています。
           </p>
           <h2 className="text-2xl font-semibold mt-8">資格</h2>
