@@ -72,14 +72,16 @@ export default function Home() {
               <p className="timeline-date">2023年4月</p>
               <div className="timeline-content">
                 <h3 className='font-bold'>V株式会社(現職)</h3>
-                <p className='mt-3 pl-3'>現在は主にサーバレス駆動のWebアプリ開発をAWS CDKを用いて行っています。</p>
+                <p className='mt-3 pl-3'>新卒として入社をした会社になります。</p>
+                <p className='mt-3 pl-3'>現在は主にサーバレスアーキテクチャを採用したWebアプリケーション開発をAWS CDKを用いて行っています。</p>
               </div>
             </li>
             <li>
               <p className="timeline-date">2022年5月</p>
               <div className="timeline-content">
                 <h3 className='font-bold'>E株式会社(退職済み)</h3>
-                <p className='mt-3 pl-3'>MineCraftを用いたプログラミング教室の運営に携わりました。</p>
+                <p className='mt-3 pl-3'>MineCraft,Robloxを用いたプログラミング教室の運営に携わりました。</p>
+                <p className='mt-3 pl-3'>大人と子供との教え方の差にギャップを受けながらも、デジタルネイティブの受講生たちにかなり刺激を受け流ことが出来とても良い経験ができました。</p>
               </div>
             </li>
             <li>
@@ -87,6 +89,7 @@ export default function Home() {
               <div className="timeline-content">
                 <h3 className='font-bold'>I株式会社(現職:副業)</h3>
                 <p className='mt-3 pl-3'>HTML,CSS,Ruby,Rails,Git,AWSの教育、PF作成などにメンターとして携わっています。</p>
+                <p className='mt-3 pl-3'>在籍は二年になり、2023/10/1付で、四段階あるメンターランクの一番上に位置するメンターランクである「JE」に到達いたしました。</p>
               </div>
             </li>
             <li>
@@ -94,6 +97,7 @@ export default function Home() {
               <div className="timeline-content">
                 <h3 className='font-bold'>T大学</h3>
                 <p className='mt-3 pl-3'>大卒資格を得るために専門と並行で通いました。</p>
+                <p className='mt-3 pl-3'>専門学校で学んだこと以外の内容を重点的に勉強するので両立に苦労しました。</p>
               </div>
             </li>
             <li>
@@ -101,13 +105,14 @@ export default function Home() {
               <div className="timeline-content">
                 <h3 className='font-bold'>S専門学校</h3>
                 <p className='mt-3 pl-3'>大学では得られないような専門的知識を学びました。</p>
+                <p className='mt-3 pl-3'>学年の垣根を越えチーム開発を行なったり、プログラミングコンテストに参加したりしました。</p>
               </div>
             </li>
             
           </ul>
           <h2 className="text-2xl font-semibold mt-8">勉強中の分野</h2>
           <p className=" mt-2 pl-3">
-            現在はAWSを用いたサーバレスのWebアプリケーション開発をメインに業務をしております。<br/>
+            サーバレスアーキテクチャの概念理解を深めようと、記事を漁ってベストプラクティスを模索しています<br/>
             個人では、Next.js×MicroCMS×Vercelを使ってブログを作成しています。<br/>
             それ以外にも、Ruby on Railsを用いてアプリの作成も行なっています。
           </p>
