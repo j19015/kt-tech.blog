@@ -193,7 +193,7 @@ body {
     }
 
     .markdown p {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
     }
 
     .markdown ul {
@@ -279,7 +279,7 @@ body {
         background: #837ccf;
         position: absolute;
         left: 106px;
-        top: 24px;
+        top: 33px;
         border-radius: 100%;
     }
 }
