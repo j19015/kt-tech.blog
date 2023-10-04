@@ -78,7 +78,7 @@ export default function Home() {
               <div className="timeline-content">
                 <h3 className='font-bold'>V株式会社(現職)</h3>
                 <p className='mt-3 pl-3'>新卒として入社をした会社になります。</p>
-                <p className='mt-3 pl-3'>現在は主にサーバレスアーキテクチャを採用したWebアプリケーション開発をAWS CDKを用いて行っています。</p>
+                <p className='mt-3 pl-3'>現在は主にサーバレスアーキテクチャを採用したWebアプリケーションのバックエンド開発をAWS CDKを用いて行っています。</p>
               </div>
             </li>
             <li>
