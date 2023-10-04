@@ -111,6 +111,7 @@ export default function Home() {
                 <h3 className='font-bold'>S専門学校</h3>
                 <p className='mt-3 pl-3'>大学では得られないような専門的知識を学びました。</p>
                 <p className='mt-3 pl-3'>学年の垣根を越えチーム開発を行なったり、プログラミングコンテストに参加したりしました。</p>
+                <p className='mt-3 pl-3'>資格取得にも力を入れ応用情報技術者試験に合格しました。</p>
               </div>
             </li>
             
@@ -129,7 +130,7 @@ export default function Home() {
           </ul>
           <h2 className="text-2xl font-semibold mt-8">実績</h2>
           <ul className="list-disc pl-6 mt-2">
-            <li>三井不動産ハッカソン mentor賞</li>
+            <li>三井不動産ハッカソン 優秀賞</li>
             <li>SANGIハッカソン ４位入賞</li>
           </ul>
         </div>
