@@ -102,7 +102,7 @@ export default function Home() {
               <div className="timeline-content">
                 <h3 className='font-bold'>T大学</h3>
                 <p className='mt-3 pl-3'>大卒資格を得るために専門と並行で通いました。</p>
-                <p className='mt-3 pl-3'>専門学校で学んだこと以外の内容を重点的に勉強するので両立に苦労しました。</p>
+                <p className='mt-3 pl-3'>専門学校で学んだこと以外の内容を重点的に勉強するので、両立に苦労しました。</p>
               </div>
             </li>
             <li>
