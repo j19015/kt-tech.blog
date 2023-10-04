@@ -129,7 +129,7 @@ export default function Home() {
           </ul>
           <h2 className="text-2xl font-semibold mt-8">実績</h2>
           <ul className="list-disc pl-6 mt-2">
-            <li>三井不動産ハッカソン mentor賞</li>
+            <li>三井不動産ハッカソン 優秀賞</li>
             <li>SANGIハッカソン ４位入賞</li>
           </ul>
         </div>
