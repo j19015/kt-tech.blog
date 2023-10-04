@@ -78,7 +78,7 @@ export default function Home() {
               <div className="timeline-content">
                 <h3 className='font-bold'>V株式会社(現職)</h3>
                 <p className='mt-3 pl-3'>新卒として入社をした会社になります。</p>
-                <p className='mt-3 pl-3'>現在は主にサーバレスアーキテクチャを採用したWebアプリケーション開発をAWS CDKを用いて行っています。</p>
+                <p className='mt-3 pl-3'>現在は主にサーバレスアーキテクチャを採用したWebアプリケーションのバックエンド開発をAWS CDKを用いて行っています。</p>
               </div>
             </li>
             <li>
@@ -94,7 +94,7 @@ export default function Home() {
               <div className="timeline-content">
                 <h3 className='font-bold'>I株式会社(現職:副業)</h3>
                 <p className='mt-3 pl-3'>HTML,CSS,Ruby,Rails,Git,AWSの教育、PF作成などにメンターとして携わっています。</p>
-                <p className='mt-3 pl-3'>在籍は二年になり、2023/10/1付で、四段階あるメンターランクの一番上に位置するメンターランクである「JE」に到達しました。</p>
+                <p className='mt-3 pl-3'>在籍は二年になり、2023/10/1付で、四段階あるメンターランクの一番上に位置するメンターランクである「<strong>JE</strong>」に到達しました。</p>
               </div>
             </li>
             <li>
@@ -102,7 +102,7 @@ export default function Home() {
               <div className="timeline-content">
                 <h3 className='font-bold'>T大学</h3>
                 <p className='mt-3 pl-3'>大卒資格を得るために専門と並行で通いました。</p>
-                <p className='mt-3 pl-3'>専門学校で学んだこと以外の内容を重点的に勉強するので両立に苦労しました。</p>
+                <p className='mt-3 pl-3'>専門学校で学んだこと以外の内容を重点的に勉強するので、両立に苦労しました。</p>
               </div>
             </li>
             <li>
@@ -111,7 +111,7 @@ export default function Home() {
                 <h3 className='font-bold'>S専門学校</h3>
                 <p className='mt-3 pl-3'>大学では得られないような専門的知識を学びました。</p>
                 <p className='mt-3 pl-3'>学年の垣根を越えチーム開発を行なったり、プログラミングコンテストに参加したりしました。</p>
-                <p className='mt-3 pl-3'>資格取得にも力を入れ応用情報技術者試験に合格しました。</p>
+                <p className='mt-3 pl-3'>資格取得にも力を入れ、応用情報技術者試験に合格しました。</p>
               </div>
             </li>
             
