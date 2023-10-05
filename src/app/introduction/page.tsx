@@ -7,9 +7,9 @@ export default function Home() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4"> {/* グリッドを設定 */}
         <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
-        <div className="text-white text-black p-8 m-1 rounded-lg introduction">
+        <div className="text-white text-black m-1 rounded-lg introduction">
           <div className="text-center mt-1 w-full col-span-2">
-            <Title title={`introduction`} />
+            <Title title={`Introduction`} />
           </div>
           <div className="text-center">
             <img
