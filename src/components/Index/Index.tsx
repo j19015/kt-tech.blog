@@ -20,7 +20,7 @@ export const Index = ({ contents }: BlogProps) => {
                         </Link>
                         <div className="p-5">
                             <Link href={`/blogs/${blog.id}`}>
-                            <h5 className="mb-2 lg:text-lg font-bold tracking-tight text-white md:text-base sm:text-base">
+                            <h5 className="mb-2 lg:text-lg font-bold tracking-tight truncate text-white md:text-base sm:text-base">
                                 {blog.title}
                             </h5>
                             </Link>
