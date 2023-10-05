@@ -15,7 +15,7 @@ export const Header = () => {
   };
 
   return (
-    <header className="py-6 px-4 flex justify-between items-center bg-gray-900 rounded-lg shadow-md m-1">
+    <header className="py-6 px-4 flex justify-between items-center bg-gray-900 rounded-lg m-1">
       <Link className="z-50" href="/" onClick={handleMenuClose}>
         <h1 className="text-3xl font-serif hover:text-indigo-500 transition duration-300">kt-tech.blog</h1>
       </Link>
