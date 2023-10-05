@@ -3,6 +3,7 @@ import { getList } from "../../libs/microcms";
 import Sidebar from "@/components/SIdebar/Sidebar"; // Sidebarのimportを修正
 import { Blog } from "../../libs/microcms";
 import Index from "@/components/Index/Index";
+import Title from "@/components/Title/Title";
 
 export default async function StaticPage () {
   const { contents } = await getList();
@@ -24,8 +25,7 @@ export default async function StaticPage () {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 pb-5">
         <div className="lg:col-span-2">
           <div className="text-center mt-1 w-full col-span-2">
-            <h1 className="lg:text-6xl md:text-5xl text-4xl font-bold text-indigo-500 mb-2">Welcome to</h1>
-            <h2 className="lg:text-5xl md:text-4xl text-3xl font-extrabold text-indigo-500 mb-6"> Kt Tech Blog</h2>
+            <Title title={`Home`} />
           </div>
           <Index contents = {latestBlogs}/>
           <div className="mt-8 flex justify-center"> {/* 中央寄せ */}
