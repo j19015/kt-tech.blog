@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarAlt,faTag } from '@fortawesome/free-solid-svg-icons'
 import markdownToHtml from 'zenn-markdown-html';
 import 'zenn-content-css';
+import '../../../../styles/markdown.css'
 import '../../../../styles/default-dark.min.css'
 export async function generateStaticParams(){
   const { contents } = await getList();
@@ -104,8 +105,8 @@ export default async function StaticDetailPage({
                     ))}
                 </ul>
             </div>
-            <div className="p-4 znc markdown">
-              <h1>{blog.title}</h1>
+            <h1 className="p-4 text-3xl font-bold lg:text-5xl">{blog.title}</h1>
+            <div className="p-4 znc markdown">    
               <div dangerouslySetInnerHTML={{ __html: parse_body.html() }}>
               </div>
             </div>

@@ -1,11 +1,11 @@
-/* Markdownクラス内のスタイル */
-.markdown {
+/* zncクラス内のスタイル */
+.znc {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     line-height: 1.7;
     color: white;
 }
 
-.markdown h1 {
+.znc h1 {
     margin-top: 50px;
     font-size: 1.9rem;
     font-weight: bold;
@@ -13,7 +13,7 @@
     color: white;
 }
 
-.markdown h1 {
+.znc h1 {
     font-size: 1.5rem;
     font-weight: bold;
     margin-top: 5rem;
@@ -24,7 +24,7 @@
     color: #ffffff; /* Matching color */
 }
 
-.markdown h2 {
+.znc h2 {
     font-weight: bold;
     margin-top: 20px;
     font-size: 1.3rem;
@@ -34,7 +34,7 @@
     color: white;
 }
 
-.markdown h3 {
+.znc h3 {
     font-weight: bold;
     font-size: 1.1rem;
     margin-top: 1.2rem;
@@ -43,47 +43,56 @@
     color: white;
 }
 
-.markdown ul {
+.znc ul {
     list-style-type: disc;
     margin-left: 2rem;
     padding-left: 10px;
     color: white;
 }
 
-.markdown ol > li {
+.znc ol,ul > li {
     font-weight: bold;
     padding: 3px;
     color: white;
 }
+.znc ol>li::marker{
+    color: white;
+}
 
-.markdown ol {
+.znc ul>li::marker{
+    color: white;
+}
+
+.znc ol {
     list-style-type: decimal;
     margin-left: 2rem;
     padding-left: 10px;
     color: white;
 }
-.markdown li {
+.znc li {
     font-size: 1.0rem;
-    padding: 5px 0;
+}
+.znc ul>li{
+    padding: 0;
 }
 
-.markdown a {
+.znc a {
     color: #3498DB; /* Blue link color */
     text-decoration: none;
     transition: color 0.2s;
 }
 
-.markdown a:hover {
+.znc a:hover {
     color: #2980B9; /* Slightly darker blue on hover */
     text-decoration: underline;
 }
 
 
-.markdown div {
+.znc div {
     position: relative;
 }
 
-.markdown code {
+.znc code {
     background-color: #1c2834;
     padding: 0.2rem 0.4rem;
     border-radius: 4px;
@@ -91,7 +100,7 @@
     color: #ffffff; /* Red text color */
 }
 
-.markdown blockquote {
+.znc blockquote {
     border-left: 5px solid #b6c9d6; /* Matching blue border */
     padding-left: 1rem;
     margin: 10px;
@@ -100,13 +109,13 @@
     font-style: italic;
 }
 
-.markdown hr {
+.znc hr {
     border: none;
     border-top: 2px solid #ECF0F1; /* Light grey border */
     margin: 1.5rem 0;
 }
 
-.markdown img {
+.znc img {
     max-width: 70%;
     height: auto;
     display: block;
@@ -115,10 +124,10 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
 }
 
-.markdown p {
+.znc p {
     padding-left: 10px;
     padding-bottom: 10px;
-    line-height: 2.5;
+    line-height: 2.0;
 }
 
 .index_img{
@@ -131,46 +140,46 @@
 
 /* メディアクエリを追加 */
 @media (max-width: 768px) {
-    .markdown h1 {
+    .znc h1 {
         font-size: 1.6rem;
     }
 
-    .markdown h2 {
+    .znc h2 {
         font-size: 1.5rem;
     }
 
-    .markdown h3 {
+    .znc h3 {
         font-size: 1.4rem;
     }
 
-    .markdown h4 {
+    .znc h4 {
         font-size: 1.2rem;
     }
 
-    .markdown p {
+    .znc p {
         font-size: 0.9rem;
     }
 
-    .markdown ul {
+    .znc ul {
         margin-left: 1rem;
     }
 
-    .markdown ol {
+    .znc ol {
         margin-left: 1rem;
     }
 
-    .markdown pre {
+    .znc pre {
         font-size: 0.9rem;
     }
 
-    .markdown code {
+    .znc code {
         font-size: 0.9rem;
     }
 
-    .markdown blockquote {
+    .znc blockquote {
         font-size: 1rem;
     }
-    .markdown img{
+    .znc img{
         max-width: 100%;
     }
     .index_img{
