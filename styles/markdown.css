@@ -50,7 +50,7 @@
     color: white;
 }
 
-.znc ol,ul > li {
+.znc ol > li {
     font-weight: bold;
     padding: 3px;
     color: white;
@@ -73,7 +73,8 @@
     font-size: 1.0rem;
 }
 .znc ul>li{
-    padding: 0;
+    padding: 3px;
+    color: white;
 }
 
 .znc a {
