@@ -62,7 +62,7 @@ export default async function StaticDetailPage({
                 />
               </Link>
             </div>
-            <div className="text-gray-500 text-lg p-1">
+            <div className="text-gray-500 text-lg p-2">
                 <FontAwesomeIcon icon={faCalendarAlt} className="mr-1 text-gray-400" />
                 <span className="mr-2 text-gray-400">
                     投稿日時:
@@ -73,12 +73,12 @@ export default async function StaticDetailPage({
                     })}
                 </span>
             </div>
-            <div className="mt-2" style={{width: "130px"}}>
-                <Link key={blog.category?.id} href={`/categories/${blog.category?.id}`} className="text-indigo-400 hover:text-indigo-300">
-                    <span className="group bg-gray-700 text-gray-100 p-2 rounded-lg flex items-center transition duration-300 ease-in-out transform hover:bg-indigo-700 hover:text-gray-300 hover:scale-105">
+            <div className="p-2">
+                <Link key={blog.category?.id} href={`/categories/${blog.category?.id}`} className="text-indigo-400 hover:text-indigo-300 inline">
+                    <div className="inline group bg-gray-700 text-gray-100 p-3 rounded-lg transition duration-300 ease-in-out transform hover:bg-indigo-700 hover:text-gray-300 hover:scale-105">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5 text-gray-400 mr-2 group-hover:text-indigo-400"
+                            className="h-5 w-5 text-gray-400 mr-2 group-hover:text-indigo-400 inline"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -91,7 +91,7 @@ export default async function StaticDetailPage({
                             />
                         </svg>
                         {blog.category?.name}
-                    </span>
+                    </div>
                 </Link>
             </div>
             <div className="mt-2 p-1">
