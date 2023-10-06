@@ -9,6 +9,7 @@ import Sidebar from "@/components/SIdebar/Sidebar"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarAlt,faTag } from '@fortawesome/free-solid-svg-icons'
 import markdownToHtml from 'zenn-markdown-html';
+import 'zenn-content-css';
 
 export async function generateStaticParams(){
   const { contents } = await getList();
