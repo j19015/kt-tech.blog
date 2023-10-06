@@ -8,6 +8,7 @@ import "highlight.js/styles/hybrid.css";
 import Sidebar from "@/components/SIdebar/Sidebar"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarAlt,faTag } from '@fortawesome/free-solid-svg-icons'
+import markdownToHtml from 'zenn-markdown-html';
 
 export async function generateStaticParams(){
   const { contents } = await getList();
@@ -26,12 +27,12 @@ export default async function StaticDetailPage({
   params: { blogId : string};
 }) {
   const blog = await getDetail(blogId);
-
-  const body = cheerio.load(blog.body);
-  body("pre code").each((_, elm) => {
-    const result = hljs.highlightAuto(body(elm).text());
-    body(elm).html(result.value);
-    body(elm).addClass("hljs");
+  const html = markdownToHtml(blog.body);
+  const parse_body = cheerio.load(html);
+  parse_body("pre code").each((_, elm) => {
+    const result = hljs.highlightAuto(parse_body(elm).text());
+    parse_body(elm).html(result.value);
+    parse_body(elm).addClass("hljs");
   });
   //console.log(blog.body)
   //console.log(body.html())
@@ -104,7 +105,7 @@ export default async function StaticDetailPage({
             </div>
             <div className="p-4 markdown">
               <h1>{blog.title}</h1>
-              <div dangerouslySetInnerHTML={{ __html: body.html() }}>
+              <div dangerouslySetInnerHTML={{ __html: parse_body.html() }}>
               </div>
             </div>
           </div>
