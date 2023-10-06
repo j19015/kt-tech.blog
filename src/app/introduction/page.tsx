@@ -1,6 +1,7 @@
 import Sidebar from '@/components/SIdebar/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquareGithub,faSquareTwitter } from '@fortawesome/free-brands-svg-icons';
+import '../../../styles/markdown.css'
 import Title from '@/components/Title/Title';
 
 export default function Home() {
