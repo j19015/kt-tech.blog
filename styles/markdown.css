@@ -1,0 +1,182 @@
+/* Markdownクラス内のスタイル */
+.markdown {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    line-height: 1.7;
+    color: white;
+}
+
+.markdown h1 {
+    margin-top: 50px;
+    font-size: 1.9rem;
+    font-weight: bold;
+    margin-bottom: 3rem;
+    color: white;
+}
+
+.markdown h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 5rem;
+    margin-bottom: 3rem;
+    border-left: 1px solid rgb(129 140 248); /* Vibrant blue border */
+    border-bottom: 1px solid rgb(129 140 248); /* Vibrant blue border */
+    padding-left: 0.5rem;
+    color: #ffffff; /* Matching color */
+}
+
+.markdown h2 {
+    font-weight: bold;
+    margin-top: 20px;
+    font-size: 1.3rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    padding-left: 10px;
+    color: white;
+}
+
+.markdown h3 {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-top: 1.2rem;
+    margin-bottom: 0.3rem;
+    padding-left: 10px;
+    color: white;
+}
+
+.markdown ul {
+    list-style-type: disc;
+    margin-left: 2rem;
+    padding-left: 10px;
+    color: white;
+}
+
+.markdown ol > li {
+    font-weight: bold;
+    padding: 3px;
+    color: white;
+}
+
+.markdown ol {
+    list-style-type: decimal;
+    margin-left: 2rem;
+    padding-left: 10px;
+    color: white;
+}
+.markdown li {
+    font-size: 1.0rem;
+    padding: 5px 0;
+}
+
+.markdown a {
+    color: #3498DB; /* Blue link color */
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.markdown a:hover {
+    color: #2980B9; /* Slightly darker blue on hover */
+    text-decoration: underline;
+}
+
+
+.markdown div {
+    position: relative;
+}
+
+.markdown code {
+    background-color: #1c2834;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Fira Code', monospace; /* Monospace font for code */
+    color: #ffffff; /* Red text color */
+}
+
+.markdown blockquote {
+    border-left: 5px solid #b6c9d6; /* Matching blue border */
+    padding-left: 1rem;
+    margin: 10px;
+    margin-left: 2rem;
+    color: #ffffff; /* Slightly darker grey text color */
+    font-style: italic;
+}
+
+.markdown hr {
+    border: none;
+    border-top: 2px solid #ECF0F1; /* Light grey border */
+    margin: 1.5rem 0;
+}
+
+.markdown img {
+    max-width: 70%;
+    height: auto;
+    display: block;
+    margin: 3rem 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
+}
+
+.markdown p {
+    padding-left: 10px;
+    padding-bottom: 10px;
+    line-height: 2.5;
+}
+
+.index_img{
+    width: 700px;
+    height: 260px;
+    object-fit: fill;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+/* メディアクエリを追加 */
+@media (max-width: 768px) {
+    .markdown h1 {
+        font-size: 1.6rem;
+    }
+
+    .markdown h2 {
+        font-size: 1.5rem;
+    }
+
+    .markdown h3 {
+        font-size: 1.4rem;
+    }
+
+    .markdown h4 {
+        font-size: 1.2rem;
+    }
+
+    .markdown p {
+        font-size: 0.9rem;
+    }
+
+    .markdown ul {
+        margin-left: 1rem;
+    }
+
+    .markdown ol {
+        margin-left: 1rem;
+    }
+
+    .markdown pre {
+        font-size: 0.9rem;
+    }
+
+    .markdown code {
+        font-size: 0.9rem;
+    }
+
+    .markdown blockquote {
+        font-size: 1rem;
+    }
+    .markdown img{
+        max-width: 100%;
+    }
+    .index_img{
+        width: 700px;
+        height: 200px;
+        object-fit: fill;
+        box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+    }
+}
