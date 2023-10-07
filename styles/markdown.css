@@ -98,7 +98,7 @@
     padding-left: 1rem;
     margin: 10px;
     margin-left: 2rem;
-    color: #ffffff; /* Slightly darker grey text color */
+    color: #ffffff !important; /* Slightly darker grey text color */
     font-style: italic;
 }
 
