@@ -4,11 +4,14 @@ import Image from "next/image"
 import { getDetail,getList } from "../../../../libs/microcms"
 import cheerio from "cheerio";
 import hljs from "highlight.js";
-import "highlight.js/styles/hybrid.css";
+//import "highlight.js/styles/hybrid.css";
 import Sidebar from "@/components/SIdebar/Sidebar"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarAlt,faTag } from '@fortawesome/free-solid-svg-icons'
-
+import markdownToHtml from 'zenn-markdown-html';
+import 'zenn-content-css';
+import '../../../../styles/markdown.css'
+import '../../../../styles/default-dark.min.css'
 export async function generateStaticParams(){
   const { contents } = await getList();
 
@@ -26,12 +29,12 @@ export default async function StaticDetailPage({
   params: { blogId : string};
 }) {
   const blog = await getDetail(blogId);
-
-  const body = cheerio.load(blog.body);
-  body("pre code").each((_, elm) => {
-    const result = hljs.highlightAuto(body(elm).text());
-    body(elm).html(result.value);
-    body(elm).addClass("hljs");
+  const html = markdownToHtml(blog.body);
+  const parse_body = cheerio.load(html);
+  parse_body("pre code").each((_, elm) => {
+    const result = hljs.highlightAuto(parse_body(elm).text());
+    parse_body(elm).html(result.value);
+    parse_body(elm).addClass("hljs");
   });
   //console.log(blog.body)
   //console.log(body.html())
@@ -59,7 +62,7 @@ export default async function StaticDetailPage({
                 />
               </Link>
             </div>
-            <div className="text-gray-500 text-lg p-1">
+            <div className="text-gray-500 text-lg p-2">
                 <FontAwesomeIcon icon={faCalendarAlt} className="mr-1 text-gray-400" />
                 <span className="mr-2 text-gray-400">
                     投稿日時:
@@ -70,12 +73,12 @@ export default async function StaticDetailPage({
                     })}
                 </span>
             </div>
-            <div className="mt-2" style={{width: "130px"}}>
-                <Link key={blog.category?.id} href={`/categories/${blog.category?.id}`} className="text-indigo-400 hover:text-indigo-300">
-                    <span className="group bg-gray-700 text-gray-100 p-2 rounded-lg flex items-center transition duration-300 ease-in-out transform hover:bg-indigo-700 hover:text-gray-300 hover:scale-105">
+            <div className="p-2">
+                <Link key={blog.category?.id} href={`/categories/${blog.category?.id}`} className="text-indigo-400 hover:text-indigo-300 inline">
+                    <div className="inline group bg-gray-700 text-gray-100 p-3 rounded-lg transition duration-300 ease-in-out transform hover:bg-indigo-700 hover:text-gray-300 hover:scale-105">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5 text-gray-400 mr-2 group-hover:text-indigo-400"
+                            className="h-5 w-5 text-gray-400 mr-2 group-hover:text-indigo-400 inline"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -88,7 +91,7 @@ export default async function StaticDetailPage({
                             />
                         </svg>
                         {blog.category?.name}
-                    </span>
+                    </div>
                 </Link>
             </div>
             <div className="mt-2 p-1">
@@ -102,9 +105,9 @@ export default async function StaticDetailPage({
                     ))}
                 </ul>
             </div>
-            <div className="p-4 markdown">
-              <h1>{blog.title}</h1>
-              <div dangerouslySetInnerHTML={{ __html: body.html() }}>
+            <h1 className="p-4 mt-5 text-xl font-bold lg:text-3xl">{blog.title}</h1>
+            <div className="p-4 znc markdown">    
+              <div dangerouslySetInnerHTML={{ __html: parse_body.html() }}>
               </div>
             </div>
           </div>
