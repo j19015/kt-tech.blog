@@ -26,7 +26,7 @@ export const Index = ({ contents }: BlogProps) => {
                             </Link>
                             <div className="p-2">
                                 <Link key={blog.category?.id} href={`/categories/${blog.category?.id}`} className="text-indigo-400 hover:text-indigo-300 inline">
-                                    <div className="inline group bg-gray-700 text-gray-100 p-3 rounded-lg transition duration-300 ease-in-out transform hover:bg-indigo-700 hover:text-gray-300 hover:scale-105">
+                                    <div className="inline group bg-gray-700 text-gray-100 p-2 rounded-lg transition duration-300 ease-in-out transform hover:bg-indigo-700 hover:text-gray-300 hover:scale-105">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             className="h-5 w-5 text-gray-400 mr-2 group-hover:text-indigo-400 inline"
