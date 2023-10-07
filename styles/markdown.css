@@ -53,28 +53,28 @@
 .znc ol > li {
     font-weight: bold;
     padding: 3px;
-    color: white;
+    color: white !important;
 }
 .znc ol>li::marker{
-    color: white;
+    color: white !important;
 }
 
 .znc ul>li::marker{
-    color: white;
+    color: white !important;
 }
 
 .znc ol {
     list-style-type: decimal;
     margin-left: 2rem;
     padding-left: 10px;
-    color: white;
+    color: white !important;
 }
 .znc li {
     font-size: 1.0rem;
 }
 .znc ul>li{
     padding: 3px;
-    color: white;
+    color: white !important;
 }
 
 .znc a {
