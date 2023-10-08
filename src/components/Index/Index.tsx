@@ -26,21 +26,7 @@ export const Index = ({ contents }: BlogProps) => {
                             </Link>
                             <div className="p-2">
                                 <Link key={blog.category?.id} href={`/categories/${blog.category?.id}`} className="text-indigo-400 hover:text-indigo-300 inline">
-                                    <div className="inline group bg-gray-700 text-gray-100 p-2 rounded-lg transition duration-300 ease-in-out transform hover:bg-indigo-700 hover:text-gray-300 hover:scale-105">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="h-5 w-5 text-gray-400 mr-2 group-hover:text-indigo-400 inline"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M5 13l4 4L19 7"
-                                            />
-                                        </svg>
+                                    <div className="inline group text-gray-100 p-2 pl-4 pr-4 rounded-lg border-solid border-2 border-indigo-500">
                                         {blog.category?.name}
                                     </div>
                                 </Link>
@@ -48,11 +34,13 @@ export const Index = ({ contents }: BlogProps) => {
                             <div className="mt-2">
                                 <ul className="list-disc list-inside text-gray-400">
                                     {blog.tags?.map((tag) => (
-                                        <span key={tag.id} className="inline-block bg-indigo-700 text-white px-2 py-1 rounded-full text-sm mr-2 mb-2">
-                                            <Link href={`/tags/${tag.id}`}>
-                                            <FontAwesomeIcon icon={faTag} /> {tag.name}
-                                            </Link>
-                                        </span>
+                                        <>
+                                             <span key={tag.id} className="inline-block border-solid  text-indigo-400 px-2 py-1 rounded-full text-sm mr-2 mb-2">
+                                                <Link href={`/tags/${tag.id}`}>
+                                                    <FontAwesomeIcon icon={faTag} /> {tag.name}
+                                                </Link>
+                                            </span>
+                                        </>
                                     ))}
                                 </ul>
                             </div>
