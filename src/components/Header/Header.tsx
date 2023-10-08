@@ -5,19 +5,21 @@ import { useState } from "react";
 
 export const Header = () => {
   const [isOpen, setOpen] = useState<boolean>(false);
+  const [selected, setSelected] = useState<string>("Home");
 
   const handleMenuOpen = () => {
     setOpen(!isOpen);
   };
 
-  const handleMenuClose = () => {
+  const handleMenuClose = (menuName: string) => {
     setOpen(false);
+    setSelected(menuName);
   };
 
   return (
     <header className="py-6 px-4 flex justify-between items-center bg-gray-900 rounded-lg m-1">
-      <Link className="z-50" href="/" onClick={handleMenuClose}>
-        <h1 className="text-3xl font-serif hover:text-indigo-500 transition duration-300">kt-tech.blog</h1>
+      <Link className="z-50" href="/" onClick={() => handleMenuClose("Home")}>
+        <h1 className={`text-3xl font-serif transition duration-300`}>kt-tech.blog</h1>
       </Link>
 
       <nav
@@ -34,34 +36,18 @@ export const Header = () => {
               : " hidden block md:flex md:gap-8"
           }
         >
-          <li>
-            <Link onClick={handleMenuClose} href="/">
-              <span className="font-serif hover:text-indigo-500 transition duration-300">
-                Home
-              </span>
-            </Link>
-          </li>
-          <li>
-            <Link onClick={handleMenuClose} href="/blogs/page/1">
-              <span className="font-serif hover:text-indigo-500 transition duration-300">
-                Blog
-              </span>
-            </Link>
-          </li>
-          <li>
-            <Link onClick={handleMenuClose} href="/dev">
-              <span className="font-serif hover:text-indigo-500 transition duration-300">
-                Dev
-              </span>
-            </Link>
-          </li>
-          <li>
-            <Link onClick={handleMenuClose} href="/introduction">
-              <span className="font-serif hover:text-indigo-500 transition duration-300">
-                Introduction
-              </span>
-            </Link>
-          </li>
+          {["Home", "Blog", "Dev", "Introduction"].map(menu => (
+            <li key={menu}>
+              <Link 
+                onClick={() => handleMenuClose(menu)}
+                href={menu === "Blog" ? "/blogs/page/1" : menu === "Home" ? "/" : `/${menu.toLowerCase()}`}
+              >
+                <span className={`font-serif transition duration-300 ${selected === menu ? "text-indigo-500" : "hover:text-indigo-500"}`}>
+                  {menu}
+                </span>
+              </Link>
+            </li>
+          ))}
         </ul>
       </nav>
       <button className="z-50 space-y-2 md:hidden" onClick={handleMenuOpen}>
