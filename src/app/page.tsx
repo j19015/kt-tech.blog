@@ -25,7 +25,7 @@ export default async function StaticPage () {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 pb-5">
         <div className="lg:col-span-2">
           <div className="text-center mt-1 w-full col-span-2">
-            <Title title={`Home`} />
+            <Title title={`Welcome`} />
           </div>
           <Index contents = {latestBlogs}/>
           <div className="mt-8 flex justify-center"> {/* 中央寄せ */}
