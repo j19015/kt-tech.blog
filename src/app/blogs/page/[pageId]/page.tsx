@@ -61,9 +61,6 @@ export default async function StaticPaginationPage({
       <>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 pb-8"> {/* グリッドを設定 */}
           <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
-            <div className="text-center mt-1 w-full col-span-2">
-              <Title title={`Blog`} />
-            </div>
             <Index contents={contentSlice}/>
             <Paginate currentPage={Number(pageId)} totalPage={Math.ceil(contents.length/6)} kind={`/blogs`}></Paginate>
           </div>
