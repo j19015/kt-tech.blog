@@ -9,9 +9,6 @@ export default function Home() {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4"> {/* グリッドを設定 */}
         <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
         <div className="text-white text-black m-1 rounded-lg introduction">
-          <div className="text-center mt-1 w-full col-span-2">
-            <Title title={`Introduction`} />
-          </div>
           <div className="text-center">
             <img
               src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2524017/profile-images/1691862464"
