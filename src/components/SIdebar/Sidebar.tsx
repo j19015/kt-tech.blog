@@ -27,9 +27,9 @@ export const Sidebar = async () => {
                     <div key={article.id} className='grid grid-cols-12 mb-3'>
                         
                         <div className='col-span-4 p-1'>
-                            <Link href={`blogs/${article.id}`}>
+                            <Link href={`/blogs/${article.id}`}>
                                 <img
-                                    className="rounded-lg rouded-md"
+                                    className="rounded-md"
                                     src={article.eyecatch?.url}
                                     alt=""
                                 />
