@@ -83,7 +83,7 @@ export default async function StaticDetailPage({
             <div className="mt-2 p-1">
                 <ul className="list-disc list-inside text-gray-400">
                     {blog.tags?.map((tag) => (
-                        <span key={tag.id} className="inline-block bg-indigo-700 text-white px-2 py-1 rounded-full text-sm mr-2 mb-2">
+                        <span key={tag.id} className="inline-block text-white px-0.5 py-1 rounded-full hover:text-indigo-700 text-sm mr-2 mb-2">
                             <Link href={`/tags/${tag.id}`}>
                               <FontAwesomeIcon icon={faTag} /> {tag.name}
                             </Link>
