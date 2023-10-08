@@ -52,7 +52,7 @@ export const Sidebar = async () => {
                 <h3 className="text-xl font-bold mb-4 border-b border-gray-600 pb-2">カテゴリー</h3>
                 <div className="flex flex-wrap gap-2">
                     {categoryList.map((category) => (
-                        <Link key={category.id} href={`/categories/${category.id}/page/1`} className="text-indigo-500">
+                        <Link key={category.id} href={`/categories/${category.id}/page/1`} className="text-indigo-500 px-0.5 py-1">
                              <div className="inline group text-gray-100 p-2 pl-4 pr-4 rounded-lg border-solid border-2 border-gray-500 hover:border-indigo-500">
                                 {category.name}
                             </div>
@@ -65,7 +65,7 @@ export const Sidebar = async () => {
                 <h3 className="text-xl font-bold mb-4 border-b border-gray-600 pb-2">タグ</h3>
                 <div className="flex flex-wrap gap-2">
                     {tagList.map((tag) => (
-                        <span key={tag.id} className="inline-block text-white px-2 py-1 rounded-full hover:text-indigo-700 text-sm mr-2 mb-2">
+                        <span key={tag.id} className="inline-block text-white px-0.5 py-1 rounded-full hover:text-indigo-700 text-sm mr-2 mb-2">
                             <Link href={`/tags/${tag.id}`}>
                             <FontAwesomeIcon icon={faTag} /> {tag.name}
                             </Link>
