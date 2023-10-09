@@ -49,6 +49,10 @@ export async function generateMetadata(
       creator: '@tech_koki',
     },
     openGraph: {
+      title: blog.title,
+      description: blog.body.slice(0,100),
+      locale: 'ja_JP',
+      type: 'website',
       images: previousImages,
     },
   }
