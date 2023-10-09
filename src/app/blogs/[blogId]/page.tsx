@@ -12,6 +12,7 @@ import markdownToHtml from 'zenn-markdown-html';
 import 'zenn-content-css';
 import '../../../../styles/markdown.css'
 import '../../../../styles/default-dark.min.css'
+import type { Metadata, ResolvingMetadata } from 'next'
 export async function generateStaticParams(){
   const { contents } = await getList();
 
@@ -21,6 +22,29 @@ export async function generateStaticParams(){
     };
   });
   return [...paths];
+}
+
+type Props = {
+  params: { blogId: string }
+}
+
+export async function generateMetadata(
+  { params }: Props
+): Promise<Metadata> {
+  
+  // fetch data
+  const blog =  await getDetail(params.blogId);
+ 
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = blog.eyecatch || []
+ 
+  return {
+    title: blog.title,
+    description: blog.body.slice(0,100),
+    openGraph: {
+      images: previousImages,
+    },
+  }
 }
 
 export default async function StaticDetailPage({
