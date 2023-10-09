@@ -4,6 +4,24 @@ import { faSquareGithub,faSquareTwitter } from '@fortawesome/free-brands-svg-ico
 import '../../../styles/markdown.css'
 import Title from '@/components/Title/Title';
 
+export const metadata = {
+  title: '自己紹介ページ',
+  description: '自己紹介のページになります。LTなどで使えればと思っています。',
+  openGraph: {
+    title: '自己紹介ページ',
+    description: '自己紹介のページになります。LTなどで使えればと思っています。',
+    locale: 'ja_JP',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '自己紹介ページ',
+    description: '自己紹介のページになります。LTなどで使えればと思っています。',
+    site: '@tech_koki',
+    creator: '@tech_koki',
+  },
+};
+
 export default function Home() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4"> {/* グリッドを設定 */}
