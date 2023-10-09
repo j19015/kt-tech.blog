@@ -7,7 +7,20 @@ import Title from "@/components/Title/Title";
 
 export const metadata = {
   title: 'TOPページ',
-  description: '基本的には技術記事を投稿していきます。PFの公開ページやIntroduction用ページとしても活用をしています。'
+  description: '基本的には技術記事を投稿していきます。PFの公開ページやIntroduction用ページとしても活用をしています。',
+  openGraph: {
+    title: 'TOPページ',
+    description: '基本的には技術記事を投稿していきます。PFの公開ページやIntroduction用ページとしても活用をしています。',
+    locale: 'ja_JP',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'TOPページ',
+    description: '基本的には技術記事を投稿していきます。PFの公開ページやIntroduction用ページとしても活用をしています。',
+    site: '@tech_koki',
+    creator: '@tech_koki',
+  },
 };
 
 export default async function StaticPage () {
