@@ -31,7 +31,7 @@ type Props = {
 export async function generateMetadata(
   { params }: Props
 ): Promise<Metadata> {
-  
+
   // fetch data
   const blog =  await getDetail(params.blogId);
  
@@ -41,6 +41,13 @@ export async function generateMetadata(
   return {
     title: blog.title,
     description: blog.body.slice(0,100),
+    twitter: {
+      card: 'summary_large_image',
+      title: blog.title,
+      description: blog.body.slice(0,100),
+      site: '@tech_koki',
+      creator: '@tech_koki',
+    },
     openGraph: {
       images: previousImages,
     },
