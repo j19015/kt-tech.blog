@@ -5,6 +5,11 @@ import { Blog } from "../../libs/microcms";
 import Index from "@/components/Index/Index";
 import Title from "@/components/Title/Title";
 
+export const metadata = {
+  title: 'TOPページ',
+  description: '基本的には技術記事を投稿していきます。PFの公開ページやIntroduction用ページとしても活用をしています。'
+};
+
 export default async function StaticPage () {
   const { contents } = await getList();
   //console.log(contents);
