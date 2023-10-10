@@ -12,6 +12,7 @@ export const metadata = {
     description: '自己紹介のページになります。LTなどで使えればと思っています。',
     locale: 'ja_JP',
     type: 'website',
+    url: 'https://kt-tech.blog/opengraph-image.png'
   },
   twitter: {
     card: 'summary_large_image',
@@ -76,7 +77,7 @@ export default function Home() {
           <p className=" mt-2 pl-3">
             Webアプリケーションエンジニアとして、Webアプリケーションの開発に携わっています。<br/>
             業務ではバックエンド、インフラをメインに担当しています。<br/>
-            サーバレスアーキテクチャやクリーンアーキテクチャに興味があります。
+            サーバレスアーキテクチャ、クリーンアーキテクチャに興味があります。
           </p>
           <h2 className="text-2xl font-semibold mt-8">技術スタック</h2>
           <ul className="list-disc mt-2 pl-6">
@@ -102,7 +103,7 @@ export default function Home() {
               <div className="timeline-content">
                 <h3 className='font-bold'>E株式会社(退職済み)</h3>
                 <p className='mt-3 pl-3'>MineCraft,Robloxを用いたプログラミング教室の運営に携わりました。</p>
-                <p className='mt-3 pl-3'>大人と子供との教え方の差にギャップを受けながらも、デジタルネイティブの受講生たちにかなり刺激を受け流ことが出来とても良い経験ができました。</p>
+                <p className='mt-3 pl-3'>大人と子供との教え方の差にギャップを受けながらも、デジタルネイティブの受講生たちにかなり刺激を受けることができ、とても良い経験ができました。</p>
               </div>
             </li>
             <li>
