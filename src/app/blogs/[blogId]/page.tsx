@@ -74,6 +74,16 @@ export default async function StaticDetailPage({
   //console.log(blog.body)
   //console.log(body.html())
 
+  //目次機能
+  const $ = cheerio.load(html);
+  const headings = $('h1, h2, h3').toArray();
+  const toc = headings.map((element) => ({
+    text: $(element).text(),
+    id: (element as any).attribs.id,
+    tag: (element as any).tagName
+  }));
+  console.log(toc)
+
 
   if(!blog){
     notFound();
@@ -127,7 +137,19 @@ export default async function StaticDetailPage({
                 </ul>
             </div>
             <h1 className="p-4 mt-5 text-xl font-bold lg:text-3xl">{blog.title}</h1>
-            <div className="p-4 znc markdown">    
+            <div className="p-4 znc markdown">
+              <div>
+                <h1>目次</h1>
+                <ul>
+                  {toc.map(data => (
+                    <li key={data.id} style={{listStyle: "none"}}>
+                      <a href={`#${data.id}`}>
+                        <span  className={`${data.tag=='h2' ? 'ml-10' : (data.tag=='h3' ? 'ml-20': 'ml-1')}`}>{data.text}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
               <div dangerouslySetInnerHTML={{ __html: parse_body.html() }}>
               </div>
             </div>
