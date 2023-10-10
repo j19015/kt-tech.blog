@@ -12,7 +12,7 @@ export const metadata = {
     description: '自己紹介のページになります。LTなどで使えればと思っています。',
     locale: 'ja_JP',
     type: 'website',
-    url: 'https://kt-tech.blog/opengraph-image.png'
+    url: 'https://kt-tech.blog'
   },
   twitter: {
     card: 'summary_large_image',
