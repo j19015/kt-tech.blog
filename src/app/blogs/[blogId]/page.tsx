@@ -144,7 +144,7 @@ export default async function StaticDetailPage({
                   {toc.map(data => (
                     <li key={data.id} style={{listStyle: "none"}}>
                       <a href={`#${data.id}`}>
-                        <span  className={`${data.tag=='h2' ? 'ml-10' : (data.tag=='h3' ? 'ml-20': 'ml-1')}`}>{data.text}</span>
+                        <span  className={`${data.tag=='h2' ? 'ml-5' : (data.tag=='h3' ? 'ml-10': 'ml-1')} text-white`}>{data.text}</span>
                       </a>
                     </li>
                   ))}
