@@ -74,6 +74,16 @@ export default async function StaticDetailPage({
   //console.log(blog.body)
   //console.log(body.html())
 
+  //目次機能
+  const $ = cheerio.load(html);
+  const headings = $('h1, h2, h3').toArray();
+  const toc = headings.map((element) => ({
+    text: $(element).text(),
+    id: (element as any).attribs.id,
+    tag: (element as any).tagName
+  }));
+  console.log(toc)
+
 
   if(!blog){
     notFound();
@@ -84,7 +94,7 @@ export default async function StaticDetailPage({
     <>
     <div>
       <div className="grid grid-cols-1 lg:grid-cols-3"> {/* グリッドを設定 */}
-        <div className="lg:col-span-3 lg:p-10"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
+        <div className="lg:col-span-2 lg:p-10"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
           <div>
             <div className="p-1">
               <Link href={`/blogs/${blog.id}`}>
@@ -127,14 +137,27 @@ export default async function StaticDetailPage({
                 </ul>
             </div>
             <h1 className="p-4 mt-5 text-xl font-bold lg:text-3xl">{blog.title}</h1>
-            <div className="p-4 znc markdown">    
+            <div className="p-4 znc markdown">
               <div dangerouslySetInnerHTML={{ __html: parse_body.html() }}>
               </div>
             </div>
           </div>
         </div>
-        <div className="col-span-3 lg:p-10 p-3"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
-          <Sidebar />
+        <div className="lg:col-span-1 p-5 pt-10 hidden lg:block"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
+          <div className="flex justify-center">
+          <div className="lg:fixed p-5" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
+            <h1 className="text-2xl mb-5 font-bold">目次</h1>
+            <ul className="pl-2 scroll_bar">
+                {toc.map(data => (
+                    <li key={data.id} className={`${data.tag == 'h2' ? 'ml-5' : (data.tag == 'h3' ? 'ml-10': 'ml-1')} text-white mb-2 hover:bg-gray-500 rounded p-0.5`}>
+                        <a href={`#${data.id}`}>
+                            {data.text}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+          </div>
+          </div>
         </div>
       </div>
     </div>
