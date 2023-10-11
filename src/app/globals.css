@@ -69,3 +69,16 @@ body {
         border-radius: 100%;
     }
 }
+
+.scroll_bar{
+    background-color: rgba(0, 0, 0, 0); /* 背景を透明に設定 */
+}
+.scroll_bar::-webkit-scrollbar{
+    width: 10px;
+}
+.scroll_bar::-webkit-scrollbar-track{
+    background-color: rgba(0, 0, 0, 0); /* トラック背景を透明に設定 */
+}
+.scroll_bar::-webkit-scrollbar-thumb{
+    background-color: #888; /* スクロールバーのつまみを灰色に設定 */
+}
