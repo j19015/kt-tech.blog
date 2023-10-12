@@ -81,14 +81,23 @@ export default function Home() {
           </p>
           <h2 className="text-2xl font-semibold mt-8">技術スタック</h2>
           <h3>実務経験あり</h3>
+          <ul className="list-disc mt-2 pl-6 ml-5">
+            <li className='mb-3'><strong>Language</strong> : JavaScript、TypeScript</li>
+            <li className='mb-3'><strong>FW</strong> : ・・・</li>
+            <li className='mb-3'><strong>Library</strong> : ・・・</li>
+            <li className='mb-3'><strong>DB</strong> : PostgreSQL</li>
+            <li className='mb-3'><strong>ORM</strong> : ・・・</li>
+            <li className='mb-3'><strong>AWS</strong> : Lamda、APIGateway、CDK、CloudWatch、EC2</li>
+            <li className='mb-3'><strong>Tool</strong> : Jira、Confluence、bitBacket</li>
+          </ul>
           <h3>実務経験なし</h3>
-          <ul className="list-disc mt-2 pl-6">
-            <li className='mb-3'><strong>Language</strong> : Ruby、PHP、C、C++、JavaScript、TypeScript</li>
+          <ul className="list-disc mt-2 pl-6 ml-3">
+            <li className='mb-3'><strong>Language</strong> : Ruby、PHP、C、C++</li>
             <li className='mb-3'><strong>FW</strong> : Express、Rails、Next.js</li>
             <li className='mb-3'><strong>Library</strong> : React、Bootstrap、MUI、Tailwind CSS</li>
-            <li className='mb-3'><strong>DB</strong> : PostgreSQL</li>
+            <li className='mb-3'><strong>DB</strong> : MySQL</li>
             <li className='mb-3'><strong>ORM</strong> : TypeORM、Gin</li>
-            <li className='mb-3'><strong>AWS</strong> : Lamda、APIGateway、CDK、CloudWatch、EC2、ECS、Fargate</li>
+            <li className='mb-3'><strong>AWS</strong> : ECS、Fargate</li>
           </ul>
           <h2 className="text-2xl font-semibold mt-8">経歴</h2>
           <ul className="timeline pl-4">
