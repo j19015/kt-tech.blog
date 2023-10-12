@@ -80,6 +80,8 @@ export default function Home() {
             サーバレスアーキテクチャ、クリーンアーキテクチャに興味があります。
           </p>
           <h2 className="text-2xl font-semibold mt-8">技術スタック</h2>
+          <h3>実務経験あり</h3>
+          <h3>実務経験なし</h3>
           <ul className="list-disc mt-2 pl-6">
             <li className='mb-3'><strong>Language</strong> : Ruby、PHP、C、C++、JavaScript、TypeScript</li>
             <li className='mb-3'><strong>FW</strong> : Express、Rails、Next.js</li>
