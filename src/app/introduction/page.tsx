@@ -90,7 +90,7 @@ export default function Home() {
             <li className='mb-3'><strong>AWS</strong> : Lamda、APIGateway、CDK、CloudWatch、EC2、S3、Secrets Manager、MediaLive、Route53</li>
             <li className='mb-3'><strong>Tool</strong> : Git、bitBacket、Jira、Confluence</li>
           </ul>
-          <h3>個人開発でのみ経験あり</h3>
+          <h3 className='mt-10'>個人開発でのみ経験あり</h3>
           <ul className="list-disc mt-6 pl-6 ml-5">
             <li className='mb-3'><strong>Language</strong> : Ruby、PHP、C、C++、Java</li>
             <li className='mb-3'><strong>FW</strong> : Express、Rails、Next.js</li>
