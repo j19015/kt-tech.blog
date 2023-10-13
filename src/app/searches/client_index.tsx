@@ -5,8 +5,9 @@ import { useSearchParams } from "next/navigation";
 import { Blog, getList } from "../../../libs/microcms";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarAlt,faTag } from '@fortawesome/free-solid-svg-icons'
+import { BlogProps } from "../../../libs/microcms";
 import Title from "@/components/Title/Title";
-export const ClientIndex = () => {
+export const ClientIndex = ({ contents }: BlogProps) => {
     const searchParams = useSearchParams();
     const text = searchParams.get("text");
     const [blogContents, setBlogContents] = useState<Blog[] | null>(null);
@@ -14,8 +15,6 @@ export const ClientIndex = () => {
     useEffect(() => {
         const fetchData = async () => {
         try {
-            const { contents } = await getList();
-
             if (text) {
                 const filteredContents = await filterData(contents)
                 setBlogContents(filteredContents);
