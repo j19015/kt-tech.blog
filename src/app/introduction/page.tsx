@@ -152,13 +152,13 @@ export default function Home() {
             それ以外にも、Ruby on Railsを用いてアプリの作成も行なっています。
           </p>
           <h2 className="text-2xl font-semibold mt-8">資格</h2>
-          <ul className="list-disc pl-6 mt-2">
+          <ul className="list-disc pl-10 mt-2">
             <li>応用情報技術者</li>
             <li>基本情報技術者</li>
             <li>国家技能検定 電子機器組み立て3級</li>
           </ul>
           <h2 className="text-2xl font-semibold mt-8">実績</h2>
-          <ul className="list-disc pl-6 mt-2">
+          <ul className="list-disc pl-10 mt-2">
             <li>三井不動産ハッカソン 優秀賞</li>
             <li>SANGIハッカソン ４位入賞</li>
           </ul>
