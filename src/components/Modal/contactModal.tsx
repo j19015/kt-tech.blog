@@ -21,7 +21,9 @@ const ContactModal: FC<ContactModalProps> = ({ isOpen, onClose }) => {
             </span>
         </button>
 
-        <h2 className="text-3xl font-semibold mb-6 text-black">Contact Us</h2>
+        <h2 className="text-3xl font-semibold mb-3 text-black">Contact Us</h2>
+        <p className="text-red-500">※現在作成中のため動作しません。</p>
+        <p className="text-red-500 mb-6"><a href="https://twitter.com/tech_koki" className='underline'>Twitter</a>へ連絡をお願いします。</p>
 
         <form action="#" method="POST" className="space-y-4">
           <div>
