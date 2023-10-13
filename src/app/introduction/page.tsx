@@ -87,17 +87,18 @@ export default function Home() {
             <li className='mb-3'><strong>Library</strong> : ・・・</li>
             <li className='mb-3'><strong>DB</strong> : PostgreSQL</li>
             <li className='mb-3'><strong>ORM</strong> : ・・・</li>
-            <li className='mb-3'><strong>AWS</strong> : Lamda、APIGateway、CDK、CloudWatch、EC2</li>
-            <li className='mb-3'><strong>Tool</strong> : Jira、Confluence、bitBacket</li>
+            <li className='mb-3'><strong>AWS</strong> : Lamda、APIGateway、CDK、CloudWatch、EC2、S3、Secrets Manager、MediaLive、Route53</li>
+            <li className='mb-3'><strong>Tool</strong> : Git、bitBacket、Jira、Confluence</li>
           </ul>
           <h3>個人開発でのみ経験あり</h3>
-          <ul className="list-disc mt-2 pl-6 ml-3">
-            <li className='mb-3'><strong>Language</strong> : Ruby、PHP、C、C++</li>
+          <ul className="list-disc mt-2 pl-6 ml-5">
+            <li className='mb-3'><strong>Language</strong> : Ruby、PHP、C、C++、Java</li>
             <li className='mb-3'><strong>FW</strong> : Express、Rails、Next.js</li>
             <li className='mb-3'><strong>Library</strong> : React、Bootstrap、MUI、Tailwind CSS</li>
             <li className='mb-3'><strong>DB</strong> : MySQL</li>
             <li className='mb-3'><strong>ORM</strong> : TypeORM、Gin</li>
-            <li className='mb-3'><strong>AWS</strong> : ECS、Fargate</li>
+            <li className='mb-3'><strong>AWS</strong> : ECS、Fargate、ElasticCache、</li>
+            <li className='mb-3'><strong>Tool</strong> : Gitlab、Figma、Miro、Trello、Notion</li>
           </ul>
           <h2 className="text-2xl font-semibold mt-8">経歴</h2>
           <ul className="timeline pl-4">
