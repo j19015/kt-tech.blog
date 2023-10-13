@@ -80,13 +80,25 @@ export default function Home() {
             サーバレスアーキテクチャ、クリーンアーキテクチャに興味があります。
           </p>
           <h2 className="text-2xl font-semibold mt-8">技術スタック</h2>
-          <ul className="list-disc mt-2 pl-6">
-            <li className='mb-3'><strong>Language</strong> : Ruby、PHP、C、C++、JavaScript、TypeScript</li>
+          <h3>実務経験あり</h3>
+          <ul className="list-disc mt-6 pl-6 ml-5">
+            <li className='mb-3'><strong>Language</strong> : JavaScript、TypeScript</li>
+            <li className='mb-3'><strong>FW</strong> : ・・・</li>
+            <li className='mb-3'><strong>Library</strong> : ・・・</li>
+            <li className='mb-3'><strong>DB</strong> : PostgreSQL</li>
+            <li className='mb-3'><strong>ORM</strong> : ・・・</li>
+            <li className='mb-3'><strong>AWS</strong> : Lamda、APIGateway、CDK、CloudWatch、EC2、S3、Secrets Manager、MediaLive、Route53</li>
+            <li className='mb-3'><strong>Tool</strong> : Git、bitBacket、Jira、Confluence</li>
+          </ul>
+          <h3>個人開発でのみ経験あり</h3>
+          <ul className="list-disc mt-6 pl-6 ml-5">
+            <li className='mb-3'><strong>Language</strong> : Ruby、PHP、C、C++、Java</li>
             <li className='mb-3'><strong>FW</strong> : Express、Rails、Next.js</li>
             <li className='mb-3'><strong>Library</strong> : React、Bootstrap、MUI、Tailwind CSS</li>
-            <li className='mb-3'><strong>DB</strong> : PostgreSQL</li>
+            <li className='mb-3'><strong>DB</strong> : MySQL</li>
             <li className='mb-3'><strong>ORM</strong> : TypeORM、Gin</li>
-            <li className='mb-3'><strong>AWS</strong> : Lamda、APIGateway、CDK、CloudWatch、EC2、ECS、Fargate</li>
+            <li className='mb-3'><strong>AWS</strong> : ECS、Fargate、ElasticCache、</li>
+            <li className='mb-3'><strong>Tool</strong> : Gitlab、Figma、Miro、Trello、Notion</li>
           </ul>
           <h2 className="text-2xl font-semibold mt-8">経歴</h2>
           <ul className="timeline pl-4">
@@ -94,59 +106,59 @@ export default function Home() {
               <p className="timeline-date">2023年4月</p>
               <div className="timeline-content">
                 <h3 className='font-bold'>V株式会社(現職)</h3>
-                <p className='mt-3 pl-3'>新卒として入社をした会社になります。</p>
-                <p className='mt-3 pl-3'>現在は主にサーバレスアーキテクチャを採用したWebアプリケーションのバックエンド開発をAWS CDKを用いて行っています。</p>
+                <p className='mt-3 pl-6'>新卒として入社をした会社になります。</p>
+                <p className='mt-3 pl-6'>現在は主にサーバレスアーキテクチャを採用したWebアプリケーションのバックエンド開発をAWS CDKを用いて行っています。</p>
               </div>
             </li>
             <li>
               <p className="timeline-date">2022年5月</p>
               <div className="timeline-content">
                 <h3 className='font-bold'>E株式会社(退職済み)</h3>
-                <p className='mt-3 pl-3'>MineCraft,Robloxを用いたプログラミング教室の運営に携わりました。</p>
-                <p className='mt-3 pl-3'>大人と子供との教え方の差にギャップを受けながらも、デジタルネイティブの受講生たちにかなり刺激を受けることができ、とても良い経験ができました。</p>
+                <p className='mt-3 pl-6'>MineCraft,Robloxを用いたプログラミング教室の運営に携わりました。</p>
+                <p className='mt-3 pl-6'>大人と子供との教え方の差にギャップを受けながらも、デジタルネイティブの受講生たちにかなり刺激を受けることができ、とても良い経験ができました。</p>
               </div>
             </li>
             <li>
               <p className="timeline-date">2021年11月</p>
               <div className="timeline-content">
                 <h3 className='font-bold'>I株式会社(現職:副業)</h3>
-                <p className='mt-3 pl-3'>HTML,CSS,Ruby,Rails,Git,AWSの教育、PF作成などにメンターとして携わっています。</p>
-                <p className='mt-3 pl-3'>在籍は二年になり、2023/10/1付で、四段階あるメンターランクの一番上に位置するメンターランクである「<strong>JE</strong>」に到達しました。</p>
+                <p className='mt-3 pl-6'>HTML,CSS,Ruby,Rails,Git,AWSの教育、PF作成などにメンターとして携わっています。</p>
+                <p className='mt-3 pl-6'>在籍は二年になり、2023/10/1付で、四段階あるメンターランクの一番上に位置するメンターランクである「<strong>JE</strong>」に到達しました。</p>
               </div>
             </li>
             <li>
               <p className="timeline-date">2019年4月</p>
               <div className="timeline-content">
                 <h3 className='font-bold'>T大学</h3>
-                <p className='mt-3 pl-3'>大卒資格を得るために専門と並行で通いました。</p>
-                <p className='mt-3 pl-3'>専門学校で学んだこと以外の内容を重点的に勉強するので、両立に苦労しました。</p>
+                <p className='mt-3 pl-6'>大卒資格を得るために専門と並行で通いました。</p>
+                <p className='mt-3 pl-6'>専門学校で学んだこと以外の内容を重点的に勉強するので、両立に苦労しました。</p>
               </div>
             </li>
             <li>
               <p className="timeline-date">2019年4月</p>
               <div className="timeline-content">
                 <h3 className='font-bold'>S専門学校</h3>
-                <p className='mt-3 pl-3'>大学では得られないような専門的知識を学びました。</p>
-                <p className='mt-3 pl-3'>学年の垣根を越えチーム開発を行なったり、プログラミングコンテストに参加したりしました。</p>
-                <p className='mt-3 pl-3'>資格取得にも力を入れ、応用情報技術者試験に合格しました。</p>
+                <p className='mt-3 pl-6'>大学では得られないような専門的知識を学びました。</p>
+                <p className='mt-3 pl-6'>学年の垣根を越えチーム開発を行なったり、プログラミングコンテストに参加したりしました。</p>
+                <p className='mt-3 pl-6'>資格取得にも力を入れ、応用情報技術者試験に合格しました。</p>
               </div>
             </li>
             
           </ul>
           <h2 className="text-2xl font-semibold mt-8">勉強中の分野</h2>
-          <p className=" mt-2 pl-3">
+          <p className=" mt-2 pl-6">
             サーバレスアーキテクチャの概念理解を深めようと、記事を漁ってベストプラクティスを模索しています。<br/>
             Next.js×MicroCMS×Vercelを使ってブログを作成しています。<br/>
             それ以外にも、Ruby on Railsを用いてアプリの作成も行なっています。
           </p>
           <h2 className="text-2xl font-semibold mt-8">資格</h2>
-          <ul className="list-disc pl-6 mt-2">
+          <ul className="list-disc pl-10 mt-2">
             <li>応用情報技術者</li>
             <li>基本情報技術者</li>
             <li>国家技能検定 電子機器組み立て3級</li>
           </ul>
           <h2 className="text-2xl font-semibold mt-8">実績</h2>
-          <ul className="list-disc pl-6 mt-2">
+          <ul className="list-disc pl-10 mt-2">
             <li>三井不動産ハッカソン 優秀賞</li>
             <li>SANGIハッカソン ４位入賞</li>
           </ul>
