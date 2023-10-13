@@ -9,7 +9,7 @@ export const Index = ({ contents }: BlogProps) => {
             <div className="grid grid-cols-1 gap-6 font-sans">
                 {contents.map((blog) => {
                     return (
-                    <div key={blog.id} className="flex flex-col md:flex-row p-4 transition-transform duration-300 ease-in-out transform hover:scale-105 bg-gray-800 rounded-lg">
+                    <div key={blog.id} className="flex flex-col md:flex-row p-2 transition-transform duration-300 ease-in-out transform hover:scale-105 bg-gray-800 rounded-lg">
                         <div className="flex-none w-full md:w-1/3 mb-4 md:mb-0 md:pr-4">
                             <Link href={`/blogs/${blog.id}`}>
                                 <img
