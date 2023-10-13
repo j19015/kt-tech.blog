@@ -81,7 +81,7 @@ export default function Home() {
           </p>
           <h2 className="text-2xl font-semibold mt-8">技術スタック</h2>
           <h3>実務経験あり</h3>
-          <ul className="list-disc mt-2 pl-6 ml-5">
+          <ul className="list-disc mt-6 pl-6 ml-5">
             <li className='mb-3'><strong>Language</strong> : JavaScript、TypeScript</li>
             <li className='mb-3'><strong>FW</strong> : ・・・</li>
             <li className='mb-3'><strong>Library</strong> : ・・・</li>
@@ -91,7 +91,7 @@ export default function Home() {
             <li className='mb-3'><strong>Tool</strong> : Git、bitBacket、Jira、Confluence</li>
           </ul>
           <h3>個人開発でのみ経験あり</h3>
-          <ul className="list-disc mt-2 pl-6 ml-5">
+          <ul className="list-disc mt-6 pl-6 ml-5">
             <li className='mb-3'><strong>Language</strong> : Ruby、PHP、C、C++、Java</li>
             <li className='mb-3'><strong>FW</strong> : Express、Rails、Next.js</li>
             <li className='mb-3'><strong>Library</strong> : React、Bootstrap、MUI、Tailwind CSS</li>
