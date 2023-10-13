@@ -1,7 +1,11 @@
+"use client"
 import Link from 'next/link';
 import React from 'react';
+import { useState } from 'react';
+import ContactModal from '../Modal/contactModal';
 
 export const Footer = () => {
+  const [isModalOpen, setModalOpen] = useState(false);
   return (
       
   <footer className="rounded-lg shadow m-1 bg-gray-900">
@@ -19,10 +23,13 @@ export const Footer = () => {
               <Link href="#" className="mr-4 hover:underline md:mr-6">Licensing</Link>
           </li>
           <li>
-              <Link href="#" className="hover:underline">Contact</Link>
+            <button onClick={() => setModalOpen(true)} className="hover:underline">
+                Contact
+            </button>
           </li>
       </ul>
       </div>
+      <ContactModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
   </footer>
 
   );
