@@ -1,12 +1,11 @@
-// components/ContactModal.tsx
-import React, { FC } from 'react';
+import React from 'react';
 
 interface ContactModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const ContactModal: FC<ContactModalProps> = ({ isOpen, onClose }) => {
+const ContactModal = ({ isOpen, onClose } :ContactModalProps) => {
   if (!isOpen) return null;
 
   return (
@@ -16,7 +15,7 @@ const ContactModal: FC<ContactModalProps> = ({ isOpen, onClose }) => {
             onClick={onClose} 
             className="absolute right-6 top-6 text-2xl text-black transition duration-300"
             >
-            <span className='p-1 hover:bg-gray-500 hover:text-white rounded-full'>
+            <span className='p-1 hover:bg-gray-300 hover:text-white rounded-full'>
                 ✖︎
             </span>
         </button>
