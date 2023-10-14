@@ -145,18 +145,18 @@ export default async function StaticDetailPage({
         </div>
         <div className="lg:col-span-1 p-5 pt-10 hidden lg:block"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
           <div className="flex justify-center">
-          <div className="lg:fixed p-5" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
-            <h1 className="text-2xl mb-5 font-bold">目次</h1>
-            <ul className="pl-2 scroll_bar">
-                {toc.map(data => (
-                    <li key={data.id} className={`${data.tag == 'h2' ? 'ml-5' : (data.tag == 'h3' ? 'ml-10': 'ml-1')} text-white mb-2 hover:bg-gray-500 rounded p-0.5`}>
-                        <a href={`#${data.id}`}>
-                            {data.text}
-                        </a>
-                    </li>
-                ))}
-            </ul>
-          </div>
+            <div className="lg:fixed p-5" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
+              <h1 className="text-2xl mb-5 font-bold">目次</h1>
+              <ul className="pl-2 scroll_bar">
+                  {toc.map(data => (
+                      <li key={data.id} className={`${data.tag == 'h2' ? 'ml-5' : (data.tag == 'h3' ? 'ml-10': 'ml-1')} text-white mb-2 hover:bg-gray-500 rounded p-0.5`}>
+                          <a href={`#${data.id}`}>
+                              {data.text}
+                          </a>
+                      </li>
+                  ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
