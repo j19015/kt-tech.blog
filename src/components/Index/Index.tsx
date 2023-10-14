@@ -43,7 +43,7 @@ export const Index = ({ contents }: BlogProps) => {
                                     ))}
                                 </ul>
                             </div>
-                            <div className="text-gray-400 text-sm">
+                            <div className="text-gray-400 text-sm text-right">
                                 <FontAwesomeIcon icon={faCalendarAlt} className="mr-1" />
                                 <span className="mr-2">
                                     投稿日時:
