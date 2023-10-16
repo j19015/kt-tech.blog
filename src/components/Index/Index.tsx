@@ -32,18 +32,18 @@ export const Index = ({ contents }: BlogProps) => {
                                     </div>
                                 </Link>
                             </div>
-                            <div className="mb-2">
+                            <div>
                                 <ul className="list-disc list-inside">
                                     {blog.tags?.map((tag) => (
                                         <Link key={tag.id} href={`/tags/${tag.id}`}>
-                                            <span className="inline-block text-indigo-400 px-2 py-1 rounded-full text-sm mr-2 mb-2 cursor-pointer hover:text-indigo-500">
+                                            <span className="inline-block text-indigo-400 px-2 py-1 rounded-full text-sm lg:text-lg mr-2 mb-2 cursor-pointer hover:text-indigo-500">
                                                 <FontAwesomeIcon icon={faTag} className="text-indigo-500" /> {tag.name}
                                             </span>
                                         </Link>
                                     ))}
                                 </ul>
                             </div>
-                            <div className="text-gray-400 text-sm text-right">
+                            <div className="text-gray-400 p-2 pt-0 lg:fixed lg:bottom-0 lg:right-0">
                                 <FontAwesomeIcon icon={faCalendarAlt} className="mr-1" />
                                 <span className="mr-2">
                                     投稿日時:
