@@ -93,8 +93,8 @@ export default async function StaticDetailPage({
   return(
     <>
     <div>
-      <div className="grid grid-cols-1 lg:grid-cols-3"> {/* グリッドを設定 */}
-        <div className="lg:col-span-2 lg:p-10"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
+      <div className="grid grid-cols-1 lg:grid-cols-4"> {/* グリッドを設定 */}
+        <div className="lg:col-span-3 lg:p-10 content"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
           <div>
             <div className="p-1">
               <Link href={`/blogs/${blog.id}`}>
@@ -107,12 +107,12 @@ export default async function StaticDetailPage({
                 />
               </Link>
             </div>
-            <div className="text-gray-500 text-lg p-2">
-                <FontAwesomeIcon icon={faCalendarAlt} className="mr-1 text-gray-400" />
-                <span className="mr-2 text-gray-400">
+            <div className="text-lg p-2">
+                <FontAwesomeIcon icon={faCalendarAlt} className="mr-1" />
+                <span className="mr-2">
                     投稿日時:
                 </span>
-                <span className="text-gray-400">
+                <span>
                     {new Date(blog.createdAt).toLocaleDateString("ja-JP", {
                         timeZone: "Asia/Tokyo",
                     })}
@@ -120,13 +120,13 @@ export default async function StaticDetailPage({
             </div>
             <div className="p-2">
                 <Link key={blog.category?.id} href={`/categories/${blog.category?.id}`} className="text-indigo-400 hover:text-indigo-300 inline">
-                <div className="inline group text-gray-100 p-2 pl-4 pr-4 rounded-lg border-solid border-2 border-indigo-500">
+                <div className="inline group text-indigo-400 p-2 pl-4 pr-4 rounded-lg border-solid border-2 border-indigo-500">
                         {blog.category?.name}
                     </div>
                 </Link>
             </div>
             <div className="mt-2 p-1">
-                <ul className="list-disc list-inside text-gray-400">
+                <ul className="list-disc list-inside">
                     {blog.tags?.map((tag) => (
                         <span key={tag.id} className="inline-block text-indigo-400 px-0.5 py-1 rounded-full hover:text-indigo-500 text-sm mr-2 mb-2">
                             <Link href={`/tags/${tag.id}`}>
@@ -145,11 +145,11 @@ export default async function StaticDetailPage({
         </div>
         <div className="lg:col-span-1 p-5 pt-10 hidden lg:block"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
           <div className="flex justify-center">
-            <div className="lg:fixed p-5" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto'}}>
+            <div className="lg:fixed p-5" style={{ maxHeight: 'calc(100vh - 300px)', overflowY: 'auto'}}>
               <h1 className="text-2xl mb-5 font-bold">目次</h1>
               <ul className="pl-2 scroll_bar">
                   {toc.map(data => (
-                      <li key={data.id} className={`${data.tag == 'h2' ? 'ml-5' : (data.tag == 'h3' ? 'ml-10': 'ml-1')} text-white mb-2 hover:bg-gray-500 rounded p-0.5`}>
+                      <li key={data.id} className={`${data.tag == 'h2' ? 'ml-5' : (data.tag == 'h3' ? 'ml-10': 'ml-1')} mb-2 hover:bg-gray-500 rounded p-0.5`}>
                           <a href={`#${data.id}`}>
                               {data.text}
                           </a>
