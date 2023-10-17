@@ -49,7 +49,7 @@ export const ClientIndex = ({ contents }: BlogProps) => {
         <div className="text-center">
             <Title title={text ? text : "No Keyword"} />
         </div>
-        <div className="bg-gray-900 p-4">
+        <div className="p-4">
             <div className="grid grid-cols-1 gap-6 font-sans">
             {blogContents?.map((blog) => {
                 return (
@@ -71,7 +71,7 @@ export const ClientIndex = ({ contents }: BlogProps) => {
                             </Link>
                             <div className="p-2 mb-2">
                                 <Link key={blog.category?.id} href={`/categories/${blog.category?.id}`} className="text-indigo-400 hover:text-indigo-500 inline">
-                                    <div className="inline text-white hover:text-gray-300 p-2 rounded-lg border-solid border-2 border-indigo-400">
+                                    <div className="inline hover:text-gray-300 p-2 rounded-lg border-solid border-2 border-indigo-400">
                                         {blog.category?.name}
                                     </div>
                                 </Link>
