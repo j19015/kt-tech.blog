@@ -15,14 +15,14 @@ const ContactModal = ({ isOpen, onClose } :ContactModalProps) => {
             onClick={onClose} 
             className="absolute right-6 top-6 text-2xl text-black transition duration-300"
             >
-            <span className='p-1 hover:bg-gray-300 hover:text-white rounded-full'>
+            <span className='p-1 hover:bg-gray-300 hover:  rounded-full'>
                 ✖︎
             </span>
         </button>
 
         <h2 className="text-3xl font-semibold mb-3 text-black">Contact Us</h2>
         <p className="text-red-500">※現在作成中のため動作しません。</p>
-        <p className="text-red-500 mb-6"><a href="https://twitter.com/tech_koki" className='underline'>Twitter</a>へ連絡をお願いします。</p>
+        <p className="text-black mb-6"><a href="https://twitter.com/tech_koki" className='underline text-black'>Twitter</a>へ連絡をお願いします。</p>
 
         <form action="#" method="POST" className="space-y-4">
           <div>
@@ -57,7 +57,7 @@ const ContactModal = ({ isOpen, onClose } :ContactModalProps) => {
 
           <button
             type="submit"
-            className="w-full bg-indigo-500 text-white p-2 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600"
+            className="w-full bg-indigo-500 p-2 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600 paginate-button-text-color"
           >
             Send Message
           </button>
