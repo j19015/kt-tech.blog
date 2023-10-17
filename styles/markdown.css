@@ -108,7 +108,7 @@
     margin: 10px;
     margin-left: 2rem;
     font-style: italic;
-    color: rgb(var(--foreground-rgb));
+    color: rgb(var(--foreground-rgb)) !important;
 }
 
 .znc hr {
