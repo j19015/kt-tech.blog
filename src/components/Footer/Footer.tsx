@@ -8,7 +8,7 @@ export const Footer = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   return (
       
-  <footer className="rounded-lg shadow m-1">
+  <footer className="m-1">
       <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
         <span className="text-sm sm:text-center">© 2023 <Link href="/" className="hover:underline">kt-tech.blog</Link>. All Rights Reserved.
       </span>
