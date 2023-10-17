@@ -1,8 +1,25 @@
+:root {
+    --foreground-rgb: 28, 28, 28;
+    --background-start-rgb: 245, 245, 245;
+    --background-end-rgb: 255, 255, 255;
+    --background-code-rgb: 200 200 200;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --foreground-rgb: 227, 227, 227;
+      --background-start-rgb: 7, 14, 29;
+      --background-end-rgb: 17 24 39;
+      --background-code-rgb: 50 50 50;
+    }
+  }
+
+
 /* zncクラス内のスタイル */
 .znc {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     line-height: 1.7;
-    color: white;
+    color: rgb(var(--foreground-rgb));
 }
 
 .znc h1 {
@@ -13,7 +30,6 @@
     border-left: 1px solid rgb(129 140 248) !important; /* Vibrant blue border */
     border-bottom: 1px solid rgb(129 140 248) !important; /* Vibrant blue border */
     padding-left: 0.5rem;
-    color: #ffffff; /* Matching color */
 }
 
 .znc h2 {
@@ -23,7 +39,6 @@
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
     padding-left: 10px;
-    color: white;
 }
 
 .znc h3 {
@@ -32,41 +47,36 @@
     margin-top: 1.2rem;
     margin-bottom: 0.3rem;
     padding-left: 10px;
-    color: white;
 }
 
 .znc ul {
     list-style-type: disc;
     margin-left: 2rem;
     padding-left: 10px;
-    color: white;
 }
 
 .znc ol > li {
     font-weight: bold;
     padding: 3px;
-    color: white !important;
 }
 .znc ol>li::marker{
-    color: white !important;
+    color: rgb(var(--foreground-rgb));
 }
 
 .znc ul>li::marker{
-    color: white !important;
+    color: rgb(var(--foreground-rgb));
 }
 
 .znc ol {
     list-style-type: decimal;
     margin-left: 2rem;
     padding-left: 10px;
-    color: white !important;
 }
 .znc li {
     font-size: 1.0rem;
 }
 .znc ul>li{
     padding: 3px;
-    color: white !important;
 }
 
 .znc a {
@@ -86,11 +96,10 @@
 }
 
 .znc code {
-    background-color: #1c2834;
+    background-color: rgb(var(--background-code-rgb));
     padding: 0.2rem 0.4rem;
     border-radius: 4px;
     font-family: 'Fira Code', monospace; /* Monospace font for code */
-    color: #ffffff; /* Red text color */
 }
 
 .znc blockquote {
@@ -98,8 +107,8 @@
     padding-left: 1rem;
     margin: 10px;
     margin-left: 2rem;
-    color: #ffffff !important; /* Slightly darker grey text color */
     font-style: italic;
+    color: rgb(var(--foreground-rgb));
 }
 
 .znc hr {
