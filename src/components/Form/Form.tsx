@@ -7,7 +7,7 @@ export const Form = () => {
             <form className="content rounded-lg shadow-lg p-4 transition duration-300 ease-in-out transform hover:scale-105" action={`/searches`} method='get'>
                 <div className="flex items-center border-b border-gray-300 py-2">
                     <input
-                        className="appearance-none bg-transparent border-none w-full text-gray-300 mr-3 py-1 px-2 leading-tight focus:outline-none focus: "
+                        className="appearance-none bg-transparent border-none w-full mr-3 py-1 px-2 leading-tight focus:outline-none focus: "
                         type="text"
                         name="text"
                         placeholder="キーワードを入力"
