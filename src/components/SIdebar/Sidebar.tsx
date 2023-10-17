@@ -17,11 +17,11 @@ export const Sidebar = async () => {
     const archives = Array.from(new Set(contents.map((item) => item.createdAt.slice(0, 7))));
 
     return (
-        <div className="col-span-12 md:col-span-4 m-1 rounded-lg bg-gray-900 p-6 shadow-md text-gray-200">
+        <div className="col-span-12 md:col-span-4 m-1 rounded-lg p-6 ">
             <Form/>
 
             <div className="mb-10">
-                <h3 className="text-xl font-bold mb-4 border-b-2 border-gray-600 pb-2">最新記事</h3>
+                <h3 className="text-xl font-bold mb-4 border-b border-gray-600 pb-2">最新記事</h3>
                     {latestArticles.map((article) => (
                         <>
                             <div key={article.id} className='grid grid-cols-12 mb-3 transition duration-300 ease-in-out transform hover:scale-105'>
@@ -52,8 +52,8 @@ export const Sidebar = async () => {
                 <h3 className="text-xl font-bold mb-4 border-b border-gray-600 pb-2">カテゴリー</h3>
                 <div className="flex flex-wrap gap-2">
                     {categoryList.map((category) => (
-                        <Link key={category.id} href={`/categories/${category.id}/page/1`} className="text-indigo-500 px-0.5 py-1 transition duration-300 ease-in-out transform hover:scale-105">
-                             <div className="inline group text-gray-100 p-2 pl-4 pr-4 rounded-lg border-solid border-2 border-gray-500 hover:border-indigo-500">
+                        <Link key={category.id} href={`/categories/${category.id}/page/1`} className="px-0.5 py-1 transition duration-300 ease-in-out transform hover:scale-105">
+                             <div className="inline group p-2 pl-4 pr-4 rounded-lg border-solid border-2 border-gray-500 hover:border-indigo-500">
                                 {category.name}
                             </div>
                         </Link>
@@ -65,7 +65,7 @@ export const Sidebar = async () => {
                 <h3 className="text-xl font-bold mb-4 border-b border-gray-600 pb-2">タグ</h3>
                 <div className="flex flex-wrap gap-2">
                     {tagList.map((tag) => (
-                        <span key={tag.id} className="inline-block text-white px-0.5 py-1 rounded-full hover:text-indigo-500 text-sm mr-2 mb-2 transition duration-300 ease-in-out transform hover:scale-105">
+                        <span key={tag.id} className="inline-block   px-0.5 py-1 rounded-full hover:text-indigo-500 text-sm mr-2 mb-2 transition duration-300 ease-in-out transform hover:scale-105">
                             <Link href={`/tags/${tag.id}`}>
                             <FontAwesomeIcon icon={faTag} /> {tag.name}
                             </Link>
