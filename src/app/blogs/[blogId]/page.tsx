@@ -129,7 +129,7 @@ export default async function StaticDetailPage({
                 <ul className="list-disc list-inside">
                     {blog.tags?.map((tag) => (
                         <span key={tag.id} className="inline-block text-indigo-400 px-0.5 py-1 rounded-full hover:text-indigo-500 text-sm mr-2 mb-2">
-                            <Link href={`/tags/${tag.id}`}>
+                            <Link href={`/tags/${tag.id}`} className="text-indigo-400">
                               <FontAwesomeIcon icon={faTag} /> {tag.name}
                             </Link>
                         </span>
