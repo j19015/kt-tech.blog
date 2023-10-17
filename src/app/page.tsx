@@ -44,7 +44,7 @@ export default async function StaticPage () {
         <div className="lg:col-span-2">
           <Index contents = {latestBlogs}/>
           <div className="mt-8 flex justify-center"> {/* 中央寄せ */}
-            <Link href="/blogs/page/1" className="transition duration-300 ease-in-out bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 border-b-4 border-indigo-800 hover:border-indigo-700 rounded shadow-md">
+            <Link href="/blogs/page/1" className="transition duration-300 ease-in-out font-semibold py-2 px-4 border-b-4 rounded shadow-md theme-button">
                 すべての記事を見る
             </Link>
         </div>
