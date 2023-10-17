@@ -27,7 +27,7 @@ export default function Home() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4"> {/* グリッドを設定 */}
         <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
-        <div className="text-white text-black m-1 rounded-lg introduction">
+        <div className="m-1 rounded-lg introduction content p-3 pt-6 pb-6">
           <div className="text-center">
             <img
               src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2524017/profile-images/1691862464"
@@ -42,7 +42,6 @@ export default function Home() {
                 href="https://github.com/j19015"
                 target="_blank"
                 rel="noopener noreferrer"
-                className=" hover:text-gray-800"
               >
                 <FontAwesomeIcon 
                   icon={faSquareGithub}
@@ -53,7 +52,7 @@ export default function Home() {
                 href="https://twitter.com/tech_koki"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-300 hover:text-blue-700"
+                className="text-blue-500 hover:text-blue-700"
               >
                 <FontAwesomeIcon 
                   icon={faSquareTwitter}
