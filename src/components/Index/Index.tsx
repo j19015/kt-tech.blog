@@ -26,8 +26,8 @@ export const Index = ({ contents }: BlogProps) => {
                             </h5>
                             </Link>
                             <div className="p-2 mb-2">
-                                <Link key={blog.category?.id} href={`/categories/${blog.category?.id}`} className="text-indigo-400 hover:text-indigo-500 inline">
-                                    <div className="inline p-2 rounded-lg border-solid border-2 border-indigo-400">
+                                <Link key={blog.category?.id} href={`/categories/${blog.category?.id}`} className="text-indigo-500 inline">
+                                    <div className="inline p-2 rounded-lg border-solid border-2 border-indigo-500 text-indigo-500">
                                         {blog.category?.name}
                                     </div>
                                 </Link>
@@ -36,14 +36,14 @@ export const Index = ({ contents }: BlogProps) => {
                                 <ul className="list-disc list-inside">
                                     {blog.tags?.map((tag) => (
                                         <Link key={tag.id} href={`/tags/${tag.id}`}>
-                                            <span className="inline-block text-indigo-400 px-2 py-1 rounded-full text-base mr-2 mb-2 cursor-pointer hover:text-indigo-500">
+                                            <span className="inline-block text-indigo-500 px-2 py-1 rounded-full text-base mr-2 mb-2 cursor-pointer">
                                                 <FontAwesomeIcon icon={faTag} className="text-indigo-500" /> {tag.name}
                                             </span>
                                         </Link>
                                     ))}
                                 </ul>
                             </div>
-                            <div className="text-gray-400 p-2 pt-0 lg:fixed lg:bottom-0 lg:right-0">
+                            <div className="text-gray-500 p-2 pt-0 lg:fixed lg:bottom-0 lg:right-0">
                                 <FontAwesomeIcon icon={faCalendarAlt} className="mr-1" />
                                 <span className="mr-2">
                                     投稿日時:

@@ -119,8 +119,8 @@ export default async function StaticDetailPage({
                 </span>
             </div>
             <div className="p-2">
-                <Link key={blog.category?.id} href={`/categories/${blog.category?.id}`} className="text-indigo-400 hover:text-indigo-300 inline">
-                <div className="inline group text-indigo-400 p-2 pl-4 pr-4 rounded-lg border-solid border-2 border-indigo-500">
+                <Link key={blog.category?.id} href={`/categories/${blog.category?.id}`} className="text-indigo-500 inline">
+                <div className="inline group text-indigo-500 p-2 pl-4 pr-4 rounded-lg border-solid border-2 border-indigo-600">
                         {blog.category?.name}
                     </div>
                 </Link>
@@ -128,8 +128,8 @@ export default async function StaticDetailPage({
             <div className="mt-2 p-1">
                 <ul className="list-disc list-inside">
                     {blog.tags?.map((tag) => (
-                        <span key={tag.id} className="inline-block text-indigo-400 px-0.5 py-1 rounded-full hover:text-indigo-500 text-sm mr-2 mb-2">
-                            <Link href={`/tags/${tag.id}`} className="text-indigo-400">
+                        <span key={tag.id} className="inline-block text-indigo-500 px-0.5 py-1 rounded-full  text-sm mr-2 mb-2">
+                            <Link href={`/tags/${tag.id}`} className="text-indigo-500">
                               <FontAwesomeIcon icon={faTag} /> {tag.name}
                             </Link>
                         </span>
