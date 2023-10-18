@@ -9,7 +9,7 @@ export const Footer = () => {
   return (
       
   <footer className="m-1">
-      <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+      <div className="w-full mx-auto max-w-screen-xl p-8 md:flex md:items-center md:justify-between">
         <span className="text-sm sm:text-center">© 2023 <Link href="/" className="hover:underline">kt-tech.blog</Link>. All Rights Reserved.
       </span>
       <ul className="flex flex-wrap items-center mt-3 text-sm font-medium sm:mt-0">
