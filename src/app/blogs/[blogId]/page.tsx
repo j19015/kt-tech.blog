@@ -93,7 +93,7 @@ export default async function StaticDetailPage({
   return(
     <>
     <div>
-      <div className="grid grid-cols-1 lg:grid-cols-4"> {/* グリッドを設定 */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 lg:p-4"> {/* グリッドを設定 */}
         <div className="lg:col-span-3 lg:p-10 content rounded-lg"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
           <div>
             <div className="p-1">
@@ -143,7 +143,7 @@ export default async function StaticDetailPage({
             </div>
           </div>
         </div>
-        <div className="lg:col-span-1 p-5 pt-10 hidden lg:block"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
+        <div className="lg:col-span-1 p-5 pl-7 pt-10 hidden lg:block"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
           <div className="flex justify-center">
             <div className="lg:fixed p-5" style={{ maxHeight: 'calc(100vh - 300px)', overflowY: 'auto'}}>
               <h1 className="text-2xl mb-5 font-bold">目次</h1>
