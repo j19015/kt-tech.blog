@@ -26,8 +26,8 @@ export const metadata = {
 export default function Home() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4"> {/* グリッドを設定 */}
-        <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
-        <div className="m-1 rounded-lg introduction content p-3 pt-6 pb-6">
+        <div className="lg:col-span-2 lg:p-4"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
+        <div className="rounded-lg introduction content pt-6 pb-6">
           <div className="text-center">
             <img
               src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2524017/profile-images/1691862464"
