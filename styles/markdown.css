@@ -132,6 +132,10 @@
     line-height: 2.0;
 }
 
+.znc p+p{
+    margin-top: 0.5rem;
+}
+
 .index_img{
     width: 700px;
     height: 260px;
