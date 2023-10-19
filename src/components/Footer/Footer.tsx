@@ -3,9 +3,11 @@ import Link from 'next/link';
 import React from 'react';
 import { useState } from 'react';
 import ContactModal from '../Modal/contactModal';
+import PrivacyPolicyModal from '../Modal/privacyPolicy';
 
 export const Footer = () => {
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [iscontactOpen, setContactOpen] = useState(false);
+  const [isPrivacyPolicyOpen, setPrivacyPolicyOpen] = useState(false);
   return (
       
   <footer className="m-1">
@@ -19,17 +21,20 @@ export const Footer = () => {
           <li>
               <Link href="#" className="mr-4 hover:underline md:mr-6">Privacy Policy</Link>
           </li>
-          <li>
-              <Link href="#" className="mr-4 hover:underline md:mr-6">Licensing</Link>
+          <li className="mr-4 hover:underline md:mr-6">
+            <button onClick={() => setPrivacyPolicyOpen(true)} className="hover:underline">
+                Lisencing
+            </button>
           </li>
           <li>
-            <button onClick={() => setModalOpen(true)} className="hover:underline">
+            <button onClick={() => setContactOpen(true)} className="hover:underline">
                 Contact
             </button>
           </li>
       </ul>
       </div>
-      <ContactModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+      <ContactModal isOpen={iscontactOpen} onClose={() => setContactOpen(false)} />
+      <PrivacyPolicyModal isOpen={isPrivacyPolicyOpen} onClose={() => setPrivacyPolicyOpen(false)} />
   </footer>
 
   );
