@@ -15,22 +15,16 @@ export const Footer = () => {
         <span className="text-sm sm:text-center">© 2023 <Link href="/" className="hover:underline">kt-tech.blog</Link>. All Rights Reserved.
       </span>
       <ul className="flex flex-wrap items-center mt-3 text-sm font-medium sm:mt-0">
-          <li>
-              <Link href="#" className="mr-4 hover:underline md:mr-6 ">About</Link>
-          </li>
-          <li>
-              <Link href="#" className="mr-4 hover:underline md:mr-6">Privacy Policy</Link>
-          </li>
-          <li className="mr-4 hover:underline md:mr-6">
-            <button onClick={() => setPrivacyPolicyOpen(true)} className="hover:underline">
-                Lisencing
-            </button>
-          </li>
-          <li>
-            <button onClick={() => setContactOpen(true)} className="hover:underline">
-                Contact
-            </button>
-          </li>
+        <li className="mr-4 hover:underline md:mr-6">
+          <button onClick={() => setPrivacyPolicyOpen(true)} className="hover:underline">
+            Privacy Policy
+          </button>
+        </li>
+        <li>
+          <button onClick={() => setContactOpen(true)} className="hover:underline">
+            Contact
+          </button>
+        </li>
       </ul>
       </div>
       <ContactModal isOpen={iscontactOpen} onClose={() => setContactOpen(false)} />
