@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import { Header } from '../../src/components/Header/Header'
 import { Footer } from '../../src/components/Footer/Footer'
 import { config } from '@fortawesome/fontawesome-svg-core'
+import GoogleAnalytics from '@/components/GoogleAnalytics/GoogleAnalytics'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 config.autoAddCss = false
 
@@ -59,6 +60,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
+      <GoogleAnalytics/>
       <body>
         <div>
           <Header/>
