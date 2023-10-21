@@ -5,7 +5,6 @@ import { getDetail,getList } from "../../../../libs/microcms"
 import cheerio from "cheerio";
 import hljs from "highlight.js";
 //import "highlight.js/styles/hybrid.css";
-import Sidebar from "@/components/SIdebar/Sidebar"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarAlt,faTag } from '@fortawesome/free-solid-svg-icons'
 import markdownToHtml from 'zenn-markdown-html';
