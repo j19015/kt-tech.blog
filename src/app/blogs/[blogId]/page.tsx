@@ -36,20 +36,25 @@ export async function generateMetadata(
  
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = blog.eyecatch || []
+
+  // markdown->平文
+  const html = markdownToHtml(blog.body);
+  const $ = cheerio.load(html);
+  const text = $('body').text();
  
   return {
     title: blog.title,
-    description: blog.body.slice(0,100),
+    description: text.slice(0,100),
     twitter: {
       card: 'summary_large_image',
       title: blog.title,
-      description: blog.body.slice(0,100),
+      description: text.slice(0,100),
       site: '@tech_koki',
       creator: '@tech_koki',
     },
     openGraph: {
       title: blog.title,
-      description: blog.body.slice(0,100),
+      description: text.slice(0,100),
       locale: 'ja_JP',
       type: 'website',
       images: previousImages,
