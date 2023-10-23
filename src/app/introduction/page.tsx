@@ -97,7 +97,7 @@ export default function Home() {
             <li className='mb-3'><strong>DB</strong> : MySQL</li>
             <li className='mb-3'><strong>ORM</strong> : TypeORM、Gin</li>
             <li className='mb-3'><strong>AWS</strong> : ECS、Fargate、ElasticCache、</li>
-            <li className='mb-3'><strong>Tool</strong> : Gitlab、Figma、Miro、Trello、Notion</li>
+            <li className='mb-3'><strong>Tool</strong> : Gitlab、Figma、Miro、Trello、Notion,Docker</li>
           </ul>
           <h2 className="text-2xl font-semibold mt-8">経歴</h2>
           <ul className="timeline pl-4">
@@ -107,6 +107,7 @@ export default function Home() {
                 <h3 className='font-bold'>V株式会社(現職)</h3>
                 <p className='mt-3 pl-6'>新卒として入社をした会社になります。</p>
                 <p className='mt-3 pl-6'>現在は主にサーバレスアーキテクチャを採用したWebアプリケーションのバックエンド開発をAWS CDKを用いて行っています。</p>
+                <p className='mt-3 pl-6'>社内の新規事業コンテストなどにも参加をし、積極的に自らの管轄外での作業も行なっています。</p>
               </div>
             </li>
             <li>
@@ -160,6 +161,13 @@ export default function Home() {
           <ul className="list-disc pl-10 mt-2">
             <li>三井不動産ハッカソン 優秀賞</li>
             <li>SANGIハッカソン ４位入賞</li>
+          </ul>
+
+          <h2 className="text-2xl font-semibold mt-8">2024年度中の目標</h2>
+          <ul className="list-disc pl-10 mt-2">
+            <li>AWSクラウドプラクティショナー取得</li>
+            <li>Paiza Aランク到達(現在はBランク)</li>
+            <li>Qiita,Zenn,自分のブログ等々でのアウトプットを週一ペースで行う。</li>
           </ul>
         </div>
       </div>
