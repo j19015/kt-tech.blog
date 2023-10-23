@@ -97,7 +97,7 @@ export default function Home() {
             <li className='mb-3'><strong>DB</strong> : MySQL</li>
             <li className='mb-3'><strong>ORM</strong> : TypeORM、Gin</li>
             <li className='mb-3'><strong>AWS</strong> : ECS、Fargate、ElasticCache、</li>
-            <li className='mb-3'><strong>Tool</strong> : Gitlab、Figma、Miro、Trello、Notion</li>
+            <li className='mb-3'><strong>Tool</strong> : Gitlab、Figma、Miro、Trello、Notion,Docker</li>
           </ul>
           <h2 className="text-2xl font-semibold mt-8">経歴</h2>
           <ul className="timeline pl-4">
