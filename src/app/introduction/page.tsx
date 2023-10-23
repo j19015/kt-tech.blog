@@ -162,6 +162,13 @@ export default function Home() {
             <li>三井不動産ハッカソン 優秀賞</li>
             <li>SANGIハッカソン ４位入賞</li>
           </ul>
+
+          <h2 className="text-2xl font-semibold mt-8">2024年度中の目標</h2>
+          <ul className="list-disc pl-10 mt-2">
+            <li>AWSクラウドプラクティショナー取得</li>
+            <li>Paiza Aランク到達(現在はBランク)</li>
+            <li>Qiita,Zenn,自分のブログ等々でのアウトプットを週一ペースで行う。</li>
+          </ul>
         </div>
       </div>
       <div className="lg:col-span-1"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
