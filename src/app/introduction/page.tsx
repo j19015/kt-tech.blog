@@ -107,6 +107,7 @@ export default function Home() {
                 <h3 className='font-bold'>V株式会社(現職)</h3>
                 <p className='mt-3 pl-6'>新卒として入社をした会社になります。</p>
                 <p className='mt-3 pl-6'>現在は主にサーバレスアーキテクチャを採用したWebアプリケーションのバックエンド開発をAWS CDKを用いて行っています。</p>
+                <p className='mt-3 pl-6'>社内の新規事業コンテストなどにも参加をし、積極的に自らの管轄外での作業も行なっています。</p>
               </div>
             </li>
             <li>
