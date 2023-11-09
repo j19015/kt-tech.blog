@@ -30,11 +30,11 @@ export default function Home() {
         <div className="rounded-lg introduction content p-2 pt-6 pb-6">
           <div className="text-center">
             <img
-              src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2524017/profile-images/1691862464"
+              src="/images/profile_image.png"
               alt="J19015"
-              width={150}
-              height={150}
-              className="mx-auto rounded-full"
+              width={400}
+              height={400}
+              className="mx-auto rounded-md"
             />
             <h1 className="text-4xl font-bold mt-4">Koki</h1>
             <div className="flex justify-center mt-2 space-x-4">
