@@ -104,7 +104,7 @@ export default function Home() {
             <li>
               <p className="timeline-date">2023年4月</p>
               <div className="timeline-content">
-                <h3 className='font-bold'>V株式会社(現職)</h3>
+                <h3 className='font-bold'>ブイキューブ株式会社(現職)</h3>
                 <p className='mt-3 pl-6'>新卒として入社をした会社になります。</p>
                 <p className='mt-3 pl-6'>現在は主にサーバレスアーキテクチャを採用したWebアプリケーションのバックエンド開発をAWS CDKを用いて行っています。</p>
                 <p className='mt-3 pl-6'>社内の新規事業コンテストなどにも参加をし、積極的に自らの管轄外での作業も行なっています。</p>
@@ -113,7 +113,7 @@ export default function Home() {
             <li>
               <p className="timeline-date">2022年5月</p>
               <div className="timeline-content">
-                <h3 className='font-bold'>E株式会社(退職済み)</h3>
+                <h3 className='font-bold'>エデュケーション・デザイン株式会社(退職済み)</h3>
                 <p className='mt-3 pl-6'>MineCraft,Robloxを用いたプログラミング教室の運営に携わりました。</p>
                 <p className='mt-3 pl-6'>大人と子供との教え方の差にギャップを受けながらも、デジタルネイティブの受講生たちにかなり刺激を受けることができ、とても良い経験ができました。</p>
               </div>
@@ -121,7 +121,7 @@ export default function Home() {
             <li>
               <p className="timeline-date">2021年11月</p>
               <div className="timeline-content">
-                <h3 className='font-bold'>I株式会社(現職:副業)</h3>
+                <h3 className='font-bold'>インフラトップ株式会社(現職:副業)</h3>
                 <p className='mt-3 pl-6'>HTML,CSS,Ruby,Rails,Git,AWSの教育、PF作成などにメンターとして携わっています。</p>
                 <p className='mt-3 pl-6'>在籍は二年になり、2023/10/1付で、四段階あるメンターランクの一番上に位置するメンターランクである「<strong>JE</strong>」に到達しました。</p>
               </div>
@@ -129,7 +129,7 @@ export default function Home() {
             <li>
               <p className="timeline-date">2019年4月</p>
               <div className="timeline-content">
-                <h3 className='font-bold'>T大学</h3>
+                <h3 className='font-bold'>帝京大学</h3>
                 <p className='mt-3 pl-6'>大卒資格を得るために専門と並行で通いました。</p>
                 <p className='mt-3 pl-6'>専門学校で学んだこと以外の内容を重点的に勉強するので、両立に苦労しました。</p>
               </div>
@@ -137,7 +137,7 @@ export default function Home() {
             <li>
               <p className="timeline-date">2019年4月</p>
               <div className="timeline-content">
-                <h3 className='font-bold'>S専門学校</h3>
+                <h3 className='font-bold'>静岡産業技術専門学校</h3>
                 <p className='mt-3 pl-6'>大学では得られないような専門的知識を学びました。</p>
                 <p className='mt-3 pl-6'>学年の垣根を越えチーム開発を行なったり、プログラミングコンテストに参加したりしました。</p>
                 <p className='mt-3 pl-6'>資格取得にも力を入れ、応用情報技術者試験に合格しました。</p>
