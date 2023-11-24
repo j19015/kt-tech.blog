@@ -12,6 +12,7 @@ import 'zenn-content-css';
 import '../../../../styles/markdown.css'
 import '../../../../styles/default-dark.min.css'
 import type { Metadata, ResolvingMetadata } from 'next'
+import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
 export async function generateStaticParams(){
   const { contents } = await getList();
 
@@ -100,46 +101,46 @@ export default async function StaticDetailPage({
       <div className="grid grid-cols-1 lg:grid-cols-4 lg:p-4"> {/* グリッドを設定 */}
         <div className="lg:col-span-3 lg:p-10 content rounded-lg"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
           <div>
-            <div className="p-1">
-              <Link href={`/blogs/${blog.id}`}>
-                <Image 
-                  src={ blog.eyecatch?.url ? blog.eyecatch?.url : `../../../public/images/no_image`}
-                  alt="画像"
-                  width={10000}
-                  height={10000}
-                  className="rounded-lg"
-                />
-              </Link>
-            </div>
-            <div className="text-lg p-2">
-                <FontAwesomeIcon icon={faCalendarAlt} className="mr-1" />
-                <span className="mr-2">
-                    投稿日時:
-                </span>
-                <span>
-                    {new Date(blog.createdAt).toLocaleDateString("ja-JP", {
-                        timeZone: "Asia/Tokyo",
-                    })}
-                </span>
-            </div>
-            <div className="p-2">
-                <Link key={blog.category?.id} href={`/categories/${blog.category?.id}`} className="text-indigo-500 inline">
-                <div className="inline group text-indigo-500 p-2 pl-4 pr-4 rounded-lg border-solid border-2 border-indigo-600">
-                        {blog.category?.name}
-                    </div>
-                </Link>
-            </div>
-            <div className="mt-2 p-1">
-                <ul className="list-disc list-inside">
-                    {blog.tags?.map((tag) => (
-                        <span key={tag.id} className="inline-block text-indigo-500 px-0.5 py-1 rounded-full  text-sm mr-2 mb-2">
-                            <Link href={`/tags/${tag.id}`} className="text-indigo-500">
+          <div className="p-4">
+            <Link href={`/blogs/${blog.id}`}>
+              <Image 
+                src={ blog.eyecatch?.url ? blog.eyecatch?.url : `../../../public/images/no_image`}
+                alt="画像"
+                width={10000}
+                height={10000}
+                className="rounded-lg"
+              />
+            </Link>
+          </div>
+          <div className="pl-6 pr-4 pb-1">
+            <Link key={blog.category?.id} href={`/categories/${blog.category?.id}`}>
+                <div className="inline rounded-lg text-xs sm:text-base lg:text-base sub-text-color">
+                    <FontAwesomeIcon icon={faFolderOpen} /> {blog.category?.name}
+                </div>
+            </Link>
+          </div>
+          <div className="pl-6 pr-4 pb-1">
+              <ul className="list-disc list-inside ">
+                  {blog.tags?.map((tag) => (
+                      <Link key={tag.id} href={`/tags/${tag.id}`}>
+                          <span className="inline-block rounded-full text-xs sm:text-base lg:text-base mr-2 sub-text-color">
                               <FontAwesomeIcon icon={faTag} /> {tag.name}
-                            </Link>
-                        </span>
-                    ))}
-                </ul>
-            </div>
+                          </span>
+                      </Link>
+                  ))}
+              </ul>
+          </div>
+          <div className="pl-6 pr-4">
+              <FontAwesomeIcon icon={faCalendarAlt} className="mr-1 sub-text-color" />
+              <span className="mr-2 text-xs sm:text-base lg:text-base sub-text-color">
+                  投稿日時:
+              </span>
+              <span className="text-xs sm:text-sm lg:text-base sub-text-color">
+                  {new Date(blog.createdAt).toLocaleDateString("ja-JP", {
+                      timeZone: "Asia/Tokyo",
+                  }).replace(/\//g, '-')}
+              </span>
+          </div>
             <h1 className="p-4 mt-5 text-xl font-bold lg:text-3xl">{blog.title}</h1>
             <div className="p-4 znc markdown">
               <div dangerouslySetInnerHTML={{ __html: parse_body.html() }}>
