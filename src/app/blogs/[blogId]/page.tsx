@@ -155,7 +155,7 @@ export default async function StaticDetailPage({
                   {toc.map(data => (
                       <li key={data.id} className={`${data.tag == 'h2' ? 'ml-5' : (data.tag == 'h3' ? 'ml-10': 'ml-1')} mb-2 hover:bg-gray-500 rounded p-0.5`}>
                           <a href={`#${data.id}`}>
-                              {data.text}
+                              {data.tag == 'h1' ? data.text : "-"+(data.text)}
                           </a>
                       </li>
                   ))}
