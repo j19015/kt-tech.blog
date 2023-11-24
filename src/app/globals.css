@@ -28,6 +28,7 @@ body {
     --paginate-button-text-color: 255 255 255 ;
     --paginate-current-button-text-color: 99 102 241 ;
     --reverce-color: 0 0 0 ;
+    --sub-text-color: #585353;
   }
   
   @media (prefers-color-scheme: dark) {
@@ -47,6 +48,7 @@ body {
       --paginate-button-text-color:255 255 255 ;
       --paginate-current-button-text-color: 99 102 241 ;
       --reverce-color: 255 255 255 ;
+      --sub-text-color: #cbcbcb;
     }
   }
   .paginate-button-color{
@@ -63,6 +65,9 @@ body {
   }
   .paginate-current-button-text-color{
     color: rgb(var(--paginate-current-button-text-color));
+  }
+  .sub-text-color{
+    color: var(--sub-text-color);
   }
 
   body {
