@@ -154,19 +154,21 @@
 /* メディアクエリを追加 */
 @media (max-width: 768px) {
     .znc h1 {
-        font-size: 1.6rem;
+        font-size: 1.3rem;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
     }
 
     .znc h2 {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
     }
 
     .znc h3 {
-        font-size: 1.4rem;
+        font-size: 1.1rem;
     }
 
     .znc h4 {
-        font-size: 1.2rem;
+        font-size: 1.0rem;
     }
 
     .znc p {
