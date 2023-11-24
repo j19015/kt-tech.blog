@@ -33,7 +33,7 @@
     margin-bottom: 3rem;
 
     /* background: #f6f5f9;背景色 */
-    background: var(--background-h1-border-background-color);/*背景色*/
+    background: var(--background-h1-border-background-color) !important;/*背景色*/
     border-left: solid 5px rgb(var(--background-h1-border-color)) !important;
     padding-left: 0.5rem;
     border-bottom: none !important;
