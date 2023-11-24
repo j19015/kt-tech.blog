@@ -3,6 +3,8 @@
     --background-start-rgb: 245, 245, 245;
     --background-end-rgb: 255, 255, 255;
     --background-code-rgb: 200 200 200;
+    --background-h1-border-color: 129 140 248;
+    --background-h1-border-background-color: #f6f5f9;
   }
   
   @media (prefers-color-scheme: dark) {
@@ -11,6 +13,8 @@
       --background-start-rgb: 7, 14, 29;
       --background-end-rgb: 17 24 39;
       --background-code-rgb: 50 50 50;
+      --background-h1-border-color: 129 140 248;
+      --background-h1-border-background-color: #161517;
     }
   }
 
@@ -27,9 +31,12 @@
     font-weight: bold;
     margin-top: 5rem;
     margin-bottom: 3rem;
-    border-left: 1px solid rgb(129 140 248) !important; /* Vibrant blue border */
-    border-bottom: 1px solid rgb(129 140 248) !important; /* Vibrant blue border */
+
+    /* background: #f6f5f9;背景色 */
+    background: var(--background-h1-border-background-color);/*背景色*/
+    border-left: solid 5px rgb(var(--background-h1-border-color)) !important;
     padding-left: 0.5rem;
+    border-bottom: none !important;
 }
 
 .znc h2 {
@@ -147,19 +154,21 @@
 /* メディアクエリを追加 */
 @media (max-width: 768px) {
     .znc h1 {
-        font-size: 1.6rem;
+        font-size: 1.3rem;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
     }
 
     .znc h2 {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
     }
 
     .znc h3 {
-        font-size: 1.4rem;
+        font-size: 1.1rem;
     }
 
     .znc h4 {
-        font-size: 1.2rem;
+        font-size: 1.0rem;
     }
 
     .znc p {
