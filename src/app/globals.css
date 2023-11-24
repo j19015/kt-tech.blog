@@ -34,7 +34,7 @@ body {
   @media (prefers-color-scheme: dark) {
     :root {
       --foreground-rgb: 227, 227, 227;
-      --background-start-rgb: 7, 14, 29;
+      --background-start-rgb: 43, 42, 42;
       --background-end-rgb: 17 24 39;
       --button-bg: 99 102 241;
       --button-bg-hover: 99 102 241;
@@ -72,11 +72,11 @@ body {
 
   body {
     color: rgb(var(--foreground-rgb));
-    background: rgb(var(--background-start-rgb));
+    background: rgb(var(--background-end-rgb));
   }
 
   .content{
-    background-color: rgb(var(--background-end-rgb));
+    background-color: rgb(var(--background-start-rgb));
   }
 
   a{
