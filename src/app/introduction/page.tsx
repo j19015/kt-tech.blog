@@ -2,7 +2,7 @@ import Sidebar from '@/components/SIdebar/Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquareGithub,faSquareTwitter } from '@fortawesome/free-brands-svg-icons';
 import '../../../styles/markdown.css'
-import Title from '@/components/Title/Title';
+import Image from 'next/image';
 
 export const metadata = {
   title: '自己紹介ページ',
@@ -29,7 +29,7 @@ export default function Home() {
         <div className="lg:col-span-2 lg:p-4"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
         <div className="rounded-lg introduction content p-2 pt-6 pb-6">
           <div className="text-center">
-            <img
+            <Image
               src="/images/profile_image.png"
               alt="J19015"
               width={400}
