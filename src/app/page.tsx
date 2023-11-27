@@ -37,11 +37,31 @@ export default async function StaticPage () {
   // contentsをBlogの配列として定義
   const latestBlogs: Blog[] = contents.slice(0, 4);
   
+  // スタイル定義
+  const welcomeStyle: React.CSSProperties = {
+    fontSize: '2rem', // フォントサイズを大きく
+    fontWeight: 'bold', // 太字
+    textAlign: 'center', // 中央寄せ
+    margin: '20px 0', // 上下の余白
+    animation: 'fadeIn 2s' // アニメーション効果
+  };
+
+  // アニメーション用のキーフレーム（CSS）
+  const keyframes = `
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  `;
 
   return (
     <>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 pb-5">
         <div className="lg:col-span-2">
+          <div style={welcomeStyle} className="top p-3">
+            <style>{keyframes}</style>
+            <h1 className="text-xl lg:text-2xl">kt-tech.blog にようこそ</h1>
+          </div>
           <Index contents = {latestBlogs}/>
           <div className="mt-8 flex justify-center"> {/* 中央寄せ */}
             <Link href="/blogs/page/1" className="transition duration-300 ease-in-out font-semibold py-2 px-4 border-b-4 rounded shadow-md theme-button">
