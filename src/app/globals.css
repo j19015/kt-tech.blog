@@ -100,8 +100,7 @@ body {
     margin-top: 5rem;
     margin-bottom: 3rem;
     background: var(--background-h1-border-background-color);/*背景色*/
-    border-left: solid 5px rgb(var(--background-h1-border-color)) !important;
-    border-bottom: none !important;
+    border-bottom: solid 1px rgba(92,147,187,.17);
     padding-left: 0.5rem;
     padding-top: 0.2rem;
     padding-bottom: 0.2rem;
@@ -117,6 +116,10 @@ body {
 .theme-button:hover {
     background-color: rgb(var(--button-bg-hover));
     border-color: rgb(var(--button-border-hover));
+}
+
+.introduction >h1 {
+  border-bottom: solid 1px rgba(92,147,187,.17);
 }
 
 .introduction h3 {
