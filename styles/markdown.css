@@ -1,17 +1,13 @@
 :root {
     --foreground-rgb: 28, 28, 28;
-    --background-start-rgb: 245, 245, 245;
-    --background-end-rgb: 255, 255, 255;
     --background-code-rgb: 200 200 200;
     --background-h1-border-color: 129 140 248;
-    --background-h1-border-background-color: #f6f5f9;
+    --background-h1-border-background-color: rgb(255, 255, 255);
   }
   
   @media (prefers-color-scheme: dark) {
     :root {
       --foreground-rgb: 227, 227, 227;
-      --background-start-rgb: 43, 42, 42;
-      --background-end-rgb: 17 24 39;
       --background-code-rgb: 50 50 50;
       --background-h1-border-color: 129 140 248;
       --background-h1-border-background-color: #363636;
