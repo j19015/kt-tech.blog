@@ -65,7 +65,7 @@ export default function RootLayout({
       <body>
         <div>
           <Header/>
-          <div className='m-1 mt-5 rounded-lg'>
+          <div className='mt-5 rounded-lg'>
             {children}
           </div>
           <Footer/>
