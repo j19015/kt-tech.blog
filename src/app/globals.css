@@ -34,7 +34,7 @@ body {
   @media (prefers-color-scheme: dark) {
     :root {
       --foreground-rgb: 227, 227, 227;
-      --background-start-rgb: 17 24 39;
+      --background-start-rgb: 33 32 32;
       --background-end-rgb: 43, 42, 42;
       --button-bg: 99 102 241;
       --button-bg-hover: 99 102 241;
