@@ -3,6 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faBlog, faCode, faUser } from '@fortawesome/free-solid-svg-icons';
+
+
 export const Header = () => {
   const [isOpen, setOpen] = useState<boolean>(false);
   const [selected, setSelected] = useState<string>("Home");
@@ -43,6 +47,7 @@ export const Header = () => {
                 href={menu === "Blog" ? "/blogs/page/1" : menu === "Home" ? "/" : `/${menu.toLowerCase()}`}
               >
                 <span className={`font-serif transition duration-300 ${selected === menu ? "text-indigo-500" : "hover:text-indigo-500"}`}>
+                  <FontAwesomeIcon icon={menu === "Home" ? faHome : menu === "Blog" ? faBlog : menu === "Dev" ? faCode : faUser} className="mr-1"/>
                   {menu}
                 </span>
               </Link>
