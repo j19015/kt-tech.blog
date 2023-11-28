@@ -188,13 +188,14 @@ body {
 }
 
 .top > h1:before, .top > h1:after {
+  color: rgb(var(--foreground-rgb));
   content: '';
   position: absolute;
   top: 50%;
   display: inline-block;
   width: 45px;
   height: 1px;
-  background-color: black;
+  background-color: rgb(var(--foreground-rgb));
 }
 
 .top > h1:before {
