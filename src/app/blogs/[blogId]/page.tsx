@@ -63,6 +63,26 @@ export async function generateMetadata(
   }
 }
 
+async function fetchOGPData(url: string) {
+  const response = await fetch(url);
+  const html = await response.text();
+  const $ = cheerio.load(html);
+
+  const getMetaTag = (name :string) => {
+    return (
+      $(`meta[name=${name}]`).attr('content') ||
+      $(`meta[property="og:${name}"]`).attr('content') ||
+      $(`meta[property="twitter:${name}"]`).attr('content')
+    );
+  };
+
+  return {
+    title: getMetaTag('title'),
+    description: getMetaTag('description'),
+    image: getMetaTag('image'),
+  };
+}
+
 export default async function StaticDetailPage({
   params : { blogId },
 }: {
@@ -76,8 +96,51 @@ export default async function StaticDetailPage({
     parse_body(elm).html(result.value);
     parse_body(elm).addClass("hljs");
   });
-  //console.log(blog.body)
-  //console.log(body.html())
+
+  // 重複なしで全てのリンクのhrefを取得
+  const uniqueLinks: string[] = [];
+  parse_body('a').each((_, link) => {
+    const href = parse_body(link).attr('href');
+    if (href && !href.startsWith('#') && !uniqueLinks.includes(href)) {
+      uniqueLinks.push(href);
+    }
+  });
+
+  // 各リンクのOGPデータを非同期で取得
+  const ogpDataPromises = Array.from(uniqueLinks).map((href) => fetchOGPData(href));
+  const ogpDataResults = await Promise.all(ogpDataPromises);
+
+  // hrefとOGPデータをマッピング
+  const hrefToOgpData = new Map();
+  Array.from(uniqueLinks).forEach((href, index) => {
+    hrefToOgpData.set(href, ogpDataResults[index]);
+  });
+
+  // リンクカードの生成とHTMLの更新
+  parse_body('a').each((_, link) => {
+    const href = parse_body(link).attr('href');
+    if (!href || href.startsWith('#')) {
+      return;
+    }
+
+    const meta = hrefToOgpData.get(href);
+    const linkCardHTML = `
+      <div class="link-card mt-3 mb-3">
+        <!-- リンクカードの内容 -->
+        <a href="${href}" target="_blank" rel="noopener noreferrer">
+          <div class="link-card-body">
+            <div class="link-card-info">
+              <div class="link-card-title">${meta.title}</div>
+              <div class="link-card-url">${href}</div>
+            </div>
+            <img src="${meta.image}" class="link-card-thumbnail" />
+          </div>
+        </a>
+      </div>
+    `;
+
+    parse_body(link.parent).replaceWith(linkCardHTML);
+  });
 
   //目次機能
   const $ = cheerio.load(html);
@@ -87,7 +150,6 @@ export default async function StaticDetailPage({
     id: (element as any).attribs.id,
     tag: (element as any).tagName
   }));
-  console.log(toc)
 
 
   if(!blog){
