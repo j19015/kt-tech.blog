@@ -203,3 +203,88 @@ body {
 .top > h1:after {
   right: 0;
 }
+
+.link-card {
+  -webkit-box-align: center;
+  border: 0.3px solid rgb(var(--foreground-rgb)) !important;
+  border-radius: 8px;
+  display: flex;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  overflow: hidden;
+  text-decoration: none;
+  word-break: break-all;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.link-card > a{
+  color: rgb(var(--foreground-rgb)) !important;
+  width: 100%;
+}
+
+.link-card:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.link-card-body {
+  display: flex;
+  justify-content: space-between;
+}
+
+.link-card-info {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.0rem;
+  flex: 1; /* 情報セクションが残りのスペースを埋める */
+}
+
+.link-card-title {
+  color: var(--color-text-high-emphasis);
+  display: -webkit-box;
+  font-weight: 600;
+  font-size: 1.0rem;
+  line-height: 1.5;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.link-card-url {
+  color: var(--color-text-high-emphasis);
+  display: -webkit-box;
+  font-size: 12px;
+  line-height: 1.8;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+
+.link-card-thumbnail {
+  border-left: 1px solid var(--color-divider);
+  flex-shrink: 0;
+  object-fit: cover;
+  width: 270px;
+  margin: 0 !important;
+}
+
+.link-card-body > img {
+  border-radius: 0px !important;
+  border-top-right-radius: 5px !important;
+  border-bottom-right-radius: 5px !important;
+  height: 110px !important;
+}
+
+@media (max-width: 768px){
+  .link-card-thumbnail {
+    width: 220px;
+  }
+}
+
+@media (max-width: 479px){
+  .link-card-thumbnail {
+    width: 110px;
+  }
+}
