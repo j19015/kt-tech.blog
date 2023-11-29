@@ -52,7 +52,7 @@ export const Sidebar = async () => {
                 <h3 className="text-xl font-bold mb-4 border-b border-gray-600 pb-2">カテゴリー</h3>
                 <div className="flex flex-wrap gap-2">
                     {categoryList.map((category) => (
-                        <Link key={category.id} href={`/categories/${category.id}/page/1`} className="px-0.5 py-1 transition duration-300 ease-in-out transform hover:scale-105">
+                        <Link key={category.id} href={`/categories/${category.id}/page/1`} className="px-0.5 py-1 transition duration-300 ease-in-out transform hover:scale-105 hover:text-indigo-500 ">
                              <div className="inline group p-2 pl-4 pr-4 rounded-lg border-solid border-2 border-gray-500 hover:border-indigo-500">
                                 {category.name}
                             </div>
@@ -65,8 +65,8 @@ export const Sidebar = async () => {
                 <h3 className="text-xl font-bold mb-4 border-b border-gray-600 pb-2">タグ</h3>
                 <div className="flex flex-wrap gap-2">
                     {tagList.map((tag) => (
-                        <span key={tag.id} className="inline-block   px-0.5 py-1 rounded-full hover:text-indigo-500 text-sm mr-2 mb-2 transition duration-300 ease-in-out transform hover:scale-105">
-                            <Link href={`/tags/${tag.id}`}>
+                        <span key={tag.id} className="inline-block px-0.5 py-1 rounded-full hover:text-indigo-500 text-sm mr-2 mb-2 transition duration-300 ease-in-out transform hover:scale-105">
+                            <Link href={`/tags/${tag.id}`} className='hover:text-indigo-500'>
                             <FontAwesomeIcon icon={faTag} /> {tag.name}
                             </Link>
                         </span>
@@ -79,7 +79,7 @@ export const Sidebar = async () => {
                 <ul>
                     {archives.map((archive) => (
                         <li key={archive} className="mb-2">
-                            <Link href={`/archives/${archive}`} className="text-whit hover:text-indigo-500 flex items-center transition duration-300 ease-in-out transform hover:scale-105">
+                            <Link href={`/archives/${archive}`} className="hover:text-indigo-500 flex items-center transition duration-300 ease-in-out transform hover:scale-105">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5 mr-2">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                                 </svg>
