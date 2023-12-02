@@ -3,6 +3,7 @@
     --background-code-rgb: 200 200 200;
     --background-h1-border-color: 129 140 248;
     --background-h1-border-background-color: rgb(255, 255, 255);
+    --table-contents-border-color: 0 0 0
   }
   
   @media (prefers-color-scheme: dark) {
@@ -195,5 +196,24 @@
         height: 200px;
         object-fit: fill;
         box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* ブログの目次のCSS */
+.table-contents{
+    border-color: rgb(var(--foreground-rgb)) !important;
+}
+
+.table-contents > h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    padding-left: 0.5rem;
+    padding-top: 0.2rem;
+    border-bottom: solid 1px rgba(92,147,187,.17);
+}
+@media (max-width: 768px) {
+    .table-contents > h1  {
+        font-size: 1.3rem !important;
     }
 }
