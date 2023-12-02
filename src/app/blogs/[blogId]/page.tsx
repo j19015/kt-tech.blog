@@ -223,19 +223,17 @@ export default async function StaticDetailPage({
           </div>
         </div>
         <div className="lg:col-span-1 p-5 pl-7 pt-10 hidden lg:block"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
-          <div className="flex justify-center">
-            <div className="lg:fixed p-5 border-2 rounded-lg table-contents" style={{ maxHeight: 'calc(100vh - 300px)', overflowY: 'auto'}}>
-              <h1 className="text-2xl mb-5 font-bold">目次</h1>
-              <ul className="pl-2 scroll_bar">
-                  {toc.map(data => (
-                      <li key={data.id} className={`${data.tag == 'h2' ? 'ml-5' : (data.tag == 'h3' ? 'ml-10': 'ml-1')} mb-2 hover:bg-gray-500 rounded p-0.5`}>
-                          <a href={`#${data.id}`}>
-                              {data.tag == 'h1' ? data.text : "-"+(data.text)}
-                          </a>
-                      </li>
-                  ))}
-              </ul>
-            </div>
+          <div className="lg:fixed p-5 border-2 rounded-lg table-contents" style={{ maxHeight: 'calc(100vh - 300px)', overflowY: 'auto'}}>
+            <h1 className="text-2xl mb-5 font-bold">目次</h1>
+            <ul className="pl-2 scroll_bar">
+                {toc.map(data => (
+                    <li key={data.id} className={`${data.tag == 'h2' ? 'ml-5' : (data.tag == 'h3' ? 'ml-10': 'ml-1')} mb-2 hover:bg-gray-500 rounded p-0.5`}>
+                        <a href={`#${data.id}`}>
+                            {data.tag == 'h1' ? data.text : "-"+(data.text)}
+                        </a>
+                    </li>
+                ))}
+            </ul>
           </div>
         </div>
       </div>
