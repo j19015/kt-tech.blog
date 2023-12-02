@@ -202,6 +202,7 @@
 /* ブログの目次のCSS */
 .table-contents{
     border-color: rgb(var(--foreground-rgb)) !important;
+    min-width: 20%;
 }
 
 .table-contents > h1 {
