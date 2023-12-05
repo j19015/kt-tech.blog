@@ -12,8 +12,12 @@ export async function generateStaticParams() {
   try {
     //ブログ取得
     const { contents } = await getList();
+
+    const articles = contents.filter(article => article.category?.name !== 'PF');
+
     //ブログ件数を取得
-    const totalItems = contents.length;
+    const totalItems = articles.length;
+
     // ページ数を計算
     const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
     //path入れる用の変数
@@ -53,7 +57,7 @@ export default async function StaticPaginationPage({
   try {
     const { contents } = await getList();
 
-    const contentSlice = contents.slice(startIndex, endIndex);
+    const contentSlice = contents.filter(article => article.category?.name !== 'PF').slice(startIndex, endIndex);
 
     // コンテンツを表示するロジックをここに追加
 
