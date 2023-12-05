@@ -11,7 +11,7 @@ export const Sidebar = async () => {
     const categoryList = (await getCategoryList()).contents;
 
     // 最新記事を取得
-    const latestArticles = contents.slice(0, 3);
+    const latestArticles = contents.filter(article => article.category?.name !== 'PF').slice(0, 3);
 
     // アーカイブを取得
     const archives = Array.from(new Set(contents.map((item) => item.createdAt.slice(0, 7))));
