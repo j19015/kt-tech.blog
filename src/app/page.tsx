@@ -35,7 +35,7 @@ export default async function StaticPage () {
   }
 
   // contentsをBlogの配列として定義
-  const latestBlogs: Blog[] = contents.slice(0, 4);
+  const latestBlogs: Blog[] = contents.filter(article => article.category?.name !== 'PF').slice(0, 4);
   
   // スタイル定義
   const welcomeStyle: React.CSSProperties = {
