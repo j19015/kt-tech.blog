@@ -40,14 +40,14 @@ export const Header = () => {
               : " hidden block md:flex md:gap-8"
           }
         >
-          {["Home", "Blog", "Dev", "Introduction"].map(menu => (
+          {["Home", "Blog", "PF", "Introduction"].map(menu => (
             <li key={menu}>
               <Link 
                 onClick={() => handleMenuClose(menu)}
                 href={menu === "Blog" ? "/blogs/page/1" : menu === "Home" ? "/" : `/${menu.toLowerCase()}`}
               >
                 <span className={`font-serif transition duration-300 ${selected === menu ? "text-indigo-500" : "hover:text-indigo-500"}`}>
-                  <FontAwesomeIcon icon={menu === "Home" ? faHome : menu === "Blog" ? faBlog : menu === "Dev" ? faCode : faUser} className="mr-1"/>
+                  <FontAwesomeIcon icon={menu === "Home" ? faHome : menu === "Blog" ? faBlog : menu === "PF" ? faCode : faUser} className="mr-1"/>
                   {menu}
                 </span>
               </Link>
