@@ -208,11 +208,11 @@ export default async function StaticDetailPage({
             <h1 style={{ marginTop: "0px !important" }}>目次</h1>
               <ul className="pl-2">
                   {toc.map(data => (
+                    <a href={`#${data.id}`}>
                       <li key={data.id} className={`${data.tag == 'h2' ? 'ml-5' : (data.tag == 'h3' ? 'ml-10': 'ml-1')} mb-2 hover:bg-gray-500 rounded p-0.5`}>
-                          <a href={`#${data.id}`}>
-                              {data.tag == 'h1' ? data.text : "-"+(data.text)}
-                          </a>
+                        {data.tag == 'h1' ? data.text : "-"+(data.text)}
                       </li>
+                      </a>
                   ))}
               </ul>
           </div>
@@ -227,11 +227,11 @@ export default async function StaticDetailPage({
             <h1 className="text-2xl mb-5 font-bold">目次</h1>
             <ul className="pl-2 scroll_bar">
                 {toc.map(data => (
+                  <a href={`#${data.id}`}>
                     <li key={data.id} className={`${data.tag == 'h2' ? 'ml-5' : (data.tag == 'h3' ? 'ml-10': 'ml-1')} mb-2 hover:bg-gray-500 rounded p-0.5`}>
-                        <a href={`#${data.id}`}>
-                            {data.tag == 'h1' ? data.text : "-"+(data.text)}
-                        </a>
+                      {data.tag == 'h1' ? data.text : "-"+(data.text)}
                     </li>
+                  </a>
                 ))}
             </ul>
           </div>
