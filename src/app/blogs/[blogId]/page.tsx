@@ -64,23 +64,37 @@ export async function generateMetadata(
 }
 
 async function fetchOGPData(url: string) {
-  const response = await fetch(url);
-  const html = await response.text();
-  const $ = cheerio.load(html);
+  // localhostを含むURLの場合はカスタムのデータを返す
+  if (url.includes('localhost')) {
+    return {
+      title: 'ローカルホスト', // タイトルにローカルホストと表示
+      description: 'ローカル環境のリンクです', // 任意の説明
+      image: '/images/no_image.jpeg', // デフォルト画像パス
+    };
+  }
 
-  const getMetaTag = (name :string) => {
-    return (
-      $(`meta[name=${name}]`).attr('content') ||
-      $(`meta[property="og:${name}"]`).attr('content') ||
-      $(`meta[property="twitter:${name}"]`).attr('content')
-    );
-  };
+  try {
+    const response = await fetch(url);
+    const html = await response.text();
+    const $ = cheerio.load(html);
 
-  return {
-    title: getMetaTag('title'),
-    description: getMetaTag('description'),
-    image: getMetaTag('image'),
-  };
+    const getMetaTag = (name: string) => {
+      return (
+        $(`meta[name=${name}]`).attr('content') ||
+        $(`meta[property="og:${name}"]`).attr('content') ||
+        $(`meta[property="twitter:${name}"]`).attr('content')
+      );
+    };
+
+    return {
+      title: getMetaTag('title'),
+      description: getMetaTag('description'),
+      image: getMetaTag('image') || "/images/no_image.jpeg", // 画像がない場合のデフォルト
+    };
+  } catch (error) {
+    console.error(`Error fetching OGP for ${url}:`, error);
+    return null; // エラーが発生した場合も何も返さない
+  }
 }
 
 export default async function StaticDetailPage({
