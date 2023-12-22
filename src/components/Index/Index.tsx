@@ -15,7 +15,7 @@ export const Index = ({ contents }: BlogProps) => {
                             <Link href={`/blogs/${blog.id}`}>
                                 <Image
                                     className="rounded-lg"
-                                    src={blog.eyecatch?.url ? blog.eyecatch?.url : `../../../public/images/no_image`}
+                                    src={blog.eyecatch?.url ? blog.eyecatch?.url : `/images/no_image.jpeg`}
                                     alt=""
                                     width={1200}
                                     height={630}
