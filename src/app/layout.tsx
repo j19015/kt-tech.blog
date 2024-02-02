@@ -1,22 +1,21 @@
-import './globals.css'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import { Header } from '../../src/components/Header/Header'
-import { Footer } from '../../src/components/Footer/Footer'
-import { config } from '@fortawesome/fontawesome-svg-core'
-import GoogleAnalytics from '@/components/GoogleAnalytics/GoogleAnalytics'
-import '@fortawesome/fontawesome-svg-core/styles.css'
-config.autoAddCss = false
+import './globals.css';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import { Header } from '../../src/components/Header/Header';
+import { Footer } from '../../src/components/Footer/Footer';
+import { config } from '@fortawesome/fontawesome-svg-core';
+import GoogleAnalytics from '@/components/GoogleAnalytics/GoogleAnalytics';
+import '@fortawesome/fontawesome-svg-core/styles.css';
+config.autoAddCss = false;
 
-
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
 // export const metadata: Metadata = {
 //   title: 'kt-tech.blog',
 //   description: 'ktの技術ブログサイトになります。',
 // }
 
-const siteName= 'kt-tech.blog';
+const siteName = 'kt-tech.blog';
 const description = 'ktの技術ブログサイトになります。';
 const url = 'https://kt-tech.blog';
 
@@ -44,7 +43,6 @@ export const metadata = {
   },
   verification: {
     google: 'IpGviaJMSPR7SL1E-maff_nCUNmuWWBXYRTLcDHZUcw',
-    
   },
   alternates: {
     alternate: url,
@@ -52,25 +50,17 @@ export const metadata = {
   },
 };
 
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ja">
-      <GoogleAnalytics/>
-      <meta name="google-adsense-account" content="ca-pub-9002778711554857"></meta>
+    <html lang='ja'>
+      <GoogleAnalytics />
       <body>
         <div>
-          <Header/>
-          <div className='mt-5 rounded-lg'>
-            {children}
-          </div>
-          <Footer/>
+          <Header />
+          <div className='mt-5 rounded-lg'>{children}</div>
+          <Footer />
         </div>
       </body>
     </html>
-  )
+  );
 }

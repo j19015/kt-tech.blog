@@ -1,29 +1,31 @@
-import Link from "next/link";
-import { getList } from "../../libs/microcms";
-import Sidebar from "@/components/SIdebar/Sidebar"; // Sidebarのimportを修正
-import { Blog } from "../../libs/microcms";
-import Index from "@/components/Index/Index";
-import Title from "@/components/Title/Title";
+import Link from 'next/link';
+import { getList } from '../../libs/microcms';
+import Sidebar from '@/components/SIdebar/Sidebar'; // Sidebarのimportを修正
+import { Blog } from '../../libs/microcms';
+import Index from '@/components/Index/Index';
 
 export const metadata = {
   title: 'TOPページ',
-  description: '基本的には技術記事を投稿していきます。PFの公開ページやIntroduction用ページとしても活用をしています。',
+  description:
+    '基本的には技術記事を投稿していきます。PFの公開ページやIntroduction用ページとしても活用をしています。',
   openGraph: {
     title: 'TOPページ',
-    description: '基本的には技術記事を投稿していきます。PFの公開ページやIntroduction用ページとしても活用をしています。',
+    description:
+      '基本的には技術記事を投稿していきます。PFの公開ページやIntroduction用ページとしても活用をしています。',
     locale: 'ja_JP',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'TOPページ',
-    description: '基本的には技術記事を投稿していきます。PFの公開ページやIntroduction用ページとしても活用をしています。',
+    description:
+      '基本的には技術記事を投稿していきます。PFの公開ページやIntroduction用ページとしても活用をしています。',
     site: '@tech_koki',
     creator: '@tech_koki',
   },
 };
 
-export default async function StaticPage () {
+export default async function StaticPage() {
   const { contents } = await getList();
   //console.log(contents);
 
@@ -35,15 +37,17 @@ export default async function StaticPage () {
   }
 
   // contentsをBlogの配列として定義
-  const latestBlogs: Blog[] = contents.filter(article => article.category?.name !== 'PF').slice(0, 4);
-  
+  const latestBlogs: Blog[] = contents
+    .filter((article) => article.category?.name !== 'PF')
+    .slice(0, 4);
+
   // スタイル定義
   const welcomeStyle: React.CSSProperties = {
     fontSize: '2rem', // フォントサイズを大きく
     fontWeight: 'bold', // 太字
     textAlign: 'center', // 中央寄せ
     margin: '20px 0', // 上下の余白
-    animation: 'fadeIn 2s' // アニメーション効果
+    animation: 'fadeIn 2s', // アニメーション効果
   };
 
   // アニメーション用のキーフレーム（CSS）
@@ -56,20 +60,25 @@ export default async function StaticPage () {
 
   return (
     <>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 pb-5">
-        <div className="lg:col-span-2">
-          <div style={welcomeStyle} className="top p-3">
+      <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 pb-5'>
+        <div className='lg:col-span-2'>
+          <div style={welcomeStyle} className='top p-3'>
             <style>{keyframes}</style>
-            <h1 className="text-xl lg:text-2xl">kt-tech.blog にようこそ</h1>
+            <h1 className='text-xl lg:text-2xl'>kt-tech.blog にようこそ</h1>
           </div>
-          <Index contents = {latestBlogs}/>
-          <div className="mt-8 flex justify-center"> {/* 中央寄せ */}
-            <Link href="/blogs/page/1" className="transition duration-300 ease-in-out font-semibold py-2 px-4 border-b-4 rounded shadow-md theme-button">
-                すべての記事を見る
+          <Index contents={latestBlogs} />
+          <div className='mt-8 flex justify-center'>
+            {' '}
+            {/* 中央寄せ */}
+            <Link
+              href='/blogs/page/1'
+              className='transition duration-300 ease-in-out font-semibold py-2 px-4 border-b-4 rounded shadow-md theme-button'
+            >
+              すべての記事を見る
             </Link>
+          </div>
         </div>
-        </div>
-        <div className="lg:col-span-1">
+        <div className='lg:col-span-1'>
           <Sidebar />
         </div>
       </div>
