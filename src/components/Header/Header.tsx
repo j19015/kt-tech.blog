@@ -39,7 +39,7 @@ export const Header = () => {
               : ' hidden block md:flex md:gap-8'
           }
         >
-          {['Home', 'Blog', 'PF', 'Introduction'].map((menu) => (
+          {['Home', 'Blog', 'Introduction'].map((menu) => (
             <li key={menu}>
               <Link
                 onClick={() => handleMenuClose(menu)}
@@ -57,15 +57,7 @@ export const Header = () => {
                   }`}
                 >
                   <FontAwesomeIcon
-                    icon={
-                      menu === 'Home'
-                        ? faHome
-                        : menu === 'Blog'
-                        ? faBlog
-                        : menu === 'PF'
-                        ? faCode
-                        : faUser
-                    }
+                    icon={menu === 'Home' ? faHome : menu === 'Blog' ? faBlog : faUser}
                     className='mr-1'
                   />
                   {menu}
