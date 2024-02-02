@@ -2,182 +2,182 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
-    font-family: 'Helvetica Neue', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f0f0f0; /* Slightly darker grey background */
-    color: #f0f0f0; /* Light text color */
-    word-break: break-all;
+  font-family: 'Quicksand', '游ゴシック体', 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro',
+    'Hiragino Kaku Gothic Pro', 'メイリオ', Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic',
+    sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0; /* Slightly darker grey background */
+  color: #f0f0f0; /* Light text color */
+  word-break: break-all;
 }
 
 :root {
-    --foreground-rgb: 28, 28, 28;
-    --background-start-rgb: 245, 245, 245;
-    --background-end-rgb: 255, 255, 255;
+  --foreground-rgb: 28, 28, 28;
+  --background-start-rgb: 245, 245, 245;
+  --background-end-rgb: 255, 255, 255;
+  --button-bg: 99 102 241;
+  --button-bg-hover: 99 102 241;
+  --button-border: 99 102 241;
+  --button-border-hover: 99 102 241;
+  --button-text-color: 255 255 255;
+  --paginate-button-color: 99 102 241;
+  --paginate-button-hover-color: 79, 70, 229;
+  --paginate-current-button-color: 199 210 254;
+  --paginate-current-button-hover-color: 179 190 234;
+  --paginate-button-text-color: 255 255 255;
+  --paginate-current-button-text-color: 99 102 241;
+  --reverce-color: 0 0 0;
+  --sub-text-color: #585353;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 227, 227, 227;
+    --background-start-rgb: 33 32 32;
+    --background-end-rgb: 43, 42, 42;
     --button-bg: 99 102 241;
     --button-bg-hover: 99 102 241;
     --button-border: 99 102 241;
     --button-border-hover: 99 102 241;
     --button-text-color: 255 255 255;
     --paginate-button-color: 99 102 241;
-    --paginate-button-hover-color: 79,70,229 ;
-    --paginate-current-button-color:199 210 254 ;
-    --paginate-current-button-hover-color: 179 190 234 ;
-    --paginate-button-text-color: 255 255 255 ;
-    --paginate-current-button-text-color: 99 102 241 ;
-    --reverce-color: 0 0 0 ;
-    --sub-text-color: #585353;
+    --paginate-button-hover-color: 79 82 221;
+    --paginate-current-button-color: 199 210 254;
+    --paginate-current-button-hover-color: ;
+    --paginate-button-text-color: 255 255 255;
+    --paginate-current-button-text-color: 99 102 241;
+    --reverce-color: 255 255 255;
+    --sub-text-color: #cbcbcb;
   }
-  
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --foreground-rgb: 227, 227, 227;
-      --background-start-rgb: 33 32 32;
-      --background-end-rgb: 43, 42, 42;
-      --button-bg: 99 102 241;
-      --button-bg-hover: 99 102 241;
-      --button-border: 99 102 241;
-      --button-border-hover: 99 102 241;
-      --button-text-color: 255 255 255;
-      --paginate-button-color: 99 102 241;
-      --paginate-button-hover-color:79 82 221;
-      --paginate-current-button-color:199 210 254 ;
-      --paginate-current-button-hover-color: ;
-      --paginate-button-text-color:255 255 255 ;
-      --paginate-current-button-text-color: 99 102 241 ;
-      --reverce-color: 255 255 255 ;
-      --sub-text-color: #cbcbcb;
-    }
-  }
-  .paginate-button-color{
-    background-color: rgb(var(--paginate-button-color));
-  }
-  .paginate-button-color:hover{
-    background-color: rgb(var(--paginate-button-hover-color));
-  }
-  .paginate-current-button-color{
-    background-color: rgb(var(--paginate-current-button-color));
-  }
-  .paginate-button-text-color{
-    color: rgb(var(--paginate-button-text-color));
-  }
-  .paginate-current-button-text-color{
-    color: rgb(var(--paginate-current-button-text-color));
-  }
-  .sub-text-color{
-    color: var(--sub-text-color);
-  }
+}
+.paginate-button-color {
+  background-color: rgb(var(--paginate-button-color));
+}
+.paginate-button-color:hover {
+  background-color: rgb(var(--paginate-button-hover-color));
+}
+.paginate-current-button-color {
+  background-color: rgb(var(--paginate-current-button-color));
+}
+.paginate-button-text-color {
+  color: rgb(var(--paginate-button-text-color));
+}
+.paginate-current-button-text-color {
+  color: rgb(var(--paginate-current-button-text-color));
+}
+.sub-text-color {
+  color: var(--sub-text-color);
+}
 
-  body {
-    color: rgb(var(--foreground-rgb));
-    background: rgb(var(--background-start-rgb));
-  }
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-start-rgb));
+}
 
-  .content{
-    background-color: rgb(var(--background-end-rgb));
-  }
+.content {
+  background-color: rgb(var(--background-end-rgb));
+}
 
-  a{
-    color: rgb(var(--foreground-rgb));
-  }
+a {
+  color: rgb(var(--foreground-rgb));
+}
 
-  .reverce-color{
-    background-color: rgb(var(--reverce-color));
-  }
-  
+.reverce-color {
+  background-color: rgb(var(--reverce-color));
+}
 
 .timeline {
-    list-style: none;
+  list-style: none;
 }
 .timeline > li {
-    margin-bottom: 60px;
+  margin-bottom: 60px;
 }
 .introduction > h2 {
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin-top: 5rem;
-    margin-bottom: 3rem;
-    border-bottom: solid 1px rgba(92,147,187,.17);
-    padding-left: 0.5rem;
-    padding-top: 0.2rem;
-    padding-bottom: 0.2rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-top: 5rem;
+  margin-bottom: 3rem;
+  border-bottom: solid 1px rgba(92, 147, 187, 0.17);
+  padding-left: 0.5rem;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
 }
 
 .theme-button {
-    background-color: rgb(var(--button-bg));
-    border-color: rgb(var(--button-border));
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-    color: rgb(var(--button-text-color));
+  background-color: rgb(var(--button-bg));
+  border-color: rgb(var(--button-border));
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  color: rgb(var(--button-text-color));
 }
 
 .theme-button:hover {
-    background-color: rgb(var(--button-bg-hover));
-    border-color: rgb(var(--button-border-hover));
+  background-color: rgb(var(--button-bg-hover));
+  border-color: rgb(var(--button-border-hover));
 }
 
-.introduction >h1 {
-  border-bottom: solid 1px rgba(92,147,187,.17);
+.introduction > h1 {
+  border-bottom: solid 1px rgba(92, 147, 187, 0.17);
 }
 
 .introduction h3 {
-    font-weight: bold;
-    font-size: 1.1rem;
-    margin-bottom: 0.3rem;
-    padding-left: 10px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+  padding-left: 10px;
 }
 
-.introduction > p{
-    line-height: 2.5;
+.introduction > p {
+  line-height: 2.5;
 }
 
-.introduction > ul{
-    line-height: 2.5;
+.introduction > ul {
+  line-height: 2.5;
 }
 
 /* for Desktop */
-@media ( min-width : 640px ){
-    .timeline > li {
-        overflow: hidden;
-        margin: 0;
-        position: relative;
-    }
-    .timeline-date {
-        width: 110px;
-        float: left;
-        margin-top: 20px;
-    }
-    .timeline-content {
-        width: 75%;
-        float: left;
-        border-left: 3px #e5e5d1 solid;
-        padding-left: 30px;
-        padding-top: 20px;
-    }
-    .timeline-content:before {
-        content: '';
-        width: 12px;
-        height: 12px;
-        background: #837ccf;
-        position: absolute;
-        left: 106px;
-        top: 33px;
-        border-radius: 100%;
-    }
+@media (min-width: 640px) {
+  .timeline > li {
+    overflow: hidden;
+    margin: 0;
+    position: relative;
+  }
+  .timeline-date {
+    width: 110px;
+    float: left;
+    margin-top: 20px;
+  }
+  .timeline-content {
+    width: 75%;
+    float: left;
+    border-left: 3px #e5e5d1 solid;
+    padding-left: 30px;
+    padding-top: 20px;
+  }
+  .timeline-content:before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    background: #837ccf;
+    position: absolute;
+    left: 106px;
+    top: 33px;
+    border-radius: 100%;
+  }
 }
 
-.scroll_bar{
-    background-color: rgba(0, 0, 0, 0); /* 背景を透明に設定 */
+.scroll_bar {
+  background-color: rgba(0, 0, 0, 0); /* 背景を透明に設定 */
 }
-.scroll_bar::-webkit-scrollbar{
-    width: 10px;
+.scroll_bar::-webkit-scrollbar {
+  width: 10px;
 }
-.scroll_bar::-webkit-scrollbar-track{
-    background-color: rgba(0, 0, 0, 0); /* トラック背景を透明に設定 */
+.scroll_bar::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0); /* トラック背景を透明に設定 */
 }
-.scroll_bar::-webkit-scrollbar-thumb{
-    background-color: #888; /* スクロールバーのつまみを灰色に設定 */
+.scroll_bar::-webkit-scrollbar-thumb {
+  background-color: #888; /* スクロールバーのつまみを灰色に設定 */
 }
 
 .top > h1 {
@@ -186,7 +186,8 @@ body {
   padding: 0 55px;
 }
 
-.top > h1:before, .top > h1:after {
+.top > h1:before,
+.top > h1:after {
   color: rgb(var(--foreground-rgb));
   content: '';
   position: absolute;
@@ -198,7 +199,7 @@ body {
 }
 
 .top > h1:before {
-  left:0;
+  left: 0;
 }
 .top > h1:after {
   right: 0;
@@ -217,7 +218,7 @@ body {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.link-card > a{
+.link-card > a {
   color: rgb(var(--foreground-rgb)) !important;
   width: 100%;
 }
@@ -236,7 +237,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  font-size: 1.0rem;
+  font-size: 1rem;
   flex: 1; /* 情報セクションが残りのスペースを埋める */
 }
 
@@ -244,7 +245,7 @@ body {
   color: var(--color-text-high-emphasis);
   display: -webkit-box;
   font-weight: 600;
-  font-size: 1.0rem;
+  font-size: 1rem;
   line-height: 1.5;
   overflow: hidden;
   -webkit-box-orient: vertical;
@@ -261,7 +262,6 @@ body {
   -webkit-line-clamp: 1;
 }
 
-
 .link-card-thumbnail {
   border-left: 1px solid var(--color-divider);
   flex-shrink: 0;
@@ -277,13 +277,13 @@ body {
   height: 110px !important;
 }
 
-@media (max-width: 768px){
+@media (max-width: 768px) {
   .link-card-thumbnail {
     width: 220px;
   }
 }
 
-@media (max-width: 479px){
+@media (max-width: 479px) {
   .link-card-thumbnail {
     width: 110px;
   }
