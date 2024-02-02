@@ -27,7 +27,9 @@ export const Index = ({ contents }: BlogProps) => {
             </div>
             <div className='w-full md:w-2/3 content'>
               <Link href={`/blogs/${blog.id}`}>
-                <h5 className='lg:mb-2 text-base sm:text-lg lg:text-xl font-bold '>{blog.title}</h5>
+                <h5 className='lg:mb-2 text-base sm:text-lg lg:text-xl font-bold hover:underline'>
+                  {blog.title}
+                </h5>
               </Link>
               <div className='p-0 sm:p-1 lg:p-2 pl-2'>
                 <Link key={blog.category?.id} href={`/categories/${blog.category?.id}`}>
