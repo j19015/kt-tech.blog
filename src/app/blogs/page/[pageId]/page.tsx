@@ -1,10 +1,8 @@
-import { notFound } from "next/navigation";
-import { getList } from "../../../../../libs/microcms";
-import Sidebar from "@/components/SIdebar/Sidebar"; // Sidebarのimportを修正
-import Paginate from "@/components/Pagination/Paginate";
-import Index from "@/components/Index/Index";
-import Title from "@/components/Title/Title";
-import Link from "next/link"
+import { notFound } from 'next/navigation';
+import { getList } from '../../../../../libs/microcms';
+import Sidebar from '@/components/SIdebar/Sidebar'; // Sidebarのimportを修正
+import Paginate from '@/components/Pagination/Paginate';
+import Index from '@/components/Index/Index';
 
 const ITEMS_PER_PAGE = 6; // 1ページあたりのアイテム数
 
@@ -13,7 +11,7 @@ export async function generateStaticParams() {
     //ブログ取得
     const { contents } = await getList();
 
-    const articles = contents.filter(article => article.category?.name !== 'PF');
+    const articles = contents.filter((article) => article.category?.name !== 'PF');
 
     //ブログ件数を取得
     const totalItems = articles.length;
@@ -26,14 +24,14 @@ export async function generateStaticParams() {
     // 各ページのパスを生成
     for (let page = 1; page <= totalPages; page++) {
       paths.push({
-         pageId: page.toString() ,
+        pageId: page.toString(),
       });
     }
     //console.log(paths)
 
     return [...paths];
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error('Error fetching data:', error);
     return [];
   }
 }
@@ -43,7 +41,6 @@ export default async function StaticPaginationPage({
 }: {
   params: { pageId: string };
 }) {
-
   if (!pageId) {
     notFound();
   }
@@ -57,25 +54,37 @@ export default async function StaticPaginationPage({
   try {
     const { contents } = await getList();
 
-    const contentSlice = contents.filter(article => article.category?.name !== 'PF').slice(startIndex, endIndex);
+    const contentSlice = contents
+      .filter((article) => article.category?.name !== 'PF')
+      .slice(startIndex, endIndex);
 
     // コンテンツを表示するロジックをここに追加
 
     return (
       <>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 pb-8"> {/* グリッドを設定 */}
-          <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
-            <Index contents={contentSlice}/>
-            <Paginate currentPage={Number(pageId)} totalPage={Math.ceil(contents.length/ITEMS_PER_PAGE)} kind={`/blogs`}></Paginate>
+        <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 pb-8'>
+          {' '}
+          {/* グリッドを設定 */}
+          <div className='lg:col-span-2'>
+            {' '}
+            {/* 通常の画面サイズでは2列分のスペースを占有 */}
+            <Index contents={contentSlice} />
+            <Paginate
+              currentPage={Number(pageId)}
+              totalPage={Math.ceil(contents.length / ITEMS_PER_PAGE)}
+              kind={`/blogs`}
+            ></Paginate>
           </div>
-          <div className="lg:col-span-1"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
+          <div className='lg:col-span-1'>
+            {' '}
+            {/* 通常の画面サイズでは1列分のスペースを占有 */}
             <Sidebar />
           </div>
         </div>
       </>
     );
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error('Error fetching data:', error);
     return (
       <>
         <p>Error fetching data.</p>
