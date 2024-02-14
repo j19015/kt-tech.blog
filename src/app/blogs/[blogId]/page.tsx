@@ -82,10 +82,14 @@ async function fetchOGPData(url: string) {
       );
     };
 
+    const title = getMetaTag('title') || $('title').text();
+    const description = getMetaTag('description') || $('meta[name="description"]').attr('content');
+    const image = getMetaTag('image') || $('img').attr('src') || '/images/no_image.jpeg';
+
     return {
-      title: getMetaTag('title'),
-      description: getMetaTag('description'),
-      image: getMetaTag('image') || '/images/no_image.jpeg', // 画像がない場合のデフォルト
+      title,
+      description,
+      image,
     };
   } catch (error) {
     console.error(`Error fetching OGP for ${url}:`, error);
