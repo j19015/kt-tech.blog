@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { getDetail, getList } from '../../../../libs/microcms';
 import cheerio from 'cheerio';
 import hljs from 'highlight.js';
-//import "highlight.js/styles/hybrid.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faTag } from '@fortawesome/free-solid-svg-icons';
 import markdownToHtml from 'zenn-markdown-html';
@@ -64,7 +63,7 @@ async function fetchOGPData(url: string) {
   // localhostを含むURLの場合はカスタムのデータを返す
   if (url.includes('localhost')) {
     return {
-      title: 'ローカルホスト', // タイトルにローカルホストと表示
+      title: 'localhost', // タイトルにローカルホストと表示
       description: 'ローカル環境のリンクです', // 任意の説明
       image: '/images/no_image.jpeg', // デフォルト画像パス
     };
