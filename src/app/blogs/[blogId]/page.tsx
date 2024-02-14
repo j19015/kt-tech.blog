@@ -82,10 +82,14 @@ async function fetchOGPData(url: string) {
       );
     };
 
+    const title = getMetaTag('title') || $('title').text();
+    const description = getMetaTag('description') || $('meta[name="description"]').attr('content');
+    const image = getMetaTag('image') || $('img').attr('src') || '/images/no_image.jpeg';
+
     return {
-      title: getMetaTag('title'),
-      description: getMetaTag('description'),
-      image: getMetaTag('image') || '/images/no_image.jpeg', // 画像がない場合のデフォルト
+      title,
+      description,
+      image,
     };
   } catch (error) {
     console.error(`Error fetching OGP for ${url}:`, error);
@@ -167,10 +171,9 @@ export default async function StaticDetailPage({
 
   return (
     <>
-      <div>
-        <div className='grid grid-cols-1 lg:grid-cols-4 lg:p-4'>
-          {' '}
-          {/* グリッドを設定 */}
+      <div className='m-auto'>
+        <div className='grid grid-cols-1 lg:grid-cols-7 lg:p-4'>
+          <div className='lg:grid-cols-1'></div> {/* グリッドを設定 */}
           <div className='lg:col-span-3 lg:p-10 rounded-lg content'>
             {' '}
             {/* 通常の画面サイズでは2列分のスペースを占有 */}
@@ -244,13 +247,10 @@ export default async function StaticDetailPage({
               </div>
             </div>
           </div>
-          <div className='lg:col-span-1 p-5 pl-7 pt-10 hidden lg:block'>
+          <div className='lg:col-span-2 p-5 pl-7 pt-10 hidden lg:block float-right'>
             {' '}
             {/* 通常の画面サイズでは1列分のスペースを占有 */}
-            <div
-              className='lg:fixed p-5 border-2 rounded-lg table-contents'
-              style={{ maxHeight: 'calc(100vh - 300px)', overflowY: 'auto', maxWidth: '250px' }}
-            >
+            <div className='p-5 rounded-lg table-contents'>
               <h1 className='text-2xl mb-5 font-bold'>目次</h1>
               <ul className='pl-2 scroll_bar'>
                 {toc.map((data) => (
@@ -268,6 +268,7 @@ export default async function StaticDetailPage({
               </ul>
             </div>
           </div>
+          <div className='lg:grid-cols-1'></div>
         </div>
       </div>
     </>
