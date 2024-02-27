@@ -12,6 +12,7 @@ import '../../../../styles/markdown.css';
 import '../../../../styles/default-dark.min.css';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { faFolderOpen } from '@fortawesome/free-solid-svg-icons';
+import Sidebar from '@/components/SIdebar/Sidebar';
 export async function generateStaticParams() {
   const { contents } = await getList();
 
@@ -172,103 +173,112 @@ export default async function StaticDetailPage({
   return (
     <>
       <div className='m-auto'>
-        <div className='grid grid-cols-1 lg:grid-cols-7 lg:p-4'>
-          <div className='lg:grid-cols-1'></div> {/* グリッドを設定 */}
-          <div className='lg:col-span-3 lg:p-10 rounded-lg content'>
-            {' '}
-            {/* 通常の画面サイズでは2列分のスペースを占有 */}
-            <div>
-              <div className='p-4'>
-                <Link href={`/blogs/${blog.id}`}>
-                  <Image
-                    src={
-                      blog.eyecatch?.url ? blog.eyecatch?.url : `../../../public/images/no_image`
-                    }
-                    alt='画像'
-                    width={10000}
-                    height={10000}
-                    className='rounded-lg'
-                  />
-                </Link>
-              </div>
-              <div className='pl-6 pr-4 pb-1'>
-                <Link key={blog.category?.id} href={`/categories/${blog.category?.id}`}>
-                  <div className='inline rounded-lg text-xs sm:text-base lg:text-base sub-text-color'>
-                    <FontAwesomeIcon icon={faFolderOpen} /> {blog.category?.name}
-                  </div>
-                </Link>
-              </div>
-              <div className='pl-6 pr-4 pb-1'>
-                <ul className='list-disc list-inside '>
-                  {blog.tags?.map((tag) => (
-                    <Link key={tag.id} href={`/tags/${tag.id}`}>
-                      <span className='inline-block rounded-full text-xs sm:text-base lg:text-base mr-2 sub-text-color'>
-                        <FontAwesomeIcon icon={faTag} /> {tag.name}
-                      </span>
-                    </Link>
-                  ))}
-                </ul>
-              </div>
-              <div className='pl-6 pr-4'>
-                <FontAwesomeIcon icon={faCalendarAlt} className='mr-1 sub-text-color' />
-                <span className='mr-2 text-xs sm:text-base lg:text-base sub-text-color'>
-                  投稿日時:
-                </span>
-                <span className='text-xs sm:text-sm lg:text-base sub-text-color'>
-                  {new Date(blog.createdAt)
-                    .toLocaleDateString('ja-JP', {
-                      timeZone: 'Asia/Tokyo',
-                    })
-                    .replace(/\//g, '-')}
-                </span>
-              </div>
-              <h1 className='p-4 mt-5 text-xl font-bold lg:text-3xl'>{blog.title}</h1>
-              <div className='lg:hidden border-2 rounded-lg table-contents m-5 p-1'>
+        <div className='grid grid-cols-2 lg:grid-cols-3 gap-4'>
+          <div className='lg:col-span-2 col-span-3'>
+            <div className='grid grid-cols-2 lg:grid-cols-3 lg:p-4'>
+              <div className='lg:col-span-1 p-5 pl-7 pt-10 hidden lg:block float-right'>
                 {' '}
                 {/* 通常の画面サイズでは1列分のスペースを占有 */}
-                <h1 style={{ marginTop: '0px !important' }}>目次</h1>
-                <ul className='pl-2'>
-                  {toc.map((data) => (
-                    <a href={`#${data.id}`}>
-                      <li
-                        key={data.id}
-                        className={`${
-                          data.tag == 'h2' ? 'ml-5' : data.tag == 'h3' ? 'ml-10' : 'ml-1'
-                        } mb-2 hover:bg-gray-500 rounded p-0.5`}
-                      >
-                        {data.tag == 'h1' ? data.text : '-' + data.text}
-                      </li>
-                    </a>
-                  ))}
-                </ul>
+                <div className='p-5 rounded-lg table-contents'>
+                  <h1 className='text-2xl mb-5 font-bold'>目次</h1>
+                  <ul className='pl-2 scroll_bar'>
+                    {toc.map((data) => (
+                      <a href={`#${data.id}`}>
+                        <li
+                          key={data.id}
+                          className={`${
+                            data.tag == 'h2' ? 'ml-5' : data.tag == 'h3' ? 'ml-10' : 'ml-1'
+                          } mb-2 hover:bg-gray-500 rounded p-0.5`}
+                        >
+                          {data.tag == 'h1' ? data.text : '-' + data.text}
+                        </li>
+                      </a>
+                    ))}
+                  </ul>
+                </div>
               </div>
-              <div className='p-4 znc markdown'>
-                <div dangerouslySetInnerHTML={{ __html: parse_body.html() }}></div>
+              <div className='lg:col-span-2 col-span-3 lg:py-5 lg:px-3 rounded-lg content'>
+                {' '}
+                {/* 通常の画面サイズでは2列分のスペースを占有 */}
+                <div>
+                  <div className='p-4'>
+                    <Link href={`/blogs/${blog.id}`}>
+                      <Image
+                        src={
+                          blog.eyecatch?.url
+                            ? blog.eyecatch?.url
+                            : `../../../public/images/no_image`
+                        }
+                        alt='画像'
+                        width={10000}
+                        height={10000}
+                        className='rounded-lg'
+                      />
+                    </Link>
+                  </div>
+                  <div className='pl-6 pr-4 pb-1'>
+                    <Link key={blog.category?.id} href={`/categories/${blog.category?.id}`}>
+                      <div className='inline rounded-lg text-xs sm:text-base lg:text-base sub-text-color'>
+                        <FontAwesomeIcon icon={faFolderOpen} /> {blog.category?.name}
+                      </div>
+                    </Link>
+                  </div>
+                  <div className='pl-6 pr-4 pb-1'>
+                    <ul className='list-disc list-inside '>
+                      {blog.tags?.map((tag) => (
+                        <Link key={tag.id} href={`/tags/${tag.id}`}>
+                          <span className='inline-block rounded-full text-xs sm:text-base lg:text-base mr-2 sub-text-color'>
+                            <FontAwesomeIcon icon={faTag} /> {tag.name}
+                          </span>
+                        </Link>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className='pl-6 pr-4'>
+                    <FontAwesomeIcon icon={faCalendarAlt} className='mr-1 sub-text-color' />
+                    <span className='mr-2 text-xs sm:text-base lg:text-base sub-text-color'>
+                      投稿日時:
+                    </span>
+                    <span className='text-xs sm:text-sm lg:text-base sub-text-color'>
+                      {new Date(blog.createdAt)
+                        .toLocaleDateString('ja-JP', {
+                          timeZone: 'Asia/Tokyo',
+                        })
+                        .replace(/\//g, '-')}
+                    </span>
+                  </div>
+                  <h1 className='p-4 mt-5 text-xl font-bold lg:text-3xl'>{blog.title}</h1>
+                  <div className='lg:hidden border-2 rounded-lg table-contents m-5 p-1'>
+                    {' '}
+                    {/* 通常の画面サイズでは1列分のスペースを占有 */}
+                    <h1 style={{ marginTop: '0px !important' }}>目次</h1>
+                    <ul className='pl-2'>
+                      {toc.map((data) => (
+                        <a href={`#${data.id}`}>
+                          <li
+                            key={data.id}
+                            className={`${
+                              data.tag == 'h2' ? 'ml-5' : data.tag == 'h3' ? 'ml-10' : 'ml-1'
+                            } mb-2 hover:bg-gray-500 rounded p-0.5`}
+                          >
+                            {data.tag == 'h1' ? data.text : '-' + data.text}
+                          </li>
+                        </a>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className='p-4 znc markdown'>
+                    <div dangerouslySetInnerHTML={{ __html: parse_body.html() }}></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div className='lg:col-span-2 p-5 pl-7 pt-10 hidden lg:block float-right'>
+          <div className='lg:col-span-1 lg:block hidden'>
             {' '}
             {/* 通常の画面サイズでは1列分のスペースを占有 */}
-            <div className='p-5 rounded-lg table-contents'>
-              <h1 className='text-2xl mb-5 font-bold'>目次</h1>
-              <ul className='pl-2 scroll_bar'>
-                {toc.map((data) => (
-                  <a href={`#${data.id}`}>
-                    <li
-                      key={data.id}
-                      className={`${
-                        data.tag == 'h2' ? 'ml-5' : data.tag == 'h3' ? 'ml-10' : 'ml-1'
-                      } mb-2 hover:bg-gray-500 rounded p-0.5`}
-                    >
-                      {data.tag == 'h1' ? data.text : '-' + data.text}
-                    </li>
-                  </a>
-                ))}
-              </ul>
-            </div>
+            <Sidebar />
           </div>
-          <div className='lg:grid-cols-1'></div>
         </div>
       </div>
     </>
