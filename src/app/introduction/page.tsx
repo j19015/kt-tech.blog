@@ -26,11 +26,7 @@ export const metadata = {
 export default function Home() {
   return (
     <div className='grid grid-cols-1 lg:grid-cols-3 gap-4'>
-      {' '}
-      {/* グリッドを設定 */}
       <div className='lg:col-span-2 lg:p-4'>
-        {' '}
-        {/* 通常の画面サイズでは2列分のスペースを占有 */}
         <div className='rounded-lg introduction p-2 pt-6 pb-6 content'>
           <div className='text-center'>
             <Image
@@ -53,7 +49,6 @@ export default function Home() {
               >
                 <FontAwesomeIcon icon={faSquareTwitter} size='3x' />
               </a>
-              {/* Add other social media links here */}
             </div>
           </div>
           <h2 className='text-2xl font-semibold mt-8 '>自己紹介</h2>
@@ -81,7 +76,7 @@ export default function Home() {
           <ul className='list-disc pl-10 mt-2'>
             <li>AWS SAA取得</li>
             <li>Paiza Aランク到達(現在はBランク)</li>
-            <li>Qiita,Zenn,自分のブログ等々でのアウトプットを週一ペースで行う。</li>
+            <li>Qiita,Zenn,自分のブログ等々でのアウトプットを最低月1ペースで行う。</li>
           </ul>
         </div>
       </div>
