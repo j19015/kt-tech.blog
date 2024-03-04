@@ -39,7 +39,7 @@ export const Header = () => {
               : ' hidden block md:flex md:gap-8'
           }
         >
-          {['Home', 'Blog', 'Introduction'].map((menu) => (
+          {['Home', 'Blog', 'About'].map((menu) => (
             <li key={menu}>
               <Link
                 onClick={() => handleMenuClose(menu)}

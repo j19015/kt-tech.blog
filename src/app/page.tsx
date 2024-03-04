@@ -7,11 +7,11 @@ import Index from '@/components/Index/Index';
 export const metadata = {
   title: 'TOPページ',
   description:
-    '基本的には技術記事を投稿していきます。PFの公開ページやIntroduction用ページとしても活用をしています。',
+    '基本的には技術記事を投稿しています。たまに勉強会への感想や最近の技術を触ってみた感想なども投稿します。',
   openGraph: {
     title: 'TOPページ',
     description:
-      '基本的には技術記事を投稿していきます。PFの公開ページやIntroduction用ページとしても活用をしています。',
+      '基本的には技術記事を投稿しています。たまに勉強会への感想や最近の技術を触ってみた感想なども投稿します。',
     locale: 'ja_JP',
     type: 'website',
   },
@@ -19,7 +19,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'TOPページ',
     description:
-      '基本的には技術記事を投稿していきます。PFの公開ページやIntroduction用ページとしても活用をしています。',
+      '基本的には技術記事を投稿しています。たまに勉強会への感想や最近の技術を触ってみた感想なども投稿します。',
     site: '@tech_koki',
     creator: '@tech_koki',
   },
