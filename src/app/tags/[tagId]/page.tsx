@@ -1,14 +1,14 @@
-import { notFound } from "next/navigation"
-import { getList,getTagList,getTagDetail } from "../../../../libs/microcms"
-import Sidebar from "@/components/SIdebar/Sidebar"
-import Index from "@/components/Index/Index";
-import Title from "@/components/Title/Title";
-import Link from "next/link";
+import { notFound } from 'next/navigation';
+import { getList, getTagList, getTagDetail } from '../../../../libs/microcms';
+import Sidebar from '@/components/SIdebar/Sidebar';
+import Index from '@/components/Index/Index';
+import Title from '@/components/Title/Title';
+import Link from 'next/link';
 
-export async function generateStaticParams(){
+export async function generateStaticParams() {
   const { contents } = await getTagList();
 
-  const paths = contents.map((tag)=>{
+  const paths = contents.map((tag) => {
     return {
       tagId: tag.id,
     };
@@ -17,11 +17,10 @@ export async function generateStaticParams(){
 }
 
 export default async function StaticDetailPage({
-  params : { tagId },
+  params: { tagId },
 }: {
-  params: { tagId : string};
+  params: { tagId: string };
 }) {
-
   //ページの生成された時間を取得
   const time = new Date().toLocaleString();
 
@@ -32,25 +31,29 @@ export default async function StaticDetailPage({
   const tag_show = await getTagDetail(tagId);
 
   //リストを指定のタグで絞り込み
-  const filteredContents = contents.filter((blog) =>
-    blog.tags?.some((tag) => tag.id === tagId)
-  );
+  const filteredContents = contents.filter((blog) => blog.tags?.some((tag) => tag.id === tagId));
 
   //コンテンツがない場合
-  if(!filteredContents){
+  if (!filteredContents) {
     notFound();
   }
 
   return (
     <>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4"> {/* グリッドを設定 */}
-        <div className="lg:col-span-2"> {/* 通常の画面サイズでは2列分のスペースを占有 */}
-          <div className="text-center mt-1 w-full col-span-2">
+      <div className='grid grid-cols-1 lg:grid-cols-3 gap-4'>
+        {' '}
+        {/* グリッドを設定 */}
+        <div className='lg:col-span-2'>
+          {' '}
+          {/* 通常の画面サイズでは2列分のスペースを占有 */}
+          <div className='text-center mt-1 w-full col-span-2'>
             <Title title={tag_show.name} />
           </div>
-          <Index contents={filteredContents}/>
+          <Index contents={filteredContents} />
         </div>
-        <div className="lg:col-span-1"> {/* 通常の画面サイズでは1列分のスペースを占有 */}
+        <div className='lg:col-span-1'>
+          {' '}
+          {/* 通常の画面サイズでは1列分のスペースを占有 */}
           <Sidebar />
         </div>
       </div>
