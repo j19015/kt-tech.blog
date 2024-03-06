@@ -35,23 +35,10 @@ export default async function StaticDetailPage({
 
   return (
     <>
-      <div className='grid grid-cols-1 lg:grid-cols-3 gap-4'>
-        {' '}
-        {/* グリッドを設定 */}
-        <div className='lg:col-span-2'>
-          {' '}
-          {/* 通常の画面サイズでは2列分のスペースを占有 */}
-          <div className='text-center mt-1 w-full col-span-2'>
-            <Title title={category_show.name} />
-          </div>
-          <Index contents={filteredContents} />
-        </div>
-        <div className='lg:col-span-1'>
-          {' '}
-          {/* 通常の画面サイズでは1列分のスペースを占有 */}
-          <Sidebar />
-        </div>
+      <div className='text-center mt-1 w-full col-span-2'>
+        <Title title={category_show.name} />
       </div>
+      <Index contents={filteredContents} />
     </>
   );
 }
