@@ -7,18 +7,9 @@ export default async function StaticPage() {
 
   return (
     <>
-      <div className='grid grid-cols-1 lg:grid-cols-3 gap-4'>
-        <div className='lg:col-span-2'>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <div className='mt-1 w-full col-span-2'>
-              <ClientIndex contents={contents} />
-            </div>
-          </div>
-        </div>
-        <div className='lg:col-span-1'>
-          {' '}
-          {/* 通常の画面サイズでは1列分のスペースを占有 */}
-          <Sidebar />
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+        <div className='mt-1 w-full col-span-2'>
+          <ClientIndex contents={contents} />
         </div>
       </div>
     </>
