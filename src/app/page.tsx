@@ -60,27 +60,18 @@ export default async function StaticPage() {
 
   return (
     <>
-      <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 pb-5'>
-        <div className='lg:col-span-2'>
-          <div style={welcomeStyle} className='top p-3'>
-            <style>{keyframes}</style>
-            <h1 className='text-xl lg:text-2xl'>kt-tech.blog にようこそ</h1>
-          </div>
-          <Index contents={latestBlogs} />
-          <div className='mt-8 flex justify-center'>
-            {' '}
-            {/* 中央寄せ */}
-            <Link
-              href='/blogs/page/1'
-              className='transition duration-300 ease-in-out font-semibold py-2 px-4 border-b-4 rounded shadow-md theme-button'
-            >
-              すべての記事を見る
-            </Link>
-          </div>
-        </div>
-        <div className='lg:col-span-1'>
-          <Sidebar />
-        </div>
+      <div style={welcomeStyle} className='top p-3'>
+        <style>{keyframes}</style>
+        <h1 className='text-xl lg:text-2xl'>kt-tech.blog にようこそ</h1>
+      </div>
+      <Index contents={latestBlogs} />
+      <div className='mt-8 flex justify-center'>
+        <Link
+          href='/blogs/page/1'
+          className='transition duration-300 ease-in-out font-semibold py-2 px-4 border-b-4 rounded shadow-md theme-button'
+        >
+          すべての記事を見る
+        </Link>
       </div>
     </>
   );
