@@ -13,6 +13,7 @@ import '../../../../styles/default-dark.min.css';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import Sidebar from '@/components/SIdebar/Sidebar';
+import { TableOfContents } from '@/components/TableOfContents/TableOfContents';
 export async function generateStaticParams() {
   const { contents } = await getList();
 
@@ -248,25 +249,7 @@ export default async function StaticDetailPage({
                     </span>
                   </div>
                   <h1 className='p-4 mt-5 text-xl font-bold lg:text-3xl'>{blog.title}</h1>
-                  <div className='lg:hidden border-2 rounded-lg table-contents m-5 p-1'>
-                    {' '}
-                    {/* 通常の画面サイズでは1列分のスペースを占有 */}
-                    <h1 style={{ marginTop: '0px !important' }}>目次</h1>
-                    <ul className='pl-2'>
-                      {toc.map((data) => (
-                        <a href={`#${data.id}`}>
-                          <li
-                            key={data.id}
-                            className={`${
-                              data.tag == 'h2' ? 'ml-5' : data.tag == 'h3' ? 'ml-10' : 'ml-1'
-                            } mb-2 hover:bg-gray-500 rounded p-0.5`}
-                          >
-                            {data.tag == 'h1' ? data.text : '-' + data.text}
-                          </li>
-                        </a>
-                      ))}
-                    </ul>
-                  </div>
+                  <TableOfContents toc={toc} />
                   <div className='p-4 znc markdown'>
                     <div dangerouslySetInnerHTML={{ __html: parse_body.html() }}></div>
                   </div>
