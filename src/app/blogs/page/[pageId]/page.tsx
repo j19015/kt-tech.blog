@@ -62,25 +62,12 @@ export default async function StaticPaginationPage({
 
     return (
       <>
-        <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 pb-8'>
-          {' '}
-          {/* グリッドを設定 */}
-          <div className='lg:col-span-2'>
-            {' '}
-            {/* 通常の画面サイズでは2列分のスペースを占有 */}
-            <Index contents={contentSlice} />
-            <Paginate
-              currentPage={Number(pageId)}
-              totalPage={Math.ceil(contents.length / ITEMS_PER_PAGE)}
-              kind={`/blogs`}
-            ></Paginate>
-          </div>
-          <div className='lg:col-span-1'>
-            {' '}
-            {/* 通常の画面サイズでは1列分のスペースを占有 */}
-            <Sidebar />
-          </div>
-        </div>
+        <Index contents={contentSlice} />
+        <Paginate
+          currentPage={Number(pageId)}
+          totalPage={Math.ceil(contents.length / ITEMS_PER_PAGE)}
+          kind={`/blogs`}
+        ></Paginate>
       </>
     );
   } catch (error) {
