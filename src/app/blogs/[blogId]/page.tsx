@@ -160,7 +160,7 @@ export default async function StaticDetailPage({
 
   //目次機能
   const $ = cheerio.load(html);
-  const headings = $('h1, h2, h3').toArray();
+  const headings = $('h1, h2').toArray();
   const toc = headings.map((element) => ({
     text: $(element).text(),
     id: (element as any).attribs.id,
@@ -194,7 +194,7 @@ export default async function StaticDetailPage({
             </ul>
           </div>
         </div>
-        <div className='lg:col-span-2 col-span-3 lg:py-5 lg:px-3 rounded-lg content'>
+        <div className='lg:col-span-2 col-span-3 lg:py-5 lg:px-3 rounded-lg shadow-lg content'>
           {' '}
           {/* 通常の画面サイズでは2列分のスペースを占有 */}
           <div>

@@ -26,7 +26,7 @@ export const metadata = {
 export default function Home() {
   return (
     <div className='lg:p-4'>
-      <div className='rounded-lg introduction p-2 pt-6 pb-6 content'>
+      <div className='rounded-lg introduction p-10 ml-10 mr-10 pt-6 pb-6 content shadow-lg'>
         <div className='text-center'>
           <Image
             src='/images/profile_image.png'
