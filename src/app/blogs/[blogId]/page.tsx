@@ -160,7 +160,7 @@ export default async function StaticDetailPage({
 
   //目次機能
   const $ = cheerio.load(html);
-  const headings = $('h1, h2, h3').toArray();
+  const headings = $('h1, h2').toArray();
   const toc = headings.map((element) => ({
     text: $(element).text(),
     id: (element as any).attribs.id,
