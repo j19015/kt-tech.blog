@@ -194,7 +194,7 @@ export default async function StaticDetailPage({
             </ul>
           </div>
         </div>
-        <div className='lg:col-span-2 col-span-3 lg:py-5 lg:px-3 rounded-lg content'>
+        <div className='lg:col-span-2 col-span-3 lg:py-5 lg:px-3 rounded-lg shadow-lg content'>
           {' '}
           {/* 通常の画面サイズでは2列分のスペースを占有 */}
           <div>
