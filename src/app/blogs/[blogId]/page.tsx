@@ -12,7 +12,6 @@ import '../../../../styles/markdown.css';
 import '../../../../styles/default-dark.min.css';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { faFolderOpen } from '@fortawesome/free-solid-svg-icons';
-import Sidebar from '@/components/SIdebar/Sidebar';
 import { TableOfContents } from '@/components/TableOfContents/TableOfContents';
 export async function generateStaticParams() {
   const { contents } = await getList();
