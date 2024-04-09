@@ -1,10 +1,14 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  compiler: {
+    styledComponents: true,
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
 
 module.exports = {
-images: {
+  images: {
     domains: ['images.microcms-assets.io'], // 使用するホスト名をここに追加
-},
-}
+  },
+};
