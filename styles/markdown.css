@@ -1,220 +1,220 @@
 :root {
-    --foreground-rgb: 28, 28, 28;
-    --background-code-rgb: 200 200 200;
-    --background-h1-border-color: 129 140 248;
-    --background-h1-border-background-color: rgb(255, 255, 255);
-    --table-contents-border-color: 0 0 0
-  }
-  
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --foreground-rgb: 227, 227, 227;
-      --background-code-rgb: 50 50 50;
-      --background-h1-border-color: 129 140 248;
-      --background-h1-border-background-color: #363636;
-    }
-  }
+  --foreground-rgb: 28, 28, 28;
+  --background-code-rgb: 241 236 236;
+  --background-h1-border-color: 129 140 248;
+  --background-h1-border-background-color: rgb(255, 255, 255);
+  --table-contents-border-color: 0 0 0;
+}
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 227, 227, 227;
+    --background-code-rgb: 69 66 66;
+    --background-h1-border-color: 129 140 248;
+    --background-h1-border-background-color: #363636;
+  }
+}
 
 /* zncクラス内のスタイル */
 .znc {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    line-height: 1.7;
-    color: rgb(var(--foreground-rgb));
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  line-height: 1.7;
+  color: rgb(var(--foreground-rgb));
 }
 
 .znc h1 {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-top: 5rem;
-    margin-bottom: 3rem;
-    padding-left: 0.5rem;
-    padding-top: 0.2rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 5rem;
+  margin-bottom: 3rem;
+  padding-left: 0.5rem;
+  padding-top: 0.2rem;
 }
 
 .znc h2 {
-    font-weight: bold;
-    margin-top: 20px;
-    font-size: 1.3rem;
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
-    padding-left: 10px;
-    border-bottom: none !important;
+  font-weight: bold;
+  margin-top: 20px;
+  font-size: 1.3rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-left: 10px;
+  border-bottom: none !important;
 }
 
 .znc h3 {
-    font-weight: bold;
-    font-size: 1.1rem;
-    margin-top: 1.2rem;
-    margin-bottom: 0.3rem;
-    padding-left: 10px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-top: 1.2rem;
+  margin-bottom: 0.3rem;
+  padding-left: 10px;
 }
 
 .znc ul {
-    list-style-type: disc;
-    margin-left: 2rem;
-    padding-left: 10px;
+  list-style-type: disc;
+  margin-left: 2rem;
+  padding-left: 10px;
 }
 
 .znc ol > li {
-    font-weight: bold;
-    padding: 3px;
+  font-weight: bold;
+  padding: 3px;
 }
-.znc ol>li::marker{
-    color: rgb(var(--foreground-rgb));
+.znc ol > li::marker {
+  color: rgb(var(--foreground-rgb));
 }
 
-.znc ul>li::marker{
-    color: rgb(var(--foreground-rgb));
+.znc ul > li::marker {
+  color: rgb(var(--foreground-rgb));
 }
 
 .znc ol {
-    list-style-type: decimal;
-    margin-left: 2rem;
-    padding-left: 10px;
+  list-style-type: decimal;
+  margin-left: 2rem;
+  padding-left: 10px;
 }
 .znc li {
-    font-size: 1.0rem;
+  font-size: 1rem;
 }
-.znc ul>li{
-    padding: 3px;
+.znc ul > li {
+  padding: 3px;
 }
 
 .znc a {
-    color: #3498DB; /* Blue link color */
-    text-decoration: none;
-    transition: color 0.2s;
+  color: #3498db; /* Blue link color */
+  text-decoration: none;
+  transition: color 0.2s;
 }
 
 .znc a:hover {
-    color: #2980B9; /* Slightly darker blue on hover */
-    text-decoration: underline;
+  color: #2980b9; /* Slightly darker blue on hover */
+  text-decoration: underline;
 }
 
-
 .znc div {
-    position: relative;
+  position: relative;
 }
 
 .znc code {
-    background-color: rgb(var(--background-code-rgb));
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-    font-family: 'Fira Code', monospace; /* Monospace font for code */
+  background-color: rgb(var(--background-code-rgb)) !important;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Fira Code', monospace; /* Monospace font for code */
+}
+.znc pre > code {
+  background-color: #1a2638 !important;
 }
 
 .znc blockquote {
-    border-left: 5px solid #b6c9d6; /* Matching blue border */
-    padding-left: 1rem;
-    margin: 10px;
-    margin-left: 2rem;
-    font-style: italic;
-    color: rgb(var(--foreground-rgb)) !important;
+  border-left: 5px solid #b6c9d6; /* Matching blue border */
+  padding-left: 1rem;
+  margin: 10px;
+  margin-left: 2rem;
+  font-style: italic;
+  color: rgb(var(--foreground-rgb)) !important;
 }
 
 .znc hr {
-    border: none;
-    border-top: 2px solid #ECF0F1; /* Light grey border */
-    margin: 1.5rem 0;
+  border: none;
+  border-top: 2px solid #ecf0f1; /* Light grey border */
+  margin: 1.5rem 0;
 }
 
 .znc img {
-    max-width: 70%;
-    height: auto;
-    display: block;
-    margin: 3rem 0;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
+  max-width: 70%;
+  height: auto;
+  display: block;
+  margin: 3rem 0;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
 }
 
 .znc p {
-    padding-left: 10px;
-    padding-bottom: 10px;
-    line-height: 2.0;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  line-height: 2;
 }
 
-.znc p+p{
-    margin-top: 0.5rem;
+.znc p + p {
+  margin-top: 0.5rem;
 }
 
-.index_img{
-    width: 700px;
-    height: 260px;
-    object-fit: fill;
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+.index_img {
+  width: 700px;
+  height: 260px;
+  object-fit: fill;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
 }
-
 
 /* メディアクエリを追加 */
 @media (max-width: 768px) {
-    .znc h1 {
-        font-size: 1.3rem !important;
-        margin-top: 2rem !important;
-        margin-bottom: 1rem !important;
-    }
+  .znc h1 {
+    font-size: 1.3rem !important;
+    margin-top: 2rem !important;
+    margin-bottom: 1rem !important;
+  }
 
-    .znc h2 {
-        font-size: 1.2rem;
-    }
+  .znc h2 {
+    font-size: 1.2rem;
+  }
 
-    .znc h3 {
-        font-size: 1.1rem;
-    }
+  .znc h3 {
+    font-size: 1.1rem;
+  }
 
-    .znc h4 {
-        font-size: 1.0rem;
-    }
+  .znc h4 {
+    font-size: 1rem;
+  }
 
-    .znc p {
-        font-size: 1.0rem;
-    }
+  .znc p {
+    font-size: 1rem;
+  }
 
-    .znc ul {
-        margin-left: 1rem;
-    }
+  .znc ul {
+    margin-left: 1rem;
+  }
 
-    .znc ol {
-        margin-left: 1rem;
-    }
+  .znc ol {
+    margin-left: 1rem;
+  }
 
-    .znc pre {
-        font-size: 0.9rem;
-    }
+  .znc pre {
+    font-size: 0.9rem;
+  }
 
-    .znc code {
-        font-size: 0.9rem;
-    }
+  .znc code {
+    font-size: 0.9rem;
+  }
 
-    .znc blockquote {
-        font-size: 1rem;
-    }
-    .znc img{
-        max-width: 100%;
-    }
-    .index_img{
-        width: 700px;
-        height: 200px;
-        object-fit: fill;
-        box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
-    }
+  .znc blockquote {
+    font-size: 1rem;
+  }
+  .znc img {
+    max-width: 100%;
+  }
+  .index_img {
+    width: 700px;
+    height: 200px;
+    object-fit: fill;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+  }
 }
 
 /* ブログの目次のCSS */
-.table-contents{
-    border-color: rgb(var(--foreground-rgb)) !important;
-    min-width: 20%;
+.table-contents {
+  border-color: rgb(var(--foreground-rgb)) !important;
+  min-width: 20%;
 }
 
 .table-contents > h1 {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 2rem;
-    padding-left: 0.5rem;
-    padding-top: 0.2rem;
-    border-bottom: solid 1px rgba(92,147,187,.17);
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  padding-left: 0.5rem;
+  padding-top: 0.2rem;
+  border-bottom: solid 1px rgba(92, 147, 187, 0.17);
 }
 @media (max-width: 768px) {
-    .table-contents > h1  {
-        font-size: 1.3rem !important;
-    }
+  .table-contents > h1 {
+    font-size: 1.3rem !important;
+  }
 }
