@@ -64,11 +64,11 @@
   padding: 3px;
 }
 .znc ol > li::marker {
-  color: rgb(var(--foreground-rgb));
+  color: rgb(var(--foreground-rgb)) !important;
 }
 
 .znc ul > li::marker {
-  color: rgb(var(--foreground-rgb));
+  color: rgb(var(--foreground-rgb)) !important;
 }
 
 .znc ol {
