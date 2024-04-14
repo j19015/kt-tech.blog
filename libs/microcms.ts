@@ -76,7 +76,7 @@ export const getDetail = async (contentId: string, queries?: MicroCMSQueries) =>
 export const getTagList = async (queries?: MicroCMSQueries) => {
   const listData = await client.getList<Tag>({
     endpoint: 'tags',
-    queries,
+    queries: { limit: 100 },
   });
 
   // データの取得が目視しやすいよう明示的に遅延効果を追加
