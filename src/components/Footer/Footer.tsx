@@ -7,6 +7,7 @@ import PrivacyPolicyModal from '../Modal/privacyPolicy';
 
 export const Footer = () => {
   const [iscontactOpen, setContactOpen] = useState(false);
+  // コメント追加
   const [isPrivacyPolicyOpen, setPrivacyPolicyOpen] = useState(false);
   return (
       
