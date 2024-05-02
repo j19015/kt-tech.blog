@@ -4,6 +4,8 @@
   --background-h1-border-color: 129 140 248;
   --background-h1-border-background-color: rgb(255, 255, 255);
   --table-contents-border-color: 0 0 0;
+  --table-background-th-color: #e0dbdb;
+  --table-background-td-color: #f8f8f8;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -12,6 +14,8 @@
     --background-code-rgb: 69 66 66;
     --background-h1-border-color: 129 140 248;
     --background-h1-border-background-color: #363636;
+    --table-background-th-color: #4b4a4a;
+    --table-background-td-color: #363636;
   }
 }
 
@@ -143,6 +147,22 @@
   height: 260px;
   object-fit: fill;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.znc table {
+  width: 100% !important;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+  display: inline-table !important;
+}
+
+.znc th {
+  background: var(--table-background-th-color) !important;
+}
+.znc td {
+  padding: 0.5rem;
+  background: var(--table-background-td-color) !important;
+  text-align: left;
 }
 
 /* メディアクエリを追加 */
