@@ -43,6 +43,7 @@
   margin-bottom: 1.5rem;
   padding-left: 10px;
   border-bottom: none !important;
+  border-left: solid 5px rgba(92, 147, 187, 0.17);
 }
 
 .znc h3 {
