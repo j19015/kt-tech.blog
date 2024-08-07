@@ -5,6 +5,7 @@ import { config } from '@fortawesome/fontawesome-svg-core';
 import GoogleAnalytics from '@/components/GoogleAnalytics/GoogleAnalytics';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import Sidebar from '@/components/SIdebar/Sidebar';
+import Favicon from './favicon.ico';
 config.autoAddCss = false;
 
 const siteName = 'kt-tech.blog';
@@ -52,7 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href='https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap'
           rel='stylesheet'
         ></link>
-        <meta name='thumbnail' content='./icon.png'></meta>
+        <meta name='thumbnail' content={`${process.env.SITE_URL}${Favicon.src}`}></meta>
       </head>
       <body>
         <Header />
