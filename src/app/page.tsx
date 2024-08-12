@@ -23,6 +23,9 @@ export const metadata = {
     site: '@tech_koki',
     creator: '@tech_koki',
   },
+  other: {
+    thumbnail: '/opengraph-image.png',
+  },
 };
 
 export default async function StaticPage() {

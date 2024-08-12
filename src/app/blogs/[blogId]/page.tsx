@@ -57,6 +57,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: 'website',
       images: previousImages,
     },
+    other: {
+      thumbnail: blog.eyecatch?.url ? blog.eyecatch?.url : '',
+    },
   };
 }
 
@@ -79,18 +82,24 @@ async function fetchOGPData(url: string) {
       return (
         $(`meta[name=${name}]`).attr('content') ||
         $(`meta[property="og:${name}"]`).attr('content') ||
-        $(`meta[property="twitter:${name}"]`).attr('content')
+        $(`meta[property="twitter:${name}"]`).attr('content') ||
+        $(`meta[name="og:${name}"]`).attr('content')
       );
     };
 
     const title = getMetaTag('title') || $('title').text();
     const description = getMetaTag('description') || $('meta[name="description"]').attr('content');
-    const image = getMetaTag('image') || $('img').attr('src') || '/images/no_image.jpeg';
+    const image = getMetaTag('image') || $('img').attr('src');
+    const main_image = image
+      ? image.includes('https')
+        ? image
+        : `${url}${image[0] == '/' ? image.substring(1) : image}`
+      : '/images/no_image.jpeg';
 
     return {
       title,
       description,
-      image,
+      image: main_image,
     };
   } catch (error) {
     console.error(`Error fetching OGP for ${url}:`, error);
@@ -130,6 +139,7 @@ export default async function StaticDetailPage({
   Array.from(uniqueLinks).forEach((href, index) => {
     hrefToOgpData.set(href, ogpDataResults[index]);
   });
+  console.log(hrefToOgpData);
 
   // リンクカードの生成とHTMLの更新
   parse_body('a').each((_, link) => {
