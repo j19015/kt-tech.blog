@@ -50,14 +50,20 @@ export default async function StaticPage() {
     fontWeight: 'bold', // 太字
     textAlign: 'center', // 中央寄せ
     margin: '20px 0', // 上下の余白
-    animation: 'fadeIn 2s', // アニメーション効果
+    animation: 'fadeInSlideIn 2s ease-in-out', // アニメーション効果
   };
 
   // アニメーション用のキーフレーム（CSS）
   const keyframes = `
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  @keyframes fadeInSlideIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   `;
 
@@ -71,7 +77,7 @@ export default async function StaticPage() {
       <div className='mt-8 flex justify-center'>
         <Link
           href='/blogs/page/1'
-          className='transition duration-300 ease-in-out font-semibold py-2 px-4 border-b-4 rounded shadow-md theme-button'
+          className='transition duration-300 ease-in-out font-semibold py-2 px-4 border-b-4 rounded shadow-md theme-button hover:bg-blue-500 hover:text-white'
         >
           すべての記事を見る
         </Link>

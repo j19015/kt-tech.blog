@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquareGithub, faSquareTwitter } from '@fortawesome/free-brands-svg-icons';
 import '../../../styles/markdown.css';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export const metadata = {
   title: '自己紹介ページ',
@@ -36,17 +37,22 @@ export default function Home() {
           />
           <h1 className='text-4xl font-bold mt-4'>Koki</h1>
           <div className='flex justify-center mt-2 space-x-4'>
-            <a href='https://github.com/j19015' target='_blank' rel='noopener noreferrer'>
+            <Link
+              href='https://github.com/j19015'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='text-gray-600 hover:text-gray-800'
+            >
               <FontAwesomeIcon icon={faSquareGithub} size='3x' />
-            </a>
-            <a
+            </Link>
+            <Link
               href='https://twitter.com/tech_koki'
               target='_blank'
               rel='noopener noreferrer'
-              className='text-blue-500 hover:text-blue-700'
+              className='text-blue-600 hover:text-blue-800'
             >
               <FontAwesomeIcon icon={faSquareTwitter} size='3x' />
-            </a>
+            </Link>
           </div>
         </div>
         <h2 className='text-2xl font-semibold mt-8 '>自己紹介</h2>
