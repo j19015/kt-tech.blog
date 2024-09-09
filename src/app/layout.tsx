@@ -6,13 +6,15 @@ import GoogleAnalytics from '@/components/GoogleAnalytics/GoogleAnalytics';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import Sidebar from '@/components/SIdebar/Sidebar';
 import Favicon from './favicon.ico';
+import icon from './icon.png';
+import { Metadata } from 'next';
 config.autoAddCss = false;
 
 const siteName = 'kt-tech.blog';
 const description = 'ktの技術ブログサイトになります。';
 const url = 'https://kt-tech.blog';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: {
     default: siteName,
     /** `next-seo`の`titleTemplate`に相当する機能 */
@@ -38,8 +40,10 @@ export const metadata = {
     google: 'IpGviaJMSPR7SL1E-maff_nCUNmuWWBXYRTLcDHZUcw',
   },
   alternates: {
-    alternate: url,
     canonical: url,
+  },
+  other: {
+    thumbnail: `${url}${icon.src}`,
   },
 };
 
