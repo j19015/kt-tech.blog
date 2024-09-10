@@ -35,9 +35,9 @@ export const Sidebar = async () => {
               </div>
 
               <div className='col-span-8 p-2 flex items-center'>
-                <div className='flex-1 whitespace-normal'>
+                <div className='flex-1'>
                   <Link href={`/blogs/${article.id}`}>
-                    <p className='whitespace-normal hover:text-indigo-500'>{article.title}</p>
+                    <p className='line-clamp-2 hover:text-indigo-500'>{article.title}</p>
                   </Link>
                 </div>
               </div>
