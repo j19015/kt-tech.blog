@@ -44,6 +44,7 @@ export const metadata: Metadata = {
   },
   other: {
     thumbnail: `${url}${icon.src}`,
+    'google-adsense-account': 'ca-pub-9002778711554857',
   },
 };
 
