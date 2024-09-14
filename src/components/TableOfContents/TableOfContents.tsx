@@ -28,15 +28,18 @@ export const TableOfContents = ({ toc }: { toc: any }) => {
         className='overflow-hidden transition-height duration-500 ease-in-out'
         style={{ height: '0px' }}
       >
-        <ul className='pl-2'>
+        <ul className='pl-2 mt-3'>
           {toc.map((data: any) => (
             <a key={data.id} href={`#${data.id}`}>
               <li
                 className={`${
-                  data.tag === 'h2' ? 'ml-5' : data.tag === 'h3' ? 'ml-15' : 'ml-1'
+                  data.tag === 'h2' ? 'ml-5' : data.tag === 'h3' ? 'ml-10' : 'ml-1'
                 } mb-2 hover:bg-gray-500 rounded`}
               >
-                {data.tag === 'h1' ? '・' + data.text : '-' + data.text}
+                <div className='flex'>
+                  <span>{data.tag === 'h1' ? '・' : '-'}</span>
+                  <span className='ml-2'>{data.text}</span>
+                </div>
               </li>
             </a>
           ))}
