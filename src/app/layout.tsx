@@ -8,6 +8,7 @@ import Sidebar from '@/components/SIdebar/Sidebar';
 import Favicon from './favicon.ico';
 import icon from './icon.png';
 import { Metadata } from 'next';
+import { ThemeProvider } from './providers/ThemeProvider/theme-provider';
 config.autoAddCss = false;
 
 const siteName = 'kt-tech.blog';
@@ -61,18 +62,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name='thumbnail' content={`${process.env.SITE_URL}${Favicon.src}`}></meta>
       </head>
       <body>
-        <Header />
-        <main>
-          <div className='m-auto mt-5 rounded-lg'>
-            <div className='lg:grid grid-cols-2 lg:grid-cols-3 gap-4'>
-              <div className='lg:col-span-2 col-span-3'>{children}</div>
-              <div className='lg:col-span-1 lg:block mt-10 lg:mt-0'>
-                <Sidebar />
+        <ThemeProvider
+          attribute='class'
+          defaultTheme='system'
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Header />
+          <main>
+            <div className='m-auto mt-5 rounded-lg'>
+              <div className='lg:grid grid-cols-2 lg:grid-cols-3 gap-4'>
+                <div className='lg:col-span-2 col-span-3'>{children}</div>
+                <div className='lg:col-span-1 lg:block mt-10 lg:mt-0'>
+                  <Sidebar />
+                </div>
               </div>
             </div>
-          </div>
-        </main>
-        <Footer />
+          </main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

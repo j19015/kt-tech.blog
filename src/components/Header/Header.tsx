@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faBlog, faCode, faUser } from '@fortawesome/free-solid-svg-icons';
+import { ModeToggle } from '../ModeToggle/modeToggle';
 
 export const Header = () => {
   const [isOpen, setOpen] = useState<boolean>(false);
