@@ -3,6 +3,15 @@ import { faSquareGithub, faSquareTwitter } from '@fortawesome/free-brands-svg-ic
 import '../../../styles/markdown.css';
 import Image from 'next/image';
 import Link from 'next/link';
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+  BreadcrumbPage,
+} from '@/components/ui/breadcrumb';
+import { Slash } from 'lucide-react';
 
 export const metadata = {
   title: '自己紹介ページ',
@@ -26,6 +35,22 @@ export const metadata = {
 export default function Home() {
   return (
     <div className='lg:p-4'>
+      {/* TODO: Breadcrumbの実装を修正する(dark-mode right-mode対応後) */}
+      <Breadcrumb className='m-3 lg:mb-5 lg:ml-10'>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href='/' className='hover:text-indigo-500'>
+              Home
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator>/</BreadcrumbSeparator>
+          <BreadcrumbItem>
+            <BreadcrumbLink href='/about' className='hover:text-indigo-500'>
+              About
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <div className='rounded-lg introduction p-10 lg:ml-10 lg:mr-10 pt-6 pb-6 content shadow-lg'>
         <div className='text-center'>
           <Image
