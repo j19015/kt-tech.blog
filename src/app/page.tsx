@@ -14,6 +14,12 @@ export const metadata = {
       '基本的には技術記事を投稿しています。たまに勉強会への感想や最近の技術を触ってみた感想なども投稿します。',
     locale: 'ja_JP',
     type: 'website',
+    images: [
+      {
+        url: `${process.env.SITE_URL}/opengraph-image.png`,
+        alt: 'kt-tech.blog',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
@@ -22,6 +28,12 @@ export const metadata = {
       '基本的には技術記事を投稿しています。たまに勉強会への感想や最近の技術を触ってみた感想なども投稿します。',
     site: '@tech_koki',
     creator: '@tech_koki',
+    images: [
+      {
+        url: `${process.env.SITE_URL}/opengraph-image.png`,
+        alt: 'kt-tech.blog',
+      },
+    ],
   },
   other: {
     thumbnail: '/opengraph-image.png',
