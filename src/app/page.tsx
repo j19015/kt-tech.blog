@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { getList } from '../../libs/microcms';
-import Sidebar from '@/components/SIdebar/Sidebar'; // Sidebarのimportを修正
 import { Blog } from '../../libs/microcms';
 import Index from '@/components/Index/Index';
 
@@ -34,9 +33,6 @@ export const metadata = {
         alt: 'kt-tech.blog',
       },
     ],
-  },
-  other: {
-    thumbnail: '/opengraph-image.png',
   },
 };
 

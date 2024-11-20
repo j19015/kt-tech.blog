@@ -12,7 +12,8 @@ import { ThemeProvider } from './providers/ThemeProvider/theme-provider';
 config.autoAddCss = false;
 
 const siteName = 'kt-tech.blog';
-const description = 'ktの技術ブログサイトになります。';
+const description =
+  'ktの技術ブログになります。日々の知見や勉強会に関する感想などを共有していきます。';
 const url = 'https://kt-tech.blog';
 
 export const metadata: Metadata = {
@@ -44,7 +45,7 @@ export const metadata: Metadata = {
     canonical: url,
   },
   other: {
-    thumbnail: `${url}${icon.src}`,
+    thumbnail: `${process.env.SITE_URL}${icon.src}`,
     'google-adsense-account': 'ca-pub-9002778711554857',
   },
 };
@@ -59,7 +60,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href='https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap'
           rel='stylesheet'
         ></link>
-        <meta name='thumbnail' content={`${process.env.SITE_URL}${Favicon.src}`}></meta>
       </head>
       <body>
         <ThemeProvider
