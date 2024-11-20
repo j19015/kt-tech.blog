@@ -19,7 +19,6 @@ const url = 'https://kt-tech.blog';
 export const metadata: Metadata = {
   title: {
     default: siteName,
-    /** `next-seo`の`titleTemplate`に相当する機能 */
     template: `%s - ${siteName}`,
   },
   description,
@@ -55,7 +54,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang='ja'>
       <head>
         <GoogleAnalytics />
-        <meta name='google-adsense-account' content='ca-pub-9002778711554857'></meta>
         <link
           href='https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap'
           rel='stylesheet'

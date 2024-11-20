@@ -38,30 +38,17 @@ export const metadata = {
 
 export default async function StaticPage() {
   const { contents } = await getList();
-  //console.log(contents);
 
-  // ページの生成された時間を取得
-  const time = new Date().toString();
+  const latestBlogs: Blog[] = contents.slice(0, 4);
 
-  if (!contents || contents.length === 0) {
-    return <h1>No Contents</h1>;
-  }
-
-  // contentsをBlogの配列として定義
-  const latestBlogs: Blog[] = contents
-    .filter((article) => article.category?.name !== 'PF')
-    .slice(0, 4);
-
-  // スタイル定義
   const welcomeStyle: React.CSSProperties = {
-    fontSize: '2rem', // フォントサイズを大きく
-    fontWeight: 'bold', // 太字
-    textAlign: 'center', // 中央寄せ
-    margin: '20px 0', // 上下の余白
-    animation: 'fadeInSlideIn 2s ease-in-out', // アニメーション効果
+    fontSize: '2rem',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    margin: '20px 0',
+    animation: 'fadeInSlideIn 2s ease-in-out',
   };
 
-  // アニメーション用のキーフレーム（CSS）
   const keyframes = `
   @keyframes fadeInSlideIn {
     0% {
