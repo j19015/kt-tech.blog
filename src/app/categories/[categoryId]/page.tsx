@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { getList, getCategoryList, getCategoryDetail } from '../../../../libs/microcms';
 import Index from '@/components/Index/Index';
 import Title from '@/components/Title/Title';
+import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 
 export async function generateStaticParams() {
   const { contents } = await getCategoryList();
@@ -34,6 +35,12 @@ export default async function StaticDetailPage({
 
   return (
     <>
+      <BreadcrumbNav 
+        items={[
+          { label: 'Category', href: '/categories' },
+          { label: category_show.name, current: true }
+        ]} 
+      />
       <div className='text-center mt-1 w-full col-span-2'>
         <Title title={category_show.name} />
       </div>

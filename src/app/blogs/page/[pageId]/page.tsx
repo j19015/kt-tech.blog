@@ -3,6 +3,7 @@ import { getList } from '../../../../../libs/microcms';
 import Sidebar from '@/components/SIdebar/Sidebar'; // Sidebarのimportを修正
 import Paginate from '@/components/Pagination/Paginate';
 import Index from '@/components/Index/Index';
+import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 
 const ITEMS_PER_PAGE = 6; // 1ページあたりのアイテム数
 
@@ -62,6 +63,11 @@ export default async function StaticPaginationPage({
 
     return (
       <>
+        <BreadcrumbNav 
+          items={[
+            { label: 'Blog', current: true }
+          ]} 
+        />
         <Index contents={contentSlice} />
         <Paginate
           currentPage={Number(pageId)}
