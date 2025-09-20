@@ -1,30 +1,18 @@
+/* Markdown用のCSS変数を独立させる */
 :root {
-  --foreground-rgb: 28, 28, 28;
-  --background-code-rgb: 241 236 236;
-  --background-h1-border-color: 129 140 248;
-  --background-h1-border-background-color: rgb(255, 255, 255);
-  --table-contents-border-color: 0 0 0;
-  --table-background-th-color: #e0dbdb;
-  --table-background-td-color: #f8f8f8;
+  --md-code-bg-light: 241 236 236;
+  --md-table-th-light: #e0dbdb;
+  --md-table-td-light: #f8f8f8;
+  --md-code-bg-dark: 69 66 66;
+  --md-table-th-dark: #4b4a4a;
+  --md-table-td-dark: #363636;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 227, 227, 227;
-    --background-code-rgb: 69 66 66;
-    --background-h1-border-color: 129 140 248;
-    --background-h1-border-background-color: #363636;
-    --table-background-th-color: #4b4a4a;
-    --table-background-td-color: #363636;
-  }
-}
-
-/* zncクラス内のスタイル */
+/* zncクラス内のスタイル - グローバルCSS変数を上書きしない */
 .znc {
   font-family: 游ゴシック体, YuGothic, '游ゴシック Medium', 'Yu Gothic Medium', 游ゴシック,
     'Yu Gothic', メイリオ, sans-serif;
   line-height: 1.7;
-  color: rgb(var(--foreground-rgb));
 }
 
 .znc h1 {
@@ -65,13 +53,7 @@
   font-weight: bold;
   padding: 3px;
 }
-.znc ol > li::marker {
-  color: rgb(var(--foreground-rgb)) !important;
-}
-
-.znc ul > li::marker {
-  color: rgb(var(--foreground-rgb)) !important;
-}
+/* markerの色は親要素から継承 */
 
 .znc ol {
   list-style-type: decimal;
@@ -86,13 +68,13 @@
 }
 
 .znc a {
-  color: #3498db; /* Blue link color */
+  color: #3498db;
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .znc a:hover {
-  color: #2980b9; /* Slightly darker blue on hover */
+  color: #5eadf2;
   text-decoration: underline;
 }
 
@@ -101,27 +83,31 @@
 }
 
 .znc code {
-  background-color: rgb(var(--background-code-rgb)) !important;
+  background-color: rgb(var(--md-code-bg-light));
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
-  font-family: 'Fira Code', monospace; /* Monospace font for code */
+  font-family: 'Fira Code', monospace;
+  color: rgb(var(--foreground-rgb));
+}
+
+.dark .znc code {
+  background-color: rgb(var(--md-code-bg-dark));
 }
 .znc pre > code {
   background-color: #1a2638 !important;
 }
 
 .znc blockquote {
-  border-left: 5px solid #b6c9d6; /* Matching blue border */
+  border-left: 5px solid #b6c9d6;
   padding-left: 1rem;
   margin: 10px;
   margin-left: 2rem;
   font-style: italic;
-  color: rgb(var(--foreground-rgb)) !important;
 }
 
 .znc hr {
   border: none;
-  border-top: 2px solid #ecf0f1; /* Light grey border */
+  border-top: 2px solid rgb(var(--border));
   margin: 1.5rem 0;
 }
 
@@ -159,12 +145,24 @@
 }
 
 .znc th {
-  background: var(--table-background-th-color) !important;
+  background: var(--md-table-th-light);
+  color: rgb(var(--foreground-rgb));
+  padding: 0.5rem;
 }
+
+.dark .znc th {
+  background: var(--md-table-th-dark);
+}
+
 .znc td {
   padding: 0.5rem;
-  background: var(--table-background-td-color) !important;
+  background: var(--md-table-td-light);
   text-align: left;
+  color: rgb(var(--foreground-rgb));
+}
+
+.dark .znc td {
+  background: var(--md-table-td-dark);
 }
 
 /* メディアクエリを追加 */
@@ -221,9 +219,8 @@
   }
 }
 
-/* ブログの目次のCSS */
+/* ブログの目次のCSS - グローバル変数を上書きしない */
 .table-contents {
-  border-color: rgb(var(--foreground-rgb)) !important;
   min-width: 20%;
 }
 

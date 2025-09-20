@@ -13,6 +13,10 @@ import '../../../../styles/default-dark.min.css';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import { TableOfContents } from '@/components/TableOfContents/TableOfContents';
+import { StickyTableOfContents } from '@/components/TableOfContents/StickyTableOfContents';
+import { RelatedPosts } from '@/components/RelatedPosts/RelatedPosts';
+import { ShareButtons } from '@/components/ShareButtons/ShareButtons';
+import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 export async function generateStaticParams() {
   const { contents } = await getList();
 
@@ -113,6 +117,24 @@ export default async function StaticDetailPage({
   params: { blogId: string };
 }) {
   const blog = await getDetail(blogId);
+  const { contents } = await getList();
+  
+  // 同じカテゴリまたはタグを持つ関連記事を取得
+  const relatedPosts = contents.filter(post => {
+    if (post.id === blogId) return false;
+    
+    // カテゴリが同じ記事を優先
+    if (blog.category && post.category?.id === blog.category.id) return true;
+    
+    // タグが重複する記事も含める
+    if (blog.tags && post.tags) {
+      const blogTagIds = blog.tags.map(t => t.id);
+      return post.tags.some(t => blogTagIds.includes(t.id));
+    }
+    
+    return false;
+  });
+  
   const html = markdownToHtml(blog.body);
   const parse_body = cheerio.load(html);
   parse_body('pre code').each((_, elm) => {
@@ -181,27 +203,15 @@ export default async function StaticDetailPage({
   }
   return (
     <>
+      <BreadcrumbNav 
+        items={[
+          { label: 'Blog', href: '/blogs/page/1' },
+          { label: blog.title, current: true }
+        ]} 
+      />
       <div className='grid grid-cols-2 lg:grid-cols-3 lg:p-4'>
-        <div className='lg:col-span-1 p-5 pl-7 pt-10 hidden lg:block float-right'>
-          {' '}
-          {/* 通常の画面サイズでは1列分のスペースを占有 */}
-          <div className='p-5 rounded-lg table-contents'>
-            <h1 className='text-2xl mb-5 font-bold'>目次</h1>
-            <ul className='pl-2 scroll_bar'>
-              {toc.map((data) => (
-                <a href={`#${data.id}`}>
-                  <li
-                    key={data.id}
-                    className={`${
-                      data.tag == 'h2' ? 'ml-5' : data.tag == 'h3' ? 'ml-10' : 'ml-1'
-                    } mb-2 hover:bg-gray-500 rounded p-0.5`}
-                  >
-                    {data.tag == 'h1' ? data.text : '-' + data.text}
-                  </li>
-                </a>
-              ))}
-            </ul>
-          </div>
+        <div className='lg:col-span-1 p-5 pl-7 pt-0 hidden lg:block'>
+          <StickyTableOfContents toc={toc} />
         </div>
         <div className='lg:col-span-2 col-span-3 lg:py-5 lg:px-3 rounded-lg shadow-lg content'>
           {' '}
@@ -218,42 +228,51 @@ export default async function StaticDetailPage({
                 />
               </Link>
             </div>
-            <div className='pl-6 pr-4 pb-1'>
-              <Link key={blog.category?.id} href={`/categories/${blog.category?.id}`}>
-                <div className='inline rounded-lg text-xs sm:text-base lg:text-base sub-text-color'>
-                  <FontAwesomeIcon icon={faFolderOpen} /> {blog.category?.name}
-                </div>
-              </Link>
-            </div>
-            <div className='pl-6 pr-4 pb-1'>
-              <ul className='list-disc list-inside '>
-                {blog.tags?.map((tag) => (
-                  <Link key={tag.id} href={`/tags/${tag.id}`}>
-                    <span className='inline-block rounded-full text-xs sm:text-base lg:text-base mr-2 sub-text-color'>
-                      <FontAwesomeIcon icon={faTag} /> {tag.name}
+            {/* メタデータセクション */}
+            <div className='p-6 space-y-4'>
+              {/* カテゴリと日付 */}
+              <div className='flex flex-wrap items-center gap-3'>
+                {blog.category && (
+                  <Link href={`/categories/${blog.category.id}`}>
+                    <span className='inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-full text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:scale-105 transition-transform'>
+                      <FontAwesomeIcon icon={faFolderOpen} className='w-4 h-4' />
+                      {blog.category.name}
                     </span>
                   </Link>
-                ))}
-              </ul>
+                )}
+                <div className='flex items-center gap-2 text-muted-foreground'>
+                  <FontAwesomeIcon icon={faCalendarAlt} className='w-4 h-4' />
+                  <time className='text-sm'>
+                    {new Date(blog.createdAt).toLocaleDateString('ja-JP', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </time>
+                </div>
+              </div>
+              
+              {/* タグ */}
+              {blog.tags && blog.tags.length > 0 && (
+                <div className='flex flex-wrap gap-2'>
+                  {blog.tags.map((tag) => (
+                    <Link key={tag.id} href={`/tags/${tag.id}`}>
+                      <span className='inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 rounded-full text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors'>
+                        <FontAwesomeIcon icon={faTag} className='w-3 h-3' />
+                        {tag.name}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
-            <div className='pl-6 pr-4'>
-              <FontAwesomeIcon icon={faCalendarAlt} className='mr-1 sub-text-color' />
-              <span className='mr-2 text-xs sm:text-base lg:text-base sub-text-color'>
-                投稿日時:
-              </span>
-              <span className='text-xs sm:text-sm lg:text-base sub-text-color'>
-                {new Date(blog.createdAt)
-                  .toLocaleDateString('ja-JP', {
-                    timeZone: 'Asia/Tokyo',
-                  })
-                  .replace(/\//g, '-')}
-              </span>
-            </div>
-            <h1 className='p-4 mt-5 text-xl font-bold lg:text-3xl'>{blog.title}</h1>
+            <h1 className='p-4 mt-5 text-xl font-bold lg:text-3xl text-foreground'>{blog.title}</h1>
+            <ShareButtons title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
             <TableOfContents toc={toc} />
-            <div className='p-4 znc markdown'>
+            <div className='p-4 znc markdown text-foreground'>
               <div dangerouslySetInnerHTML={{ __html: parse_body.html() }}></div>
             </div>
+            <RelatedPosts posts={relatedPosts} currentPostId={blogId} />
           </div>
         </div>
       </div>

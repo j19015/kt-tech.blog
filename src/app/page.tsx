@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { getList } from '../../libs/microcms';
-import Sidebar from '@/components/SIdebar/Sidebar'; // Sidebarのimportを修正
 import { Blog } from '../../libs/microcms';
 import Index from '@/components/Index/Index';
+import HeroSection from '@/components/HeroSection/HeroSection';
 
 export const metadata = {
   title: 'TOPページ',
@@ -44,9 +44,6 @@ export default async function StaticPage() {
   const { contents } = await getList();
   //console.log(contents);
 
-  // ページの生成された時間を取得
-  const time = new Date().toString();
-
   if (!contents || contents.length === 0) {
     return <h1>No Contents</h1>;
   }
@@ -56,35 +53,9 @@ export default async function StaticPage() {
     .filter((article) => article.category?.name !== 'PF')
     .slice(0, 4);
 
-  // スタイル定義
-  const welcomeStyle: React.CSSProperties = {
-    fontSize: '2rem', // フォントサイズを大きく
-    fontWeight: 'bold', // 太字
-    textAlign: 'center', // 中央寄せ
-    margin: '20px 0', // 上下の余白
-    animation: 'fadeInSlideIn 2s ease-in-out', // アニメーション効果
-  };
-
-  // アニメーション用のキーフレーム（CSS）
-  const keyframes = `
-  @keyframes fadeInSlideIn {
-    0% {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  `;
-
   return (
     <>
-      <div style={welcomeStyle} className='top p-3'>
-        <style>{keyframes}</style>
-        <h1 className='text-xl lg:text-2xl'>kt-tech.blog にようこそ</h1>
-      </div>
+      <HeroSection />
       <Index contents={latestBlogs} />
       <div className='mt-8 flex justify-center'>
         <Link

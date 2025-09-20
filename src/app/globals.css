@@ -2,12 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes gradient-x {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-x {
+  animation: gradient-x 15s ease infinite;
+  background-size: 200% 200%;
+}
+
 body {
   margin: 0;
   padding: 0;
-  background-color: #f0f0f0; /* Slightly darker grey background */
-  color: #f0f0f0; /* Light text color */
   word-break: break-all;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 main {
@@ -34,25 +47,23 @@ main {
   --sub-text-color: #585353;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 227, 227, 227;
-    --background-start-rgb: 33 32 32;
-    --background-end-rgb: 43, 42, 42;
-    --button-bg: 99 102 241;
-    --button-bg-hover: 99 102 241;
-    --button-border: 99 102 241;
-    --button-border-hover: 99 102 241;
-    --button-text-color: 255 255 255;
-    --paginate-button-color: 99 102 241;
-    --paginate-button-hover-color: 79 82 221;
-    --paginate-current-button-color: 199 210 254;
-    --paginate-current-button-hover-color: ;
-    --paginate-button-text-color: 255 255 255;
-    --paginate-current-button-text-color: 99 102 241;
-    --reverce-color: 255 255 255;
-    --sub-text-color: #cbcbcb;
-  }
+.dark {
+  --foreground-rgb: 227, 227, 227;
+  --background-start-rgb: 20, 20, 20;
+  --background-end-rgb: 30, 30, 30;
+  --button-bg: 99 102 241;
+  --button-bg-hover: 99 102 241;
+  --button-border: 99 102 241;
+  --button-border-hover: 99 102 241;
+  --button-text-color: 255 255 255;
+  --paginate-button-color: 99 102 241;
+  --paginate-button-hover-color: 79 82 221;
+  --paginate-current-button-color: 199 210 254;
+  --paginate-current-button-hover-color: 179 190 234;
+  --paginate-button-text-color: 255 255 255;
+  --paginate-current-button-text-color: 99 102 241;
+  --reverce-color: 255 255 255;
+  --sub-text-color: #cbcbcb;
 }
 .paginate-button-color {
   background-color: rgb(var(--paginate-button-color));
@@ -80,10 +91,24 @@ body {
 
 .content {
   background-color: rgb(var(--background-end-rgb));
+  transition: background-color 0.3s ease;
+}
+
+.table-contents {
+  background-color: rgb(var(--background-end-rgb));
+  transition: background-color 0.3s ease;
 }
 
 a {
   color: rgb(var(--foreground-rgb));
+}
+
+.markdown {
+  color: rgb(var(--foreground-rgb)) !important;
+}
+
+.markdown * {
+  color: inherit;
 }
 
 .reverce-color {
@@ -175,22 +200,31 @@ a {
 }
 
 .scroll_bar {
-  background-color: rgba(0, 0, 0, 0); /* 背景を透明に設定 */
+  background-color: rgba(0, 0, 0, 0);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.5) transparent;
 }
 .scroll_bar::-webkit-scrollbar {
-  width: 10px;
+  width: 6px;
 }
 .scroll_bar::-webkit-scrollbar-track {
-  background-color: rgba(0, 0, 0, 0); /* トラック背景を透明に設定 */
+  background: transparent;
+  border-radius: 10px;
 }
 .scroll_bar::-webkit-scrollbar-thumb {
-  background-color: #888; /* スクロールバーのつまみを灰色に設定 */
+  background: linear-gradient(to bottom, #6366f1, #a855f7);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+.scroll_bar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #4f46e5, #9333ea);
 }
 
 .top > h1 {
   position: relative;
   display: inline-block;
   padding: 0 55px;
+  color: rgb(var(--foreground-rgb)) !important;
 }
 
 .top > h1:before,
