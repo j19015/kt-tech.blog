@@ -120,10 +120,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <GoogleAnalytics />
         <meta name='google-adsense-account' content='ca-pub-9002778711554857'></meta>
-        <link
-          href='https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap'
-          rel='stylesheet'
-        ></link>
         <meta name='thumbnail' content={`${process.env.SITE_URL}${Favicon.src}`}></meta>
         <script
           type='application/ld+json'

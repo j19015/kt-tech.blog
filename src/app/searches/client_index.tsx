@@ -78,7 +78,7 @@ export const ClientIndex = ({ contents }: BlogProps) => {
             <div className='flex items-center justify-center gap-2 text-lg'>
               <span className='text-muted-foreground'>キーワード:</span>
               <span className='px-4 py-2 bg-white dark:bg-gray-800 rounded-full font-medium text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800'>
-                "{text}"
+                &ldquo;{text}&rdquo;
               </span>
               <span className='text-muted-foreground'>
                 {blogContents ? `(${blogContents.length}件)` : ''}
@@ -208,7 +208,7 @@ export const ClientIndex = ({ contents }: BlogProps) => {
               検索結果が見つかりませんでした
             </h3>
             <p className='text-gray-600 dark:text-gray-400 max-w-md mx-auto mb-6'>
-              キーワード "{text}" に一致する記事が見つかりませんでした。
+              キーワード &ldquo;{text}&rdquo; に一致する記事が見つかりませんでした。
               他のキーワードで検索してみてください。
             </p>
             <Link href='/blogs/page/1'>

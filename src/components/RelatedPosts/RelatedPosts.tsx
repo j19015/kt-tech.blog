@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Blog } from '../../../interface/blog';
+import { Blog } from '../../../libs/microcms';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { motion } from 'framer-motion';
