@@ -57,12 +57,12 @@ export default async function StaticPage() {
     <>
       <HeroSection />
       <Index contents={latestBlogs} />
-      <div className='mt-8 flex justify-center'>
+      <div className='mt-12 text-center'>
         <Link
           href='/blogs/page/1'
-          className='px-8 py-3 bg-cyan-500 hover:bg-cyan-600 dark:bg-cyan-600 dark:hover:bg-cyan-700 text-white font-semibold rounded-xl transition-colors duration-200 shadow-md hover:shadow-lg'
+          className='text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors font-medium'
         >
-          すべての記事を見る
+          すべての記事を見る →
         </Link>
       </div>
     </>

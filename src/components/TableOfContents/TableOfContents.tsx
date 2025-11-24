@@ -1,7 +1,5 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 export const TableOfContents = ({ toc }: { toc: any }) => {
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -14,34 +12,36 @@ export const TableOfContents = ({ toc }: { toc: any }) => {
   }, [isOpen]);
 
   return (
-    <div className='lg:hidden border-2 border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800 m-5 mt-10 p-1 shadow-md'>
-      <div className='flex justify-between px-3 py-2 cursor-pointer' onClick={() => setOpen(!isOpen)}>
-        <h1 className='text-lg font-bold text-slate-900 dark:text-slate-100' style={{ marginTop: '0px !important' }}>
-          目次
-        </h1>
-        <span className='text-lg text-cyan-600 dark:text-cyan-400'>
-          <FontAwesomeIcon icon={isOpen ? faMinus : faPlus} />
+    <div className='lg:hidden border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900 my-8 mx-4'>
+      <button
+        onClick={() => setOpen(!isOpen)}
+        className='w-full flex justify-between items-center px-4 py-3 text-left'
+      >
+        <span className='font-bold text-slate-900 dark:text-slate-100'>目次</span>
+        <span className='text-slate-500 dark:text-slate-500 text-sm'>
+          {isOpen ? '−' : '+'}
         </span>
-      </div>
+      </button>
       <div
         ref={contentRef}
-        className='overflow-hidden transition-all duration-300 ease-in-out'
+        className='overflow-hidden transition-all duration-200'
         style={{ height: '0px' }}
       >
-        <ul className='pl-2 mt-3 pb-2'>
+        <ul className='px-4 pb-4 space-y-2'>
           {toc.map((data: any) => (
-            <a key={data.id} href={`#${data.id}`}>
-              <li
-                className={`${
-                  data.tag === 'h2' ? 'ml-5' : data.tag === 'h3' ? 'ml-10' : 'ml-1'
-                } mb-2 py-2 px-3 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-cyan-600 dark:hover:text-cyan-400 rounded-lg transition-colors duration-200`}
+            <li
+              key={data.id}
+              className={`${
+                data.tag === 'h2' ? 'ml-4' : data.tag === 'h3' ? 'ml-8' : ''
+              }`}
+            >
+              <a
+                href={`#${data.id}`}
+                className='text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
               >
-                <div className='flex'>
-                  <span>{data.tag === 'h1' ? '・' : '-'}</span>
-                  <span className='ml-2'>{data.text}</span>
-                </div>
-              </li>
-            </a>
+                {data.text}
+              </a>
+            </li>
           ))}
         </ul>
       </div>

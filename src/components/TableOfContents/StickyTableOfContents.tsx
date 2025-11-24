@@ -92,87 +92,33 @@ export const StickyTableOfContents = ({ toc }: { toc: TocItem[] }) => {
   };
 
   return (
-    <div className='sticky top-20 p-5 rounded-xl bg-white dark:bg-slate-800 shadow-lg border border-slate-200 dark:border-slate-700'>
-      <div className='flex items-center gap-2 mb-5'>
-        <FontAwesomeIcon icon={faListUl} className='text-cyan-600 dark:text-cyan-400' />
-        <h2 className='text-xl font-bold text-slate-900 dark:text-slate-100'>
-          目次
-        </h2>
-      </div>
+    <div className='sticky top-20 p-4 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900'>
+      <h2 className='text-sm font-bold text-slate-900 dark:text-slate-100 mb-3'>
+        目次
+      </h2>
 
-      {/* プログレスバー */}
-      <div className='mb-4 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden'>
-        <div
-          className='h-full bg-cyan-500 dark:bg-cyan-400 transition-all duration-300'
-          style={{ width: `${scrollProgress}%` }}
-        />
-      </div>
-
-      {/* 現在のセクション表示 */}
-      {activeId && (
-        <div className='mb-3 p-3 bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600'>
-          <p className='text-xs text-slate-600 dark:text-slate-400 font-medium mb-1'>
-            現在のセクション
-          </p>
-          <p className='text-sm font-semibold text-slate-900 dark:text-slate-100 truncate'>
-            {toc.find(item => item.id === activeId)?.text}
-          </p>
-        </div>
-      )}
-
-      <ul
-        ref={tocRef}
-        className='space-y-1 max-h-[50vh] overflow-y-auto scroll-smooth scroll_bar'
-      >
+      <ul ref={tocRef} className='space-y-2 max-h-[60vh] overflow-y-auto'>
         {toc.map((item) => (
           <li
             key={item.id}
             data-toc-id={item.id}
             ref={activeId === item.id ? activeItemRef : null}
-            className={`
-              transition-all duration-200
-              ${item.tag === 'h2' ? 'ml-4' : item.tag === 'h3' ? 'ml-8' : ''}
-            `}
+            className={`${item.tag === 'h2' ? 'ml-3' : item.tag === 'h3' ? 'ml-6' : ''}`}
           >
             <a
               href={`#${item.id}`}
               onClick={(e) => handleClick(e, item.id)}
-              className={`
-                block py-2 px-3 rounded-lg transition-all duration-200
-                hover:bg-slate-100 dark:hover:bg-slate-700
-                ${
-                  activeId === item.id
-                    ? 'text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-slate-700 font-semibold border-l-3 border-cyan-500 dark:border-cyan-400'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 border-l-3 border-transparent'
-                }
-              `}
+              className={`block text-sm transition-colors ${
+                activeId === item.id
+                  ? 'text-slate-900 dark:text-slate-100 font-medium'
+                  : 'text-slate-500 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+              }`}
             >
-              <span className='flex items-center gap-2'>
-                <span className='text-xs'>
-                  {activeId === item.id ? '●' : '○'}
-                </span>
-                <span className='line-clamp-2 text-sm'>
-                  {item.text}
-                </span>
-              </span>
+              {item.text}
             </a>
           </li>
         ))}
       </ul>
-
-      {/* スクロールインジケーター */}
-      {toc.length > 5 && (
-        <div className='mt-3 pt-3 border-t border-slate-200 dark:border-slate-700'>
-          <div className='flex items-center justify-between text-xs text-slate-500 dark:text-slate-400'>
-            <span>
-              {toc.findIndex(item => item.id === activeId) + 1} / {toc.length}
-            </span>
-            <span>
-              スクロールで移動
-            </span>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
