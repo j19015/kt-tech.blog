@@ -62,18 +62,14 @@ export const Header = () => {
       >
         <div className='container mx-auto px-4 py-4 flex justify-between items-center'>
           <Link href='/' onClick={() => handleMenuClose('Home')}>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className='flex items-center gap-2'
-            >
-              <div className='w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center'>
+            <div className='flex items-center gap-2 hover:opacity-80 transition-opacity'>
+              <div className='w-10 h-10 bg-cyan-500 dark:bg-cyan-600 rounded-lg flex items-center justify-center'>
                 <span className='text-white font-bold text-xl'>K</span>
               </div>
-              <h1 className='text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent'>
-                kt-tech.blog
+              <h1 className='text-2xl font-bold text-slate-900 dark:text-slate-100'>
+                kt-tech<span className='text-cyan-500 dark:text-cyan-400'>.</span>blog
               </h1>
-            </motion.div>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -82,20 +78,16 @@ export const Header = () => {
               {menuItems.map((item) => (
                 <li key={item.name}>
                   <Link href={item.href} onClick={() => setSelected(item.name)}>
-                    <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`px-4 py-2 rounded-full transition-all duration-300 flex items-center gap-2 ${
+                    <div
+                      className={`px-4 py-2 rounded-lg transition-all duration-200 flex items-center gap-2 ${
                         selected === item.name
-                          ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg'
-                          : scrolled 
-                            ? 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200'
-                            : 'hover:bg-gray-100/10 dark:hover:bg-gray-800/30 text-gray-700 dark:text-gray-200'
+                          ? 'bg-cyan-500 dark:bg-cyan-600 text-white'
+                          : 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200'
                       }`}
                     >
                       <FontAwesomeIcon icon={item.icon} className='w-4 h-4' />
                       <span className='font-medium'>{item.name}</span>
-                    </motion.div>
+                    </div>
                   </Link>
                 </li>
               ))}
@@ -144,8 +136,8 @@ export const Header = () => {
             >
               <div className='flex flex-col h-full'>
                 {/* Header */}
-                <div className='p-6 border-b border-gray-200 dark:border-gray-700'>
-                  <h2 className='text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent'>
+                <div className='p-6 border-b border-slate-200 dark:border-slate-700'>
+                  <h2 className='text-2xl font-bold text-slate-900 dark:text-slate-100'>
                     Navigation
                   </h2>
                 </div>
@@ -164,43 +156,41 @@ export const Header = () => {
                           href={item.href}
                           onClick={() => handleMenuClose(item.name)}
                         >
-                          <motion.div
-                            whileHover={{ x: 10 }}
-                            whileTap={{ scale: 0.95 }}
-                            className={`p-4 rounded-xl flex items-center gap-3 transition-all duration-300 ${
+                          <div
+                            className={`p-4 rounded-xl flex items-center gap-3 transition-all duration-200 ${
                               selected === item.name
-                                ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg'
-                                : 'bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700'
+                                ? 'bg-cyan-500 dark:bg-cyan-600 text-white'
+                                : 'bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700'
                             }`}
                           >
                             <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                               selected === item.name
                                 ? 'bg-white/20'
-                                : 'bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900 dark:to-purple-900'
+                                : 'bg-cyan-100 dark:bg-cyan-900/30'
                             }`}>
                               <FontAwesomeIcon icon={item.icon} className={`w-5 h-5 ${
                                 selected === item.name
                                   ? 'text-white'
-                                  : 'text-indigo-600 dark:text-indigo-400'
+                                  : 'text-cyan-600 dark:text-cyan-400'
                               }`} />
                             </div>
                             <div>
                               <span className={`font-semibold text-base ${
-                                selected === item.name ? 'text-white' : 'text-gray-900 dark:text-gray-100'
+                                selected === item.name ? 'text-white' : 'text-slate-900 dark:text-slate-100'
                               }`}>
                                 {item.name}
                               </span>
                               <p className={`text-xs mt-0.5 ${
                                 selected === item.name
                                   ? 'text-white/80'
-                                  : 'text-gray-600 dark:text-gray-400'
+                                  : 'text-slate-600 dark:text-slate-400'
                               }`}>
                                 {item.name === 'Home' && 'トップページ'}
                                 {item.name === 'Blog' && '記事一覧'}
                                 {item.name === 'About' && 'このサイトについて'}
                               </p>
                             </div>
-                          </motion.div>
+                          </div>
                         </Link>
                       </motion.li>
                     ))}
@@ -208,29 +198,21 @@ export const Header = () => {
                 </div>
 
                 {/* Footer */}
-                <div className='p-6 border-t border-gray-200 dark:border-gray-700'>
-                  <div className='p-4 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30 rounded-xl'>
-                    <h3 className='font-semibold text-sm mb-3 text-gray-900 dark:text-gray-100'>
+                <div className='p-6 border-t border-slate-200 dark:border-slate-700'>
+                  <div className='p-4 bg-slate-100 dark:bg-slate-800 rounded-xl'>
+                    <h3 className='font-semibold text-sm mb-3 text-slate-900 dark:text-slate-100'>
                       Follow Me
                     </h3>
                     <div className='flex gap-3'>
                       <a href='https://github.com/j19015' target='_blank' rel='noopener noreferrer'>
-                        <motion.div
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          className='w-10 h-10 bg-gradient-to-r from-gray-700 to-gray-900 rounded-lg flex items-center justify-center text-white'
-                        >
+                        <div className='w-10 h-10 bg-slate-800 dark:bg-slate-700 rounded-lg flex items-center justify-center text-white hover:bg-slate-700 dark:hover:bg-slate-600 transition-colors'>
                           <FontAwesomeIcon icon={faGithub} className='w-5 h-5' />
-                        </motion.div>
+                        </div>
                       </a>
                       <a href='https://twitter.com/tech_koki' target='_blank' rel='noopener noreferrer'>
-                        <motion.div
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          className='w-10 h-10 bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg flex items-center justify-center text-white'
-                        >
+                        <div className='w-10 h-10 bg-blue-500 dark:bg-blue-600 rounded-lg flex items-center justify-center text-white hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors'>
                           <FontAwesomeIcon icon={faTwitter} className='w-5 h-5' />
-                        </motion.div>
+                        </div>
                       </a>
                     </div>
                   </div>

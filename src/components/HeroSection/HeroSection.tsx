@@ -1,240 +1,170 @@
 'use client';
-import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { Sparkles, Code2, Rocket, Brain } from 'lucide-react';
+import { Code2, Terminal, Layers } from 'lucide-react';
 import Link from 'next/link';
 
 export const HeroSection = () => {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
-  const texts = ['技術と創造性が交わる場所', 'Innovation meets Creativity', 'コードで未来を創造する'];
-  
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  
-  const springConfig = { damping: 20, stiffness: 100 };
-  const x = useSpring(mouseX, springConfig);
-  const y = useSpring(mouseY, springConfig);
+  const texts = ['Build. Ship. Scale.', 'Modern Web Development', 'Code with Purpose'];
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTextIndex((prev) => (prev + 1) % texts.length);
-    }, 3000);
+    }, 3500);
     return () => clearInterval(interval);
   }, [texts.length]);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    mouseX.set(e.clientX - rect.left - rect.width / 2);
-    mouseY.set(e.clientY - rect.top - rect.height / 2);
-  };
-
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
-      className='relative overflow-hidden rounded-2xl mx-4 my-6 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900/50 dark:via-indigo-950/30 dark:to-purple-950/30'
-      onMouseMove={handleMouseMove}
+      transition={{ duration: 0.8 }}
+      className='relative overflow-hidden mx-4 my-8'
     >
-      {/* Interactive Background */}
-      <div className='absolute inset-0'>
-        <motion.div 
-          className='absolute inset-0 opacity-30'
-          style={{
-            background: 'radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(99, 102, 241, 0.15), transparent 40%)',
-            '--mouse-x': useTransform(x, (value) => `${value}px`),
-            '--mouse-y': useTransform(y, (value) => `${value}px`),
-          } as any}
-        />
-      </div>
+      {/* メインコンテンツ */}
+      <div className='relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 dark:from-black dark:via-slate-900 dark:to-black rounded-3xl overflow-hidden'>
+        {/* Background Grid */}
+        <div className='absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem]' />
 
-      {/* Animated Grid Background */}
-      <div className='absolute inset-0'>
-        <div className='absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]' />
-      </div>
+        {/* Gradient Overlay */}
+        <div className='absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent' />
 
-      {/* Floating Icons */}
-      <div className='absolute inset-0'>
-        <motion.div
-          className='absolute top-10 left-10 text-indigo-500/20'
-          animate={{ 
-            y: [0, -20, 0],
-            rotate: [0, 10, -10, 0]
-          }}
-          transition={{ duration: 6, repeat: Infinity }}
-        >
-          <Code2 className='w-12 h-12' />
-        </motion.div>
-        <motion.div
-          className='absolute bottom-10 right-10 text-purple-500/20'
-          animate={{ 
-            y: [0, 20, 0],
-            rotate: [0, -10, 10, 0]
-          }}
-          transition={{ duration: 5, repeat: Infinity }}
-        >
-          <Rocket className='w-12 h-12' />
-        </motion.div>
-        <motion.div
-          className='absolute top-20 right-20 text-pink-500/20'
-          animate={{ 
-            y: [0, -15, 0],
-            x: [0, 15, 0]
-          }}
-          transition={{ duration: 7, repeat: Infinity }}
-        >
-          <Brain className='w-10 h-10' />
-        </motion.div>
-      </div>
+        {/* Accent Lines */}
+        <div className='absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent' />
+        <div className='absolute top-0 right-1/4 w-px h-full bg-gradient-to-b from-transparent via-purple-500/20 to-transparent' />
 
-      <motion.div 
-        initial={{ y: -30 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-        className='relative z-10 text-center py-16 px-6'
-      >
-        {/* Sparkle Effect */}
-        <motion.div
-          className='absolute top-4 right-4'
-          animate={{ 
-            scale: [1, 1.2, 1],
-            rotate: [0, 180, 360]
-          }}
-          transition={{ duration: 3, repeat: Infinity }}
-        >
-          <Sparkles className='w-6 h-6 text-yellow-500' />
-        </motion.div>
+        {/* Content Container */}
+        <div className='relative z-10 px-6 py-20 lg:py-28'>
+          {/* Tech Icons */}
+          <div className='flex justify-center gap-6 mb-8'>
+            {[Code2, Terminal, Layers].map((Icon, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className='w-12 h-12 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 flex items-center justify-center'
+              >
+                <Icon className='w-6 h-6 text-cyan-400' />
+              </motion.div>
+            ))}
+          </div>
 
-        {/* Main Title */}
-        <motion.h1 
-          initial={{ scale: 0.8 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className='text-4xl lg:text-6xl font-bold mb-6'
-        >
-          <span className='bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto]'>
-            kt-tech.blog
-          </span>
-          <motion.span
-            className='inline-block ml-2'
-            animate={{ rotate: [0, 20, -20, 0] }}
-            transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+          {/* Main Heading */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className='text-center mb-6'
           >
-            ✨
-          </motion.span>
-        </motion.h1>
+            <h1 className='text-5xl lg:text-7xl font-bold text-white mb-4 tracking-tight'>
+              kt-tech<span className='text-cyan-400'>.</span>blog
+            </h1>
 
-        {/* Animated Subtitle */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className='h-8 mb-8 relative'
-        >
-          {texts.map((text, index) => (
-            <motion.p
-              key={index}
-              className='text-xl text-muted-foreground absolute inset-0 flex items-center justify-center'
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ 
-                opacity: currentTextIndex === index ? 1 : 0,
-                y: currentTextIndex === index ? 0 : 20
-              }}
-              transition={{ duration: 0.5 }}
-            >
-              {text}
-            </motion.p>
-          ))}
-        </motion.div>
-        
-        {/* Tech Stack Pills with Animation */}
-        <motion.div 
-          className='flex flex-wrap justify-center gap-3 mb-8'
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.8 }}
-        >
-          {['React', 'Next.js', 'TypeScript', 'TailwindCSS'].map((tech, index) => (
-            <motion.div
-              key={tech}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: 1 + index * 0.1 }}
-              whileHover={{ 
-                scale: 1.1,
-                boxShadow: '0 0 20px rgba(99, 102, 241, 0.4)'
-              }}
-              className='relative'
-            >
-              <span className='px-4 py-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-indigo-200 dark:border-indigo-800 rounded-full text-sm font-medium text-indigo-700 dark:text-indigo-300 shadow-md cursor-pointer'>
+            {/* Animated Subtitle */}
+            <div className='h-10 relative'>
+              {texts.map((text, index) => (
+                <motion.p
+                  key={index}
+                  className='text-xl lg:text-2xl font-medium text-slate-300 absolute inset-0 flex items-center justify-center'
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{
+                    opacity: currentTextIndex === index ? 1 : 0,
+                    y: currentTextIndex === index ? 0 : 10
+                  }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {text}
+                </motion.p>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className='text-center text-slate-400 text-base lg:text-lg max-w-2xl mx-auto mb-10'
+          >
+            実践的な技術記事とエンジニアリングの知見を発信
+          </motion.p>
+
+          {/* Tech Stack */}
+          <motion.div
+            className='flex flex-wrap justify-center gap-3 mb-10'
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.7 }}
+          >
+            {['React', 'Next.js', 'TypeScript', 'Tailwind CSS'].map((tech) => (
+              <span
+                key={tech}
+                className='px-4 py-2 bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg text-sm font-medium text-slate-300 hover:border-cyan-500/50 hover:text-cyan-400 transition-all duration-300'
+              >
                 {tech}
               </span>
-            </motion.div>
-          ))}
-        </motion.div>
+            ))}
+          </motion.div>
 
-        {/* CTA Buttons */}
-        <motion.div 
-          className='flex justify-center gap-4'
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1 }}
-        >
-          <Link href='/blogs/page/1'>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className='px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2'
-            >
-              ブログを読む
-              <motion.span
-                animate={{ x: [0, 5, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
+          {/* CTA Buttons */}
+          <motion.div
+            className='flex flex-col sm:flex-row justify-center gap-4'
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.9 }}
+          >
+            <Link href='/blogs/page/1'>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className='px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold rounded-xl shadow-lg shadow-cyan-500/25 hover:shadow-xl hover:shadow-cyan-500/40 transition-all duration-300'
               >
-                →
-              </motion.span>
-            </motion.button>
-          </Link>
-          <Link href='/about'>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className='px-6 py-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-indigo-600 dark:text-indigo-400 font-medium rounded-xl border-2 border-indigo-200 dark:border-indigo-800 shadow-md hover:shadow-lg transition-all duration-300'
-            >
-              About Me
-            </motion.button>
-          </Link>
-        </motion.div>
+                記事を読む
+              </motion.button>
+            </Link>
+            <Link href='/about'>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className='px-8 py-4 bg-slate-800 text-slate-200 font-semibold rounded-xl border border-slate-700 hover:border-slate-600 hover:bg-slate-700 transition-all duration-300'
+              >
+                About
+              </motion.button>
+            </Link>
+          </motion.div>
 
-        {/* Stats Section */}
-        <motion.div 
-          className='grid grid-cols-3 gap-4 mt-12 max-w-2xl mx-auto'
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 1.2 }}
-        >
-          {[
-            { label: '記事数', value: '50+', icon: '📝' },
-            { label: '技術スタック', value: '15+', icon: '⚡' },
-            { label: '経験年数', value: '3+', icon: '🚀' }
-          ].map((stat, index) => (
-            <motion.div
-              key={stat.label}
-              whileHover={{ y: -5 }}
-              className='bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-lg p-4 border border-indigo-100 dark:border-indigo-900'
-            >
-              <div className='text-2xl mb-1'>{stat.icon}</div>
-              <div className='text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent'>
-                {stat.value}
+          {/* Stats Bar */}
+          <motion.div
+            className='grid grid-cols-3 gap-6 mt-16 max-w-3xl mx-auto'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 1.1 }}
+          >
+            {[
+              { label: 'Articles', value: '50+' },
+              { label: 'Tech Stack', value: '15+' },
+              { label: 'Years', value: '3+' }
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                className='text-center p-6 rounded-xl bg-slate-800/30 border border-slate-700/50 backdrop-blur-sm'
+              >
+                <div className='text-3xl lg:text-4xl font-bold text-white mb-2'>
+                  {stat.value}
+                </div>
+                <div className='text-sm text-slate-400 font-medium uppercase tracking-wider'>
+                  {stat.label}
+                </div>
               </div>
-              <div className='text-xs text-muted-foreground'>{stat.label}</div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </motion.div>
+            ))}
+          </motion.div>
+        </div>
 
-      {/* Animated gradient border */}
-      <div className='absolute inset-0 rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-20 blur-xl animate-pulse' />
+        {/* Bottom Accent */}
+        <div className='absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent' />
+      </div>
     </motion.div>
   );
 };

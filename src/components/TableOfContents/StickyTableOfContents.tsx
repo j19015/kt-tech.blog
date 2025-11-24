@@ -92,71 +92,43 @@ export const StickyTableOfContents = ({ toc }: { toc: TocItem[] }) => {
   };
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.5 }}
-      className='sticky top-20 p-5 rounded-xl bg-card/80 backdrop-blur-sm shadow-xl border border-border'
-    >
+    <div className='sticky top-20 p-5 rounded-xl bg-white dark:bg-slate-800 shadow-lg border border-slate-200 dark:border-slate-700'>
       <div className='flex items-center gap-2 mb-5'>
-        <motion.div
-          animate={{ rotate: activeId ? 360 : 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <FontAwesomeIcon icon={faListUl} className='text-indigo-500' />
-        </motion.div>
-        <h2 className='text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent'>
+        <FontAwesomeIcon icon={faListUl} className='text-cyan-600 dark:text-cyan-400' />
+        <h2 className='text-xl font-bold text-slate-900 dark:text-slate-100'>
           目次
         </h2>
       </div>
-      
+
       {/* プログレスバー */}
-      <div className='mb-4 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden'>
-        <motion.div 
-          className='h-full bg-gradient-to-r from-indigo-500 to-purple-500'
-          initial={{ width: 0 }}
-          animate={{ width: `${scrollProgress}%` }}
-          transition={{ duration: 0.1 }}
+      <div className='mb-4 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden'>
+        <div
+          className='h-full bg-cyan-500 dark:bg-cyan-400 transition-all duration-300'
+          style={{ width: `${scrollProgress}%` }}
         />
       </div>
 
       {/* 現在のセクション表示 */}
-      <AnimatePresence mode='wait'>
-        {activeId && (
-          <motion.div
-            key={activeId}
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.2 }}
-            className='mb-3 p-2 bg-indigo-50 dark:bg-indigo-950/30 rounded-lg border border-indigo-200 dark:border-indigo-800'
-          >
-            <p className='text-xs text-indigo-600 dark:text-indigo-400 font-medium'>
-              現在のセクション:
-            </p>
-            <p className='text-sm font-semibold text-foreground truncate'>
-              {toc.find(item => item.id === activeId)?.text}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {activeId && (
+        <div className='mb-3 p-3 bg-slate-100 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600'>
+          <p className='text-xs text-slate-600 dark:text-slate-400 font-medium mb-1'>
+            現在のセクション
+          </p>
+          <p className='text-sm font-semibold text-slate-900 dark:text-slate-100 truncate'>
+            {toc.find(item => item.id === activeId)?.text}
+          </p>
+        </div>
+      )}
 
-      <ul 
+      <ul
         ref={tocRef}
-        className='space-y-1 max-h-[50vh] overflow-y-auto scroll-smooth'
-        style={{
-          scrollbarWidth: 'thin',
-          scrollbarColor: 'rgb(99 102 241 / 0.3) transparent'
-        }}
+        className='space-y-1 max-h-[50vh] overflow-y-auto scroll-smooth scroll_bar'
       >
-        {toc.map((item, index) => (
-          <motion.li
+        {toc.map((item) => (
+          <li
             key={item.id}
             data-toc-id={item.id}
             ref={activeId === item.id ? activeItemRef : null}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.05 }}
             className={`
               transition-all duration-200
               ${item.tag === 'h2' ? 'ml-4' : item.tag === 'h3' ? 'ml-8' : ''}
@@ -167,50 +139,40 @@ export const StickyTableOfContents = ({ toc }: { toc: TocItem[] }) => {
               onClick={(e) => handleClick(e, item.id)}
               className={`
                 block py-2 px-3 rounded-lg transition-all duration-200
-                hover:bg-gray-100 dark:hover:bg-gray-800
+                hover:bg-slate-100 dark:hover:bg-slate-700
                 ${
                   activeId === item.id
-                    ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 font-semibold border-l-4 border-indigo-500 shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground border-l-4 border-transparent'
+                    ? 'text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-slate-700 font-semibold border-l-3 border-cyan-500 dark:border-cyan-400'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 border-l-3 border-transparent'
                 }
               `}
             >
               <span className='flex items-center gap-2'>
-                <motion.span 
-                  className='text-xs'
-                  animate={{ 
-                    scale: activeId === item.id ? [1, 1.3, 1] : 1,
-                    rotate: activeId === item.id ? [0, 360] : 0
-                  }}
-                  transition={{ duration: 0.5 }}
-                >
+                <span className='text-xs'>
                   {activeId === item.id ? '●' : '○'}
-                </motion.span>
+                </span>
                 <span className='line-clamp-2 text-sm'>
                   {item.text}
                 </span>
               </span>
             </a>
-          </motion.li>
+          </li>
         ))}
       </ul>
 
       {/* スクロールインジケーター */}
       {toc.length > 5 && (
-        <div className='mt-3 pt-3 border-t border-border'>
-          <div className='flex items-center justify-between text-xs text-muted-foreground'>
+        <div className='mt-3 pt-3 border-t border-slate-200 dark:border-slate-700'>
+          <div className='flex items-center justify-between text-xs text-slate-500 dark:text-slate-400'>
             <span>
               {toc.findIndex(item => item.id === activeId) + 1} / {toc.length}
             </span>
-            <motion.span
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
+            <span>
               スクロールで移動
-            </motion.span>
+            </span>
           </div>
         </div>
       )}
-    </motion.div>
+    </div>
   );
 };

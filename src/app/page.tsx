@@ -60,7 +60,7 @@ export default async function StaticPage() {
       <div className='mt-8 flex justify-center'>
         <Link
           href='/blogs/page/1'
-          className='transition duration-300 ease-in-out font-semibold py-2 px-4 border-b-4 rounded shadow-md theme-button'
+          className='px-8 py-3 bg-cyan-500 hover:bg-cyan-600 dark:bg-cyan-600 dark:hover:bg-cyan-700 text-white font-semibold rounded-xl transition-colors duration-200 shadow-md hover:shadow-lg'
         >
           すべての記事を見る
         </Link>

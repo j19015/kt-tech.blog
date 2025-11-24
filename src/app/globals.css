@@ -29,41 +29,41 @@ main {
 }
 
 :root {
-  --foreground-rgb: 28, 28, 28;
-  --background-start-rgb: 245, 245, 245;
+  --foreground-rgb: 15, 23, 42;
+  --background-start-rgb: 248, 250, 252;
   --background-end-rgb: 255, 255, 255;
-  --button-bg: 99 102 241;
-  --button-bg-hover: 99 102 241;
-  --button-border: 99 102 241;
-  --button-border-hover: 99 102 241;
+  --button-bg: 6 182 212;
+  --button-bg-hover: 8 145 178;
+  --button-border: 6 182 212;
+  --button-border-hover: 8 145 178;
   --button-text-color: 255 255 255;
-  --paginate-button-color: 99 102 241;
-  --paginate-button-hover-color: 79, 70, 229;
-  --paginate-current-button-color: 199 210 254;
-  --paginate-current-button-hover-color: 179 190 234;
+  --paginate-button-color: 6 182 212;
+  --paginate-button-hover-color: 8 145 178;
+  --paginate-current-button-color: 165 243 252;
+  --paginate-current-button-hover-color: 103 232 249;
   --paginate-button-text-color: 255 255 255;
-  --paginate-current-button-text-color: 99 102 241;
+  --paginate-current-button-text-color: 8 145 178;
   --reverce-color: 0 0 0;
-  --sub-text-color: #585353;
+  --sub-text-color: #64748b;
 }
 
 .dark {
-  --foreground-rgb: 227, 227, 227;
-  --background-start-rgb: 20, 20, 20;
-  --background-end-rgb: 30, 30, 30;
-  --button-bg: 99 102 241;
-  --button-bg-hover: 99 102 241;
-  --button-border: 99 102 241;
-  --button-border-hover: 99 102 241;
+  --foreground-rgb: 241, 245, 249;
+  --background-start-rgb: 15, 23, 42;
+  --background-end-rgb: 30, 41, 59;
+  --button-bg: 6 182 212;
+  --button-bg-hover: 34 211 238;
+  --button-border: 6 182 212;
+  --button-border-hover: 34 211 238;
   --button-text-color: 255 255 255;
-  --paginate-button-color: 99 102 241;
-  --paginate-button-hover-color: 79 82 221;
-  --paginate-current-button-color: 199 210 254;
-  --paginate-current-button-hover-color: 179 190 234;
+  --paginate-button-color: 6 182 212;
+  --paginate-button-hover-color: 34 211 238;
+  --paginate-current-button-color: 165 243 252;
+  --paginate-current-button-hover-color: 103 232 249;
   --paginate-button-text-color: 255 255 255;
-  --paginate-current-button-text-color: 99 102 241;
+  --paginate-current-button-text-color: 8 145 178;
   --reverce-color: 255 255 255;
-  --sub-text-color: #cbcbcb;
+  --sub-text-color: #94a3b8;
 }
 .paginate-button-color {
   background-color: rgb(var(--paginate-button-color));
