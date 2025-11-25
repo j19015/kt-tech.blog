@@ -171,6 +171,12 @@ export default async function StaticDetailPage({
     }
 
     const meta = hrefToOgpData.get(href);
+
+    // metaがnullの場合はリンクカードを生成しない
+    if (!meta) {
+      return;
+    }
+
     const linkCardHTML = `
       <div class="link-card mt-3 mb-3">
         <!-- リンクカードの内容 -->
