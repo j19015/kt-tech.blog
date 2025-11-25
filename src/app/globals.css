@@ -99,10 +99,6 @@ body {
   transition: background-color 0.3s ease;
 }
 
-a {
-  color: rgb(var(--foreground-rgb));
-}
-
 .markdown {
   color: rgb(var(--foreground-rgb)) !important;
 }
