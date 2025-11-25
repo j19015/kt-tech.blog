@@ -4,122 +4,90 @@ import React from 'react';
 import { useState } from 'react';
 import ContactModal from '../Modal/contactModal';
 import PrivacyPolicyModal from '../Modal/privacyPolicy';
-import { motion } from 'framer-motion';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { faHeart, faEnvelope, faShield } from '@fortawesome/free-solid-svg-icons';
 
 export const Footer = () => {
   const [iscontactOpen, setContactOpen] = useState(false);
   const [isPrivacyPolicyOpen, setPrivacyPolicyOpen] = useState(false);
-  
-  return (
-    <footer className='mt-20 relative'>
-      {/* 背景グラデーション */}
-      <div className='absolute inset-0 bg-gradient-to-t from-indigo-50/50 via-transparent to-transparent dark:from-indigo-950/20' />
-      
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        className='relative'
-      >
-        {/* メインフッター */}
-        <div className='mx-4 mb-4 p-8 bg-card/80 backdrop-blur-sm rounded-2xl border border-border shadow-xl'>
-          <div className='max-w-7xl mx-auto'>
-            <div className='grid md:grid-cols-3 gap-8 mb-8'>
-              {/* ブランド */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <h3 className='text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4'>
-                  kt-tech.blog
-                </h3>
-                <p className='text-muted-foreground text-sm'>
-                  技術と創造性が交わる場所。<br />
-                  最新の技術トレンドと実践的な知識を共有します。
-                </p>
-              </motion.div>
 
-              {/* リンク */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className='flex flex-col gap-3'
-              >
-                <h4 className='font-semibold text-foreground mb-2'>Quick Links</h4>
-                <Link href='/' className='text-muted-foreground hover:text-indigo-600 transition-colors text-sm'>
+  return (
+    <footer className='mt-20 border-t border-slate-200 dark:border-slate-800'>
+      <div className='max-w-6xl mx-auto px-4 py-12'>
+        <div className='grid md:grid-cols-3 gap-8 text-sm'>
+          {/* ブランド */}
+          <div>
+            <h3 className='font-bold text-slate-900 dark:text-slate-100 mb-3'>
+              kt-tech.blog
+            </h3>
+            <p className='text-slate-600 dark:text-slate-400 text-sm leading-relaxed'>
+              実践的な技術記事とエンジニアリングの知見を発信
+            </p>
+          </div>
+
+          {/* リンク */}
+          <div>
+            <h4 className='font-bold text-slate-900 dark:text-slate-100 mb-3'>Links</h4>
+            <ul className='space-y-2'>
+              <li>
+                <Link href='/' className='text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'>
                   Home
                 </Link>
-                <Link href='/blogs/page/1' className='text-muted-foreground hover:text-indigo-600 transition-colors text-sm'>
+              </li>
+              <li>
+                <Link href='/blogs/page/1' className='text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'>
                   Blog
                 </Link>
-                <Link href='/about' className='text-muted-foreground hover:text-indigo-600 transition-colors text-sm'>
+              </li>
+              <li>
+                <Link href='/about' className='text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'>
                   About
                 </Link>
-                <button 
-                  onClick={() => setPrivacyPolicyOpen(true)} 
-                  className='text-left text-muted-foreground hover:text-indigo-600 transition-colors text-sm'
+              </li>
+              <li>
+                <button
+                  onClick={() => setPrivacyPolicyOpen(true)}
+                  className='text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
                 >
                   Privacy Policy
                 </button>
-              </motion.div>
+              </li>
+            </ul>
+          </div>
 
-              {/* ソーシャル & アクション */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
+          {/* ソーシャル */}
+          <div>
+            <h4 className='font-bold text-slate-900 dark:text-slate-100 mb-3'>Connect</h4>
+            <div className='flex gap-4'>
+              <Link
+                href='https://github.com/j19015'
+                target='_blank'
+                className='text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
               >
-                <h4 className='font-semibold text-foreground mb-4'>Connect</h4>
-                <div className='flex gap-3 mb-6'>
-                  <Link 
-                    href='https://github.com/j19015' 
-                    target='_blank'
-                    className='w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-gray-700 to-gray-900 text-white hover:scale-110 transition-transform'
-                  >
-                    <FontAwesomeIcon icon={faGithub} className='w-5 h-5' />
-                  </Link>
-                  <Link 
-                    href='https://twitter.com/tech_koki' 
-                    target='_blank'
-                    className='w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-blue-400 to-blue-600 text-white hover:scale-110 transition-transform'
-                  >
-                    <FontAwesomeIcon icon={faTwitter} className='w-5 h-5' />
-                  </Link>
-                  <button 
-                    onClick={() => setContactOpen(true)}
-                    className='w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:scale-110 transition-transform'
-                  >
-                    <FontAwesomeIcon icon={faEnvelope} className='w-5 h-5' />
-                  </button>
-                </div>
-              </motion.div>
+                GitHub
+              </Link>
+              <Link
+                href='https://twitter.com/tech_koki'
+                target='_blank'
+                className='text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
+              >
+                Twitter
+              </Link>
+              <button
+                onClick={() => setContactOpen(true)}
+                className='text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
+              >
+                Contact
+              </button>
             </div>
-
-            {/* 区切り線 */}
-            <div className='h-px bg-gradient-to-r from-transparent via-border to-transparent mb-6' />
-
-            {/* コピーライト */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className='text-center'
-            >
-              <p className='text-sm text-muted-foreground flex items-center justify-center gap-2'>
-                © {new Date().getFullYear()} kt-tech.blog. 
-                <span className='inline-flex items-center gap-1'>
-                  Made with <FontAwesomeIcon icon={faHeart} className='w-3 h-3 text-red-500' /> in Japan
-                </span>
-              </p>
-            </motion.div>
           </div>
         </div>
-      </motion.div>
+
+        {/* コピーライト */}
+        <div className='mt-12 pt-8 border-t border-slate-200 dark:border-slate-800 text-center'>
+          <p className='text-sm text-slate-500 dark:text-slate-500'>
+            © {new Date().getFullYear()} kt-tech.blog
+          </p>
+        </div>
+      </div>
 
       <ContactModal isOpen={iscontactOpen} onClose={() => setContactOpen(false)} />
       <PrivacyPolicyModal
