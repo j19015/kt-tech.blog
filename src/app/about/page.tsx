@@ -65,7 +65,7 @@ export default function About() {
           <h1 className='text-3xl font-bold text-slate-900 dark:text-slate-100 mb-4'>
             Koki
           </h1>
-          <p className='text-base text-slate-600 dark:text-slate-400 mb-4'>
+          <p className='text-base text-slate-600 dark:text-slate-300 mb-4'>
             Full Stack Engineer / AI Developer
           </p>
           <div className='flex gap-4 text-sm'>
@@ -73,7 +73,7 @@ export default function About() {
               href='https://github.com/j19015'
               target='_blank'
               rel='noopener noreferrer'
-              className='text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
+              className='text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors'
             >
               GitHub
             </Link>
@@ -81,7 +81,7 @@ export default function About() {
               href='https://twitter.com/tech_koki'
               target='_blank'
               rel='noopener noreferrer'
-              className='text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
+              className='text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors'
             >
               Twitter
             </Link>
@@ -93,13 +93,13 @@ export default function About() {
           <h2 className='text-xl font-bold text-slate-900 dark:text-slate-100 mb-4'>
             自己紹介
           </h2>
-          <p className='text-base text-slate-600 dark:text-slate-400 leading-relaxed mb-4'>
+          <p className='text-base text-slate-600 dark:text-slate-300 leading-relaxed mb-4'>
             フルスタックエンジニアのKokiです。2年半の実務経験を通じて、フロントエンドからバックエンド、クラウドまで幅広く対応しています。現在は複数の企業で開発に携わりながら、技術と自然の両方を愛する生活を送っています。
           </p>
-          <p className='text-base text-slate-600 dark:text-slate-400 leading-relaxed'>
+          <p className='text-base text-slate-600 dark:text-slate-300 leading-relaxed'>
             ドライブが大好きで、愛車のCX-3で岐阜の山奥や富士の朝霧高原など、自然豊かな場所を巡っています。コードを書く日々と、自然の中でリフレッシュする時間のバランスを大切にしています。
           </p>
-          <p className='text-sm text-slate-500 dark:text-slate-400 mt-4'>
+          <p className='text-sm text-slate-500 dark:text-slate-300 mt-4'>
             静岡県浜松市 / Full Remote
           </p>
         </section>
@@ -117,10 +117,10 @@ export default function About() {
                   <h3 className='font-bold text-base text-slate-900 dark:text-slate-100'>
                     {job.company}
                   </h3>
-                  <p className='text-sm text-slate-600 dark:text-slate-400'>
+                  <p className='text-sm text-slate-600 dark:text-slate-300'>
                     {job.role}
                   </p>
-                  <p className='text-sm text-slate-500 dark:text-slate-400'>
+                  <p className='text-sm text-slate-500 dark:text-slate-300'>
                     {job.period}
                   </p>
                 </div>
@@ -129,7 +129,7 @@ export default function About() {
                   <p className='text-sm font-medium text-slate-700 dark:text-slate-300 mb-2'>
                     プロジェクト:
                   </p>
-                  <ul className='list-disc list-inside text-sm text-slate-600 dark:text-slate-400 space-y-1'>
+                  <ul className='list-disc list-inside text-sm text-slate-600 dark:text-slate-300 space-y-1'>
                     {job.projects.map((project, i) => (
                       <li key={i}>{project}</li>
                     ))}
@@ -138,7 +138,7 @@ export default function About() {
 
                 <div className='flex flex-wrap gap-2'>
                   {job.tech.map((tech) => (
-                    <span key={tech} className='text-xs text-slate-500 dark:text-slate-400'>
+                    <span key={tech} className='text-xs text-slate-500 dark:text-slate-300'>
                       {tech}
                     </span>
                   ))}
@@ -162,7 +162,7 @@ export default function About() {
                 </h3>
                 <div className='flex flex-wrap gap-2'>
                   {items.map((item) => (
-                    <span key={item} className='text-sm text-slate-600 dark:text-slate-400'>
+                    <span key={item} className='text-sm text-slate-600 dark:text-slate-300'>
                       {item}
                     </span>
                   ))}
@@ -185,7 +185,7 @@ export default function About() {
                   <span className='text-sm font-medium text-slate-700 dark:text-slate-300'>
                     {skill.name}
                   </span>
-                  <span className='text-sm text-slate-500 dark:text-slate-400'>
+                  <span className='text-sm text-slate-500 dark:text-slate-300'>
                     {skill.level}%
                   </span>
                 </div>
@@ -205,7 +205,7 @@ export default function About() {
           <h2 className='text-xl font-bold text-slate-900 dark:text-slate-100 mb-2'>
             転職活動中
           </h2>
-          <p className='text-sm text-slate-600 dark:text-slate-400 mb-6'>
+          <p className='text-sm text-slate-600 dark:text-slate-300 mb-6'>
             新しいチャレンジを求めています
           </p>
 
@@ -216,23 +216,23 @@ export default function About() {
 
             <dl className='space-y-3 text-sm'>
               <div>
-                <dt className='text-slate-600 dark:text-slate-400 inline'>勤務形態:</dt>
+                <dt className='text-slate-600 dark:text-slate-300 inline'>勤務形態:</dt>
                 <dd className='ml-2 text-slate-900 dark:text-slate-100 inline'>フルリモート希望（必須）</dd>
               </div>
               <div>
-                <dt className='text-slate-600 dark:text-slate-400 inline'>居住地:</dt>
+                <dt className='text-slate-600 dark:text-slate-300 inline'>居住地:</dt>
                 <dd className='ml-2 text-slate-900 dark:text-slate-100 inline'>静岡県浜松市（移住の予定なし）</dd>
               </div>
               <div>
-                <dt className='text-slate-600 dark:text-slate-400 inline'>ポジション:</dt>
+                <dt className='text-slate-600 dark:text-slate-300 inline'>ポジション:</dt>
                 <dd className='ml-2 text-slate-900 dark:text-slate-100 inline'>フルスタック / バックエンド / フロントエンドエンジニア</dd>
               </div>
               <div>
-                <dt className='text-slate-600 dark:text-slate-400 inline'>年収:</dt>
+                <dt className='text-slate-600 dark:text-slate-300 inline'>年収:</dt>
                 <dd className='ml-2 text-slate-900 dark:text-slate-100 inline'>現年収以上を希望（応相談）</dd>
               </div>
               <div>
-                <dt className='text-slate-600 dark:text-slate-400 inline'>勤務時間:</dt>
+                <dt className='text-slate-600 dark:text-slate-300 inline'>勤務時間:</dt>
                 <dd className='ml-2 text-slate-900 dark:text-slate-100 inline'>フレックス制度歓迎</dd>
               </div>
             </dl>
@@ -243,7 +243,7 @@ export default function About() {
               <h4 className='text-base font-bold text-slate-900 dark:text-slate-100 mb-3'>
                 重視するポイント
               </h4>
-              <ul className='space-y-2 text-sm text-slate-600 dark:text-slate-400'>
+              <ul className='space-y-2 text-sm text-slate-600 dark:text-slate-300'>
                 <li>• 技術的なチャレンジができる環境</li>
                 <li>• モダンな技術スタックの採用</li>
                 <li>• プロダクトの成長に貢献できる</li>
@@ -256,7 +256,7 @@ export default function About() {
               <h4 className='text-base font-bold text-slate-900 dark:text-slate-100 mb-3'>
                 理想のチーム・環境
               </h4>
-              <ul className='space-y-2 text-sm text-slate-600 dark:text-slate-400'>
+              <ul className='space-y-2 text-sm text-slate-600 dark:text-slate-300'>
                 <li>• 心理的安全性の高いチーム</li>
                 <li>• コードレビュー文化の定着</li>
                 <li>• アジャイル・スクラム開発</li>
@@ -267,7 +267,7 @@ export default function About() {
           </div>
 
           <div className='mt-6 pt-4 border-t border-slate-200 dark:border-slate-700'>
-            <p className='text-sm text-slate-600 dark:text-slate-400'>
+            <p className='text-sm text-slate-600 dark:text-slate-300'>
               お問い合わせ: ご興味を持っていただけた企業様は、
               <Link href='https://twitter.com/tech_koki' className='text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors mx-1'>
                 Twitter DM
