@@ -37,7 +37,7 @@ export const ShareButtons = ({ title, url }: ShareButtonsProps) => {
           href={shareLinks.twitter}
           target='_blank'
           rel='noopener noreferrer'
-          className='text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
+          className='text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
           aria-label='Share on X (Twitter)'
         >
           X
@@ -47,7 +47,7 @@ export const ShareButtons = ({ title, url }: ShareButtonsProps) => {
           href={shareLinks.facebook}
           target='_blank'
           rel='noopener noreferrer'
-          className='text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
+          className='text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
           aria-label='Share on Facebook'
         >
           Facebook
@@ -57,7 +57,7 @@ export const ShareButtons = ({ title, url }: ShareButtonsProps) => {
           href={shareLinks.line}
           target='_blank'
           rel='noopener noreferrer'
-          className='text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
+          className='text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
           aria-label='Share on LINE'
         >
           LINE
@@ -67,7 +67,7 @@ export const ShareButtons = ({ title, url }: ShareButtonsProps) => {
           href={shareLinks.hatena}
           target='_blank'
           rel='noopener noreferrer'
-          className='text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
+          className='text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
           aria-label='Share on Hatena Bookmark'
         >
           はてブ
@@ -75,7 +75,7 @@ export const ShareButtons = ({ title, url }: ShareButtonsProps) => {
         <span className='text-slate-300 dark:text-slate-700'>·</span>
         <button
           onClick={handleCopyLink}
-          className='text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
+          className='text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
           aria-label='Copy link'
         >
           {copied ? 'コピーしました' : 'リンクをコピー'}

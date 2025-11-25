@@ -14,7 +14,7 @@ const Paginate = ({ currentPage, totalPage, kind }: PaginateProps) => {
         {currentPage > 1 && (
           <Link
             href={`${kind}/page/${currentPage - 1}`}
-            className="px-3 py-1 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
+            className="px-3 py-1 text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
           >
             ← 前へ
           </Link>
@@ -34,7 +34,7 @@ const Paginate = ({ currentPage, totalPage, kind }: PaginateProps) => {
                   className={`min-w-[32px] h-8 flex items-center justify-center text-sm transition-colors ${
                     currentPage === page
                       ? "text-slate-900 dark:text-slate-100 font-medium"
-                      : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
+                      : "text-slate-500 dark:text-slate-300 hover:text-slate-700 dark:hover:text-slate-300"
                   }`}
                 >
                   {page}
@@ -57,7 +57,7 @@ const Paginate = ({ currentPage, totalPage, kind }: PaginateProps) => {
         {currentPage < totalPage && (
           <Link
             href={`${kind}/page/${currentPage + 1}`}
-            className="px-3 py-1 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
+            className="px-3 py-1 text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
           >
             次へ →
           </Link>

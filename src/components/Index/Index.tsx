@@ -14,7 +14,7 @@ export const Index = ({ contents }: BlogProps) => {
                   {blog.title}
                 </h2>
 
-                <div className='flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400'>
+                <div className='flex items-center gap-3 text-sm text-slate-500 dark:text-slate-300'>
                   <time>
                     {new Date(blog.createdAt).toLocaleDateString('ja-JP', {
                       year: 'numeric',
@@ -35,7 +35,7 @@ export const Index = ({ contents }: BlogProps) => {
                     {blog.tags.slice(0, 3).map((tag) => (
                       <span
                         key={tag.id}
-                        className='text-xs text-slate-500 dark:text-slate-400'
+                        className='text-xs text-slate-500 dark:text-slate-300'
                       >
                         #{tag.name}
                       </span>
@@ -50,7 +50,7 @@ export const Index = ({ contents }: BlogProps) => {
 
       {/* 記事がない場合 */}
       {contents.length === 0 && (
-        <div className='text-center py-16 text-slate-500 dark:text-slate-400'>
+        <div className='text-center py-16 text-slate-500 dark:text-slate-300'>
           記事が見つかりませんでした
         </div>
       )}

@@ -26,7 +26,7 @@ export const RelatedPosts = ({ posts, currentPostId }: RelatedPostsProps) => {
                 <h3 className='text-base font-medium text-slate-900 dark:text-slate-100 group-hover:text-slate-600 dark:group-hover:text-slate-400 transition-colors line-clamp-2'>
                   {post.title}
                 </h3>
-                <div className='flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400'>
+                <div className='flex items-center gap-3 text-sm text-slate-500 dark:text-slate-300'>
                   <time>
                     {new Date(post.createdAt).toLocaleDateString('ja-JP', {
                       year: 'numeric',

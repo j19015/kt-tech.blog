@@ -18,7 +18,7 @@ export const Footer = () => {
             <h3 className='font-bold text-slate-900 dark:text-slate-100 mb-3'>
               kt-tech.blog
             </h3>
-            <p className='text-slate-600 dark:text-slate-400 text-sm leading-relaxed'>
+            <p className='text-slate-600 dark:text-slate-300 text-sm leading-relaxed'>
               実践的な技術記事とエンジニアリングの知見を発信
             </p>
           </div>
@@ -28,24 +28,24 @@ export const Footer = () => {
             <h4 className='font-bold text-slate-900 dark:text-slate-100 mb-3'>Links</h4>
             <ul className='space-y-2'>
               <li>
-                <Link href='/' className='text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'>
+                <Link href='/' className='text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'>
                   Home
                 </Link>
               </li>
               <li>
-                <Link href='/blogs/page/1' className='text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'>
+                <Link href='/blogs/page/1' className='text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'>
                   Blog
                 </Link>
               </li>
               <li>
-                <Link href='/about' className='text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'>
+                <Link href='/about' className='text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'>
                   About
                 </Link>
               </li>
               <li>
                 <button
                   onClick={() => setPrivacyPolicyOpen(true)}
-                  className='text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
+                  className='text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
                 >
                   Privacy Policy
                 </button>
@@ -60,20 +60,20 @@ export const Footer = () => {
               <Link
                 href='https://github.com/j19015'
                 target='_blank'
-                className='text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
+                className='text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
               >
                 GitHub
               </Link>
               <Link
                 href='https://twitter.com/tech_koki'
                 target='_blank'
-                className='text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
+                className='text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
               >
                 Twitter
               </Link>
               <button
                 onClick={() => setContactOpen(true)}
-                className='text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
+                className='text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
               >
                 Contact
               </button>
@@ -83,7 +83,7 @@ export const Footer = () => {
 
         {/* コピーライト */}
         <div className='mt-12 pt-8 border-t border-slate-200 dark:border-slate-800 text-center'>
-          <p className='text-sm text-slate-500 dark:text-slate-400'>
+          <p className='text-sm text-slate-500 dark:text-slate-300'>
             © {new Date().getFullYear()} kt-tech.blog
           </p>
         </div>

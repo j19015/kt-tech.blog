@@ -11,7 +11,7 @@ export const HeroSection = () => {
         </h1>
 
         {/* Description */}
-        <p className='text-lg text-slate-600 dark:text-slate-400 max-w-xl mx-auto leading-relaxed'>
+        <p className='text-lg text-slate-600 dark:text-slate-300 max-w-xl mx-auto leading-relaxed'>
           実践的な技術記事とエンジニアリングの知見を発信しています
         </p>
 

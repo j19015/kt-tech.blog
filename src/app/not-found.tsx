@@ -12,7 +12,7 @@ export default function Custom404() {
           <h1 className='text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-100'>
             ページが見つかりません
           </h1>
-          <p className='text-base text-slate-600 dark:text-slate-400 max-w-md mx-auto'>
+          <p className='text-base text-slate-600 dark:text-slate-300 max-w-md mx-auto'>
             お探しのページは移動したか、削除された可能性があります。
           </p>
         </div>

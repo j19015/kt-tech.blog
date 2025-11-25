@@ -18,7 +18,7 @@ export const TableOfContents = ({ toc }: { toc: any }) => {
         className='w-full flex justify-between items-center px-4 py-3 text-left'
       >
         <span className='font-bold text-slate-900 dark:text-slate-100'>目次</span>
-        <span className='text-slate-500 dark:text-slate-400 text-sm'>
+        <span className='text-slate-500 dark:text-slate-300 text-sm'>
           {isOpen ? '−' : '+'}
         </span>
       </button>
@@ -37,7 +37,7 @@ export const TableOfContents = ({ toc }: { toc: any }) => {
             >
               <a
                 href={`#${data.id}`}
-                className='text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
+                className='text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
               >
                 {data.text}
               </a>

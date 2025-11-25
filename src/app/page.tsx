@@ -60,7 +60,7 @@ export default async function StaticPage() {
       <div className='mt-12 text-center'>
         <Link
           href='/blogs/page/1'
-          className='text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors font-medium'
+          className='text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors font-medium'
         >
           すべての記事を見る →
         </Link>

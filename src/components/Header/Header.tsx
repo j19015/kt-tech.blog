@@ -47,7 +47,7 @@ export const Header = () => {
                 key={item.name}
                 href={item.href}
                 onClick={() => setSelected(item.name)}
-                className='text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
+                className='text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
               >
                 {item.name}
               </Link>
