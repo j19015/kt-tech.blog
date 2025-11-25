@@ -1,7 +1,5 @@
 'use client';
 import Link from "next/link";
-import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 type PaginateProps = {
   currentPage: number;
@@ -11,50 +9,35 @@ type PaginateProps = {
 
 const Paginate = ({ currentPage, totalPage, kind }: PaginateProps) => {
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="flex justify-center mt-12 mb-8"
-    >
-      <nav className="inline-flex items-center gap-2 p-2 bg-card rounded-full shadow-lg border border-border">
+    <div className="flex justify-center mt-12 mb-8">
+      <nav className="flex items-center gap-2">
         {currentPage > 1 && (
-          <Link href={`${kind}/page/${currentPage - 1}`}>
-            <motion.span 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 transition-all cursor-pointer shadow-md"
-            >
-              <ChevronLeft className="w-4 h-4" />
-              <span className="hidden sm:inline">前へ</span>
-            </motion.span>
+          <Link
+            href={`${kind}/page/${currentPage - 1}`}
+            className="px-3 py-1 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
+          >
+            ← 前へ
           </Link>
         )}
-        
+
         <div className="flex items-center gap-1">
           {Array.from({ length: totalPage }, (_, i) => i + 1).map((page) => {
-            // 表示するページ番号を制限（現在のページの前後2ページ + 最初と最後）
             if (
-              page === 1 || 
-              page === totalPage || 
+              page === 1 ||
+              page === totalPage ||
               (page >= currentPage - 2 && page <= currentPage + 2)
             ) {
               return (
-                <Link href={`${kind}/page/${page}`} key={page}>
-                  <motion.span
-                    whileHover={{ scale: currentPage === page ? 1 : 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    className={`
-                      min-w-[40px] h-10 flex items-center justify-center rounded-full cursor-pointer transition-all font-medium
-                      ${
-                        currentPage === page
-                          ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg"
-                          : "bg-background hover:bg-muted text-muted-foreground hover:text-foreground"
-                      }
-                    `}
-                  >
-                    {page}
-                  </motion.span>
+                <Link
+                  href={`${kind}/page/${page}`}
+                  key={page}
+                  className={`min-w-[32px] h-8 flex items-center justify-center text-sm transition-colors ${
+                    currentPage === page
+                      ? "text-slate-900 dark:text-slate-100 font-medium"
+                      : "text-slate-500 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                  }`}
+                >
+                  {page}
                 </Link>
               );
             } else if (
@@ -62,7 +45,7 @@ const Paginate = ({ currentPage, totalPage, kind }: PaginateProps) => {
               (page === currentPage + 3 && currentPage < totalPage - 3)
             ) {
               return (
-                <span key={page} className="px-2 text-muted-foreground">
+                <span key={page} className="px-2 text-slate-400 dark:text-slate-600">
                   ...
                 </span>
               );
@@ -70,21 +53,17 @@ const Paginate = ({ currentPage, totalPage, kind }: PaginateProps) => {
             return null;
           })}
         </div>
-        
+
         {currentPage < totalPage && (
-          <Link href={`${kind}/page/${currentPage + 1}`}>
-            <motion.span 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 transition-all cursor-pointer shadow-md"
-            >
-              <span className="hidden sm:inline">次へ</span>
-              <ChevronRight className="w-4 h-4" />
-            </motion.span>
+          <Link
+            href={`${kind}/page/${currentPage + 1}`}
+            className="px-3 py-1 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
+          >
+            次へ →
           </Link>
         )}
       </nav>
-    </motion.div>
+    </div>
   );
 };
 
