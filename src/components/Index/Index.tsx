@@ -10,7 +10,7 @@ export const Index = ({ contents }: BlogProps) => {
           <article key={blog.id} className='group'>
             <Link href={`/blogs/${blog.id}`} className='block'>
               <div className='space-y-2'>
-                <h2 className='text-xl font-bold text-slate-900 dark:text-slate-100 group-hover:text-slate-600 dark:group-hover:text-slate-400 transition-colors line-clamp-2'>
+                <h2 className='text-xl font-bold text-slate-900 dark:text-white group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors line-clamp-2'>
                   {blog.title}
                 </h2>
 
