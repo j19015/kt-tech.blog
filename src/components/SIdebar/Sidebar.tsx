@@ -32,7 +32,7 @@ const SidebarClient = ({ latestArticles, tagList, categoryList, archives }: Side
               >
                 {article.title}
               </Link>
-              <p className='text-xs text-slate-500 dark:text-slate-500 mt-1'>
+              <p className='text-xs text-slate-500 dark:text-slate-400 mt-1'>
                 {new Date(article.createdAt).toLocaleDateString('ja-JP')}
               </p>
             </li>
