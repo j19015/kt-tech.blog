@@ -28,11 +28,11 @@ const SidebarClient = ({ latestArticles, tagList, categoryList, archives }: Side
             <li key={article.id}>
               <Link
                 href={`/blogs/${article.id}`}
-                className='block text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors line-clamp-2'
+                className='block text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors line-clamp-2'
               >
                 {article.title}
               </Link>
-              <p className='text-xs text-slate-500 dark:text-slate-400 mt-1'>
+              <p className='text-xs text-slate-500 dark:text-slate-300 mt-1'>
                 {new Date(article.createdAt).toLocaleDateString('ja-JP')}
               </p>
             </li>
@@ -50,7 +50,7 @@ const SidebarClient = ({ latestArticles, tagList, categoryList, archives }: Side
             <Link
               key={category.id}
               href={`/categories/${category.id}/page/1`}
-              className='text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
+              className='text-xs text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
             >
               {category.name}
             </Link>
@@ -68,7 +68,7 @@ const SidebarClient = ({ latestArticles, tagList, categoryList, archives }: Side
             <Link
               key={tag.id}
               href={`/tags/${tag.id}`}
-              className='text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
+              className='text-xs text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
             >
               #{tag.name}
             </Link>
@@ -86,7 +86,7 @@ const SidebarClient = ({ latestArticles, tagList, categoryList, archives }: Side
             <li key={archive}>
               <Link
                 href={`/archives/${archive}`}
-                className='text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
+                className='text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
               >
                 {archive.replace('-', '年')}月
               </Link>

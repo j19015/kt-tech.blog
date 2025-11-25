@@ -14,7 +14,7 @@ export const Form = () => {
                 />
                 <button
                     type='submit'
-                    className='px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
+                    className='px-4 py-2 text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
                 >
                     検索
                 </button>
