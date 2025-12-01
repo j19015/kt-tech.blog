@@ -110,41 +110,73 @@ export default function About() {
             職務経歴
           </h2>
 
-          <div className='space-y-8'>
-            {experience.map((job) => (
-              <div key={job.company} className='border-l-2 border-slate-200 dark:border-slate-700 pl-4'>
-                <div className='mb-2'>
-                  <h3 className='font-bold text-base text-slate-900 dark:text-slate-100'>
-                    {job.company}
-                  </h3>
-                  <p className='text-sm text-slate-600 dark:text-slate-300'>
-                    {job.role}
-                  </p>
-                  <p className='text-sm text-slate-500 dark:text-slate-300'>
-                    {job.period}
-                  </p>
-                </div>
+          <div className='relative'>
+            {/* Timeline line */}
+            <div className='absolute left-[7px] top-2 bottom-2 w-0.5 bg-gradient-to-b from-blue-500 via-slate-300 to-slate-200 dark:from-blue-400 dark:via-slate-600 dark:to-slate-700' />
 
-                <div className='mb-3'>
-                  <p className='text-sm font-medium text-slate-700 dark:text-slate-300 mb-2'>
-                    プロジェクト:
-                  </p>
-                  <ul className='list-disc list-inside text-sm text-slate-600 dark:text-slate-300 space-y-1'>
-                    {job.projects.map((project, i) => (
-                      <li key={i}>{project}</li>
-                    ))}
-                  </ul>
-                </div>
+            <div className='space-y-6'>
+              {experience.map((job, index) => (
+                <div key={job.company} className='relative pl-8'>
+                  {/* Timeline dot */}
+                  <div className={`absolute left-0 top-1.5 w-[15px] h-[15px] rounded-full border-2 ${
+                    job.current
+                      ? 'bg-blue-500 border-blue-500 dark:bg-blue-400 dark:border-blue-400'
+                      : 'bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-600'
+                  }`}>
+                    {job.current && (
+                      <div className='absolute inset-0 rounded-full bg-blue-500 dark:bg-blue-400 animate-ping opacity-25' />
+                    )}
+                  </div>
 
-                <div className='flex flex-wrap gap-2'>
-                  {job.tech.map((tech) => (
-                    <span key={tech} className='text-xs text-slate-500 dark:text-slate-300'>
-                      {tech}
-                    </span>
-                  ))}
+                  {/* Content card */}
+                  <div className={`p-4 rounded-lg border ${
+                    job.current
+                      ? 'bg-blue-50/50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-900/50'
+                      : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700'
+                  }`}>
+                    <div className='flex items-start justify-between gap-4 mb-2'>
+                      <div>
+                        <h3 className='font-bold text-base text-slate-900 dark:text-slate-100'>
+                          {job.company}
+                        </h3>
+                        <p className='text-sm text-slate-600 dark:text-slate-400'>
+                          {job.role}
+                        </p>
+                      </div>
+                      <span className={`flex-shrink-0 px-2 py-0.5 text-xs rounded ${
+                        job.current
+                          ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300'
+                          : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
+                      }`}>
+                        {job.period}
+                      </span>
+                    </div>
+
+                    <div className='mb-3'>
+                      <ul className='text-sm text-slate-600 dark:text-slate-400 space-y-1'>
+                        {job.projects.map((project, i) => (
+                          <li key={i} className='flex items-start gap-2'>
+                            <span className='text-slate-400 dark:text-slate-500 mt-1'>-</span>
+                            {project}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className='flex flex-wrap gap-1.5'>
+                      {job.tech.map((tech) => (
+                        <span
+                          key={tech}
+                          className='px-2 py-0.5 text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-slate-600 dark:text-slate-400'
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </section>
 

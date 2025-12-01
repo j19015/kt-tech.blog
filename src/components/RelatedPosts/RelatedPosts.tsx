@@ -1,6 +1,8 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Blog } from '../../../libs/microcms';
+import { Clock, FolderOpen, ArrowRight } from 'lucide-react';
 
 interface RelatedPostsProps {
   posts: Blog[];
@@ -13,34 +15,55 @@ export const RelatedPosts = ({ posts, currentPostId }: RelatedPostsProps) => {
   if (relatedPosts.length === 0) return null;
 
   return (
-    <div className='mt-16 pt-8 border-t border-slate-200 dark:border-slate-800'>
-      <h2 className='text-lg font-bold text-slate-900 dark:text-slate-100 mb-6'>
-        関連記事
-      </h2>
+    <div className='mt-16 pt-8 border-t border-slate-200 dark:border-slate-700'>
+      <div className='flex items-center justify-between mb-6'>
+        <h2 className='text-lg font-bold text-slate-900 dark:text-slate-100'>
+          関連記事
+        </h2>
+        <Link
+          href='/blogs/page/1'
+          className='text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 flex items-center gap-1 transition-colors'
+        >
+          すべて見る
+          <ArrowRight className='w-3.5 h-3.5' />
+        </Link>
+      </div>
 
-      <div className='space-y-4'>
+      <div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
         {relatedPosts.map((post) => (
-          <article key={post.id}>
-            <Link href={`/blogs/${post.id}`} className='block group'>
-              <div className='space-y-2'>
-                <h3 className='text-base font-medium text-slate-900 dark:text-slate-100 group-hover:text-slate-600 dark:group-hover:text-slate-400 transition-colors line-clamp-2'>
-                  {post.title}
-                </h3>
-                <div className='flex items-center gap-3 text-sm text-slate-500 dark:text-slate-300'>
-                  <time>
-                    {new Date(post.createdAt).toLocaleDateString('ja-JP', {
-                      year: 'numeric',
-                      month: '2-digit',
-                      day: '2-digit'
-                    })}
-                  </time>
-                  {post.category && (
-                    <>
-                      <span>·</span>
-                      <span>{post.category.name}</span>
-                    </>
-                  )}
-                </div>
+          <article key={post.id} className='group'>
+            <Link href={`/blogs/${post.id}`} className='block'>
+              {/* Thumbnail */}
+              <div className='relative aspect-[16/9] mb-3 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800'>
+                <Image
+                  src={post.eyecatch?.url || '/images/no_image.jpeg'}
+                  alt={post.title}
+                  fill
+                  className='object-cover group-hover:scale-105 transition-transform duration-300'
+                />
+                {post.category && (
+                  <div className='absolute bottom-2 left-2'>
+                    <span className='px-2 py-0.5 bg-white/90 dark:bg-slate-900/90 rounded text-xs text-slate-700 dark:text-slate-300'>
+                      {post.category.name}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Content */}
+              <h3 className='text-sm font-medium text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 mb-2'>
+                {post.title}
+              </h3>
+
+              <div className='flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400'>
+                <Clock className='w-3 h-3' />
+                <time>
+                  {new Date(post.createdAt).toLocaleDateString('ja-JP', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                  })}
+                </time>
               </div>
             </Link>
           </article>
