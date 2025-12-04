@@ -240,8 +240,8 @@ export default async function StaticDetailPage({
               <div className='flex flex-wrap items-center gap-3'>
                 {blog.category && (
                   <Link href={`/categories/${blog.category.id}`}>
-                    <span className='inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-full text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:scale-105 transition-transform'>
-                      <FontAwesomeIcon icon={faFolderOpen} className='w-4 h-4' />
+                    <span className='inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-full text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors'>
+                      <FontAwesomeIcon icon={faFolderOpen} className='w-3.5 h-3.5' />
                       {blog.category.name}
                     </span>
                   </Link>
