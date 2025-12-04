@@ -21,7 +21,7 @@ interface BreadcrumbNavProps {
 
 export const BreadcrumbNav = ({ items }: BreadcrumbNavProps) => {
   return (
-    <div className='px-4 py-3 lg:px-8'>
+    <div className='px-4 py-3 lg:px-8 mb-6'>
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
