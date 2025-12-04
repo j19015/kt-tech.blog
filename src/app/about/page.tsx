@@ -66,7 +66,7 @@ export default function About() {
             Koki
           </h1>
           <p className='text-base text-slate-600 dark:text-slate-300 mb-4'>
-            Full Stack Engineer / AI Developer
+            Full Stack Engineer
           </p>
           <div className='flex gap-4 text-sm'>
             <Link
