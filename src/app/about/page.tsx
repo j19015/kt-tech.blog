@@ -1,84 +1,125 @@
 import Link from 'next/link';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
+import { Github } from 'lucide-react';
 import {
   SiNextdotjs, SiReact, SiTypescript, SiJavascript, SiRuby,
   SiRubyonrails, SiPostgresql, SiMysql, SiAmazonwebservices, SiGooglecloud,
   SiMicrosoftazure, SiTailwindcss, SiRedux, SiGit, SiVisualstudiocode,
-  SiPrisma, SiNotion, SiSlack
+  SiPrisma, SiNotion, SiSlack, SiPython, SiGo, SiDocker, SiGithubactions,
+  SiCircleci, SiFirebase, SiSass
 } from 'react-icons/si';
-import { TbBrandReactNative } from 'react-icons/tb';
+
+// X icon component
+const XIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox='0 0 24 24' fill='currentColor'>
+    <path d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z' />
+  </svg>
+);
 
 export default function About() {
-  const skills = [
-    { name: 'Next.js', level: 90 },
-    { name: 'React', level: 85 },
-    { name: 'TypeScript', level: 85 },
-    { name: 'Ruby on Rails', level: 75 },
-    { name: 'AWS', level: 70 },
-    { name: 'Tailwind CSS', level: 90 },
-  ];
-
   const techIcons: { [key: string]: { icon: React.ReactNode; color: string } } = {
-    'JavaScript': { icon: <SiJavascript />, color: '#F7DF1E' },
     'TypeScript': { icon: <SiTypescript />, color: '#3178C6' },
+    'JavaScript': { icon: <SiJavascript />, color: '#F7DF1E' },
+    'Python': { icon: <SiPython />, color: '#3776AB' },
+    'Go': { icon: <SiGo />, color: '#00ADD8' },
     'Ruby': { icon: <SiRuby />, color: '#CC342D' },
     'React': { icon: <SiReact />, color: '#61DAFB' },
     'Next.js': { icon: <SiNextdotjs />, color: '#000000' },
-    'Tailwind CSS': { icon: <SiTailwindcss />, color: '#06B6D4' },
     'Rails': { icon: <SiRubyonrails />, color: '#CC0000' },
+    'Tailwind CSS': { icon: <SiTailwindcss />, color: '#06B6D4' },
+    'Sass': { icon: <SiSass />, color: '#CC6699' },
     'Prisma': { icon: <SiPrisma />, color: '#2D3748' },
     'PostgreSQL': { icon: <SiPostgresql />, color: '#4169E1' },
     'MySQL': { icon: <SiMysql />, color: '#4479A1' },
     'AWS': { icon: <SiAmazonwebservices />, color: '#FF9900' },
     'GCP': { icon: <SiGooglecloud />, color: '#4285F4' },
     'Azure': { icon: <SiMicrosoftazure />, color: '#0078D4' },
+    'Firebase': { icon: <SiFirebase />, color: '#FFCA28' },
+    'Docker': { icon: <SiDocker />, color: '#2496ED' },
+    'GitHub Actions': { icon: <SiGithubactions />, color: '#2088FF' },
+    'CircleCI': { icon: <SiCircleci />, color: '#343434' },
     'Redux': { icon: <SiRedux />, color: '#764ABC' },
     'Git': { icon: <SiGit />, color: '#F05032' },
     'VS Code': { icon: <SiVisualstudiocode />, color: '#007ACC' },
-    'Notion': { icon: <SiNotion />, color: '#000000' },
-    'Slack': { icon: <SiSlack />, color: '#4A154B' },
   };
 
   const techStack = [
-    'JavaScript', 'TypeScript', 'Ruby',
-    'React', 'Next.js', 'Tailwind CSS',
-    'Rails', 'Prisma', 'PostgreSQL', 'MySQL',
-    'AWS', 'GCP', 'Azure',
-    'Redux', 'Git', 'VS Code', 'Notion', 'Slack'
+    'TypeScript', 'JavaScript', 'Python', 'Go', 'Ruby',
+    'React', 'Next.js', 'Rails', 'Tailwind CSS', 'Sass',
+    'Prisma', 'PostgreSQL', 'MySQL',
+    'AWS', 'GCP', 'Azure', 'Firebase',
+    'Docker', 'GitHub Actions', 'CircleCI',
+    'Redux', 'Git', 'VS Code'
   ];
 
   const experience = [
     {
-      company: 'SaaS企業 A社',
+      company: 'SaaS企業',
       period: '2023.04 - 現在',
       role: '正社員 / フルスタックエンジニア',
-      projects: ['動画配信プラットフォーム開発', 'ウェビナーシステム構築'],
-      tech: ['React', 'TypeScript', 'AWS'],
+      description: '動画配信プラットフォームの開発・運用。フロントエンドからバックエンド、インフラまで一貫して担当。',
+      tech: ['React', 'TypeScript', 'AWS', 'Firebase'],
       current: true
     },
     {
-      company: 'AI系スタートアップ B社',
+      company: 'AI系スタートアップ',
       period: '2025.01 - 現在',
-      role: '業務委託 / AIエンジニア',
-      projects: ['生成AI活用型コンテンツプラットフォーム', 'レビュー自動化システム'],
-      tech: ['Next.js', 'AI/ML', 'TypeScript'],
+      role: '業務委託 / フルスタックエンジニア',
+      description: '生成AIを活用したコンテンツプラットフォームの開発。Azure OpenAIを用いたAI機能の設計・実装。',
+      tech: ['Next.js', 'TypeScript', 'Azure'],
       current: true
     },
     {
-      company: 'IT企業 C社',
+      company: 'IT企業',
       period: '2024.04 - 現在',
-      role: '業務委託 / フロントエンドエンジニア',
-      projects: ['位置情報サービス開発'],
-      tech: ['React', 'TypeScript', 'Map API'],
+      role: '業務委託 / フルスタックエンジニア',
+      description: '位置情報サービスの開発。技術選定からインフラ構築まで担当。',
+      tech: ['Next.js', 'TypeScript', 'AWS'],
       current: true
     },
     {
       company: '個人事業主',
       period: '2024.01 - 2024.09',
-      role: 'フリーランス',
-      projects: ['マッチングサービスWebアプリケーション'],
+      role: '受託開発',
+      description: '業務管理Webアプリケーションの受託開発。要件定義から運用まで全工程を単独で担当。',
       tech: ['Next.js', 'Rails', 'PostgreSQL'],
       current: false
+    },
+    {
+      company: 'プログラミングスクール',
+      period: '2021.11 - 2025.07',
+      role: '業務委託 / テックメンター',
+      description: 'プログラミング学習者への技術サポート・コードレビュー。',
+      tech: ['Ruby on Rails', 'AWS'],
+      current: false
+    }
+  ];
+
+  const strengths = [
+    {
+      title: 'BE/FEを横断したフルスタック開発力',
+      description: 'バックエンドからキャリアをスタートし、現在はフロントエンドをメインにBE/FEを横断した開発を行っています。技術選定・設計から実装・運用まで一貫して担当できることが強みです。'
+    },
+    {
+      title: '圧倒的な稼働量と吸収力',
+      description: '本業をこなしながら複数の業務委託案件を並行して担当。不明点があれば納得できるまで徹底的に調査・学習を行い、短期間で複数の技術スタックを習得してきました。'
+    },
+    {
+      title: '0→1のプロダクト開発経験',
+      description: 'クライアントへのヒアリングから要件定義、技術選定、設計、実装、運用まで全工程を単独で担当した経験があります。プロダクトの立ち上げフェーズに強みがあります。'
+    }
+  ];
+
+  const education = [
+    {
+      school: '情報系専門学校',
+      period: '2019.04 - 2023.03',
+      description: 'システム開発やIoTについて学習。VR × メタバースの授業プラットフォームを卒業研究として開発。'
+    },
+    {
+      school: '通信制大学（理工学部）',
+      period: '2019.04 - 2023.03',
+      description: '専門学校と併修で大卒資格を取得。'
     }
   ];
 
@@ -89,28 +130,33 @@ export default function About() {
       <div className='max-w-3xl mx-auto px-4 py-8'>
         {/* Profile */}
         <div className='mb-16'>
-          <h1 className='text-3xl font-bold text-slate-900 dark:text-slate-100 mb-4'>
+          <h1 className='text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2'>
             Koki
           </h1>
           <p className='text-base text-slate-600 dark:text-slate-300 mb-4'>
             Full Stack Engineer
           </p>
-          <div className='flex gap-4 text-sm'>
+          <p className='text-sm text-slate-500 dark:text-slate-400 mb-4'>
+            静岡県 / フルリモート / 実務経験 3年以上
+          </p>
+          <div className='flex items-center gap-4'>
             <Link
               href='https://github.com/j19015'
               target='_blank'
               rel='noopener noreferrer'
-              className='text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors'
+              className='text-slate-500 dark:text-slate-400'
+              aria-label='GitHub'
             >
-              GitHub
+              <Github className='w-5 h-5' />
             </Link>
             <Link
               href='https://twitter.com/tech_koki'
               target='_blank'
               rel='noopener noreferrer'
-              className='text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors'
+              className='text-slate-500 dark:text-slate-400'
+              aria-label='X (Twitter)'
             >
-              Twitter
+              <XIcon className='w-5 h-5' />
             </Link>
           </div>
         </div>
@@ -120,15 +166,36 @@ export default function About() {
           <h2 className='text-xl font-bold text-slate-900 dark:text-slate-100 mb-4'>
             自己紹介
           </h2>
-          <p className='text-base text-slate-600 dark:text-slate-300 leading-relaxed mb-4'>
-            フルスタックエンジニアのKokiです。2年半の実務経験を通じて、フロントエンドからバックエンド、クラウドまで幅広く対応しています。現在は複数の企業で開発に携わりながら、技術と自然の両方を愛する生活を送っています。
-          </p>
-          <p className='text-base text-slate-600 dark:text-slate-300 leading-relaxed'>
-            ドライブが大好きで、愛車のCX-3で岐阜の山奥や富士の朝霧高原など、自然豊かな場所を巡っています。コードを書く日々と、自然の中でリフレッシュする時間のバランスを大切にしています。
-          </p>
-          <p className='text-sm text-slate-500 dark:text-slate-300 mt-4'>
-            静岡県浜松市 / Full Remote
-          </p>
+          <div className='space-y-4 text-base text-slate-600 dark:text-slate-300 leading-relaxed'>
+            <p>
+              「明日やろうは馬鹿やろう」をモットーに、新しい技術や未経験の領域に積極的に挑戦してきたフルスタックエンジニアです。
+            </p>
+            <p>
+              バックエンドからキャリアをスタートし、現在はフロントエンドをメインにBE/FEを横断した開発を行っています。本業で動画配信プラットフォームの開発に携わりながら、複数企業で業務委託エンジニアとしても活動しています。
+            </p>
+            <p>
+              ドライブが趣味で、愛車で自然豊かな場所を巡っています。コードを書く日々と、自然の中でリフレッシュする時間のバランスを大切にしています。
+            </p>
+          </div>
+        </section>
+
+        {/* Strengths */}
+        <section className='mb-16'>
+          <h2 className='text-xl font-bold text-slate-900 dark:text-slate-100 mb-6'>
+            強み
+          </h2>
+          <div className='space-y-6'>
+            {strengths.map((strength, index) => (
+              <div key={index} className='border-l-2 border-slate-300 dark:border-slate-600 pl-4'>
+                <h3 className='font-bold text-slate-900 dark:text-slate-100 mb-2'>
+                  {strength.title}
+                </h3>
+                <p className='text-sm text-slate-600 dark:text-slate-400'>
+                  {strength.description}
+                </p>
+              </div>
+            ))}
+          </div>
         </section>
 
         {/* Experience */}
@@ -137,73 +204,46 @@ export default function About() {
             職務経歴
           </h2>
 
-          <div className='relative'>
-            {/* Timeline line */}
-            <div className='absolute left-[7px] top-2 bottom-2 w-0.5 bg-gradient-to-b from-blue-500 via-slate-300 to-slate-200 dark:from-blue-400 dark:via-slate-600 dark:to-slate-700' />
-
-            <div className='space-y-6'>
-              {experience.map((job, index) => (
-                <div key={job.company} className='relative pl-8'>
-                  {/* Timeline dot */}
-                  <div className={`absolute left-0 top-1.5 w-[15px] h-[15px] rounded-full border-2 ${
-                    job.current
-                      ? 'bg-blue-500 border-blue-500 dark:bg-blue-400 dark:border-blue-400'
-                      : 'bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-600'
-                  }`}>
-                    {job.current && (
-                      <div className='absolute inset-0 rounded-full bg-blue-500 dark:bg-blue-400 animate-ping opacity-25' />
-                    )}
+          <div className='space-y-6'>
+            {experience.map((job) => (
+              <div
+                key={job.company + job.period}
+                className={`p-4 rounded-lg border ${
+                  job.current
+                    ? 'bg-slate-50 dark:bg-slate-800/50 border-slate-300 dark:border-slate-600'
+                    : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700'
+                }`}
+              >
+                <div className='flex items-start justify-between gap-4 mb-2'>
+                  <div>
+                    <h3 className='font-bold text-slate-900 dark:text-slate-100'>
+                      {job.company}
+                    </h3>
+                    <p className='text-sm text-slate-600 dark:text-slate-400'>
+                      {job.role}
+                    </p>
                   </div>
-
-                  {/* Content card */}
-                  <div className={`p-4 rounded-lg border ${
-                    job.current
-                      ? 'bg-blue-50/50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-900/50'
-                      : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700'
-                  }`}>
-                    <div className='flex items-start justify-between gap-4 mb-2'>
-                      <div>
-                        <h3 className='font-bold text-base text-slate-900 dark:text-slate-100'>
-                          {job.company}
-                        </h3>
-                        <p className='text-sm text-slate-600 dark:text-slate-400'>
-                          {job.role}
-                        </p>
-                      </div>
-                      <span className={`flex-shrink-0 px-2 py-0.5 text-xs rounded ${
-                        job.current
-                          ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300'
-                          : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
-                      }`}>
-                        {job.period}
-                      </span>
-                    </div>
-
-                    <div className='mb-3'>
-                      <ul className='text-sm text-slate-600 dark:text-slate-400 space-y-1'>
-                        {job.projects.map((project, i) => (
-                          <li key={i} className='flex items-start gap-2'>
-                            <span className='text-slate-400 dark:text-slate-500 mt-1'>-</span>
-                            {project}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div className='flex flex-wrap gap-1.5'>
-                      {job.tech.map((tech) => (
-                        <span
-                          key={tech}
-                          className='px-2 py-0.5 text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-slate-600 dark:text-slate-400'
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+                  <span className='flex-shrink-0 text-xs text-slate-500 dark:text-slate-400'>
+                    {job.period}
+                  </span>
                 </div>
-              ))}
-            </div>
+
+                <p className='text-sm text-slate-600 dark:text-slate-400 mb-3'>
+                  {job.description}
+                </p>
+
+                <div className='flex flex-wrap gap-1.5'>
+                  {job.tech.map((tech) => (
+                    <span
+                      key={tech}
+                      className='px-2 py-0.5 text-xs bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded text-slate-600 dark:text-slate-400'
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -233,113 +273,75 @@ export default function About() {
           </div>
         </section>
 
-        {/* Skills */}
+        {/* Education */}
         <section className='mb-16'>
           <h2 className='text-xl font-bold text-slate-900 dark:text-slate-100 mb-6'>
-            スキルレベル
+            学歴
           </h2>
 
           <div className='space-y-4'>
-            {skills.map((skill) => (
-              <div key={skill.name}>
-                <div className='flex justify-between mb-2'>
-                  <span className='text-sm font-medium text-slate-700 dark:text-slate-300'>
-                    {skill.name}
-                  </span>
-                  <span className='text-sm text-slate-500 dark:text-slate-300'>
-                    {skill.level}%
-                  </span>
-                </div>
-                <div className='h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden'>
-                  <div
-                    className='h-full bg-slate-900 dark:bg-slate-100 transition-all'
-                    style={{ width: `${skill.level}%` }}
-                  />
+            {education.map((edu) => (
+              <div key={edu.school} className='flex items-start gap-4'>
+                <span className='flex-shrink-0 text-xs text-slate-500 dark:text-slate-400 w-28'>
+                  {edu.period}
+                </span>
+                <div>
+                  <h3 className='font-medium text-slate-900 dark:text-slate-100'>
+                    {edu.school}
+                  </h3>
+                  <p className='text-sm text-slate-600 dark:text-slate-400'>
+                    {edu.description}
+                  </p>
                 </div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Job Search */}
-        <section className='mb-16 p-6 border border-slate-200 dark:border-slate-700 rounded-lg'>
-          <h2 className='text-xl font-bold text-slate-900 dark:text-slate-100 mb-2'>
-            転職活動中
+        {/* Achievements */}
+        <section className='mb-16'>
+          <h2 className='text-xl font-bold text-slate-900 dark:text-slate-100 mb-6'>
+            実績
           </h2>
-          <p className='text-sm text-slate-600 dark:text-slate-300 mb-6'>
-            新しいチャレンジを求めています
+
+          <ul className='space-y-3 text-sm text-slate-600 dark:text-slate-400'>
+            <li>• ハッカソン準優勝（6チーム中2位）</li>
+            <li>• ハッカソン4位入賞（約120名中）</li>
+            <li>• 技術ブログ運営・技術記事執筆</li>
+            <li>• 個人開発から業務委託案件への発展</li>
+          </ul>
+        </section>
+
+        {/* Career Vision */}
+        <section className='mb-16'>
+          <h2 className='text-xl font-bold text-slate-900 dark:text-slate-100 mb-4'>
+            キャリアビジョン
+          </h2>
+          <p className='text-base text-slate-600 dark:text-slate-300 leading-relaxed'>
+            BE/FEを横断できるフルスタックエンジニアとして技術力を磨きつつ、将来的にはテックリードやプロダクトマネージャーとして、チームを技術面からリードできる存在を目指しています。
           </p>
+        </section>
 
-          <div className='mb-6'>
-            <h3 className='text-base font-bold text-slate-900 dark:text-slate-100 mb-4'>
-              希望条件
-            </h3>
-
-            <dl className='space-y-3 text-sm'>
-              <div>
-                <dt className='text-slate-600 dark:text-slate-300 inline'>勤務形態:</dt>
-                <dd className='ml-2 text-slate-900 dark:text-slate-100 inline'>フルリモート希望（必須）</dd>
-              </div>
-              <div>
-                <dt className='text-slate-600 dark:text-slate-300 inline'>居住地:</dt>
-                <dd className='ml-2 text-slate-900 dark:text-slate-100 inline'>静岡県浜松市（移住の予定なし）</dd>
-              </div>
-              <div>
-                <dt className='text-slate-600 dark:text-slate-300 inline'>ポジション:</dt>
-                <dd className='ml-2 text-slate-900 dark:text-slate-100 inline'>フルスタック / バックエンド / フロントエンドエンジニア</dd>
-              </div>
-              <div>
-                <dt className='text-slate-600 dark:text-slate-300 inline'>年収:</dt>
-                <dd className='ml-2 text-slate-900 dark:text-slate-100 inline'>現年収以上を希望（応相談）</dd>
-              </div>
-              <div>
-                <dt className='text-slate-600 dark:text-slate-300 inline'>勤務時間:</dt>
-                <dd className='ml-2 text-slate-900 dark:text-slate-100 inline'>フレックス制度歓迎</dd>
-              </div>
-            </dl>
-          </div>
-
-          <div className='space-y-6'>
-            <div>
-              <h4 className='text-base font-bold text-slate-900 dark:text-slate-100 mb-3'>
-                重視するポイント
-              </h4>
-              <ul className='space-y-2 text-sm text-slate-600 dark:text-slate-300'>
-                <li>• 技術的なチャレンジができる環境</li>
-                <li>• モダンな技術スタックの採用</li>
-                <li>• プロダクトの成長に貢献できる</li>
-                <li>• エンジニアリング文化の醸成</li>
-                <li>• 継続的な学習機会の提供</li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className='text-base font-bold text-slate-900 dark:text-slate-100 mb-3'>
-                理想のチーム・環境
-              </h4>
-              <ul className='space-y-2 text-sm text-slate-600 dark:text-slate-300'>
-                <li>• 心理的安全性の高いチーム</li>
-                <li>• コードレビュー文化の定着</li>
-                <li>• アジャイル・スクラム開発</li>
-                <li>• ドキュメント文化の重視</li>
-                <li>• オープンなコミュニケーション</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className='mt-6 pt-4 border-t border-slate-200 dark:border-slate-700'>
-            <p className='text-sm text-slate-600 dark:text-slate-300'>
-              お問い合わせ: ご興味を持っていただけた企業様は、
-              <Link href='https://twitter.com/tech_koki' className='text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors mx-1'>
-                Twitter DM
-              </Link>
-              または
-              <Link href='https://github.com/j19015' className='text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors mx-1'>
-                GitHub
-              </Link>
-              からご連絡ください
-            </p>
-          </div>
+        {/* Contact */}
+        <section className='p-6 border border-slate-200 dark:border-slate-700 rounded-lg'>
+          <h2 className='text-xl font-bold text-slate-900 dark:text-slate-100 mb-4'>
+            お仕事のご依頼
+          </h2>
+          <p className='text-sm text-slate-600 dark:text-slate-300 mb-4'>
+            正社員・業務委託ともにお受けしています。フルリモート勤務を希望しています。
+          </p>
+          <p className='text-sm text-slate-600 dark:text-slate-300'>
+            ご興味を持っていただけた方は、
+            <Link
+              href='https://twitter.com/tech_koki'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='text-slate-700 dark:text-slate-300 underline mx-1'
+            >
+              X (Twitter)
+            </Link>
+            からご連絡ください。
+          </p>
         </section>
       </div>
     </>
