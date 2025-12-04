@@ -51,7 +51,7 @@ export const ShareButtons = ({ title, url }: ShareButtonsProps) => {
             href={shareLinks.twitter}
             target='_blank'
             rel='noopener noreferrer'
-            className='w-9 h-9 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-900 hover:text-white dark:hover:bg-white dark:hover:text-slate-900 transition-colors'
+            className='w-9 h-9 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-black hover:text-white transition-colors'
             aria-label='Share on X (Twitter)'
           >
             <Twitter className='w-4 h-4' />
@@ -85,7 +85,7 @@ export const ShareButtons = ({ title, url }: ShareButtonsProps) => {
           </a>
           <button
             onClick={handleCopyLink}
-            className='w-9 h-9 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-700 hover:text-white dark:hover:bg-slate-200 dark:hover:text-slate-900 transition-colors'
+            className='w-9 h-9 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-600 hover:text-white transition-colors'
             aria-label='Copy link'
           >
             {copied ? <Check className='w-4 h-4 text-green-500' /> : <Link2 className='w-4 h-4' />}
