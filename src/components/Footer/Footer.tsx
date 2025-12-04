@@ -19,7 +19,7 @@ export const Footer = () => {
 
   return (
     <footer className='mt-20 border-t border-slate-200 dark:border-slate-800'>
-      <div className='max-w-4xl mx-auto px-6 py-10'>
+      <div className='max-w-6xl mx-auto px-4 py-10'>
         {/* メインコンテンツ */}
         <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-6'>
           {/* ブランド */}
