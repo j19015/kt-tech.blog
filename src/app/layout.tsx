@@ -136,7 +136,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ReadingProgress />
           <Header />
           <main>
-            <div className='max-w-6xl mx-auto mt-5 px-4 rounded-lg'>
+            <div className='m-auto mt-5 rounded-lg'>
               <div className='lg:grid grid-cols-2 lg:grid-cols-3 gap-4'>
                 <div className='lg:col-span-2 col-span-3'>{children}</div>
                 <div className='lg:col-span-1 lg:block mt-10 lg:mt-0'>
