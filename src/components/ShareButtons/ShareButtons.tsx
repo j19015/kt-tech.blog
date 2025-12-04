@@ -43,7 +43,7 @@ export const ShareButtons = ({ title, url }: ShareButtonsProps) => {
   };
 
   return (
-    <div className='my-8'>
+    <div className='my-8 px-4'>
       <div className='flex items-center gap-3'>
         <span className='text-sm text-slate-500 dark:text-slate-400'>Share</span>
         <div className='flex items-center gap-2'>
