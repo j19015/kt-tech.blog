@@ -4,7 +4,7 @@ import SidebarClient from './Sidebar';
 const Sidebar = async () => {
   // データを並列で取得
   const [blogData, tagData, categoryData] = await Promise.all([
-    getList({ limit: 5, orders: '-createdAt' }),
+    getList({ limit: 10, orders: '-createdAt' }),
     getTagList(),
     getCategoryList()
   ]);
