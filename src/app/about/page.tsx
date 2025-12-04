@@ -4,10 +4,11 @@ import { Github } from 'lucide-react';
 import {
   SiNextdotjs, SiReact, SiTypescript, SiJavascript, SiRuby,
   SiRubyonrails, SiPostgresql, SiMysql, SiAmazonwebservices, SiGooglecloud,
-  SiMicrosoftazure, SiTailwindcss, SiRedux, SiGit, SiVisualstudiocode,
-  SiPrisma, SiNotion, SiSlack, SiPython, SiGo, SiDocker, SiGithubactions,
+  SiTailwindcss, SiRedux, SiGit,
+  SiPrisma, SiPython, SiGo, SiDocker, SiGithubactions,
   SiCircleci, SiFirebase, SiSass
 } from 'react-icons/si';
+import { VscVscode, VscAzure } from 'react-icons/vsc';
 
 // X icon component
 const XIcon = ({ className }: { className?: string }) => (
@@ -33,14 +34,14 @@ export default function About() {
     'MySQL': { icon: <SiMysql />, color: '#4479A1' },
     'AWS': { icon: <SiAmazonwebservices />, color: '#FF9900' },
     'GCP': { icon: <SiGooglecloud />, color: '#4285F4' },
-    'Azure': { icon: <SiMicrosoftazure />, color: '#0078D4' },
+    'Azure': { icon: <VscAzure />, color: '#0078D4' },
     'Firebase': { icon: <SiFirebase />, color: '#FFCA28' },
     'Docker': { icon: <SiDocker />, color: '#2496ED' },
     'GitHub Actions': { icon: <SiGithubactions />, color: '#2088FF' },
     'CircleCI': { icon: <SiCircleci />, color: '#343434' },
     'Redux': { icon: <SiRedux />, color: '#764ABC' },
     'Git': { icon: <SiGit />, color: '#F05032' },
-    'VS Code': { icon: <SiVisualstudiocode />, color: '#007ACC' },
+    'VS Code': { icon: <VscVscode />, color: '#007ACC' },
   };
 
   const techStack = [
