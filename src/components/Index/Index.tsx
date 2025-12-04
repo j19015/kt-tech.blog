@@ -11,8 +11,8 @@ export const Index = ({ contents }: BlogProps) => {
           <article key={blog.id} className='group'>
             <Link href={`/blogs/${blog.id}`} className='block'>
               <div className='flex gap-4'>
-                {/* サムネイル画像 */}
-                <div className='flex-shrink-0 relative w-24 h-24 sm:w-32 sm:h-32 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800'>
+                {/* サムネイル画像 (1200x630比率を維持) */}
+                <div className='flex-shrink-0 relative w-32 sm:w-40 aspect-[1200/630] rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800'>
                   <Image
                     src={blog.eyecatch?.url || '/images/no_image.jpeg'}
                     alt={blog.title}
