@@ -1,5 +1,12 @@
 import Link from 'next/link';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
+import {
+  SiNextdotjs, SiReact, SiTypescript, SiJavascript, SiRuby,
+  SiRubyonrails, SiPostgresql, SiMysql, SiAmazonwebservices, SiGooglecloud,
+  SiMicrosoftazure, SiTailwindcss, SiRedux, SiGit, SiVisualstudiocode,
+  SiPrisma, SiNotion, SiSlack
+} from 'react-icons/si';
+import { TbBrandReactNative } from 'react-icons/tb';
 
 export default function About() {
   const skills = [
@@ -11,14 +18,34 @@ export default function About() {
     { name: 'Tailwind CSS', level: 90 },
   ];
 
-  const techStack = {
-    languages: ['JavaScript', 'TypeScript', 'Ruby'],
-    frontend: ['React', 'Next.js', 'Tailwind CSS', 'MUI', 'CSS Modules'],
-    backend: ['Rails', 'Prisma', 'PostgreSQL', 'MySQL'],
-    cloud: ['AWS', 'GCP', 'Azure'],
-    stateManagement: ['Redux', 'TanStack Query', 'Zustand'],
-    tools: ['Git', 'VS Code', 'Notion', 'Slack']
+  const techIcons: { [key: string]: { icon: React.ReactNode; color: string } } = {
+    'JavaScript': { icon: <SiJavascript />, color: '#F7DF1E' },
+    'TypeScript': { icon: <SiTypescript />, color: '#3178C6' },
+    'Ruby': { icon: <SiRuby />, color: '#CC342D' },
+    'React': { icon: <SiReact />, color: '#61DAFB' },
+    'Next.js': { icon: <SiNextdotjs />, color: '#000000' },
+    'Tailwind CSS': { icon: <SiTailwindcss />, color: '#06B6D4' },
+    'Rails': { icon: <SiRubyonrails />, color: '#CC0000' },
+    'Prisma': { icon: <SiPrisma />, color: '#2D3748' },
+    'PostgreSQL': { icon: <SiPostgresql />, color: '#4169E1' },
+    'MySQL': { icon: <SiMysql />, color: '#4479A1' },
+    'AWS': { icon: <SiAmazonwebservices />, color: '#FF9900' },
+    'GCP': { icon: <SiGooglecloud />, color: '#4285F4' },
+    'Azure': { icon: <SiMicrosoftazure />, color: '#0078D4' },
+    'Redux': { icon: <SiRedux />, color: '#764ABC' },
+    'Git': { icon: <SiGit />, color: '#F05032' },
+    'VS Code': { icon: <SiVisualstudiocode />, color: '#007ACC' },
+    'Notion': { icon: <SiNotion />, color: '#000000' },
+    'Slack': { icon: <SiSlack />, color: '#4A154B' },
   };
+
+  const techStack = [
+    'JavaScript', 'TypeScript', 'Ruby',
+    'React', 'Next.js', 'Tailwind CSS',
+    'Rails', 'Prisma', 'PostgreSQL', 'MySQL',
+    'AWS', 'GCP', 'Azure',
+    'Redux', 'Git', 'VS Code', 'Notion', 'Slack'
+  ];
 
   const experience = [
     {
@@ -186,21 +213,23 @@ export default function About() {
             技術スタック
           </h2>
 
-          <div className='space-y-6'>
-            {Object.entries(techStack).map(([category, items]) => (
-              <div key={category}>
-                <h3 className='text-sm font-bold text-slate-700 dark:text-slate-300 mb-2'>
-                  {category.replace(/([A-Z])/g, ' $1').trim()}
-                </h3>
-                <div className='flex flex-wrap gap-2'>
-                  {items.map((item) => (
-                    <span key={item} className='text-sm text-slate-600 dark:text-slate-300'>
-                      {item}
+          <div className='flex flex-wrap gap-3'>
+            {techStack.map((tech) => {
+              const techInfo = techIcons[tech];
+              return (
+                <div
+                  key={tech}
+                  className='flex items-center gap-2 px-3 py-2 bg-slate-100 dark:bg-slate-800 rounded-lg'
+                >
+                  {techInfo && (
+                    <span style={{ color: techInfo.color }} className='text-lg'>
+                      {techInfo.icon}
                     </span>
-                  ))}
+                  )}
+                  <span className='text-sm text-slate-700 dark:text-slate-300'>{tech}</span>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 
