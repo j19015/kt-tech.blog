@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getDetail, getList } from '../../../../libs/microcms';
+import { getDetail, getList } from '../../../../libs/content';
 import cheerio from 'cheerio';
 import hljs from 'highlight.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
