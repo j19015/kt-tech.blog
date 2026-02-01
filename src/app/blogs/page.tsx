@@ -1,4 +1,4 @@
-import { getList } from '../../../libs/microcms';
+import { getList } from '../../../libs/notion';
 import Index from '@/components/Index/Index';
 import Sidebar from '@/components/SIdebar/Sidebar'; // Sidebarのimportを修正
 import Title from '@/components/Title/Title';

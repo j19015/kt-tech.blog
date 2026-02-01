@@ -1,6 +1,6 @@
 import Sidebar from '@/components/SIdebar/Sidebar'; // Sidebarのimportを修正
 import ClientIndex from './client_index';
-import { getList } from '../../../libs/microcms';
+import { getList } from '../../../libs/notion';
 
 export default async function StaticPage() {
   const { contents } = await getList();

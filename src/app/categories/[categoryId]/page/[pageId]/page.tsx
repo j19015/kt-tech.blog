@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getList, getCategoryList, getCategoryDetail } from '../../../../../../libs/microcms';
+import { getList, getCategoryList, getCategoryDetail } from '../../../../../../libs/notion';
 import Paginate from '@/components/Pagination/Paginate';
 import Index from '@/components/Index/Index';
 import Title from '@/components/Title/Title';

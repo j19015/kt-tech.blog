@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getList } from '../../../../../libs/microcms';
+import { getList } from '../../../../../libs/notion';
 import Sidebar from '@/components/SIdebar/Sidebar'; // Sidebarのimportを修正
 import Paginate from '@/components/Pagination/Paginate';
 import Index from '@/components/Index/Index';

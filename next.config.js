@@ -3,12 +3,14 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  images: {
+    domains: [
+      'images.microcms-assets.io',
+      'prod-files-secure.s3.us-west-2.amazonaws.com',
+      'www.notion.so',
+      's3.us-west-2.amazonaws.com',
+    ],
+  },
 };
 
 module.exports = nextConfig;
-
-module.exports = {
-  images: {
-    domains: ['images.microcms-assets.io'], // 使用するホスト名をここに追加
-  },
-};
