@@ -123,7 +123,7 @@ async function fetchOGPData(url: string) {
   }
 
   try {
-    const response = await fetch(url, { signal: AbortSignal.timeout(3000) });
+    const response = await fetch(url, { signal: AbortSignal.timeout(1500) });
     const html = await response.text();
 
     const title = extractMetaContent(html, ['og:title', 'twitter:title', 'title']) ||
@@ -150,8 +150,10 @@ export default async function StaticDetailPage({
   params: Promise<{ blogId: string }>;
 }) {
   const { blogId } = await params;
-  const blog = await getDetail(blogId);
-  const { contents } = await getList();
+  const [blog, { contents }] = await Promise.all([
+    getDetail(blogId),
+    getList(),
+  ]);
   
   // 同じカテゴリまたはタグを持つ関連記事を取得
   const relatedPosts = contents.filter(post => {

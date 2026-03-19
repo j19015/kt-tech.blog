@@ -25,17 +25,14 @@ export default async function StaticPaginationPage({
 
   // コンテンツを取得
   try {
-    //listAll
-    const { contents } = await getList();
+    //リスト一覧とカテゴリ詳細を並列取得
+    const [{ contents }, category] = await Promise.all([
+      getList(),
+      getCategoryDetail(categoryId),
+    ]);
 
-    //fileter
     const filteredContents = contents.filter((blog) => blog.category?.id === decodeURIComponent(categoryId));
-
-    //silce
     const contentSlice = filteredContents.slice(startIndex, endIndex);
-
-    //category取得
-    const category = await getCategoryDetail(categoryId);
 
     // コンテンツを表示するロジックをここに追加
 

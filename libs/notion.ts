@@ -2,17 +2,8 @@
 const NOTION_API_BASE = 'https://api.notion.com/v1';
 const NOTION_VERSION = '2022-06-28';
 
-// Notion APIレート制限対策: 3req/sec以下に制御
-let lastRequestTime = 0;
+// Notion API fetch（Edge Runtimeではリクエスト毎に新インスタンスのためグローバルレート制限不要）
 async function notionFetch(path: string, options: { method?: string; body?: any; revalidate?: number } = {}) {
-  // 最低350msの間隔を確保（約2.8req/sec）
-  const now = Date.now();
-  const elapsed = now - lastRequestTime;
-  if (elapsed < 350) {
-    await new Promise(r => setTimeout(r, 350 - elapsed));
-  }
-  lastRequestTime = Date.now();
-
   const res = await fetch(`${NOTION_API_BASE}${path}`, {
     method: options.method || 'GET',
     headers: {
@@ -21,8 +12,7 @@ async function notionFetch(path: string, options: { method?: string; body?: any;
       'Content-Type': 'application/json',
     },
     body: options.body ? JSON.stringify(options.body) : undefined,
-    next: { revalidate: options.revalidate ?? 3600 },
-  } as any);
+  });
   if (!res.ok) throw new Error(`Notion API error: ${res.status} ${await res.text()}`);
   return res.json();
 }
