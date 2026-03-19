@@ -10,7 +10,7 @@
     "lint": "next lint",
     "lint:fix": "yarn lint --fix",
     "format": "prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json}'",
-    "pages:build": "npx @cloudflare/next-on-pages@1 --no-nodejs-compat-check"
+    "pages:build": "npx @cloudflare/next-on-pages@1"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1012.0",
