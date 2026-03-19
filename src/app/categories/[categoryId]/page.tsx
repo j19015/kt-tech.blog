@@ -10,11 +10,12 @@ export async function generateStaticParams() {
 }
 
 export default async function StaticDetailPage({
-  params: { categoryId },
+  params,
 }: {
-  params: { categoryId: string };
+  params: Promise<{ categoryId: string }>;
 }) {
   //リスト一覧を取得
+  const { categoryId } = await params;
   const { contents } = await getList();
 
   //カテゴリの詳細情報を取得

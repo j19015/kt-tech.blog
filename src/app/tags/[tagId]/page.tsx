@@ -11,11 +11,12 @@ export async function generateStaticParams() {
 }
 
 export default async function StaticDetailPage({
-  params: { tagId },
+  params,
 }: {
-  params: { tagId: string };
+  params: Promise<{ tagId: string }>;
 }) {
   //ページの生成された時間を取得
+  const { tagId } = await params;
   const time = new Date().toLocaleString();
 
   //リスト一覧を取得

@@ -9,11 +9,12 @@ export async function generateStaticParams() {
 }
 
 export default async function StaticDetailPage({
-  params: { archive },
+  params,
 }: {
-  params: { archive: string };
+  params: Promise<{ archive: string }>;
 }) {
   //リスト一覧を取得
+  const { archive } = await params;
   const { contents } = await getList();
 
   //コンテンツを日付でフィルター

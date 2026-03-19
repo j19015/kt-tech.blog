@@ -13,10 +13,11 @@ export async function generateStaticParams() {
 }
 
 export default async function StaticPaginationPage({
-  params: { pageId },
+  params,
 }: {
-  params: { pageId: string };
+  params: Promise<{ pageId: string }>;
 }) {
+  const { pageId } = await params;
   if (!pageId) {
     notFound();
   }

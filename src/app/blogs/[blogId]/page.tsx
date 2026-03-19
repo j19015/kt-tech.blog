@@ -70,12 +70,12 @@ export async function generateStaticParams() {
 }
 
 type Props = {
-  params: { blogId: string };
+  params: Promise<{ blogId: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  // fetch data
-  const blog = await getDetail(params.blogId);
+  const { blogId } = await params;
+  const blog = await getDetail(blogId);
 
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = blog.eyecatch || [];
@@ -86,7 +86,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const description = text.slice(0, 120).replace(/\n/g, ' ').trim();
   const ogImage = blog.eyecatch?.url || `${process.env.SITE_URL}/opengraph-image.png`;
-  const pageUrl = `${process.env.SITE_URL}/blogs/${params.blogId}`;
+  const pageUrl = `${process.env.SITE_URL}/blogs/${blogId}`;
 
   return {
     title: blog.title,
@@ -152,10 +152,11 @@ async function fetchOGPData(url: string) {
 }
 
 export default async function StaticDetailPage({
-  params: { blogId },
+  params,
 }: {
-  params: { blogId: string };
+  params: Promise<{ blogId: string }>;
 }) {
+  const { blogId } = await params;
   const blog = await getDetail(blogId);
   const { contents } = await getList();
   
