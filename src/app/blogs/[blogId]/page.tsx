@@ -5,9 +5,29 @@ import { getDetail, getList } from '../../../../libs/notion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faTag } from '@fortawesome/free-solid-svg-icons';
 import MarkdownIt from 'markdown-it';
-const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
+import anchor from 'markdown-it-anchor';
+import hljs from 'highlight.js';
 import '../../../../styles/markdown.css';
-import '../../../../styles/default-dark.min.css';
+import '../../../../styles/hljs-theme.css';
+
+const md = new MarkdownIt({
+  html: true,
+  linkify: true,
+  typographer: true,
+  highlight: (str: string, lang: string) => {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return `<pre><code class="hljs language-${lang}">${hljs.highlight(str, { language: lang }).value}</code></pre>`;
+      } catch {}
+    }
+    // 言語指定なしの場合は自動検出
+    try {
+      return `<pre><code class="hljs">${hljs.highlightAuto(str).value}</code></pre>`;
+    } catch {}
+    return `<pre><code class="hljs">${md.utils.escapeHtml(str)}</code></pre>`;
+  },
+});
+md.use(anchor, { permalink: false, slugify: (s: string) => encodeURIComponent(String(s).trim().toLowerCase().replace(/\s+/g, '-')) });
 
 // Edge Runtime互換のHTML操作ヘルパー（cheerio不使用）
 function stripHtml(html: string): string {
@@ -175,8 +195,7 @@ export default async function StaticDetailPage({
     processedHtml = processedHtml.replace(new RegExp(`<p>${placeholder}</p>|${placeholder}`, 'g'), calloutHtml);
   });
 
-  // codeブロックにhljsクラスを追加（CSSでスタイリング）
-  processedHtml = processedHtml.replace(/<pre><code/g, '<pre><code class="hljs"');
+  // highlight.jsのスタイルはmarkdown-itのhighlightオプションで適用済み
 
   // リンクカード生成（正規表現ベース）
   const linkRegex = /<a[^>]*href="(https?:\/\/[^"]*)"[^>]*>.*?<\/a>/gi;
