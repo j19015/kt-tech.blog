@@ -11,8 +11,7 @@ async function notionFetch(path: string, options: { method?: string; body?: any;
       'Content-Type': 'application/json',
     },
     body: options.body ? JSON.stringify(options.body) : undefined,
-    // Cloudflare Edgeキャッシュ: デフォルト60秒、指定可能
-    next: { revalidate: options.revalidate ?? 60 },
+    next: { revalidate: options.revalidate ?? 3600 },
   } as any);
   if (!res.ok) throw new Error(`Notion API error: ${res.status} ${await res.text()}`);
   return res.json();

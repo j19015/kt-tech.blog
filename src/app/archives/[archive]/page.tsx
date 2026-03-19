@@ -4,6 +4,7 @@ import Index from '@/components/Index/Index';
 import Title from '@/components/Title/Title';
 
 
+export const revalidate = 3600;
 export async function generateStaticParams() {
   return [];
 }

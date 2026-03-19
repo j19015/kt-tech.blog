@@ -7,6 +7,7 @@ import Title from '@/components/Title/Title';
 const ITEMS_PER_PAGE = 6;
 
 
+export const revalidate = 3600;
 export async function generateStaticParams() {
   return [];
 }

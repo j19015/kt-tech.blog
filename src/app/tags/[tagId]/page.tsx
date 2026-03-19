@@ -6,6 +6,7 @@ import Title from '@/components/Title/Title';
 import Link from 'next/link';
 
 
+export const revalidate = 3600;
 export async function generateStaticParams() {
   return [];
 }
