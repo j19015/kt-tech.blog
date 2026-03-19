@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getDetail, getList } from '../../../../libs/microcms';
+import { getDetail, getList } from '../../../../libs/notion';
 import cheerio from 'cheerio';
 import hljs from 'highlight.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,15 +17,14 @@ import { StickyTableOfContents } from '@/components/TableOfContents/StickyTableO
 import { RelatedPosts } from '@/components/RelatedPosts/RelatedPosts';
 import { ShareButtons } from '@/components/ShareButtons/ShareButtons';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
-export async function generateStaticParams() {
-  const { contents } = await getList();
 
-  const paths = contents.map((blog) => {
-    return {
-      blogId: blog.id,
-    };
-  });
-  return [...paths];
+// ISR: 1時間ごとに再生成
+export const revalidate = 3600;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  // ビルド時にはパスを生成しない（ISRで初回アクセス時に生成）
+  return [];
 }
 
 type Props = {
@@ -226,7 +225,7 @@ export default async function StaticDetailPage({
             <div className='p-4'>
               <Link href={`/blogs/${blog.id}`}>
                 <Image
-                  src={blog.eyecatch?.url ? blog.eyecatch?.url : `../../../public/images/no_image`}
+                  src={blog.eyecatch?.url || '/images/no_image.jpeg'}
                   alt='画像'
                   width={10000}
                   height={10000}

@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { getList } from '../../libs/microcms';
-import { Blog } from '../../libs/microcms';
+import { getList } from '../../libs/notion';
+import { Blog } from '../../libs/notion';
 import Index from '@/components/Index/Index';
 import HeroSection from '@/components/HeroSection/HeroSection';
 

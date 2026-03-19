@@ -1,4 +1,4 @@
-import { getList, getTagList, getCategoryList } from '../../../libs/microcms';
+import { getList, getTagList, getCategoryList } from '../../../libs/notion';
 import SidebarClient from './Sidebar';
 
 const Sidebar = async () => {

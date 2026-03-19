@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getList } from '../../../../../libs/microcms';
+import { getList } from '../../../../../libs/notion';
 import Sidebar from '@/components/SIdebar/Sidebar'; // Sidebarのimportを修正
 import Paginate from '@/components/Pagination/Paginate';
 import Index from '@/components/Index/Index';
@@ -7,34 +7,11 @@ import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 
 const ITEMS_PER_PAGE = 6; // 1ページあたりのアイテム数
 
+export const revalidate = 3600;
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
-  try {
-    //ブログ取得
-    const { contents } = await getList();
-
-    const articles = contents.filter((article) => article.category?.name !== 'PF');
-
-    //ブログ件数を取得
-    const totalItems = articles.length;
-
-    // ページ数を計算
-    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
-    //path入れる用の変数
-    const paths = [];
-
-    // 各ページのパスを生成
-    for (let page = 1; page <= totalPages; page++) {
-      paths.push({
-        pageId: page.toString(),
-      });
-    }
-    //console.log(paths)
-
-    return [...paths];
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return [];
-  }
+  return [];
 }
 
 export default async function StaticPaginationPage({

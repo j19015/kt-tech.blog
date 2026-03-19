@@ -1,46 +1,16 @@
 import { notFound } from 'next/navigation';
-import { getList, getCategoryList, getCategoryDetail } from '../../../../../../libs/microcms';
+import { getList, getCategoryList, getCategoryDetail } from '../../../../../../libs/notion';
 import Paginate from '@/components/Pagination/Paginate';
 import Index from '@/components/Index/Index';
 import Title from '@/components/Title/Title';
 
-const ITEMS_PER_PAGE = 6; // 1ページあたりのアイテム数
+const ITEMS_PER_PAGE = 6;
 
-export async function generateStaticParams({
-  params: { categoryId },
-}: {
-  params: { categoryId: string };
-}) {
-  try {
-    //ブログ取得
-    const { contents } = await getList();
+export const revalidate = 3600;
+export const dynamicParams = true;
 
-    const categoryList = await getCategoryList();
-
-    console.log(categoryList);
-
-    const paths: { categoryId: string; pageId: string }[] = [];
-
-    // 各ページのパスを生成
-    categoryList.contents.map((category) => {
-      const filteredContents = contents.filter((blog) => blog.category?.id === category.id);
-      console.log(category.name, filteredContents.length);
-      const totalPages = Math.ceil(filteredContents.length / ITEMS_PER_PAGE);
-      for (let page = 1; page <= totalPages; page++) {
-        paths.push({
-          categoryId: category.id,
-          pageId: String(page),
-        });
-      }
-    });
-
-    console.log(paths);
-
-    return [...paths];
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return [];
-  }
+export async function generateStaticParams() {
+  return [];
 }
 
 export default async function StaticPaginationPage({

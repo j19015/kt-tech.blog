@@ -2,10 +2,10 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Blog } from '../../../libs/microcms';
+import { Blog } from '../../../libs/notion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolderOpen } from '@fortawesome/free-solid-svg-icons';
-import { BlogProps } from '../../../libs/microcms';
+import { BlogProps } from '../../../libs/notion';
 import Image from 'next/image';
 import { Clock, Search, ArrowRight } from 'lucide-react';
 

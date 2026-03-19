@@ -1,20 +1,13 @@
 import { notFound } from 'next/navigation';
-import { getList } from '../../../../libs/microcms';
+import { getList } from '../../../../libs/notion';
 import Index from '@/components/Index/Index';
 import Title from '@/components/Title/Title';
 
+export const revalidate = 3600;
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
-  const { contents } = await getList();
-
-  // アーカイブを取得
-  const archives = Array.from(new Set(contents.map((item) => item.createdAt.slice(0, 7))));
-
-  const paths = archives.map((archive) => {
-    return {
-      archive: archive,
-    };
-  });
-  return [...paths];
+  return [];
 }
 
 export default async function StaticDetailPage({
