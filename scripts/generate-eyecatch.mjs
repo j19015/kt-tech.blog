@@ -18,7 +18,8 @@ envFile.split('\n').forEach(line => {
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const NOTION_API_KEY = process.env.NOTION_API_KEY;
-const DATABASE_ID = process.env.NOTION_DATABASE_ID;
+// SDK v5はdata_source_idが必要（REST APIのdatabase_idとは異なる）
+const DATABASE_ID = '2eca0ffb-73d1-811b-aa8e-000bb9c14a3c';
 const R2_ENDPOINT = process.env.R2_ENDPOINT;
 const R2_ACCESS_KEY = process.env.R2_ACCESS_KEY;
 const R2_SECRET_KEY = process.env.R2_SECRET_KEY;
