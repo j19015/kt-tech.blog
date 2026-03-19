@@ -2,7 +2,7 @@
 const NOTION_API_BASE = 'https://api.notion.com/v1';
 const NOTION_VERSION = '2022-06-28';
 
-async function notionFetch(path: string, options: { method?: string; body?: any } = {}) {
+async function notionFetch(path: string, options: { method?: string; body?: any; revalidate?: number } = {}) {
   const res = await fetch(`${NOTION_API_BASE}${path}`, {
     method: options.method || 'GET',
     headers: {
@@ -11,7 +11,9 @@ async function notionFetch(path: string, options: { method?: string; body?: any 
       'Content-Type': 'application/json',
     },
     body: options.body ? JSON.stringify(options.body) : undefined,
-  });
+    // Cloudflare Edgeキャッシュ: デフォルト60秒、指定可能
+    next: { revalidate: options.revalidate ?? 60 },
+  } as any);
   if (!res.ok) throw new Error(`Notion API error: ${res.status} ${await res.text()}`);
   return res.json();
 }
