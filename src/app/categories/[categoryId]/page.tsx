@@ -5,7 +5,6 @@ import Title from '@/components/Title/Title';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 
 
-export const runtime = 'edge';
 export async function generateStaticParams() {
   return [];
 }

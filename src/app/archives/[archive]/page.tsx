@@ -4,7 +4,6 @@ import Index from '@/components/Index/Index';
 import Title from '@/components/Title/Title';
 
 
-export const runtime = 'edge';
 export async function generateStaticParams() {
   return [];
 }

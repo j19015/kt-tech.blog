@@ -10,21 +10,24 @@ import hljs from 'highlight.js';
 import '../../../../styles/markdown.css';
 import '../../../../styles/hljs-theme.css';
 
-const md = new MarkdownIt({
+function escapeHtml(str: string): string {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+const md: MarkdownIt = new MarkdownIt({
   html: true,
   linkify: true,
   typographer: true,
-  highlight: (str: string, lang: string) => {
+  highlight: (str: string, lang: string): string => {
     if (lang && hljs.getLanguage(lang)) {
       try {
         return `<pre><code class="hljs language-${lang}">${hljs.highlight(str, { language: lang }).value}</code></pre>`;
-      } catch {}
+      } catch { /* fallthrough */ }
     }
-    // 言語指定なしの場合は自動検出
     try {
       return `<pre><code class="hljs">${hljs.highlightAuto(str).value}</code></pre>`;
-    } catch {}
-    return `<pre><code class="hljs">${md.utils.escapeHtml(str)}</code></pre>`;
+    } catch { /* fallthrough */ }
+    return `<pre><code class="hljs">${escapeHtml(str)}</code></pre>`;
   },
 });
 md.use(anchor, { permalink: false, slugify: (s: string) => encodeURIComponent(String(s).trim().toLowerCase().replace(/\s+/g, '-')) });
@@ -61,7 +64,6 @@ import { ShareButtons } from '@/components/ShareButtons/ShareButtons';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 
 
-export const runtime = 'edge';
 export async function generateStaticParams() {
   // ビルド時にはパスを生成しない（ISRで初回アクセス時に生成）
   return [];
