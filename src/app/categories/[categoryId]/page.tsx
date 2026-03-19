@@ -5,12 +5,7 @@ import Title from '@/components/Title/Title';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 
 
-export const revalidate = 3600;
-export async function generateStaticParams() {
-  const { contents: categories } = await getCategoryList();
-  return categories.map((cat) => ({ categoryId: cat.id }));
-}
-
+export const runtime = 'edge';
 export default async function StaticDetailPage({
   params,
 }: {
