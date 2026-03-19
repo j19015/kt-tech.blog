@@ -134,18 +134,39 @@ export default async function StaticDetailPage({
     return false;
   });
   
-  const html = markdownToHtml(blog.body);
-  const parse_body = cheerio.load(html);
-  parse_body('pre code').each((_, elm) => {
-    const result = hljs.highlightAuto(parse_body(elm).text());
-    parse_body(elm).html(result.value);
-    parse_body(elm).addClass('hljs');
+  // calloutマーカーをプレースホルダーに変換（markdownToHtmlに通す前）
+  const calloutMap = new Map<string, string>();
+  let calloutIndex = 0;
+  const bodyPreprocessed = blog.body.replace(
+    /:::callout\{icon="([^"]*)" color="([^"]*)"\}\n([\s\S]*?)\n:::/g,
+    (_, icon, color, text) => {
+      const placeholder = `CALLOUT_PLACEHOLDER_${calloutIndex++}`;
+      calloutMap.set(placeholder, `<div class="callout callout-${color}"><span class="callout-icon">${icon}</span><div class="callout-content"><p>${text}</p></div></div>`);
+      return placeholder;
+    }
+  );
+
+  const html = markdownToHtml(bodyPreprocessed);
+
+  // プレースホルダーをcallout HTMLに置換
+  let htmlWithCallouts = html;
+  calloutMap.forEach((calloutHtml, placeholder) => {
+    htmlWithCallouts = htmlWithCallouts.replace(new RegExp(`<p>${placeholder}</p>|${placeholder}`, 'g'), calloutHtml);
+  });
+
+  const parse_body2 = cheerio.load(htmlWithCallouts);
+
+  // シンタックスハイライト
+  parse_body2('pre code').each((_, elm) => {
+    const result = hljs.highlightAuto(parse_body2(elm).text());
+    parse_body2(elm).html(result.value);
+    parse_body2(elm).addClass('hljs');
   });
 
   // 重複なしで全てのリンクのhrefを取得
   const uniqueLinks: string[] = [];
-  parse_body('a').each((_, link) => {
-    const href = parse_body(link).attr('href');
+  parse_body2('a').each((_, link) => {
+    const href = parse_body2(link).attr('href');
     if (href && !href.startsWith('#') && !uniqueLinks.includes(href)) {
       uniqueLinks.push(href);
     }
@@ -160,25 +181,22 @@ export default async function StaticDetailPage({
   Array.from(uniqueLinks).forEach((href, index) => {
     hrefToOgpData.set(href, ogpDataResults[index]);
   });
-  console.log(hrefToOgpData);
 
   // リンクカードの生成とHTMLの更新
-  parse_body('a').each((_, link) => {
-    const href = parse_body(link).attr('href');
+  parse_body2('a').each((_, link) => {
+    const href = parse_body2(link).attr('href');
     if (!href || href.startsWith('#')) {
       return;
     }
 
     const meta = hrefToOgpData.get(href);
 
-    // metaがnullの場合はリンクカードを生成しない
     if (!meta) {
       return;
     }
 
     const linkCardHTML = `
       <div class="link-card mt-3 mb-3">
-        <!-- リンクカードの内容 -->
         <a href="${href}" target="_blank" rel="noopener noreferrer">
           <div class="link-card-body">
             <div class="link-card-info">
@@ -191,7 +209,7 @@ export default async function StaticDetailPage({
       </div>
     `;
 
-    parse_body(link.parent).replaceWith(linkCardHTML);
+    parse_body2(link.parent).replaceWith(linkCardHTML);
   });
 
   //目次機能
@@ -275,7 +293,7 @@ export default async function StaticDetailPage({
             <ShareButtons title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
             <TableOfContents toc={toc} />
             <div className='p-4 znc markdown text-foreground'>
-              <div dangerouslySetInnerHTML={{ __html: parse_body.html() }}></div>
+              <div dangerouslySetInnerHTML={{ __html: parse_body2.html() }}></div>
             </div>
             <RelatedPosts posts={relatedPosts} currentPostId={blogId} />
           </div>

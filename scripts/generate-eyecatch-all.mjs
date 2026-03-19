@@ -58,16 +58,19 @@ const DEFAULT_COLORS = 'deep blue, purple, teal, silver. Dark slate background.'
 function generatePrompt(category) {
   const colors = CATEGORY_COLORS[category] || DEFAULT_COLORS;
   const noText = 'Absolutely no text, no words, no letters, no labels, no numbers, no characters. Pure visual abstract art only.';
-  const style = 'Abstract geometric composition with overlapping translucent circles, arcs and curved shapes. Matte paper-like texture. Flat design, minimal, modern. 16:9.';
+  const style = 'Abstract geometric composition with overlapping translucent circles, arcs and curved shapes. Matte paper-like texture. Flat design, minimal, modern. 16:9 aspect ratio.';
   return `${noText} ${style} Color palette: ${colors}`;
 }
 
+// Nano Banana Pro (gemini-3-pro-image-preview) で画像生成
 function callImagen(prompt) {
   return new Promise((resolve, reject) => {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-fast-generate-001:predict?key=${GEMINI_API_KEY}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent?key=${GEMINI_API_KEY}`;
     const body = JSON.stringify({
-      instances: [{ prompt }],
-      parameters: { sampleCount: 1, aspectRatio: '16:9' },
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: {
+        responseModalities: ['IMAGE', 'TEXT'],
+      },
     });
 
     const req = https.request(url, { method: 'POST', headers: { 'Content-Type': 'application/json' } }, (res) => {
@@ -76,11 +79,15 @@ function callImagen(prompt) {
       res.on('end', () => {
         try {
           const data = JSON.parse(Buffer.concat(chunks).toString());
-          if (data.predictions?.[0]?.bytesBase64Encoded) {
-            resolve(Buffer.from(data.predictions[0].bytesBase64Encoded, 'base64'));
-          } else {
-            reject(new Error(`Imagen error: ${JSON.stringify(data).slice(0, 300)}`));
+          const parts = data.candidates?.[0]?.content?.parts;
+          if (parts) {
+            const imgPart = parts.find(p => p.inlineData);
+            if (imgPart) {
+              resolve(Buffer.from(imgPart.inlineData.data, 'base64'));
+              return;
+            }
           }
+          reject(new Error(`Nano Banana Pro error: ${JSON.stringify(data).slice(0, 300)}`));
         } catch (e) {
           reject(e);
         }
@@ -176,8 +183,8 @@ async function main() {
         writeFileSync(localPath, imageBuffer);
         console.log(`  Saved locally: ${localPath}`);
 
-        // レート制限対策（Imagen 4は1分5リクエスト制限）
-        await new Promise(r => setTimeout(r, 15000));
+        // レート制限対策
+        await new Promise(r => setTimeout(r, 5000));
       }
 
       // R2アップロード

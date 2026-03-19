@@ -219,6 +219,124 @@
   }
 }
 
+/* Callout / Tips UI */
+.znc .callout {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  border-radius: 0.5rem;
+  font-style: normal;
+  line-height: 1.7;
+  border: 1px solid transparent;
+}
+
+.znc .callout-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.znc .callout-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.znc .callout-content p {
+  padding: 0;
+  margin: 0;
+}
+
+/* デフォルト: グレー背景 */
+.znc .callout-default,
+.znc .callout-gray_background {
+  background: #f3f4f6;
+  border-color: #e5e7eb;
+}
+.dark .znc .callout-default,
+.dark .znc .callout-gray_background {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 青: 情報・メモ */
+.znc .callout-blue_background {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  border-left: 4px solid #3b82f6;
+}
+.dark .znc .callout-blue_background {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.3);
+  border-left: 4px solid #60a5fa;
+}
+
+/* 緑: 成功・Tips */
+.znc .callout-green_background {
+  background: #f0fdf4;
+  border-color: #86efac;
+  border-left: 4px solid #22c55e;
+}
+.dark .znc .callout-green_background {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.3);
+  border-left: 4px solid #4ade80;
+}
+
+/* 黄色: 注意・警告 */
+.znc .callout-yellow_background {
+  background: #fefce8;
+  border-color: #fde047;
+  border-left: 4px solid #eab308;
+}
+.dark .znc .callout-yellow_background {
+  background: rgba(234, 179, 8, 0.15);
+  border-color: rgba(234, 179, 8, 0.3);
+  border-left: 4px solid #facc15;
+}
+
+/* 赤: 危険・重要 */
+.znc .callout-red_background {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  border-left: 4px solid #ef4444;
+}
+.dark .znc .callout-red_background {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  border-left: 4px solid #f87171;
+}
+
+/* 紫 */
+.znc .callout-purple_background {
+  background: #faf5ff;
+  border-color: #e9d5ff;
+}
+.dark .znc .callout-purple_background {
+  background: rgba(168, 85, 247, 0.1);
+  border-color: rgba(168, 85, 247, 0.2);
+}
+
+/* ピンク */
+.znc .callout-pink_background {
+  background: #fdf2f8;
+  border-color: #fbcfe8;
+}
+.dark .znc .callout-pink_background {
+  background: rgba(236, 72, 153, 0.1);
+  border-color: rgba(236, 72, 153, 0.2);
+}
+
+/* オレンジ */
+.znc .callout-orange_background {
+  background: #fff7ed;
+  border-color: #fed7aa;
+}
+.dark .znc .callout-orange_background {
+  background: rgba(249, 115, 22, 0.1);
+  border-color: rgba(249, 115, 22, 0.2);
+}
+
 /* ブログの目次のCSS - グローバル変数を上書きしない */
 .table-contents {
   min-width: 20%;

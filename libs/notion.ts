@@ -91,9 +91,13 @@ async function blocksToMarkdown(blockId: string): Promise<string> {
       case 'heading_1':
         lines.push(`# ${richTextToPlain(block.heading_1.rich_text)}`);
         break;
-      case 'heading_2':
-        lines.push(`## ${richTextToPlain(block.heading_2.rich_text)}`);
+      case 'heading_2': {
+        const h2Text = richTextToPlain(block.heading_2.rich_text);
+        // 「目次」見出しはスキップ（ブログ側で自動生成するため）
+        if (h2Text === '目次') break;
+        lines.push(`## ${h2Text}`);
         break;
+      }
       case 'heading_3':
         lines.push(`### ${richTextToPlain(block.heading_3.rich_text)}`);
         break;
@@ -123,12 +127,25 @@ async function blocksToMarkdown(blockId: string): Promise<string> {
       case 'divider':
         lines.push('---');
         break;
-      case 'quote':
-        lines.push(`> ${richTextToMarkdown(block.quote.rich_text)}`);
+      case 'quote': {
+        const quoteText = richTextToMarkdown(block.quote.rich_text);
+        const quoteColor = block.quote.color || 'default';
+        // quoteもcalloutと同じUIで表示（アイコンは引用マーク）
+        lines.push(`:::callout{icon="📌" color="${quoteColor === 'default' ? 'gray_background' : quoteColor}"}`);
+        lines.push(quoteText);
+        lines.push(':::');
         break;
-      case 'callout':
-        lines.push(`> ${richTextToMarkdown(block.callout.rich_text)}`);
+      }
+      case 'callout': {
+        const icon = block.callout.icon?.emoji || 'ℹ️';
+        const text = richTextToMarkdown(block.callout.rich_text);
+        const color = block.callout.color || 'default';
+        // :::callout マーカーで出力し、後処理でHTMLに変換
+        lines.push(`:::callout{icon="${icon}" color="${color}"}`);
+        lines.push(text);
+        lines.push(':::');
         break;
+      }
       case 'toggle':
         lines.push(richTextToMarkdown(block.toggle.rich_text));
         break;
