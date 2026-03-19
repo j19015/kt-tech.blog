@@ -1,5 +1,5 @@
 'use client';
-import { BlogProps } from '../../../libs/microcms';
+import { BlogProps } from '../../../libs/notion';
 import Link from 'next/link';
 import Image from 'next/image';
 

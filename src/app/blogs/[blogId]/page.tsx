@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getDetail, getList } from '../../../../libs/microcms';
+import { getDetail, getList } from '../../../../libs/notion';
 import cheerio from 'cheerio';
 import hljs from 'highlight.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,15 +17,14 @@ import { StickyTableOfContents } from '@/components/TableOfContents/StickyTableO
 import { RelatedPosts } from '@/components/RelatedPosts/RelatedPosts';
 import { ShareButtons } from '@/components/ShareButtons/ShareButtons';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
-export async function generateStaticParams() {
-  const { contents } = await getList();
 
-  const paths = contents.map((blog) => {
-    return {
-      blogId: blog.id,
-    };
-  });
-  return [...paths];
+// ISR: 1時間ごとに再生成
+export const revalidate = 3600;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  // ビルド時にはパスを生成しない（ISRで初回アクセス時に生成）
+  return [];
 }
 
 type Props = {
@@ -44,25 +43,37 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const $ = cheerio.load(html);
   const text = $('body').text();
 
+  const description = text.slice(0, 120).replace(/\n/g, ' ').trim();
+  const ogImage = blog.eyecatch?.url || `${process.env.SITE_URL}/opengraph-image.png`;
+  const pageUrl = `${process.env.SITE_URL}/blogs/${params.blogId}`;
+
   return {
     title: blog.title,
-    description: text.slice(0, 100),
+    description,
+    alternates: {
+      canonical: pageUrl,
+    },
     twitter: {
       card: 'summary_large_image',
       title: blog.title,
-      description: text.slice(0, 100),
+      description,
       site: '@tech_koki',
       creator: '@tech_koki',
+      images: [ogImage],
     },
     openGraph: {
       title: blog.title,
-      description: text.slice(0, 100),
+      description,
       locale: 'ja_JP',
-      type: 'website',
-      images: previousImages,
+      type: 'article',
+      url: pageUrl,
+      publishedTime: blog.publishedAt,
+      modifiedTime: blog.updatedAt,
+      authors: ['kt'],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: blog.title }],
     },
     other: {
-      thumbnail: blog.eyecatch?.url ? blog.eyecatch?.url : '',
+      thumbnail: ogImage,
     },
   };
 }
@@ -135,18 +146,42 @@ export default async function StaticDetailPage({
     return false;
   });
   
-  const html = markdownToHtml(blog.body);
-  const parse_body = cheerio.load(html);
-  parse_body('pre code').each((_, elm) => {
-    const result = hljs.highlightAuto(parse_body(elm).text());
-    parse_body(elm).html(result.value);
-    parse_body(elm).addClass('hljs');
+  // calloutマーカーをプレースホルダーに変換（markdownToHtmlに通す前）
+  const calloutMap = new Map<string, { icon: string; color: string; text: string }>();
+  let calloutIndex = 0;
+  const bodyPreprocessed = blog.body.replace(
+    /:::callout\{icon="([^"]*)" color="([^"]*)"\}\n([\s\S]*?)\n:::/g,
+    (_, icon, color, text) => {
+      const placeholder = `CALLOUT_PLACEHOLDER_${calloutIndex++}`;
+      calloutMap.set(placeholder, { icon, color, text });
+      return placeholder;
+    }
+  );
+
+  const html = markdownToHtml(bodyPreprocessed);
+
+  // プレースホルダーをcallout HTMLに置換（テキスト部分もMarkdown変換）
+  let htmlWithCallouts = html;
+  calloutMap.forEach(({ icon, color, text }, placeholder) => {
+    // callout内テキストのインラインMarkdownを変換
+    const textHtml = markdownToHtml(text).replace(/<\/?p>/g, '').trim();
+    const calloutHtml = `<div class="callout callout-${color}"><span class="callout-icon">${icon}</span><div class="callout-content">${textHtml}</div></div>`;
+    htmlWithCallouts = htmlWithCallouts.replace(new RegExp(`<p>${placeholder}</p>|${placeholder}`, 'g'), calloutHtml);
+  });
+
+  const parse_body2 = cheerio.load(htmlWithCallouts);
+
+  // シンタックスハイライト
+  parse_body2('pre code').each((_, elm) => {
+    const result = hljs.highlightAuto(parse_body2(elm).text());
+    parse_body2(elm).html(result.value);
+    parse_body2(elm).addClass('hljs');
   });
 
   // 重複なしで全てのリンクのhrefを取得
   const uniqueLinks: string[] = [];
-  parse_body('a').each((_, link) => {
-    const href = parse_body(link).attr('href');
+  parse_body2('a').each((_, link) => {
+    const href = parse_body2(link).attr('href');
     if (href && !href.startsWith('#') && !uniqueLinks.includes(href)) {
       uniqueLinks.push(href);
     }
@@ -161,25 +196,22 @@ export default async function StaticDetailPage({
   Array.from(uniqueLinks).forEach((href, index) => {
     hrefToOgpData.set(href, ogpDataResults[index]);
   });
-  console.log(hrefToOgpData);
 
   // リンクカードの生成とHTMLの更新
-  parse_body('a').each((_, link) => {
-    const href = parse_body(link).attr('href');
+  parse_body2('a').each((_, link) => {
+    const href = parse_body2(link).attr('href');
     if (!href || href.startsWith('#')) {
       return;
     }
 
     const meta = hrefToOgpData.get(href);
 
-    // metaがnullの場合はリンクカードを生成しない
     if (!meta) {
       return;
     }
 
     const linkCardHTML = `
       <div class="link-card mt-3 mb-3">
-        <!-- リンクカードの内容 -->
         <a href="${href}" target="_blank" rel="noopener noreferrer">
           <div class="link-card-body">
             <div class="link-card-info">
@@ -192,7 +224,7 @@ export default async function StaticDetailPage({
       </div>
     `;
 
-    parse_body(link.parent).replaceWith(linkCardHTML);
+    parse_body2(link.parent).replaceWith(linkCardHTML);
   });
 
   //目次機能
@@ -207,13 +239,49 @@ export default async function StaticDetailPage({
   if (!blog) {
     notFound();
   }
+
+  // JSON-LD 構造化データ
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: blog.title,
+    description: blog.body.replace(/[#*`>\n]/g, ' ').slice(0, 160).trim(),
+    image: blog.eyecatch?.url || `${process.env.SITE_URL}/opengraph-image.png`,
+    datePublished: blog.publishedAt,
+    dateModified: blog.updatedAt,
+    author: { '@type': 'Person', name: 'kt', url: 'https://kt-tech.blog/about' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'kt-tech.blog',
+      url: 'https://kt-tech.blog',
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${process.env.SITE_URL}/blogs/${blogId}`,
+    },
+    keywords: blog.tags?.map(t => t.name).join(', '),
+    articleSection: blog.category?.name,
+  };
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: process.env.SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${process.env.SITE_URL}/blogs/page/1` },
+      { '@type': 'ListItem', position: 3, name: blog.title },
+    ],
+  };
+
   return (
     <>
-      <BreadcrumbNav 
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      <BreadcrumbNav
         items={[
           { label: 'Blog', href: '/blogs/page/1' },
           { label: blog.title, current: true }
-        ]} 
+        ]}
       />
       <div className='grid grid-cols-2 lg:grid-cols-3 lg:p-4'>
         <div className='lg:col-span-1 p-5 pl-7 pt-0 hidden lg:block'>
@@ -226,7 +294,7 @@ export default async function StaticDetailPage({
             <div className='p-4'>
               <Link href={`/blogs/${blog.id}`}>
                 <Image
-                  src={blog.eyecatch?.url ? blog.eyecatch?.url : `../../../public/images/no_image`}
+                  src={blog.eyecatch?.url || '/images/no_image.jpeg'}
                   alt='画像'
                   width={10000}
                   height={10000}
@@ -276,7 +344,7 @@ export default async function StaticDetailPage({
             <ShareButtons title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
             <TableOfContents toc={toc} />
             <div className='p-4 znc markdown text-foreground'>
-              <div dangerouslySetInnerHTML={{ __html: parse_body.html() }}></div>
+              <div dangerouslySetInnerHTML={{ __html: parse_body2.html() }}></div>
             </div>
             <RelatedPosts posts={relatedPosts} currentPostId={blogId} />
           </div>

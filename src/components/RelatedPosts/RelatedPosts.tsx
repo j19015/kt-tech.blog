@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Blog } from '../../../libs/microcms';
+import { Blog } from '../../../libs/notion';
 import { Clock, FolderOpen, ArrowRight } from 'lucide-react';
 
 interface RelatedPostsProps {

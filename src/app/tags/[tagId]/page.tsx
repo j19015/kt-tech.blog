@@ -1,19 +1,15 @@
 import { notFound } from 'next/navigation';
-import { getList, getTagList, getTagDetail } from '../../../../libs/microcms';
+import { getList, getTagList, getTagDetail } from '../../../../libs/notion';
 import Sidebar from '@/components/SIdebar/Sidebar';
 import Index from '@/components/Index/Index';
 import Title from '@/components/Title/Title';
 import Link from 'next/link';
 
-export async function generateStaticParams() {
-  const { contents } = await getTagList();
+export const revalidate = 3600;
+export const dynamicParams = true;
 
-  const paths = contents.map((tag) => {
-    return {
-      tagId: tag.id,
-    };
-  });
-  return [...paths];
+export async function generateStaticParams() {
+  return [];
 }
 
 export default async function StaticDetailPage({

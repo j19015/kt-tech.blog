@@ -1,18 +1,14 @@
 import { notFound } from 'next/navigation';
-import { getList, getCategoryList, getCategoryDetail } from '../../../../libs/microcms';
+import { getList, getCategoryList, getCategoryDetail } from '../../../../libs/notion';
 import Index from '@/components/Index/Index';
 import Title from '@/components/Title/Title';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 
-export async function generateStaticParams() {
-  const { contents } = await getCategoryList();
+export const revalidate = 3600;
+export const dynamicParams = true;
 
-  const paths = contents.map((category) => {
-    return {
-      categoryId: category.id,
-    };
-  });
-  return [...paths];
+export async function generateStaticParams() {
+  return [];
 }
 
 export default async function StaticDetailPage({
