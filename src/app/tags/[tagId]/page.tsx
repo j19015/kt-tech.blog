@@ -16,11 +16,11 @@ export default async function StaticDetailPage({
   const { tagId } = await params;
   const time = new Date().toLocaleString();
 
-  //リスト一覧を取得
-  const { contents } = await getList();
-
-  //タグの詳細情報を取得
-  const tag_show = await getTagDetail(tagId);
+  //リスト一覧とタグ詳細を並列取得
+  const [{ contents }, tag_show] = await Promise.all([
+    getList(),
+    getTagDetail(tagId),
+  ]);
 
   //リストを指定のタグで絞り込み
   const filteredContents = contents.filter((blog) => blog.tags?.some((tag) => tag.id === decodeURIComponent(tagId)));
