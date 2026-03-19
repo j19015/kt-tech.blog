@@ -19,8 +19,7 @@ import { ShareButtons } from '@/components/ShareButtons/ShareButtons';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 
 // ISR: 1時間ごとに再生成
-export const revalidate = 3600;
-export const dynamicParams = true;
+export const runtime = 'edge';
 
 export async function generateStaticParams() {
   // ビルド時にはパスを生成しない（ISRで初回アクセス時に生成）

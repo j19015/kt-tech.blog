@@ -5,8 +5,7 @@ import Index from '@/components/Index/Index';
 import Title from '@/components/Title/Title';
 import Link from 'next/link';
 
-export const revalidate = 3600;
-export const dynamicParams = true;
+export const runtime = 'edge';
 
 export async function generateStaticParams() {
   return [];
