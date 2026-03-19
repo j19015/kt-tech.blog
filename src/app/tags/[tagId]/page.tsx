@@ -6,12 +6,7 @@ import Title from '@/components/Title/Title';
 import Link from 'next/link';
 
 
-export const revalidate = 3600;
-export async function generateStaticParams() {
-  const { contents: tags } = await getTagList();
-  return tags.map((tag) => ({ tagId: tag.id }));
-}
-
+export const runtime = 'edge';
 export default async function StaticDetailPage({
   params,
 }: {

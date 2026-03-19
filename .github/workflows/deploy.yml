@@ -1,4 +1,4 @@
-name: Deploy to Cloudflare Workers
+name: Deploy to Cloudflare Pages
 
 on:
   push:
@@ -27,26 +27,19 @@ jobs:
           key: nextjs-${{ hashFiles('package-lock.json') }}-${{ hashFiles('**/*.tsx', '**/*.ts', '**/*.css') }}
           restore-keys: nextjs-${{ hashFiles('package-lock.json') }}-
 
-      - name: Build Next.js & OpenNext
-        run: npx opennextjs-cloudflare build
+      - name: Build Next.js
+        run: npm run build
         env:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
           SITE_URL: ${{ secrets.SITE_URL }}
 
-      - name: Deploy to Cloudflare
-        run: npx wrangler deploy
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Build for Cloudflare Pages
+        run: npx @cloudflare/next-on-pages --skip-build
 
-      - name: Set Worker Secrets
+      - name: Deploy to Cloudflare Pages
+        run: npx wrangler pages deploy .vercel/output/static --project-name=kt-tech-blog
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: |
-          echo "${{ secrets.NOTION_API_KEY }}" | npx wrangler secret put NOTION_API_KEY
-          echo "${{ secrets.NOTION_DATABASE_ID }}" | npx wrangler secret put NOTION_DATABASE_ID
-          echo "${{ secrets.NEXT_PUBLIC_GA_ID }}" | npx wrangler secret put NEXT_PUBLIC_GA_ID
-          echo "${{ secrets.SITE_URL }}" | npx wrangler secret put SITE_URL

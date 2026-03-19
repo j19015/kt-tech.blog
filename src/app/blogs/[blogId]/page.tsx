@@ -64,13 +64,7 @@ import { ShareButtons } from '@/components/ShareButtons/ShareButtons';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 
 
-export const revalidate = 3600;
-export const dynamicParams = true;
-
-export async function generateStaticParams() {
-  const { contents } = await getList();
-  return contents.map((blog) => ({ blogId: blog.id }));
-}
+export const runtime = 'edge';
 
 type Props = {
   params: Promise<{ blogId: string }>;
