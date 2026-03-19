@@ -2,7 +2,7 @@
 
 ## プロジェクト概要
 
-kt-tech.blogは、Next.js 13とTypeScriptで構築された技術ブログサイトです。microCMSをヘッドレスCMSとして使用し、レスポンシブデザインとダークモード対応、高いSEO最適化を実現している現代的なブログプラットフォームです。
+kt-tech.blogは、Next.js 13とTypeScriptで構築された技術ブログサイトです。**Notion**をヘッドレスCMSとして使用し、レスポンシブデザインとダークモード対応、高いSEO最適化を実現しています。**Cloudflare Pages**にデプロイしています。
 
 ## 技術スタック
 
@@ -13,34 +13,39 @@ kt-tech.blogは、Next.js 13とTypeScriptで構築された技術ブログサイ
 - **Tailwind CSS 3.3.3**
 - **styled-components 6.1.8**
 
-### UI・デザイン
-- **Radix UI** (アクセシブルなプリミティブコンポーネント)
-- **FontAwesome** (アイコン)
-- **Lucide React** (モダンアイコン)
-- **next-themes** (ダークモード切り替え)
-
 ### コンテンツ管理
-- **microCMS** (ヘッドレスCMS)
+- **Notion API** (`@notionhq/client` v5) — ヘッドレスCMS
 - **Zenn Markdown** (Markdownレンダリング)
 - **Highlight.js** (シンタックスハイライト)
 - **Cheerio** (HTMLパースと操作)
 
-### 分析・SEO
-- **Google Analytics**
-- **next-sitemap** (サイトマップ自動生成)
+### デプロイ・インフラ
+- **Cloudflare Pages** (`@cloudflare/next-on-pages`)
+- **Cloudflare R2** — 画像ホスティング（eyecatch等）
+- **Edge Runtime必須** — 全ての動的ルートに `export const runtime = 'edge'` が必要
 
-## 主要機能
+### 画像生成
+- **Gemini Nano Banana Pro** (`gemini-3-pro-image-preview`) — eyecatch自動生成
+- 生成スクリプト: `scripts/generate-eyecatch.mjs`
 
-- 📱 レスポンシブデザイン
-- 🌙 ダークモード対応
-- 🔍 リアルタイム検索機能
-- 📄 ページネーション
-- 🏷️ カテゴリ・タグ別フィルタリング
-- 📅 アーカイブ機能（年月別）
-- 📋 目次自動生成
-- 🔗 リンクカード表示
-- 📊 Google Analytics連携
-- 🚀 SEO最適化
+## 重要な制約事項
+
+### Cloudflare Pages (Edge Runtime)
+- **ISR (`revalidate`) は使用不可** — Cloudflare PagesはEdge Runtimeのみ対応
+- 全ての動的ルートに `export const runtime = 'edge'` を設定すること
+- `generateStaticParams()` は空配列を返す（ビルド時に生成しない）
+- Node.js専用APIは使えない（`fs`, `path`等）
+
+### Notion API
+- **Data Source ID**: `2eca0ffb-73d1-811b-aa8e-000bb9c14a3c`（`database_id`ではない）
+- SDK v5では `dataSources.query()` を使用（`databases.query()` は廃止）
+- レート制限: 3リクエスト/秒
+- `libs/notion.ts` にメモリキャッシュ実装済み
+
+### 記事URL構造
+- microCMS移行記事: `/blogs/{microCMS-ID}` (例: `/blogs/psl309s8itir`)
+- Notion記事: `/blogs/{slug}` (例: `/blogs/production-deploy-troubleshooting`)
+- SlugはNotionのSlugプロパティで管理
 
 ## ディレクトリ構造
 
@@ -51,72 +56,56 @@ kt-tech.blog/
 │   │   ├── layout.tsx         # ルートレイアウト
 │   │   ├── page.tsx           # ホームページ
 │   │   ├── blogs/             # ブログ関連ルート
-│   │   │   ├── [blogId]/      # ブログ詳細
-│   │   │   └── page/[pageId]/ # ページネーション
-│   │   ├── categories/        # カテゴリ別記事
-│   │   ├── tags/              # タグ別記事
+│   │   │   ├── [blogId]/      # ブログ詳細（Edge Runtime）
+│   │   │   └── page/[pageId]/ # ページネーション（Edge Runtime）
+│   │   ├── categories/        # カテゴリ別記事（Edge Runtime）
+│   │   ├── tags/              # タグ別記事（Edge Runtime）
+│   │   ├── archives/          # アーカイブ（Edge Runtime）
 │   │   ├── searches/          # 検索機能
-│   │   ├── about/             # Aboutページ
-│   │   └── profile/           # プロフィール
+│   │   └── about/             # Aboutページ
 │   ├── components/            # 再利用可能コンポーネント
-│   │   ├── Header/
-│   │   ├── Footer/
-│   │   ├── Sidebar/
-│   │   ├── Modal/
-│   │   ├── Form/
-│   │   ├── Pagination/
-│   │   ├── TableOfContents/
-│   │   └── ui/               # shadcn/ui系コンポーネント
 │   └── lib/
 ├── libs/
-│   ├── microcms.ts           # microCMS API クライアント
-│   └── gtag.ts               # Google Analytics
-├── public/
+│   ├── notion.ts              # Notion API クライアント
+│   └── gtag.ts                # Google Analytics
+├── scripts/
+│   ├── generate-eyecatch.mjs      # eyecatch生成（未設定のみ）
+│   └── generate-eyecatch-all.mjs  # eyecatch全記事生成
 ├── styles/
-└── 設定ファイル
+│   └── markdown.css           # 記事本文のスタイル（callout UI含む）
+└── public/
+    └── images/
 ```
 
-## 開発手順
+## 環境変数
 
-### 1. 環境セットアップ
-
-```bash
-# 依存関係のインストール
-npm install
-# または
-yarn install
-```
-
-### 2. 環境変数設定
-
-`.env.local` ファイルを作成し、以下の環境変数を設定：
-
+### 必須（.env.local / Cloudflare Pages Secrets）
 ```env
-NEXT_PUBLIC_MICROCMS_SERVICE_DOMAIN=your-service-domain
-NEXT_PUBLIC_MICROCMS_API_KEY=your-api-key
-NEXT_PUBLIC_GA_ID=your-ga-id
-SITE_URL=https://kt-tech.blog
+NOTION_API_KEY=ntn_xxx           # Notion APIトークン（Secret）
+NOTION_DATABASE_ID=xxx           # Notion Data Source ID
+NEXT_PUBLIC_GA_ID=G-xxx          # Google Analytics
+SITE_URL=https://kt-tech.blog   # サイトURL
 ```
 
-### 3. 開発サーバー起動
-
-```bash
-npm run dev
-# または
-yarn dev
+### eyecatch生成スクリプト用（.env.localのみ）
+```env
+GEMINI_API_KEY=xxx               # Gemini API
+R2_ENDPOINT=xxx                  # Cloudflare R2
+R2_ACCESS_KEY=xxx                # R2アクセスキー
+R2_SECRET_KEY=xxx                # R2シークレットキー
+NEXT_PUBLIC_BUCKET_NAME=xxx      # R2バケット名
+NEXT_PUBLIC_R2_BUCKET_URL=xxx    # R2パブリックURL
 ```
 
-開発サーバーは `http://localhost:3000` で起動します。
+## 開発時の注意点
 
-### 4. ビルドとデプロイ
-
-```bash
-# プロダクションビルド
-npm run build
-
-# ビルド後のサーバー起動
-npm run start
-```
+1. **Edge Runtime**: 動的ルートには必ず `export const runtime = 'edge'` を設定
+2. **ISR不可**: `revalidate` は使えない。Cloudflare PagesではEdge Runtimeのみ
+3. **Notion SDK v5**: `databases.query` → `dataSources.query`、`database_id` → `data_source_id`
+4. **画像ドメイン**: `next.config.js` の `remotePatterns` に追加が必要
+5. **callout UI**: Notionのcalloutブロックは `:::callout` マーカー → プレースホルダー → HTML変換の3段階処理
+6. **型安全性**: TypeScriptの型チェックを必ず確認
+7. **レスポンシブ**: モバイルファーストでの開発
 
 ## 重要なコマンド
 
@@ -124,77 +113,6 @@ npm run start
 |---------|------|
 | `npm run dev` | 開発サーバー起動 |
 | `npm run build` | プロダクションビルド |
-| `npm run start` | プロダクションサーバー起動 |
 | `npm run lint` | ESLint実行 |
-| `npm run lint:fix` | ESLint自動修正 |
-| `npm run format` | Prettierでコードフォーマット |
-
-## microCMS設定
-
-### APIエンドポイント
-- `blogs` - ブログ記事
-- `categories` - カテゴリ
-- `tags` - タグ
-
-### 必要なフィールド
-
-**Blogs API**
-- `title` (テキスト) - 記事タイトル
-- `body` (リッチエディタ) - 記事本文
-- `eyecatch` (画像) - アイキャッチ画像
-- `category` (コンテンツ参照 - categories) - カテゴリ
-- `tags` (複数コンテンツ参照 - tags) - タグ
-
-**Categories API**
-- `name` (テキスト) - カテゴリ名
-
-**Tags API**
-- `name` (テキスト) - タグ名
-
-## デプロイ
-
-このプロジェクトはVercelでのデプロイに最適化されていますが、Cloudflare Pagesでも動作します。
-
-### Vercel
-```bash
-npm install -g vercel
-vercel
-```
-
-### Cloudflare Pages
-`@cloudflare/next-on-pages` が含まれているため、Cloudflare Pagesでも動作します。
-
-## 開発時の注意点
-
-1. **型安全性**: TypeScriptの型チェックを必ず確認
-2. **レスポンシブ**: モバイルファーストでの開発を心がける
-3. **アクセシビリティ**: セマンティックHTMLとARIA属性の適切な使用
-4. **パフォーマンス**: 画像最適化とStatic Generation活用
-5. **SEO**: メタデータとOGP設定の確認
-
-## トラブルシューティング
-
-### よくある問題
-
-1. **microCMS API接続エラー**
-   - 環境変数の設定確認
-   - APIキーの権限確認
-
-2. **ビルドエラー**
-   - TypeScriptの型エラー確認
-   - 不要なimportの削除
-
-3. **スタイルが適用されない**
-   - Tailwind CSSの設定確認
-   - CSS Modulesとの競合確認
-
-## 貢献ガイドライン
-
-1. 新機能追加前にIssueを作成
-2. 適切なブランチ命名規則に従う (`feature/`, `fix/`, `chore/`)
-3. コミットメッセージはConventional Commits形式
-4. プルリクエスト前にlintとtypecheckを実行
-
-## ライセンス
-
-このプロジェクトはプライベートプロジェクトです。
+| `node scripts/generate-eyecatch.mjs` | eyecatch未設定記事に画像生成 |
+| `node scripts/generate-eyecatch.mjs --dry-run` | 対象記事の確認のみ |
