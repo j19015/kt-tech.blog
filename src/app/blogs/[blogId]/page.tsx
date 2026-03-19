@@ -123,13 +123,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 async function fetchOGPData(url: string) {
-  // localhostを含むURLの場合はカスタムのデータを返す
-  if (url.includes('localhost')) {
-    return {
-      title: 'localhost', // タイトルにローカルホストと表示
-      description: 'ローカル環境のリンクです', // 任意の説明
-      image: '/images/no_image_generated.png', // デフォルト画像パス
-    };
+  // 無効なURLや内部リンクをスキップ
+  if (url.includes('localhost') || !url.startsWith('https://')) {
+    return null;
   }
 
   try {
@@ -221,8 +217,10 @@ export default async function StaticDetailPage({
     /<p>\s*<a[^>]*href="(https?:\/\/[^"]*)"[^>]*>[^<]*<\/a>\s*<\/p>/gi,
     (fullMatch, href) => {
       const meta = hrefToOgpData.get(href);
-      if (!meta) return fullMatch;
-      return `<div class="link-card mt-3 mb-3"><a href="${href}" target="_blank" rel="noopener noreferrer"><div class="link-card-body"><div class="link-card-info"><div class="link-card-title">${meta.title || ''}</div><div class="link-card-url">${href}</div></div><img src="${meta.image || '/images/no_image_generated.png'}" class="link-card-thumbnail" /></div></a></div>`;
+      const title = meta?.title || new URL(href).hostname;
+      const favicon = `https://www.google.com/s2/favicons?domain=${new URL(href).hostname}&sz=128`;
+      const image = meta?.image || favicon;
+      return `<div class="link-card mt-3 mb-3"><a href="${href}" target="_blank" rel="noopener noreferrer"><div class="link-card-body"><div class="link-card-info"><div class="link-card-title">${title}</div><div class="link-card-url">${href}</div></div><img src="${image}" class="link-card-thumbnail" /></div></a></div>`;
     }
   );
 
