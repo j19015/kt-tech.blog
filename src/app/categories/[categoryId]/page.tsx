@@ -7,7 +7,8 @@ import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 
 export const revalidate = 3600;
 export async function generateStaticParams() {
-  return [];
+  const { contents: categories } = await getCategoryList();
+  return categories.map((cat) => ({ categoryId: cat.id }));
 }
 
 export default async function StaticDetailPage({
@@ -23,7 +24,7 @@ export default async function StaticDetailPage({
   const category_show = await getCategoryDetail(categoryId);
 
   //リストを指定のタグで絞り込み
-  const filteredContents = contents.filter((blog) => blog.category?.id === categoryId);
+  const filteredContents = contents.filter((blog) => blog.category?.id === decodeURIComponent(categoryId));
 
   if (!filteredContents) {
     notFound();

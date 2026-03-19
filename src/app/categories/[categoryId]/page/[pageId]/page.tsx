@@ -9,7 +9,17 @@ const ITEMS_PER_PAGE = 6;
 
 export const revalidate = 3600;
 export async function generateStaticParams() {
-  return [];
+  const { contents } = await getList();
+  const { contents: categories } = await getCategoryList();
+  const paths = [];
+  for (const cat of categories) {
+    const filtered = contents.filter((b) => b.category?.id === cat.id);
+    const totalPages = Math.ceil(filtered.length / 6);
+    for (let i = 1; i <= totalPages; i++) {
+      paths.push({ categoryId: cat.id, pageId: String(i) });
+    }
+  }
+  return paths;
 }
 
 export default async function StaticPaginationPage({
@@ -33,7 +43,7 @@ export default async function StaticPaginationPage({
     const { contents } = await getList();
 
     //fileter
-    const filteredContents = contents.filter((blog) => blog.category?.id === categoryId);
+    const filteredContents = contents.filter((blog) => blog.category?.id === decodeURIComponent(categoryId));
 
     //silce
     const contentSlice = filteredContents.slice(startIndex, endIndex);

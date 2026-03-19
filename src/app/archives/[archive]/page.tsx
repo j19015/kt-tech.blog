@@ -6,7 +6,9 @@ import Title from '@/components/Title/Title';
 
 export const revalidate = 3600;
 export async function generateStaticParams() {
-  return [];
+  const { contents } = await getList();
+  const archives = Array.from(new Set(contents.map((item) => item.createdAt.slice(0, 7))));
+  return archives.map((archive) => ({ archive }));
 }
 
 export default async function StaticDetailPage({

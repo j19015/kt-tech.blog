@@ -3,6 +3,10 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  experimental: {
+    cpus: 1,
+    workerThreads: false,
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.microcms-assets.io' },

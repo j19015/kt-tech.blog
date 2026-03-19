@@ -10,7 +10,10 @@ const ITEMS_PER_PAGE = 6; // 1ページあたりのアイテム数
 
 export const revalidate = 3600;
 export async function generateStaticParams() {
-  return [];
+  const { contents } = await getList();
+  const articles = contents.filter((a) => a.category?.name !== 'PF');
+  const totalPages = Math.ceil(articles.length / 6);
+  return Array.from({ length: totalPages }, (_, i) => ({ pageId: String(i + 1) }));
 }
 
 export default async function StaticPaginationPage({

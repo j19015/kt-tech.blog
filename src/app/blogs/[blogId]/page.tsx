@@ -65,9 +65,11 @@ import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 
 
 export const revalidate = 3600;
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
-  // ビルド時にはパスを生成しない（ISRで初回アクセス時に生成）
-  return [];
+  const { contents } = await getList();
+  return contents.map((blog) => ({ blogId: blog.id }));
 }
 
 type Props = {
@@ -131,7 +133,7 @@ async function fetchOGPData(url: string) {
   }
 
   try {
-    const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
+    const response = await fetch(url, { signal: AbortSignal.timeout(3000) });
     const html = await response.text();
 
     const title = extractMetaContent(html, ['og:title', 'twitter:title', 'title']) ||

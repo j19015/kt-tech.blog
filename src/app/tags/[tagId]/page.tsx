@@ -8,7 +8,8 @@ import Link from 'next/link';
 
 export const revalidate = 3600;
 export async function generateStaticParams() {
-  return [];
+  const { contents: tags } = await getTagList();
+  return tags.map((tag) => ({ tagId: tag.id }));
 }
 
 export default async function StaticDetailPage({
@@ -27,7 +28,7 @@ export default async function StaticDetailPage({
   const tag_show = await getTagDetail(tagId);
 
   //リストを指定のタグで絞り込み
-  const filteredContents = contents.filter((blog) => blog.tags?.some((tag) => tag.id === tagId));
+  const filteredContents = contents.filter((blog) => blog.tags?.some((tag) => tag.id === decodeURIComponent(tagId)));
 
   //コンテンツがない場合
   if (!filteredContents) {

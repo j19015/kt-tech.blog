@@ -2,7 +2,17 @@
 const NOTION_API_BASE = 'https://api.notion.com/v1';
 const NOTION_VERSION = '2022-06-28';
 
+// Notion APIレート制限対策: 3req/sec以下に制御
+let lastRequestTime = 0;
 async function notionFetch(path: string, options: { method?: string; body?: any; revalidate?: number } = {}) {
+  // 最低350msの間隔を確保（約2.8req/sec）
+  const now = Date.now();
+  const elapsed = now - lastRequestTime;
+  if (elapsed < 350) {
+    await new Promise(r => setTimeout(r, 350 - elapsed));
+  }
+  lastRequestTime = Date.now();
+
   const res = await fetch(`${NOTION_API_BASE}${path}`, {
     method: options.method || 'GET',
     headers: {
@@ -72,7 +82,7 @@ function richTextToPlain(richText: any[]): string {
 
 // NotionのページプロパティからBlog型に変換
 function nameToSlug(name: string): string {
-  return encodeURIComponent(name.toLowerCase().trim());
+  return name.toLowerCase().trim();
 }
 
 function pageToTag(name: string): Tag {
@@ -306,7 +316,8 @@ export const getTagList = async () => {
 // タグの詳細を取得
 export const getTagDetail = async (tagId: string) => {
   const { contents } = await getTagList();
-  const tag = contents.find((t) => t.id === tagId);
+  const decoded = decodeURIComponent(tagId);
+  const tag = contents.find((t) => t.id === decoded || t.id === tagId);
   if (!tag) throw new Error(`Tag not found: ${tagId}`);
   return tag;
 };
@@ -324,7 +335,8 @@ export const getCategoryList = async () => {
 // カテゴリの詳細を取得
 export const getCategoryDetail = async (categoryId: string) => {
   const { contents } = await getCategoryList();
-  const category = contents.find((c) => c.id === categoryId);
+  const decoded = decodeURIComponent(categoryId);
+  const category = contents.find((c) => c.id === decoded || c.id === categoryId);
   if (!category) throw new Error(`Category not found: ${categoryId}`);
   return category;
 };
