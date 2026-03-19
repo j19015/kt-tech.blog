@@ -43,25 +43,37 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const $ = cheerio.load(html);
   const text = $('body').text();
 
+  const description = text.slice(0, 120).replace(/\n/g, ' ').trim();
+  const ogImage = blog.eyecatch?.url || `${process.env.SITE_URL}/opengraph-image.png`;
+  const pageUrl = `${process.env.SITE_URL}/blogs/${params.blogId}`;
+
   return {
     title: blog.title,
-    description: text.slice(0, 100),
+    description,
+    alternates: {
+      canonical: pageUrl,
+    },
     twitter: {
       card: 'summary_large_image',
       title: blog.title,
-      description: text.slice(0, 100),
+      description,
       site: '@tech_koki',
       creator: '@tech_koki',
+      images: [ogImage],
     },
     openGraph: {
       title: blog.title,
-      description: text.slice(0, 100),
+      description,
       locale: 'ja_JP',
-      type: 'website',
-      images: previousImages,
+      type: 'article',
+      url: pageUrl,
+      publishedTime: blog.publishedAt,
+      modifiedTime: blog.updatedAt,
+      authors: ['kt'],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: blog.title }],
     },
     other: {
-      thumbnail: blog.eyecatch?.url ? blog.eyecatch?.url : '',
+      thumbnail: ogImage,
     },
   };
 }
@@ -227,13 +239,49 @@ export default async function StaticDetailPage({
   if (!blog) {
     notFound();
   }
+
+  // JSON-LD 構造化データ
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: blog.title,
+    description: blog.body.replace(/[#*`>\n]/g, ' ').slice(0, 160).trim(),
+    image: blog.eyecatch?.url || `${process.env.SITE_URL}/opengraph-image.png`,
+    datePublished: blog.publishedAt,
+    dateModified: blog.updatedAt,
+    author: { '@type': 'Person', name: 'kt', url: 'https://kt-tech.blog/about' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'kt-tech.blog',
+      url: 'https://kt-tech.blog',
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${process.env.SITE_URL}/blogs/${blogId}`,
+    },
+    keywords: blog.tags?.map(t => t.name).join(', '),
+    articleSection: blog.category?.name,
+  };
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: process.env.SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${process.env.SITE_URL}/blogs/page/1` },
+      { '@type': 'ListItem', position: 3, name: blog.title },
+    ],
+  };
+
   return (
     <>
-      <BreadcrumbNav 
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      <BreadcrumbNav
         items={[
           { label: 'Blog', href: '/blogs/page/1' },
           { label: blog.title, current: true }
-        ]} 
+        ]}
       />
       <div className='grid grid-cols-2 lg:grid-cols-3 lg:p-4'>
         <div className='lg:col-span-1 p-5 pl-7 pt-0 hidden lg:block'>

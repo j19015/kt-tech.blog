@@ -165,6 +165,21 @@
   background: var(--md-table-td-dark);
 }
 
+/* リンクカードがリスト内にある場合のbullet除去 */
+.znc li .link-card,
+.znc ul .link-card {
+  list-style: none;
+}
+.znc li:has(.link-card) {
+  list-style: none;
+  margin-left: -2rem;
+}
+
+/* 空段落の非表示 */
+.znc p:empty {
+  display: none;
+}
+
 /* メディアクエリを追加 */
 @media (max-width: 768px) {
   .znc h1 {
@@ -273,80 +288,86 @@
 
 /* 青: 情報・メモ */
 .znc .callout-blue_background {
-  background: #eff6ff;
-  border-color: #93c5fd;
-  border-left: 4px solid #3b82f6;
+  background: #e8f4fd;
+  border-color: #7cb9e8;
+  border-left-color: #2563eb;
 }
 .dark .znc .callout-blue_background {
-  background: rgba(59, 130, 246, 0.15);
-  border-color: rgba(59, 130, 246, 0.3);
-  border-left: 4px solid #60a5fa;
+  background: rgba(37, 99, 235, 0.18);
+  border-color: rgba(59, 130, 246, 0.35);
+  border-left-color: #60a5fa;
 }
 
 /* 緑: 成功・Tips */
 .znc .callout-green_background {
-  background: #f0fdf4;
-  border-color: #86efac;
-  border-left: 4px solid #22c55e;
+  background: #e6f9ed;
+  border-color: #6ee7a0;
+  border-left-color: #16a34a;
 }
 .dark .znc .callout-green_background {
-  background: rgba(34, 197, 94, 0.15);
-  border-color: rgba(34, 197, 94, 0.3);
-  border-left: 4px solid #4ade80;
+  background: rgba(22, 163, 74, 0.18);
+  border-color: rgba(34, 197, 94, 0.35);
+  border-left-color: #4ade80;
 }
 
 /* 黄色: 注意・警告 */
 .znc .callout-yellow_background {
-  background: #fefce8;
-  border-color: #fde047;
-  border-left: 4px solid #eab308;
+  background: #fef9e7;
+  border-color: #f5d44e;
+  border-left-color: #ca8a04;
 }
 .dark .znc .callout-yellow_background {
-  background: rgba(234, 179, 8, 0.15);
-  border-color: rgba(234, 179, 8, 0.3);
-  border-left: 4px solid #facc15;
+  background: rgba(202, 138, 4, 0.18);
+  border-color: rgba(234, 179, 8, 0.35);
+  border-left-color: #facc15;
 }
 
 /* 赤: 危険・重要 */
 .znc .callout-red_background {
-  background: #fef2f2;
-  border-color: #fca5a5;
-  border-left: 4px solid #ef4444;
+  background: #fde8e8;
+  border-color: #f87171;
+  border-left-color: #dc2626;
 }
 .dark .znc .callout-red_background {
-  background: rgba(239, 68, 68, 0.15);
-  border-color: rgba(239, 68, 68, 0.3);
-  border-left: 4px solid #f87171;
+  background: rgba(220, 38, 38, 0.18);
+  border-color: rgba(239, 68, 68, 0.35);
+  border-left-color: #f87171;
 }
 
 /* 紫 */
 .znc .callout-purple_background {
-  background: #faf5ff;
-  border-color: #e9d5ff;
+  background: #f3e8ff;
+  border-color: #c084fc;
+  border-left-color: #7c3aed;
 }
 .dark .znc .callout-purple_background {
-  background: rgba(168, 85, 247, 0.1);
-  border-color: rgba(168, 85, 247, 0.2);
+  background: rgba(124, 58, 237, 0.18);
+  border-color: rgba(168, 85, 247, 0.35);
+  border-left-color: #a78bfa;
 }
 
 /* ピンク */
 .znc .callout-pink_background {
-  background: #fdf2f8;
-  border-color: #fbcfe8;
+  background: #fce7f3;
+  border-color: #f472b6;
+  border-left-color: #db2777;
 }
 .dark .znc .callout-pink_background {
-  background: rgba(236, 72, 153, 0.1);
-  border-color: rgba(236, 72, 153, 0.2);
+  background: rgba(219, 39, 119, 0.18);
+  border-color: rgba(236, 72, 153, 0.35);
+  border-left-color: #f472b6;
 }
 
 /* オレンジ */
 .znc .callout-orange_background {
-  background: #fff7ed;
-  border-color: #fed7aa;
+  background: #fff3e0;
+  border-color: #fb923c;
+  border-left-color: #ea580c;
 }
 .dark .znc .callout-orange_background {
-  background: rgba(249, 115, 22, 0.1);
-  border-color: rgba(249, 115, 22, 0.2);
+  background: rgba(234, 88, 12, 0.18);
+  border-color: rgba(249, 115, 22, 0.35);
+  border-left-color: #fb923c;
 }
 
 /* ブログの目次のCSS - グローバル変数を上書きしない */

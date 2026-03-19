@@ -41,22 +41,79 @@ const s3 = new S3Client({
   },
 });
 
-// カテゴリ別のカラーパレット
-const CATEGORY_COLORS = {
-  'トラブルシューティング': 'warm orange, burnt sienna, cream, dark brown. Beige background.',
-  '設定・環境構築': 'deep navy blue, steel blue, lavender, soft peach. Navy blue background.',
-  '実装': 'emerald green, teal, sage, dark forest green. Soft mint background.',
-  '設計': 'deep indigo, slate blue, dusty rose, warm taupe. Light gray background.',
-  '学習メモ': 'golden yellow, amber, warm brown, mustard. Cream background.',
-  '技術': 'cool gray, steel blue, ice blue, charcoal. Light silver background.',
-  '勉強会': 'coral pink, salmon, peach, warm rose. Soft blush background.',
-  '日常': 'sky blue, turquoise, soft white, pale mint. Light blue background.',
+// カテゴリ別のカラーパレット（各カテゴリに複数バリエーション）
+const CATEGORY_PALETTES = {
+  'トラブルシューティング': [
+    'warm orange, burnt sienna, cream, dark brown. Beige background.',
+    'coral red, terracotta, soft peach, maroon. Warm sand background.',
+    'amber, rust, golden cream, chocolate brown. Light tan background.',
+    'vermillion, copper, ivory, deep sienna. Off-white background.',
+  ],
+  '設定・環境構築': [
+    'deep navy blue, steel blue, lavender, soft peach. Navy blue background.',
+    'royal blue, cobalt, powder blue, slate gray. Deep blue background.',
+    'cerulean, midnight blue, periwinkle, silver. Dark slate background.',
+    'sapphire, ocean blue, ice blue, dove gray. Charcoal background.',
+  ],
+  '実装': [
+    'emerald green, teal, sage, dark forest green. Soft mint background.',
+    'jade, sea green, lime, deep olive. Light sage background.',
+    'viridian, moss green, chartreuse, hunter green. Pale green background.',
+    'malachite, pine green, mint, dark emerald. Cream background.',
+  ],
+  '設計': [
+    'deep indigo, slate blue, dusty rose, warm taupe. Light gray background.',
+    'plum, amethyst, mauve, charcoal. Lavender background.',
+    'deep violet, periwinkle, blush pink, dark gray. Soft lilac background.',
+    'byzantium, wisteria, rose quartz, gunmetal. Pearl background.',
+  ],
+  '学習メモ': [
+    'golden yellow, amber, warm brown, mustard. Cream background.',
+    'saffron, honey, caramel, dark gold. Light yellow background.',
+    'sunflower, bronze, wheat, deep amber. Ivory background.',
+    'canary yellow, ochre, tan, burnt gold. Pale cream background.',
+  ],
+  '技術': [
+    'cool gray, steel blue, ice blue, charcoal. Light silver background.',
+    'graphite, platinum, pale blue, dark gray. Silver background.',
+    'titanium, ash gray, arctic blue, onyx. Pearl gray background.',
+    'slate, mercury, frost blue, anthracite. White smoke background.',
+  ],
+  '勉強会': [
+    'coral pink, salmon, peach, warm rose. Soft blush background.',
+    'magenta, hot pink, light coral, dusty rose. Pink tint background.',
+    'fuchsia, flamingo, apricot, deep rose. Pastel pink background.',
+    'cerise, raspberry, soft orange, rose gold. Light peach background.',
+  ],
+  '日常': [
+    'sky blue, turquoise, soft white, pale mint. Light blue background.',
+    'aquamarine, teal, cream, soft cyan. Pale turquoise background.',
+    'cornflower blue, seafoam, vanilla, light teal. Mint background.',
+    'robin egg blue, azure, pearl, sage green. Soft aqua background.',
+  ],
 };
 
-const DEFAULT_COLORS = 'deep blue, purple, teal, silver. Dark slate background.';
+const DEFAULT_PALETTES = [
+  'deep blue, purple, teal, silver. Dark slate background.',
+  'indigo, crimson, gold, charcoal. Midnight background.',
+  'forest green, burnt orange, cream, navy. Dark brown background.',
+  'burgundy, teal, ivory, slate. Warm gray background.',
+];
 
-function generatePrompt(category) {
-  const colors = CATEGORY_COLORS[category] || DEFAULT_COLORS;
+// slugからハッシュ値を計算してバリエーション選択
+function hashSlug(slug) {
+  let hash = 0;
+  for (let i = 0; i < slug.length; i++) {
+    hash = ((hash << 5) - hash) + slug.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+
+function generatePrompt(category, slug) {
+  const palettes = CATEGORY_PALETTES[category] || DEFAULT_PALETTES;
+  const index = hashSlug(slug) % palettes.length;
+  const colors = palettes[index];
   const noText = 'Absolutely no text, no words, no letters, no labels, no numbers, no characters. Pure visual abstract art only.';
   const style = 'Abstract geometric composition with overlapping translucent circles, arcs and curved shapes. Matte paper-like texture. Flat design, minimal, modern. 16:9 aspect ratio.';
   return `${noText} ${style} Color palette: ${colors}`;
@@ -175,7 +232,7 @@ async function main() {
         imageBuffer = readFileSync(localPath);
       } else {
         // 画像生成
-        const prompt = generatePrompt(category);
+        const prompt = generatePrompt(category, slug);
         console.log('  Generating image...');
         imageBuffer = await callImagen(prompt);
 
