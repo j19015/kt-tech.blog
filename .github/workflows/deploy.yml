@@ -20,23 +20,13 @@ jobs:
 
       - run: npm ci --legacy-peer-deps
 
-      - name: Cache Next.js build
-        uses: actions/cache@v4
-        with:
-          path: .next/cache
-          key: nextjs-${{ hashFiles('package-lock.json') }}-${{ hashFiles('**/*.tsx', '**/*.ts', '**/*.css') }}
-          restore-keys: nextjs-${{ hashFiles('package-lock.json') }}-
-
-      - name: Build Next.js
-        run: npm run build
+      - name: Build for Cloudflare Pages
+        run: npx @cloudflare/next-on-pages
         env:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
           SITE_URL: ${{ secrets.SITE_URL }}
-
-      - name: Build for Cloudflare Pages
-        run: npx @cloudflare/next-on-pages --skip-build
 
       - name: Deploy to Cloudflare Pages
         run: npx wrangler pages deploy .vercel/output/static --project-name=kt-tech-blog
