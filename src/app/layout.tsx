@@ -1,5 +1,13 @@
 import './globals.css';
+import { Noto_Sans_JP } from 'next/font/google';
 import { Header } from '../../src/components/Header/Header';
+
+const notoSansJP = Noto_Sans_JP({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  display: 'swap',
+  variable: '--font-noto-sans-jp',
+});
 import { Footer } from '../../src/components/Footer/Footer';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import GoogleAnalytics from '@/components/GoogleAnalytics/GoogleAnalytics';
@@ -116,7 +124,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <html lang='ja'>
+    <html lang='ja' className={notoSansJP.variable}>
       <head>
         <GoogleAnalytics />
         <meta name='google-adsense-account' content='ca-pub-9002778711554857'></meta>

@@ -3,6 +3,9 @@ name: Deploy to Cloudflare Workers
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+  repository_dispatch:
+    types: [notion-update]
 
 jobs:
   deploy:
