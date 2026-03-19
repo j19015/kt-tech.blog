@@ -151,7 +151,7 @@ async function blocksToMarkdown(blockId: string): Promise<string> {
         lines.push(block.bookmark.url || '');
         break;
       case 'divider':
-        lines.push('---');
+        // 区切り線は出力しない（見出しで十分区切られるため）
         break;
       case 'quote': {
         const quoteText = richTextToMarkdown(block.quote.rich_text);
