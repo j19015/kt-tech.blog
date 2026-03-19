@@ -236,7 +236,7 @@ export default async function StaticDetailPage({
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: blog.title,
-    description: blog.body.replace(/[#*`>\n]/g, ' ').slice(0, 160).trim(),
+    description: blog.body.replace(/:::callout\{[^}]*\}/g, '').replace(/:::/g, '').replace(/[#*`>\n]/g, ' ').replace(/\s+/g, ' ').slice(0, 160).trim(),
     image: blog.eyecatch?.url || `${process.env.SITE_URL}/opengraph-image.png`,
     datePublished: blog.publishedAt,
     dateModified: blog.updatedAt,
