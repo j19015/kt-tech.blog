@@ -2,14 +2,36 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getDetail, getList } from '../../../../libs/notion';
-import cheerio from 'cheerio';
-import hljs from 'highlight.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faTag } from '@fortawesome/free-solid-svg-icons';
-import markdownToHtml from 'zenn-markdown-html';
-import 'zenn-content-css';
+import MarkdownIt from 'markdown-it';
+const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
 import '../../../../styles/markdown.css';
 import '../../../../styles/default-dark.min.css';
+
+// Edge Runtime互換のHTML操作ヘルパー（cheerio不使用）
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").trim();
+}
+
+function extractMetaContent(html: string, patterns: string[]): string | undefined {
+  for (const pattern of patterns) {
+    const regex = new RegExp(`<meta[^>]*(?:name|property)=["']${pattern}["'][^>]*content=["']([^"']*)["']|<meta[^>]*content=["']([^"']*)["'][^>]*(?:name|property)=["']${pattern}["']`, 'i');
+    const match = html.match(regex);
+    if (match) return match[1] || match[2];
+  }
+  return undefined;
+}
+
+function extractHeadings(html: string): { text: string; id: string; tag: string }[] {
+  const headings: { text: string; id: string; tag: string }[] = [];
+  const regex = /<(h[12])[^>]*id=["']([^"']*)["'][^>]*>(.*?)<\/\1>/gi;
+  let match;
+  while ((match = regex.exec(html)) !== null) {
+    headings.push({ tag: match[1], id: match[2], text: stripHtml(match[3]) });
+  }
+  return headings;
+}
 import type { Metadata, ResolvingMetadata } from 'next';
 import { faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import { TableOfContents } from '@/components/TableOfContents/TableOfContents';
@@ -19,6 +41,7 @@ import { ShareButtons } from '@/components/ShareButtons/ShareButtons';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 
 
+export const runtime = 'edge';
 export async function generateStaticParams() {
   // ビルド時にはパスを生成しない（ISRで初回アクセス時に生成）
   return [];
@@ -35,10 +58,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = blog.eyecatch || [];
 
-  // markdown->平文
-  const html = markdownToHtml(blog.body);
-  const $ = cheerio.load(html);
-  const text = $('body').text();
+  // markdown->平文（Edge互換）
+  const rawHtml = md.render(blog.body);
+  const text = stripHtml(rawHtml);
 
   const description = text.slice(0, 120).replace(/\n/g, ' ').trim();
   const ogImage = blog.eyecatch?.url || `${process.env.SITE_URL}/opengraph-image.png`;
@@ -86,23 +108,13 @@ async function fetchOGPData(url: string) {
   }
 
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
     const html = await response.text();
-    const $ = cheerio.load(html);
 
-    const getMetaTag = (name: string) => {
-      return (
-        $(`meta[name=${name}]`).attr('content') ||
-        $(`meta[property="og:${name}"]`).attr('content') ||
-        $(`meta[property="twitter:${name}"]`).attr('content') ||
-        $(`meta[name="og:${name}"]`).attr('content')
-      );
-    };
-
-    const title = getMetaTag('title') || $('title').text();
-    const description = getMetaTag('description') || $('meta[name="description"]').attr('content');
-    const image = getMetaTag('image') || $('img').attr('src');
-    // ファビコンをフォールバックとして使用
+    const title = extractMetaContent(html, ['og:title', 'twitter:title', 'title']) ||
+      (html.match(/<title[^>]*>(.*?)<\/title>/i)?.[1] || '').trim();
+    const description = extractMetaContent(html, ['og:description', 'description', 'twitter:description']);
+    const image = extractMetaContent(html, ['og:image', 'twitter:image', 'image']);
     const faviconUrl = `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=128`;
     const main_image = image
       ? image.includes('https')
@@ -110,14 +122,10 @@ async function fetchOGPData(url: string) {
         : `${url}${image[0] == '/' ? image.substring(1) : image}`
       : faviconUrl;
 
-    return {
-      title,
-      description,
-      image: main_image,
-    };
+    return { title, description, image: main_image };
   } catch (error) {
     console.error(`Error fetching OGP for ${url}:`, error);
-    return null; // エラーが発生した場合も何も返さない
+    return null;
   }
 }
 
@@ -157,83 +165,44 @@ export default async function StaticDetailPage({
     }
   );
 
-  const html = markdownToHtml(bodyPreprocessed);
+  const html = md.render(bodyPreprocessed);
 
-  // プレースホルダーをcallout HTMLに置換（テキスト部分もMarkdown変換）
-  let htmlWithCallouts = html;
+  // プレースホルダーをcallout HTMLに置換
+  let processedHtml = html;
   calloutMap.forEach(({ icon, color, text }, placeholder) => {
-    // callout内テキストのインラインMarkdownを変換
-    const textHtml = markdownToHtml(text).replace(/<\/?p>/g, '').trim();
+    const textHtml = md.render(text).replace(/<\/?p>/g, '').trim();
     const calloutHtml = `<div class="callout callout-${color}"><span class="callout-icon">${icon}</span><div class="callout-content">${textHtml}</div></div>`;
-    htmlWithCallouts = htmlWithCallouts.replace(new RegExp(`<p>${placeholder}</p>|${placeholder}`, 'g'), calloutHtml);
+    processedHtml = processedHtml.replace(new RegExp(`<p>${placeholder}</p>|${placeholder}`, 'g'), calloutHtml);
   });
 
-  const parse_body2 = cheerio.load(htmlWithCallouts);
+  // codeブロックにhljsクラスを追加（CSSでスタイリング）
+  processedHtml = processedHtml.replace(/<pre><code/g, '<pre><code class="hljs"');
 
-  // シンタックスハイライト
-  parse_body2('pre code').each((_, elm) => {
-    const result = hljs.highlightAuto(parse_body2(elm).text());
-    parse_body2(elm).html(result.value);
-    parse_body2(elm).addClass('hljs');
-  });
-
-  // 重複なしで全てのリンクのhrefを取得
+  // リンクカード生成（正規表現ベース）
+  const linkRegex = /<a[^>]*href="(https?:\/\/[^"]*)"[^>]*>.*?<\/a>/gi;
   const uniqueLinks: string[] = [];
-  parse_body2('a').each((_, link) => {
-    const href = parse_body2(link).attr('href');
-    if (href && !href.startsWith('#') && !uniqueLinks.includes(href)) {
-      uniqueLinks.push(href);
+  let linkMatch;
+  while ((linkMatch = linkRegex.exec(processedHtml)) !== null) {
+    const href = linkMatch[1];
+    if (!uniqueLinks.includes(href)) uniqueLinks.push(href);
+  }
+
+  const ogpResults = await Promise.all(uniqueLinks.map(href => fetchOGPData(href)));
+  const hrefToOgpData = new Map<string, any>();
+  uniqueLinks.forEach((href, i) => hrefToOgpData.set(href, ogpResults[i]));
+
+  // <p>タグ内の単独リンクをリンクカードに置換
+  processedHtml = processedHtml.replace(
+    /<p>\s*<a[^>]*href="(https?:\/\/[^"]*)"[^>]*>[^<]*<\/a>\s*<\/p>/gi,
+    (fullMatch, href) => {
+      const meta = hrefToOgpData.get(href);
+      if (!meta) return fullMatch;
+      return `<div class="link-card mt-3 mb-3"><a href="${href}" target="_blank" rel="noopener noreferrer"><div class="link-card-body"><div class="link-card-info"><div class="link-card-title">${meta.title || ''}</div><div class="link-card-url">${href}</div></div><img src="${meta.image || '/images/no_image_generated.png'}" class="link-card-thumbnail" /></div></a></div>`;
     }
-  });
+  );
 
-  // 各リンクのOGPデータを非同期で取得
-  const ogpDataPromises = Array.from(uniqueLinks).map((href) => fetchOGPData(href));
-  const ogpDataResults = await Promise.all(ogpDataPromises);
-
-  // hrefとOGPデータをマッピング
-  const hrefToOgpData = new Map();
-  Array.from(uniqueLinks).forEach((href, index) => {
-    hrefToOgpData.set(href, ogpDataResults[index]);
-  });
-
-  // リンクカードの生成とHTMLの更新
-  parse_body2('a').each((_, link) => {
-    const href = parse_body2(link).attr('href');
-    if (!href || href.startsWith('#')) {
-      return;
-    }
-
-    const meta = hrefToOgpData.get(href);
-
-    if (!meta) {
-      return;
-    }
-
-    const linkCardHTML = `
-      <div class="link-card mt-3 mb-3">
-        <a href="${href}" target="_blank" rel="noopener noreferrer">
-          <div class="link-card-body">
-            <div class="link-card-info">
-              <div class="link-card-title">${meta.title}</div>
-              <div class="link-card-url">${href}</div>
-            </div>
-            <img src="${meta.image}" class="link-card-thumbnail" />
-          </div>
-        </a>
-      </div>
-    `;
-
-    parse_body2(link.parent).replaceWith(linkCardHTML);
-  });
-
-  //目次機能
-  const $ = cheerio.load(html);
-  const headings = $('h1, h2').toArray();
-  const toc = headings.map((element) => ({
-    text: $(element).text(),
-    id: (element as any).attribs.id,
-    tag: (element as any).tagName,
-  }));
+  // 目次生成（正規表現ベース）
+  const toc = extractHeadings(processedHtml);
 
   if (!blog) {
     notFound();
@@ -343,7 +312,7 @@ export default async function StaticDetailPage({
             <ShareButtons title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
             <TableOfContents toc={toc} />
             <div className='p-4 znc markdown text-foreground'>
-              <div dangerouslySetInnerHTML={{ __html: parse_body2.html() }}></div>
+              <div dangerouslySetInnerHTML={{ __html: processedHtml }}></div>
             </div>
             <RelatedPosts posts={relatedPosts} currentPostId={blogId} />
           </div>

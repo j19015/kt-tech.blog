@@ -8,6 +8,7 @@ import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 const ITEMS_PER_PAGE = 6; // 1ページあたりのアイテム数
 
 
+export const runtime = 'edge';
 export async function generateStaticParams() {
   return [];
 }

@@ -1,4 +1,20 @@
-import { Client } from '@notionhq/client';
+// Notion REST API を直接fetch（Edge Runtime互換、@notionhq/client不使用）
+const NOTION_API_BASE = 'https://api.notion.com/v1';
+const NOTION_VERSION = '2022-06-28';
+
+async function notionFetch(path: string, options: { method?: string; body?: any } = {}) {
+  const res = await fetch(`${NOTION_API_BASE}${path}`, {
+    method: options.method || 'GET',
+    headers: {
+      'Authorization': `Bearer ${process.env.NOTION_API_KEY}`,
+      'Notion-Version': NOTION_VERSION,
+      'Content-Type': 'application/json',
+    },
+    body: options.body ? JSON.stringify(options.body) : undefined,
+  });
+  if (!res.ok) throw new Error(`Notion API error: ${res.status} ${await res.text()}`);
+  return res.json();
+}
 
 // 既存のmicrocms.tsと同じ型インターフェースを維持
 export type Blog = {
@@ -36,13 +52,14 @@ export type Category = {
   revisedAt: string;
 };
 
-const DATABASE_ID = process.env.NOTION_DATABASE_ID || '2eca0ffb-73d1-811b-aa8e-000bb9c14a3c';
+// REST APIでは Database ID を使用（data_source_idではない）
+const DATABASE_ID = process.env.NOTION_DATABASE_ID || '2eca0ffb73d181ffba0aecf7cad44701';
 
 if (!process.env.NOTION_API_KEY) {
   throw new Error('NOTION_API_KEY is required');
 }
 
-const notion = new Client({ auth: process.env.NOTION_API_KEY });
+// notionFetchを使用（上で定義済み）
 
 // ビルド時のAPI呼び出し削減用キャッシュ
 let listCache: { contents: Blog[]; totalCount: number; offset: number; limit: number } | null = null;
@@ -75,11 +92,9 @@ async function blocksToMarkdown(blockId: string): Promise<string> {
   let cursor: string | undefined;
 
   do {
-    const response: any = await notion.blocks.children.list({
-      block_id: blockId,
-      start_cursor: cursor,
-      page_size: 100,
-    });
+    const params = new URLSearchParams({ page_size: '100' });
+    if (cursor) params.set('start_cursor', cursor);
+    const response: any = await notionFetch(`/blocks/${blockId}/children?${params}`);
     blocks.push(...response.results);
     cursor = response.has_more ? response.next_cursor : undefined;
   } while (cursor);
@@ -154,7 +169,7 @@ async function blocksToMarkdown(blockId: string): Promise<string> {
         break;
       case 'table': {
         // テーブルの子ブロック(行)を取得
-        const tableRows = await notion.blocks.children.list({ block_id: block.id });
+        const tableRows = await notionFetch(`/blocks/${block.id}/children`);
         const rows = tableRows.results as any[];
         rows.forEach((row: any, idx: number) => {
           if (row.type === 'table_row') {
@@ -236,21 +251,13 @@ export const getList = async (queries?: { limit?: number; orders?: string }) => 
   let cursor: string | undefined;
 
   do {
-    const response: any = await notion.dataSources.query({
-      data_source_id: DATABASE_ID,
-      start_cursor: cursor,
+    const body: any = {
       page_size: 100,
-      filter: {
-        property: 'Status',
-        select: { equals: 'Published' },
-      },
-      sorts: [
-        {
-          property: 'Created',
-          direction: 'descending',
-        },
-      ],
-    });
+      filter: { property: 'Status', select: { equals: 'Published' } },
+      sorts: [{ property: 'Created', direction: 'descending' }],
+    };
+    if (cursor) body.start_cursor = cursor;
+    const response: any = await notionFetch(`/databases/${DATABASE_ID}/query`, { method: 'POST', body });
     allPages.push(...response.results);
     cursor = response.has_more ? response.next_cursor : undefined;
   } while (cursor);
@@ -266,18 +273,15 @@ export const getList = async (queries?: { limit?: number; orders?: string }) => 
 // ブログの詳細を取得 (slugで検索)
 export const getDetail = async (slug: string) => {
   // まずSlugプロパティで検索
-  const response = await notion.dataSources.query({
-    data_source_id: DATABASE_ID,
-    filter: {
-      property: 'Slug',
-      rich_text: { equals: slug },
-    },
+  const response = await notionFetch(`/databases/${DATABASE_ID}/query`, {
+    method: 'POST',
+    body: { filter: { property: 'Slug', rich_text: { equals: slug } } },
   });
 
   if (response.results.length === 0) {
     // Slugが見つからない場合はNotionのpage IDで検索
     try {
-      const page = await notion.pages.retrieve({ page_id: slug });
+      const page = await notionFetch(`/pages/${slug}`);
       return pageToBlog(page, true);
     } catch {
       throw new Error(`Blog not found: ${slug}`);
@@ -290,7 +294,7 @@ export const getDetail = async (slug: string) => {
 // タグ一覧を取得
 export const getTagList = async () => {
   // Notionのデータベーススキーマからタグオプションを取得
-  const db = await notion.dataSources.retrieve({ data_source_id: DATABASE_ID });
+  const db = await notionFetch(`/databases/${DATABASE_ID}`);
   const tagsProperty = (db.properties as any).Tags;
   const options = tagsProperty?.multi_select?.options || [];
 
@@ -308,7 +312,7 @@ export const getTagDetail = async (tagId: string) => {
 
 // カテゴリ一覧を取得
 export const getCategoryList = async () => {
-  const db = await notion.dataSources.retrieve({ data_source_id: DATABASE_ID });
+  const db = await notionFetch(`/databases/${DATABASE_ID}`);
   const categoryProperty = (db.properties as any).Category;
   const options = categoryProperty?.select?.options || [];
 
