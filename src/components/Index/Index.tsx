@@ -14,7 +14,7 @@ export const Index = ({ contents }: BlogProps) => {
                 {/* サムネイル画像 */}
                 <div className='flex-shrink-0 relative w-28 sm:w-36 aspect-[1200/630] rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-700'>
                   <Image
-                    src={blog.eyecatch?.url || '/images/no_image.jpeg'}
+                    src={blog.eyecatch?.url || '/images/no_image_generated.png'}
                     alt={blog.title}
                     fill
                     className='object-cover group-hover:scale-105 transition-transform duration-300'

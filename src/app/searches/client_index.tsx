@@ -94,7 +94,7 @@ export const ClientIndex = ({ contents }: BlogProps) => {
                     {/* Thumbnail */}
                     <div className='relative w-full sm:w-48 h-40 sm:h-32 flex-shrink-0 bg-slate-100 dark:bg-slate-800'>
                       <Image
-                        src={blog.eyecatch?.url || '/images/no_image.jpeg'}
+                        src={blog.eyecatch?.url || '/images/no_image_generated.png'}
                         alt={blog.title}
                         fill
                         className='object-cover'

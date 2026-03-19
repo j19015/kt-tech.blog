@@ -178,14 +178,15 @@ async function blocksToMarkdown(blockId: string): Promise<string> {
 }
 
 // rich_textをマークダウン形式に変換 (インライン装飾対応)
+// bold/italic/codeが混在する場合はHTMLタグで出力して確実に変換
 function richTextToMarkdown(richText: any[]): string {
   if (!richText) return '';
   return richText.map((t: any) => {
     let text = t.plain_text;
-    if (t.annotations?.bold) text = `**${text}**`;
-    if (t.annotations?.italic) text = `*${text}*`;
-    if (t.annotations?.strikethrough) text = `~~${text}~~`;
     if (t.annotations?.code) text = `\`${text}\``;
+    if (t.annotations?.bold) text = `<strong>${text}</strong>`;
+    if (t.annotations?.italic) text = `<em>${text}</em>`;
+    if (t.annotations?.strikethrough) text = `<del>${text}</del>`;
     if (t.href) text = `[${text}](${t.href})`;
     return text;
   }).join('');

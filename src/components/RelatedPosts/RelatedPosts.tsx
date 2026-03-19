@@ -36,7 +36,7 @@ export const RelatedPosts = ({ posts, currentPostId }: RelatedPostsProps) => {
               {/* Thumbnail */}
               <div className='relative aspect-[16/9] mb-3 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800'>
                 <Image
-                  src={post.eyecatch?.url || '/images/no_image.jpeg'}
+                  src={post.eyecatch?.url || '/images/no_image_generated.png'}
                   alt={post.title}
                   fill
                   className='object-cover group-hover:scale-105 transition-transform duration-300'

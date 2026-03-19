@@ -84,7 +84,7 @@ async function fetchOGPData(url: string) {
     return {
       title: 'localhost', // タイトルにローカルホストと表示
       description: 'ローカル環境のリンクです', // 任意の説明
-      image: '/images/no_image.jpeg', // デフォルト画像パス
+      image: '/images/no_image_generated.png', // デフォルト画像パス
     };
   }
 
@@ -105,11 +105,13 @@ async function fetchOGPData(url: string) {
     const title = getMetaTag('title') || $('title').text();
     const description = getMetaTag('description') || $('meta[name="description"]').attr('content');
     const image = getMetaTag('image') || $('img').attr('src');
+    // ファビコンをフォールバックとして使用
+    const faviconUrl = `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=128`;
     const main_image = image
       ? image.includes('https')
         ? image
         : `${url}${image[0] == '/' ? image.substring(1) : image}`
-      : '/images/no_image.jpeg';
+      : faviconUrl;
 
     return {
       title,
@@ -294,7 +296,7 @@ export default async function StaticDetailPage({
             <div className='p-4'>
               <Link href={`/blogs/${blog.id}`}>
                 <Image
-                  src={blog.eyecatch?.url || '/images/no_image.jpeg'}
+                  src={blog.eyecatch?.url || '/images/no_image_generated.png'}
                   alt='画像'
                   width={10000}
                   height={10000}
