@@ -23,29 +23,25 @@ const nextConfig = {
       {
         source: '/blogs/:path*',
         headers: [
-          { key: 'CDN-Cache-Control', value: 'public, s-maxage=3600, stale-while-revalidate=86400' },
-          { key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' },
+          { key: 'Cache-Control', value: 'public, s-maxage=3600, stale-while-revalidate=86400, max-age=0' },
         ],
       },
       {
         source: '/categories/:path*',
         headers: [
-          { key: 'CDN-Cache-Control', value: 'public, s-maxage=3600, stale-while-revalidate=86400' },
-          { key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' },
+          { key: 'Cache-Control', value: 'public, s-maxage=3600, stale-while-revalidate=86400, max-age=0' },
         ],
       },
       {
         source: '/tags/:path*',
         headers: [
-          { key: 'CDN-Cache-Control', value: 'public, s-maxage=3600, stale-while-revalidate=86400' },
-          { key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' },
+          { key: 'Cache-Control', value: 'public, s-maxage=3600, stale-while-revalidate=86400, max-age=0' },
         ],
       },
       {
         source: '/archives/:path*',
         headers: [
-          { key: 'CDN-Cache-Control', value: 'public, s-maxage=3600, stale-while-revalidate=86400' },
-          { key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' },
+          { key: 'Cache-Control', value: 'public, s-maxage=3600, stale-while-revalidate=86400, max-age=0' },
         ],
       },
     ];
