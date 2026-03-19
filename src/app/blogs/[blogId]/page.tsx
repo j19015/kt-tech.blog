@@ -135,22 +135,25 @@ export default async function StaticDetailPage({
   });
   
   // calloutマーカーをプレースホルダーに変換（markdownToHtmlに通す前）
-  const calloutMap = new Map<string, string>();
+  const calloutMap = new Map<string, { icon: string; color: string; text: string }>();
   let calloutIndex = 0;
   const bodyPreprocessed = blog.body.replace(
     /:::callout\{icon="([^"]*)" color="([^"]*)"\}\n([\s\S]*?)\n:::/g,
     (_, icon, color, text) => {
       const placeholder = `CALLOUT_PLACEHOLDER_${calloutIndex++}`;
-      calloutMap.set(placeholder, `<div class="callout callout-${color}"><span class="callout-icon">${icon}</span><div class="callout-content"><p>${text}</p></div></div>`);
+      calloutMap.set(placeholder, { icon, color, text });
       return placeholder;
     }
   );
 
   const html = markdownToHtml(bodyPreprocessed);
 
-  // プレースホルダーをcallout HTMLに置換
+  // プレースホルダーをcallout HTMLに置換（テキスト部分もMarkdown変換）
   let htmlWithCallouts = html;
-  calloutMap.forEach((calloutHtml, placeholder) => {
+  calloutMap.forEach(({ icon, color, text }, placeholder) => {
+    // callout内テキストのインラインMarkdownを変換
+    const textHtml = markdownToHtml(text).replace(/<\/?p>/g, '').trim();
+    const calloutHtml = `<div class="callout callout-${color}"><span class="callout-icon">${icon}</span><div class="callout-content">${textHtml}</div></div>`;
     htmlWithCallouts = htmlWithCallouts.replace(new RegExp(`<p>${placeholder}</p>|${placeholder}`, 'g'), calloutHtml);
   });
 
