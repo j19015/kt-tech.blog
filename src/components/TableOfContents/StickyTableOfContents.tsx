@@ -92,7 +92,7 @@ export const StickyTableOfContents = ({ toc }: { toc: TocItem[] }) => {
   };
 
   return (
-    <div className='sticky top-20 p-4 rounded-lg'>
+    <div className='sticky top-20 p-4 rounded-lg bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm'>
       <h2 className='text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-4'>
         目次
       </h2>

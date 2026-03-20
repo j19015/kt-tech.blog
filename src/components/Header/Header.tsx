@@ -51,10 +51,11 @@ export const Header = () => {
     <>
       <header className={`sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-transform duration-300 ${hidden && !isOpen ? '-translate-y-full' : 'translate-y-0'}`}>
         <div className='max-w-6xl mx-auto px-4 py-4 flex justify-between items-center'>
-          <Link href='/' onClick={() => handleMenuClose('Home')}>
-            <h1 className='text-xl font-bold text-slate-900 dark:text-slate-100 hover:text-slate-700 dark:hover:text-slate-300 transition-colors'>
+          <Link href='/' onClick={() => handleMenuClose('Home')} className='flex items-center gap-2.5'>
+            <img src='/favicon.ico' alt='' className='w-7 h-7 rounded' />
+            <span className='text-xl font-bold text-slate-900 dark:text-slate-100 hover:text-slate-700 dark:hover:text-slate-300 transition-colors'>
               kt-tech.blog
-            </h1>
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
