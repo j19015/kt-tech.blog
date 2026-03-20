@@ -81,7 +81,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const previousImages = blog.eyecatch || [];
 
   // markdown->平文（Edge互換）
-  const rawHtml = md.render(blog.body);
+  const cleanBody = blog.body
+    .replace(/:::callout\{[^}]*\}/g, '')
+    .replace(/:::/g, '')
+    .replace(/\[toc\]/gi, '')
+    .replace(/"\[toc\]"/gi, '');
+  const rawHtml = md.render(cleanBody);
   const text = stripHtml(rawHtml);
 
   const description = text.slice(0, 120).replace(/\n/g, ' ').trim();
