@@ -29,7 +29,7 @@ export const RelatedPosts = ({ posts, currentPostId }: RelatedPostsProps) => {
         </Link>
       </div>
 
-      <div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
+      <div className='grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-4'>
         {relatedPosts.map((post) => (
           <article key={post.id} className='group'>
             <Link href={`/blogs/${post.id}`} className='block'>

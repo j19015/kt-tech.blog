@@ -69,29 +69,22 @@ export const Header = () => {
         </div>
       </header>
 
-      {/* Mobile Menu Panel */}
+      {/* Mobile Menu Panel - Full screen overlay */}
       {isOpen && (
-        <>
-          <div
-            className='fixed inset-0 bg-black/20 dark:bg-black/40 z-40 md:hidden'
-            onClick={() => setOpen(false)}
-          />
-          <nav className='fixed top-[73px] right-0 bottom-0 w-64 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 z-40 md:hidden'>
-            <ul className='p-4 space-y-1'>
-              {menuItems.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    href={item.href}
-                    onClick={() => handleMenuClose(item.name)}
-                    className='block px-4 py-3 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors'
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </>
+        <div className='fixed inset-0 z-40 md:hidden bg-white dark:bg-slate-900'>
+          <div className='flex flex-col items-center justify-center h-full gap-2'>
+            {menuItems.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                onClick={() => handleMenuClose(item.name)}
+                className='px-8 py-4 text-lg font-medium text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white transition-colors'
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
+        </div>
       )}
     </>
   );
