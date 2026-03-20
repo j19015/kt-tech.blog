@@ -15,7 +15,7 @@ export const RelatedPosts = ({ posts, currentPostId }: RelatedPostsProps) => {
   if (relatedPosts.length === 0) return null;
 
   return (
-    <div className='mt-16 pt-8 border-t border-slate-200 dark:border-slate-700'>
+    <div className='mt-16 pt-8 px-4 border-t border-slate-200 dark:border-slate-700'>
       <div className='flex items-center justify-between mb-6'>
         <h2 className='text-lg font-bold text-slate-900 dark:text-slate-100'>
           関連記事
