@@ -33,7 +33,7 @@ export const Header = () => {
 
   return (
     <>
-      <header className='sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800'>
+      <header className='sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800'>
         <div className='max-w-6xl mx-auto px-4 py-4 flex justify-between items-center'>
           <Link href='/' onClick={() => handleMenuClose('Home')}>
             <h1 className='text-xl font-bold text-slate-900 dark:text-slate-100 hover:text-slate-700 dark:hover:text-slate-300 transition-colors'>

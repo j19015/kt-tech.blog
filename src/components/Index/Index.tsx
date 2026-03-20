@@ -3,6 +3,17 @@ import { BlogProps } from '../../../libs/notion';
 import Link from 'next/link';
 import Image from 'next/image';
 
+const timeAgo = (date: string) => {
+  const diff = Date.now() - new Date(date).getTime();
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  if (days === 0) return '今日';
+  if (days === 1) return '昨日';
+  if (days < 7) return `${days}日前`;
+  if (days < 30) return `${Math.floor(days / 7)}週間前`;
+  if (days < 365) return `${Math.floor(days / 30)}ヶ月前`;
+  return `${Math.floor(days / 365)}年前`;
+};
+
 export const Index = ({ contents }: BlogProps) => {
   return (
     <div className='max-w-3xl mx-auto px-4'>
@@ -10,7 +21,7 @@ export const Index = ({ contents }: BlogProps) => {
         {contents.map((blog) => (
           <article key={blog.id} className='group'>
             <Link href={`/blogs/${blog.id}`} className='block'>
-              <div className='flex gap-5 p-4 rounded-xl bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-md hover:border-slate-200 dark:hover:border-slate-600 transition-all duration-300'>
+              <div className='flex gap-5 p-4 rounded-xl bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-lg hover:border-slate-200 dark:hover:border-slate-600 hover:-translate-y-0.5 transition-all duration-300'>
                 {/* サムネイル画像 */}
                 <div className='flex-shrink-0 relative w-28 sm:w-36 aspect-[1200/630] rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-700'>
                   <Image
@@ -33,12 +44,8 @@ export const Index = ({ contents }: BlogProps) => {
                   </h2>
 
                   <div className='flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-400 dark:text-slate-400'>
-                    <time className='font-medium whitespace-nowrap'>
-                      {new Date(blog.createdAt).toLocaleDateString('ja-JP', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit'
-                      })}
+                    <time className='font-medium whitespace-nowrap' title={new Date(blog.createdAt).toLocaleDateString('ja-JP')}>
+                      {timeAgo(blog.createdAt)}
                     </time>
                     <span className='text-slate-300 dark:text-slate-600'>·</span>
                     <span className='whitespace-nowrap'>{Math.max(1, Math.ceil(blog.body.length / 600))}min</span>

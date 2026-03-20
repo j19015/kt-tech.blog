@@ -1,39 +1,31 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { ArrowUp } from 'lucide-react';
 
 export const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.pageYOffset > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+      setIsVisible(window.pageYOffset > 300);
     };
-
     window.addEventListener('scroll', toggleVisibility);
-
     return () => window.removeEventListener('scroll', toggleVisibility);
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
-  if (!isVisible) return null;
 
   return (
     <button
       onClick={scrollToTop}
-      className='fixed bottom-8 right-8 z-50 p-3 rounded-full bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:bg-slate-700 dark:hover:bg-slate-300 transition-colors'
-      aria-label='Scroll to top'
+      className={`fixed bottom-6 right-6 z-50 w-11 h-11 flex items-center justify-center rounded-full bg-slate-900/80 dark:bg-slate-100/80 text-white dark:text-slate-900 backdrop-blur-sm shadow-lg hover:bg-slate-900 dark:hover:bg-slate-100 hover:scale-110 active:scale-95 transition-all duration-200 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+      }`}
+      aria-label='トップへ戻る'
     >
-      <span className='block w-5 h-5 text-center leading-5'>↑</span>
+      <ArrowUp className='w-5 h-5' />
     </button>
   );
 };
