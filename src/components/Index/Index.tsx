@@ -32,8 +32,8 @@ export const Index = ({ contents }: BlogProps) => {
                     {blog.title}
                   </h2>
 
-                  <div className='flex items-center gap-2 text-xs text-slate-400 dark:text-slate-400'>
-                    <time className='font-medium'>
+                  <div className='flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-400 dark:text-slate-400'>
+                    <time className='font-medium whitespace-nowrap'>
                       {new Date(blog.createdAt).toLocaleDateString('ja-JP', {
                         year: 'numeric',
                         month: '2-digit',
@@ -41,14 +41,11 @@ export const Index = ({ contents }: BlogProps) => {
                       })}
                     </time>
                     <span className='text-slate-300 dark:text-slate-600'>·</span>
-                    <span>{Math.max(1, Math.ceil(blog.body.length / 600))}min</span>
+                    <span className='whitespace-nowrap'>{Math.max(1, Math.ceil(blog.body.length / 600))}min</span>
                     {blog.category && (
-                      <>
-                        <span className='text-slate-300 dark:text-slate-600'>|</span>
-                        <span className='px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-medium'>
-                          {blog.category.name}
-                        </span>
-                      </>
+                      <span className='px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-medium truncate max-w-[120px]'>
+                        {blog.category.name}
+                      </span>
                     )}
                   </div>
 

@@ -98,9 +98,17 @@
   color: #60a5fa;
 }
 
+.znc a {
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s, color 0.2s;
+}
 .znc a:hover {
   color: #1d4ed8;
-  text-decoration: underline;
+  background-size: 100% 1px;
 }
 .dark .znc a:hover {
   color: #93bbfd;
@@ -245,7 +253,7 @@
 .znc p {
   padding-left: 10px;
   padding-bottom: 10px;
-  line-height: 2;
+  line-height: 1.85;
 }
 
 .znc p + p {
