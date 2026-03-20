@@ -279,15 +279,14 @@ export default async function StaticDetailPage({
           {/* 通常の画面サイズでは2列分のスペースを占有 */}
           <div>
             <div className='p-4'>
-              <Link href={`/blogs/${blog.id}`}>
-                <Image
-                  src={blog.eyecatch?.url || '/images/no_image_generated.png'}
-                  alt='画像'
-                  width={10000}
-                  height={10000}
-                  className='rounded-lg'
-                />
-              </Link>
+              <Image
+                src={blog.eyecatch?.url || '/images/no_image_generated.png'}
+                alt={blog.title}
+                width={1200}
+                height={630}
+                className='rounded-lg w-full'
+                priority
+              />
             </div>
             {/* メタデータセクション */}
             <div className='p-6 space-y-4'>
