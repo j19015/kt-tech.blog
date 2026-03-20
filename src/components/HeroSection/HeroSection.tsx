@@ -11,7 +11,7 @@ export const HeroSection = () => {
         <div className='absolute bottom-10 right-10 w-96 h-96 bg-purple-500/5 dark:bg-purple-400/5 rounded-full blur-3xl' />
       </div>
 
-      <div className='max-w-3xl mx-auto px-4 py-16 lg:py-20'>
+      <div className='max-w-6xl mx-auto px-4 py-10 lg:py-14'>
         <div className='space-y-6'>
           {/* Greeting */}
           <p className='text-sm font-medium text-blue-600 dark:text-blue-400 tracking-wide'>

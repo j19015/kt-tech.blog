@@ -99,16 +99,16 @@ export default async function StaticPage() {
                     priority
                   />
                   <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent' />
-                  <div className='absolute bottom-0 left-0 right-0 p-5 sm:p-6'>
+                  <div className='absolute bottom-0 left-0 right-0 p-6 lg:p-8'>
                     {latestBlogs[0].category && (
-                      <span className='inline-block px-2.5 py-1 mb-2 text-xs font-medium bg-white/20 backdrop-blur-sm text-white rounded-full'>
+                      <span className='inline-block px-3 py-1 mb-3 text-sm font-medium bg-white/20 backdrop-blur-sm text-white rounded-full'>
                         {latestBlogs[0].category.name}
                       </span>
                     )}
-                    <h2 className='text-lg sm:text-xl lg:text-2xl font-bold text-white leading-snug group-hover:text-blue-200 transition-colors line-clamp-2'>
+                    <h2 className='text-xl sm:text-2xl lg:text-3xl font-bold text-white leading-tight group-hover:text-blue-200 transition-colors line-clamp-2'>
                       {latestBlogs[0].title}
                     </h2>
-                    <p className='text-xs text-white/50 mt-2'>
+                    <p className='text-sm text-white/50 mt-3'>
                       {new Date(latestBlogs[0].createdAt).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </p>
                   </div>
@@ -120,21 +120,21 @@ export default async function StaticPage() {
             <div className='lg:col-span-2 flex flex-col gap-4'>
               {latestBlogs.slice(1, 3).map((blog) => (
                 <Link key={blog.id} href={`/blogs/${blog.id}`} className='group block flex-1'>
-                  <div className='relative h-full min-h-[130px] rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800'>
+                  <div className='relative h-full min-h-[160px] rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800'>
                     <Image
                       src={blog.eyecatch?.url || '/images/no_image_generated.png'}
                       alt={blog.title}
                       fill
                       className='object-cover group-hover:scale-105 transition-transform duration-500'
                     />
-                    <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent' />
-                    <div className='absolute bottom-0 left-0 right-0 p-4'>
+                    <div className='absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10' />
+                    <div className='absolute bottom-0 left-0 right-0 p-5'>
                       {blog.category && (
-                        <span className='inline-block px-2 py-0.5 mb-1.5 text-[10px] font-medium bg-white/20 backdrop-blur-sm text-white rounded-full'>
+                        <span className='inline-block px-2.5 py-0.5 mb-2 text-xs font-medium bg-white/20 backdrop-blur-sm text-white rounded-full'>
                           {blog.category.name}
                         </span>
                       )}
-                      <h3 className='text-sm font-semibold text-white leading-snug group-hover:text-blue-200 transition-colors line-clamp-2'>
+                      <h3 className='text-base font-bold text-white leading-snug group-hover:text-blue-200 transition-colors line-clamp-2'>
                         {blog.title}
                       </h3>
                     </div>
