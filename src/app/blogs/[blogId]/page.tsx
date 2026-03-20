@@ -192,7 +192,9 @@ export default async function StaticDetailPage({
   // プレースホルダーをcallout HTMLに置換
   let processedHtml = html;
   calloutMap.forEach(({ icon, color, text }, placeholder) => {
-    const textHtml = md.render(text).replace(/<\/?p>/g, '').trim();
+    // テキスト先頭の絵文字がiconと重複する場合は除去
+    let cleanText = text.replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]+\s*/u, '').trim();
+    const textHtml = md.render(cleanText).replace(/<\/?p>/g, '').trim();
     const calloutHtml = `<div class="callout callout-${color}"><span class="callout-icon">${icon}</span><div class="callout-content">${textHtml}</div></div>`;
     processedHtml = processedHtml.replace(new RegExp(`<p>${placeholder}</p>|${placeholder}`, 'g'), calloutHtml);
   });
