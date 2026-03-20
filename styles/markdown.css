@@ -110,6 +110,41 @@
   background-color: #22272e !important;
 }
 
+/* Code copy button */
+.znc pre .copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-family: -apple-system, sans-serif;
+  color: #64748b;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.2s;
+}
+.dark .znc pre .copy-btn {
+  color: #94a3b8;
+  background: rgba(30, 41, 59, 0.9);
+  border-color: #475569;
+}
+.znc pre:hover .copy-btn {
+  opacity: 1;
+}
+.znc pre .copy-btn:hover {
+  background: #f1f5f9;
+}
+.dark .znc pre .copy-btn:hover {
+  background: #334155;
+}
+.znc pre .copy-btn.copied {
+  color: #16a34a;
+  opacity: 1;
+}
+
 .znc blockquote {
   border-left: 5px solid #b6c9d6;
   padding-left: 1rem;
