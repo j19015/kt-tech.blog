@@ -24,6 +24,29 @@
   padding-top: 0.2rem;
 }
 
+/* 見出しアンカーリンク */
+.znc h1[id]::before,
+.znc h2[id]::before,
+.znc h3[id]::before {
+  content: '#';
+  position: absolute;
+  left: -1.2em;
+  color: #cbd5e1;
+  font-weight: 400;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.znc h1[id]:hover::before,
+.znc h2[id]:hover::before,
+.znc h3[id]:hover::before {
+  opacity: 1;
+}
+.znc h1[id],
+.znc h2[id],
+.znc h3[id] {
+  position: relative;
+}
+
 .znc h2 {
   font-weight: bold;
   margin-top: 20px;
@@ -81,6 +104,12 @@
 }
 .dark .znc a:hover {
   color: #93bbfd;
+}
+/* 外部リンクアイコン */
+.znc a[href^="http"]:not([href*="kt-tech.blog"])::after {
+  content: ' ↗';
+  font-size: 0.75em;
+  opacity: 0.5;
 }
 
 

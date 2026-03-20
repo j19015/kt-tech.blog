@@ -21,6 +21,12 @@
 
 body {
   font-family: var(--font-noto-sans-jp), 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow-anchor: auto;
+}
+/* スムーズスクロール */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
 }
 
 @keyframes gradient-x {
