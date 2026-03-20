@@ -3,11 +3,12 @@ import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 import { Github } from 'lucide-react';
 import {
   SiNextdotjs, SiReact, SiTypescript, SiJavascript, SiRuby,
-  SiRubyonrails, SiPostgresql, SiMysql, SiAmazonwebservices, SiGooglecloud,
+  SiRubyonrails, SiPostgresql, SiMysql, SiGooglecloud,
   SiTailwindcss, SiRedux, SiGit,
   SiPrisma, SiPython, SiGo, SiDocker, SiGithubactions,
   SiCircleci, SiFirebase, SiSass
 } from 'react-icons/si';
+import { FaAws } from 'react-icons/fa';
 import { VscVscode, VscAzure } from 'react-icons/vsc';
 
 // X icon component
@@ -32,7 +33,7 @@ export default function About() {
     'Prisma': { icon: <SiPrisma />, color: '#2D3748' },
     'PostgreSQL': { icon: <SiPostgresql />, color: '#4169E1' },
     'MySQL': { icon: <SiMysql />, color: '#4479A1' },
-    'AWS': { icon: <SiAmazonwebservices />, color: '#FF9900' },
+    'AWS': { icon: <FaAws />, color: '#FF9900' },
     'GCP': { icon: <SiGooglecloud />, color: '#4285F4' },
     'Azure': { icon: <VscAzure />, color: '#0078D4' },
     'Firebase': { icon: <SiFirebase />, color: '#FFCA28' },
