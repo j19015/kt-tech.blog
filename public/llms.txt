@@ -1,0 +1,28 @@
+# kt-tech.blog
+
+> 実践的な技術記事とエンジニアリングの知見を発信する技術ブログ
+
+## About
+kt-tech.blog はフルスタックエンジニア Koki が運営する技術ブログです。React, Next.js, TypeScript, Cloudflare, AI などのモダン技術を中心に、実践的な開発ノウハウや設計の知見を共有しています。
+
+## Topics
+- Next.js / React / TypeScript
+- Cloudflare Pages / Workers
+- Notion API (Headless CMS)
+- CI/CD (GitHub Actions)
+- AI / LLM / Claude Code
+- AWS / GCP / Azure
+- Ruby on Rails
+- PostgreSQL / Prisma
+- Docker / DevOps
+- SEO / Web Performance
+
+## Content Structure
+- /blogs/{slug} - 個別の技術記事
+- /categories/{name}/page/1 - カテゴリ別記事一覧
+- /tags/{name} - タグ別記事一覧
+- /about - 著者プロフィール
+
+## Contact
+- GitHub: https://github.com/j19015
+- X (Twitter): https://twitter.com/tech_koki
