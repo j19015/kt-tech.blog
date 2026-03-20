@@ -13,19 +13,15 @@ export default async function StaticDetailPage({
 }) {
   const { categoryId } = await params;
 
-  let contents, category_show;
-  try {
-    [{ contents }, category_show] = await Promise.all([
-      getList(),
-      getCategoryDetail(categoryId),
-    ]);
-  } catch {
-    notFound();
-  }
+  const [{ contents }, category_show] = await Promise.all([
+    getList().catch(() => ({ contents: [], totalCount: 0, offset: 0, limit: 0 })),
+    getCategoryDetail(categoryId).catch(() => null),
+  ]);
+  if (!category_show) notFound();
 
   const filteredContents = contents.filter((blog) => blog.category?.id === decodeURIComponent(categoryId));
 
-  if (!filteredContents || filteredContents.length === 0) {
+  if (filteredContents.length === 0) {
     notFound();
   }
 

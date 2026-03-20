@@ -14,15 +14,11 @@ export default async function StaticDetailPage({
 }) {
   const { tagId } = await params;
 
-  let contents, tag_show;
-  try {
-    [{ contents }, tag_show] = await Promise.all([
-      getList(),
-      getTagDetail(tagId),
-    ]);
-  } catch {
-    notFound();
-  }
+  const [{ contents }, tag_show] = await Promise.all([
+    getList().catch(() => ({ contents: [], totalCount: 0, offset: 0, limit: 0 })),
+    getTagDetail(tagId).catch(() => null),
+  ]);
+  if (!tag_show) notFound();
 
   const filteredContents = contents.filter((blog) => blog.tags?.some((tag) => tag.id === decodeURIComponent(tagId)));
 
