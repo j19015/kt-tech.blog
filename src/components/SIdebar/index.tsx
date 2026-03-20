@@ -28,6 +28,7 @@ const Sidebar = async () => {
       tagList={tagList}
       categoryList={categoryList}
       archives={archives}
+      totalCount={blogData.totalCount}
     />
   );
 };

@@ -9,14 +9,22 @@ interface SidebarProps {
   tagList: any[];
   categoryList: any[];
   archives: string[];
+  totalCount?: number;
 }
 
-const SidebarClient = ({ latestArticles, tagList, categoryList, archives }: SidebarProps) => {
+const SidebarClient = ({ latestArticles, tagList, categoryList, archives, totalCount }: SidebarProps) => {
   const [showAllTags, setShowAllTags] = useState(false);
   const visibleTags = showAllTags ? tagList : tagList.slice(0, 15);
 
   return (
     <div className='p-4'>
+      {/* 記事数 */}
+      {totalCount && (
+        <p className='text-center text-xs text-slate-400 dark:text-slate-500 mb-4'>
+          <span className='text-lg font-bold text-slate-900 dark:text-slate-100'>{totalCount}</span> 記事
+        </p>
+      )}
+
       {/* 検索フォーム - always full width */}
       <div className='border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-900 mb-6'>
         <Form />
