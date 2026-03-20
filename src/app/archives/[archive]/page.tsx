@@ -10,15 +10,18 @@ export default async function StaticDetailPage({
 }: {
   params: Promise<{ archive: string }>;
 }) {
-  //リスト一覧を取得
   const { archive } = await params;
-  const { contents } = await getList();
 
-  //コンテンツを日付でフィルター
+  let contents;
+  try {
+    ({ contents } = await getList());
+  } catch {
+    notFound();
+  }
+
   const filteredContents = contents.filter((item) => item.createdAt.slice(0, 7) === archive);
 
-  //コンテンツがない場合
-  if (!filteredContents) {
+  if (!filteredContents || filteredContents.length === 0) {
     notFound();
   }
 

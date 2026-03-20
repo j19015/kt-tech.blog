@@ -12,16 +12,20 @@ export default async function StaticDetailPage({
   params: Promise<{ categoryId: string }>;
 }) {
   const { categoryId } = await params;
-  //リスト一覧とカテゴリ詳細を並列取得
-  const [{ contents }, category_show] = await Promise.all([
-    getList(),
-    getCategoryDetail(categoryId),
-  ]);
 
-  //リストを指定のタグで絞り込み
+  let contents, category_show;
+  try {
+    [{ contents }, category_show] = await Promise.all([
+      getList(),
+      getCategoryDetail(categoryId),
+    ]);
+  } catch {
+    notFound();
+  }
+
   const filteredContents = contents.filter((blog) => blog.category?.id === decodeURIComponent(categoryId));
 
-  if (!filteredContents) {
+  if (!filteredContents || filteredContents.length === 0) {
     notFound();
   }
 
