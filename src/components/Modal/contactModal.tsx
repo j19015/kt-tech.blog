@@ -38,7 +38,7 @@ const ContactModal = ({ isOpen, onClose }: ContactModalProps) => {
 
             <div className='space-y-3'>
               <Link
-                href='https://twitter.com/tech_koki'
+                href='https://x.com/meow_koki'
                 target='_blank'
                 rel='noopener noreferrer'
                 className='flex items-center gap-3 px-4 py-3 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors'
@@ -46,7 +46,7 @@ const ContactModal = ({ isOpen, onClose }: ContactModalProps) => {
                 <XIcon className='w-5 h-5 text-slate-700 dark:text-slate-300' />
                 <div>
                   <p className='text-sm font-medium text-slate-800 dark:text-slate-200'>X (Twitter)</p>
-                  <p className='text-xs text-slate-500'>@tech_koki</p>
+                  <p className='text-xs text-slate-500'>@meow_koki</p>
                 </div>
               </Link>
 

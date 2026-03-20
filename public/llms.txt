@@ -25,4 +25,4 @@ kt-tech.blog はフルスタックエンジニア Koki が運営する技術ブ�
 
 ## Contact
 - GitHub: https://github.com/j19015
-- X (Twitter): https://twitter.com/tech_koki
+- X (Twitter): https://x.com/meow_koki

@@ -62,8 +62,8 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: `${siteName} - 技術と創造性が交わる場所`,
     description,
-    site: '@tech_koki',
-    creator: '@tech_koki',
+    site: '@meow_koki',
+    creator: '@meow_koki',
     images: ['/opengraph-image.png'],
   },
   robots: {
@@ -104,7 +104,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       name: author,
       url: 'https://github.com/j19015',
       sameAs: [
-        'https://twitter.com/tech_koki',
+        'https://x.com/meow_koki',
         'https://github.com/j19015'
       ]
     },

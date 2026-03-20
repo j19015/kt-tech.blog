@@ -103,8 +103,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: 'summary_large_image',
       title: blog.title,
       description,
-      site: '@tech_koki',
-      creator: '@tech_koki',
+      site: '@meow_koki',
+      creator: '@meow_koki',
       images: [ogImage],
     },
     openGraph: {
