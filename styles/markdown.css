@@ -105,11 +105,14 @@
 .dark .znc a:hover {
   color: #93bbfd;
 }
-/* 外部リンクアイコン */
-.znc a[href^="http"]:not([href*="kt-tech.blog"])::after {
+/* 外部リンクアイコン（リンクカード内は除外） */
+.znc a[href^="http"]:not([href*="kt-tech.blog"]):not(.link-card a):not(.link-card-body a)::after {
   content: ' ↗';
   font-size: 0.75em;
   opacity: 0.5;
+}
+.znc .link-card a::after {
+  content: none !important;
 }
 
 
