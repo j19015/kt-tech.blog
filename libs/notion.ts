@@ -70,6 +70,11 @@ function richTextToPlain(richText: any[]): string {
   return richText?.map((t: any) => t.plain_text).join('') || '';
 }
 
+// 見出しテキストから絵文字を除去
+function stripEmoji(text: string): string {
+  return text.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]/gu, '').trim();
+}
+
 // NotionのページプロパティからBlog型に変換
 function nameToSlug(name: string): string {
   return name.toLowerCase().trim();
@@ -105,17 +110,17 @@ async function blocksToMarkdown(blockId: string): Promise<string> {
   for (const block of blocks) {
     switch (block.type) {
       case 'heading_1':
-        lines.push(`# ${richTextToPlain(block.heading_1.rich_text)}`);
+        lines.push(`# ${stripEmoji(richTextToPlain(block.heading_1.rich_text))}`);
         break;
       case 'heading_2': {
-        const h2Text = richTextToPlain(block.heading_2.rich_text);
+        const h2Text = stripEmoji(richTextToPlain(block.heading_2.rich_text));
         // 「目次」見出しはスキップ（ブログ側で自動生成するため）
         if (h2Text === '目次') break;
         lines.push(`## ${h2Text}`);
         break;
       }
       case 'heading_3':
-        lines.push(`### ${richTextToPlain(block.heading_3.rich_text)}`);
+        lines.push(`### ${stripEmoji(richTextToPlain(block.heading_3.rich_text))}`);
         break;
       case 'paragraph':
         lines.push(richTextToMarkdown(block.paragraph.rich_text));
