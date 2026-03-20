@@ -17,7 +17,7 @@ export const PostNavigation = ({ currentId, allPosts }: PostNavigationProps) => 
   if (!prev && !next) return null;
 
   return (
-    <nav className='mt-12 pt-8 border-t border-slate-200 dark:border-slate-700'>
+    <nav className='mt-12 pt-8 px-4 border-t border-slate-200 dark:border-slate-700'>
       <div className='grid grid-cols-2 gap-4'>
         {prev ? (
           <Link
