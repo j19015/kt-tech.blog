@@ -362,7 +362,7 @@ export default async function StaticDetailPage({
               </div>
               <div className='border-t border-slate-200 dark:border-slate-700 pt-6'>
                 <div className='flex items-center gap-4'>
-                  <div className='w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-lg font-bold text-slate-500 dark:text-slate-400'>K</div>
+                  <img src='/images/meow_koki.webp' alt='Koki' className='w-12 h-12 rounded-full object-cover' />
                   <div>
                     <p className='font-bold text-slate-900 dark:text-slate-100'>Koki</p>
                     <p className='text-xs text-slate-500 dark:text-slate-400'>フルスタックエンジニア / React, Next.js, TypeScript</p>
