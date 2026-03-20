@@ -288,7 +288,7 @@ export default async function StaticDetailPage({
           { label: blog.title, current: true }
         ]}
       />
-      <div className='grid grid-cols-1 lg:grid-cols-3 lg:p-4 overflow-hidden'>
+      <div className='grid grid-cols-1 lg:grid-cols-3 lg:p-4'>
         <div className='lg:col-span-1 p-5 pl-7 pt-0 hidden lg:block'>
           <StickyTableOfContents toc={toc} />
         </div>
