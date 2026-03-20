@@ -1,9 +1,0 @@
-# *
-User-agent: *
-Allow: /
-
-# Host
-Host: https://kt-tech.blog
-
-# Sitemaps
-Sitemap: https://kt-tech.blog/sitemap.xml

@@ -1,6 +1,11 @@
 import { Suspense } from 'react';
 import ClientIndex from './client_index';
 import { getList } from '../../../libs/notion';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default async function StaticPage() {
   const { contents } = await getList();
