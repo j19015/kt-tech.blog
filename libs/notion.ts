@@ -22,6 +22,7 @@ export type Blog = {
   id: string; // Slug (microCMS IDまたはNotion page ID)
   title: string;
   body: string;
+  ogpDescription?: string;
   eyecatch?: { url: string; height?: number; width?: number };
   category?: Category;
   tags?: Tag[];
@@ -248,6 +249,7 @@ async function pageToBlog(page: any, fetchBody: boolean = false): Promise<Blog> 
   const categoryName = props.Category?.select?.name || '';
   const tags = (props.Tags?.multi_select || []).map((t: any) => pageToTag(t.name));
   const eyecatchUrl = props.Eyecatch?.url || page.cover?.external?.url || page.cover?.file?.url || '';
+  const ogpDescription = richTextToPlain(props['OGP Description']?.rich_text || []) || '';
   const createdDate = props.Created?.date?.start || page.created_time;
   const id = slug || page.id.replace(/-/g, '');
 
@@ -262,6 +264,7 @@ async function pageToBlog(page: any, fetchBody: boolean = false): Promise<Blog> 
     id,
     title,
     body,
+    ogpDescription: ogpDescription || undefined,
     eyecatch: eyecatchUrl ? { url: eyecatchUrl, width: 1200, height: 630 } : undefined,
     category: categoryName ? pageToCategory(categoryName) : undefined,
     tags,

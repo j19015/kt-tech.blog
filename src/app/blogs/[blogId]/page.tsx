@@ -89,7 +89,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const rawHtml = md.render(cleanBody);
   const text = stripHtml(rawHtml);
 
-  const description = text.slice(0, 120).replace(/\n/g, ' ').trim();
+  const description = blog.ogpDescription || text.slice(0, 120).replace(/\n/g, ' ').trim();
   const ogImage = blog.eyecatch?.url || `${process.env.SITE_URL}/opengraph-image.png`;
   const pageUrl = `${process.env.SITE_URL}/blogs/${blogId}`;
 
