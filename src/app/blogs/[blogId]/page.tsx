@@ -254,6 +254,8 @@ export default async function StaticDetailPage({
     },
     keywords: blog.tags?.map(t => t.name).join(', '),
     articleSection: blog.category?.name,
+    wordCount: stripHtml(processedHtml).length,
+    timeRequired: `PT${Math.max(1, Math.ceil(stripHtml(processedHtml).length / 600))}M`,
   };
 
   const breadcrumbJsonLd = {
@@ -347,6 +349,22 @@ export default async function StaticDetailPage({
               <div dangerouslySetInnerHTML={{ __html: processedHtml }}></div>
               <CodeCopyButton />
               <ImageLightbox />
+            </div>
+            {/* 記事末シェアCTA + 著者カード */}
+            <div className='mt-12 p-6 bg-slate-50 dark:bg-slate-800/50 rounded-lg space-y-6'>
+              <div className='text-center'>
+                <p className='text-sm text-slate-600 dark:text-slate-400 mb-3'>この記事が役に立ったら共有しよう</p>
+                <ShareButtons title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
+              </div>
+              <div className='border-t border-slate-200 dark:border-slate-700 pt-6'>
+                <div className='flex items-center gap-4'>
+                  <div className='w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-lg font-bold text-slate-500 dark:text-slate-400'>K</div>
+                  <div>
+                    <p className='font-bold text-slate-900 dark:text-slate-100'>Koki</p>
+                    <p className='text-xs text-slate-500 dark:text-slate-400'>フルスタックエンジニア / React, Next.js, TypeScript</p>
+                  </div>
+                </div>
+              </div>
             </div>
             <PostNavigation currentId={blogId} allPosts={contents} />
             <RelatedPosts posts={relatedPosts} currentPostId={blogId} />

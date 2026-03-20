@@ -39,6 +39,8 @@ export const ShareButtons = ({ title, url }: ShareButtonsProps) => {
     x: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
     line: `https://line.me/R/msg/text/?${encodedTitle}%20${encodedUrl}`,
+    hatena: `https://b.hatena.ne.jp/entry/${shareUrl}`,
+    pocket: `https://getpocket.com/save?url=${encodedUrl}&title=${encodedTitle}`,
   };
 
   return (
@@ -72,6 +74,24 @@ export const ShareButtons = ({ title, url }: ShareButtonsProps) => {
             aria-label='Share on LINE'
           >
             <LineIcon className='w-4 h-4' />
+          </a>
+          <a
+            href={shareLinks.hatena}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-[#00A4DE] hover:bg-[#00A4DE] hover:text-white transition-colors text-xs font-bold'
+            aria-label='Bookmark on Hatena'
+          >
+            B!
+          </a>
+          <a
+            href={shareLinks.pocket}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-[#EF3F56] hover:bg-[#EF3F56] hover:text-white transition-colors'
+            aria-label='Save to Pocket'
+          >
+            <svg className='w-4 h-4' viewBox='0 0 24 24' fill='currentColor'><path d='M18.813 2.07C21.451 2.276 23 4.031 23 6.653v5.07c0 6.281-5.165 11.372-11.488 11.372S.024 18.004.024 11.723V6.653C.024 4.031 1.572 2.276 4.21 2.07H18.813zM12 16.063l5.406-5.344a1.627 1.627 0 00.012-2.312 1.66 1.66 0 00-2.34.012L12 11.469l-3.078-3.05a1.66 1.66 0 00-2.34-.012 1.627 1.627 0 00.012 2.312L12 16.063z'/></svg>
           </a>
           <button
             onClick={handleCopyLink}
