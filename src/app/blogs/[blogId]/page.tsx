@@ -194,7 +194,9 @@ export default async function StaticDetailPage({
     processedHtml = processedHtml.replace(new RegExp(`<p>${placeholder}</p>|${placeholder}`, 'g'), calloutHtml);
   });
 
-  // highlight.jsのスタイルはmarkdown-itのhighlightオプションで適用済み
+  // [toc]マーカーを除去（ブログ側で目次を自動生成するため）
+  processedHtml = processedHtml.replace(/<p>\s*\[toc\]\s*<\/p>/gi, '');
+  processedHtml = processedHtml.replace(/\[toc\]/gi, '');
 
   // リンクカード生成（正規表現ベース）
   const linkRegex = /<a[^>]*href="(https?:\/\/[^"]*)"[^>]*>.*?<\/a>/gi;
