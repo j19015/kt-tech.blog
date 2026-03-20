@@ -36,7 +36,7 @@ export const BreadcrumbNav = ({ items }: BreadcrumbNavProps) => {
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 {item.current ? (
-                  <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                  <BreadcrumbPage className='truncate max-w-[200px] sm:max-w-[400px]'>{item.label}</BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink asChild>
                     <Link href={item.href || '#'} prefetch={false}>

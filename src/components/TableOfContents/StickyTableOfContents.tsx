@@ -97,24 +97,28 @@ export const StickyTableOfContents = ({ toc }: { toc: TocItem[] }) => {
         目次
       </h2>
 
-      <ul ref={tocRef} className='space-y-1 max-h-[60vh] overflow-y-auto border-l-2 border-slate-200 dark:border-slate-700'>
+      <ul ref={tocRef} className='space-y-0.5 max-h-[60vh] overflow-y-auto'>
         {toc.map((item) => (
           <li
             key={item.id}
             data-toc-id={item.id}
             ref={activeId === item.id ? activeItemRef : null}
-            className={`${item.tag === 'h2' ? 'pl-3' : item.tag === 'h3' ? 'pl-6' : 'pl-3'}`}
+            className={`border-l-2 transition-all ${
+              activeId === item.id
+                ? 'border-blue-500'
+                : 'border-slate-200 dark:border-slate-700'
+            } ${item.tag === 'h2' ? 'ml-2' : item.tag === 'h3' ? 'ml-5' : ''}`}
           >
             <a
               href={`#${item.id}`}
               onClick={(e) => handleClick(e, item.id)}
-              className={`block text-sm py-1 transition-all border-l-2 -ml-[2px] ${
+              className={`block text-sm py-1.5 pl-3 transition-colors ${
                 activeId === item.id
-                  ? 'text-blue-600 dark:text-blue-400 font-medium border-blue-500'
-                  : 'text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 border-transparent'
+                  ? 'text-blue-600 dark:text-blue-400 font-medium'
+                  : 'text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
               }`}
             >
-              <span className='pl-3'>{item.text}</span>
+              {item.text}
             </a>
           </li>
         ))}
