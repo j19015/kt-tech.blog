@@ -161,9 +161,22 @@ async function blocksToMarkdown(blockId: string): Promise<string> {
         const icon = block.callout.icon?.emoji || 'ℹ️';
         const text = richTextToMarkdown(block.callout.rich_text);
         const color = block.callout.color || 'default';
-        // :::callout マーカーで出力し、後処理でHTMLに変換
+        // calloutの子ブロック（リスト等）を取得
+        let childContent = '';
+        if (block.has_children) {
+          const childBlocks = await notionFetch(`/blocks/${block.id}/children?page_size=100`);
+          for (const child of childBlocks.results) {
+            if (child.type === 'bulleted_list_item') {
+              childContent += `\n- ${richTextToMarkdown(child.bulleted_list_item.rich_text)}`;
+            } else if (child.type === 'numbered_list_item') {
+              childContent += `\n1. ${richTextToMarkdown(child.numbered_list_item.rich_text)}`;
+            } else if (child.type === 'paragraph') {
+              childContent += `\n${richTextToMarkdown(child.paragraph.rich_text)}`;
+            }
+          }
+        }
         lines.push(`:::callout{icon="${icon}" color="${color}"}`);
-        lines.push(text);
+        lines.push(text + childContent);
         lines.push(':::');
         break;
       }
