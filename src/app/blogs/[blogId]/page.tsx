@@ -361,7 +361,7 @@ export default async function StaticDetailPage({
               <ImageLightbox />
             </div>
             {/* 記事末シェアCTA + 著者カード */}
-            <div className='mt-12 p-6 bg-slate-50 dark:bg-slate-800/50 rounded-lg space-y-6'>
+            <div className='mt-12 mx-4 p-6 bg-slate-50 dark:bg-slate-800/50 rounded-lg space-y-6'>
               <div className='text-center'>
                 <p className='text-sm text-slate-600 dark:text-slate-400 mb-3'>この記事が役に立ったら共有しよう</p>
                 <ShareButtons title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
