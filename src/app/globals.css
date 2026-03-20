@@ -2,12 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Unified focus ring */
+/* Unified focus ring + selection */
 @layer base {
   :focus-visible {
     outline: 2px solid #3b82f6;
     outline-offset: 2px;
     border-radius: 4px;
+  }
+  ::selection {
+    background: #3b82f6;
+    color: white;
+  }
+  .dark ::selection {
+    background: #60a5fa;
+    color: #0f172a;
   }
 }
 

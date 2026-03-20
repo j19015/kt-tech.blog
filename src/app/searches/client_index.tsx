@@ -9,6 +9,16 @@ import { BlogProps } from '../../../libs/notion';
 import Image from 'next/image';
 import { Clock, Search, ArrowRight } from 'lucide-react';
 
+const HighlightText = ({ text: content, query }: { text: string; query: string | null }) => {
+  if (!query) return <>{content}</>;
+  const parts = content.split(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'));
+  return <>{parts.map((part, i) =>
+    part.toLowerCase() === query.toLowerCase()
+      ? <mark key={i} className='bg-yellow-200 dark:bg-yellow-800/50 text-inherit rounded px-0.5'>{part}</mark>
+      : part
+  )}</>;
+};
+
 export const ClientIndex = ({ contents }: BlogProps) => {
   const searchParams = useSearchParams();
   const text = searchParams.get('text');
@@ -113,7 +123,7 @@ export const ClientIndex = ({ contents }: BlogProps) => {
                     {/* Content */}
                     <div className='flex-1 p-4'>
                       <h2 className='text-base font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 mb-2'>
-                        {blog.title}
+                        <HighlightText text={blog.title} query={text} />
                       </h2>
 
                       {/* Tags */}
