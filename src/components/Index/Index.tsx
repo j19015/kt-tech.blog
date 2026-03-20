@@ -44,15 +44,15 @@ export const Index = ({ contents }: BlogProps) => {
                   </h2>
 
                   <div className='space-y-1.5'>
-                    <div className='flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-400'>
+                    <div className='flex items-center gap-1.5 text-[11px] text-slate-400 dark:text-slate-500'>
                       <time className='whitespace-nowrap' title={new Date(blog.createdAt).toLocaleDateString('ja-JP')}>
-                        {timeAgo(blog.createdAt)}
+                        {new Date(blog.createdAt).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' })}
                       </time>
-                      <span className='text-slate-300 dark:text-slate-600'>·</span>
-                      <span className='whitespace-nowrap'>{Math.max(1, Math.ceil(blog.body.length / 600))}min</span>
+                      <span className='text-slate-300 dark:text-slate-600'>|</span>
+                      <span className='whitespace-nowrap'>{Math.max(1, Math.ceil(blog.body.length / 600))}分で読める</span>
                       {blog.category && (
                         <>
-                          <span className='text-slate-300 dark:text-slate-600'>·</span>
+                          <span className='text-slate-300 dark:text-slate-600'>|</span>
                           <span className='whitespace-nowrap truncate'>{blog.category.name}</span>
                         </>
                       )}
