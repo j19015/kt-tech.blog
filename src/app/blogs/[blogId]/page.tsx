@@ -65,6 +65,7 @@ import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 import { CodeCopyButton } from '@/components/CodeCopyButton/CodeCopyButton';
 import { PostNavigation } from '@/components/PostNavigation/PostNavigation';
 import { ImageLightbox } from '@/components/ImageLightbox/ImageLightbox';
+import { FloatingTocButton } from '@/components/TableOfContents/FloatingTocButton';
 
 
 export const runtime = 'edge';
@@ -377,6 +378,7 @@ export default async function StaticDetailPage({
             </div>
             <PostNavigation currentId={blogId} allPosts={contents} />
             <RelatedPosts posts={relatedPosts} currentPostId={blogId} />
+          <FloatingTocButton toc={toc} />
           </div>
         </div>
       </div>
