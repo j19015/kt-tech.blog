@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { getList } from '../../libs/notion';
 import { Blog } from '../../libs/notion';
 import Index from '@/components/Index/Index';
@@ -79,7 +80,40 @@ export default async function StaticPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <HeroSection />
-      <Index contents={latestBlogs} />
+
+      {/* フィーチャー記事 */}
+      {latestBlogs[0] && (
+        <div className='max-w-3xl mx-auto px-4 mb-8'>
+          <Link href={`/blogs/${latestBlogs[0].id}`} className='group block'>
+            <div className='relative aspect-[2/1] rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800'>
+              <Image
+                src={latestBlogs[0].eyecatch?.url || '/images/no_image_generated.png'}
+                alt={latestBlogs[0].title}
+                fill
+                className='object-cover group-hover:scale-105 transition-transform duration-500'
+                priority
+              />
+              <div className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent' />
+              <div className='absolute bottom-0 left-0 right-0 p-6'>
+                {latestBlogs[0].category && (
+                  <span className='inline-block px-2.5 py-1 mb-3 text-xs font-medium bg-white/20 backdrop-blur-sm text-white rounded-full'>
+                    {latestBlogs[0].category.name}
+                  </span>
+                )}
+                <h2 className='text-xl sm:text-2xl font-bold text-white leading-snug group-hover:text-blue-200 transition-colors'>
+                  {latestBlogs[0].title}
+                </h2>
+                <p className='text-sm text-white/60 mt-2'>
+                  {new Date(latestBlogs[0].createdAt).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric', year: 'numeric' })}
+                </p>
+              </div>
+            </div>
+          </Link>
+        </div>
+      )}
+
+      {/* 残りの記事 */}
+      <Index contents={latestBlogs.slice(1)} />
       <div className='mt-12 text-center'>
         <Link
           href='/blogs/page/1'

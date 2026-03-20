@@ -50,7 +50,7 @@ export const ClientIndex = ({ contents }: BlogProps) => {
           content.tags?.some(tag => tag.name.toLowerCase().includes(text.toLowerCase())) ||
           content.category?.name.toLowerCase().includes(text.toLowerCase())
         );
-        return filteredContents;
+        return filteredContents.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       } else {
         return null;
       }
