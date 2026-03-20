@@ -47,51 +47,60 @@ export default function About() {
 
   const techStack = [
     'TypeScript', 'JavaScript', 'Python', 'Go', 'Ruby',
-    'React', 'Next.js', 'Rails', 'Tailwind CSS', 'Sass',
+    'React', 'Next.js', 'Rails', 'FastAPI', 'Tailwind CSS',
     'Prisma', 'PostgreSQL', 'MySQL',
-    'AWS', 'GCP', 'Azure', 'Firebase',
+    'AWS', 'Azure', 'Firebase', 'GCP',
     'Docker', 'GitHub Actions', 'CircleCI',
-    'Redux', 'Git', 'VS Code'
+    'Redux', 'Zustand', 'TanStack Query',
+    'Git', 'VS Code'
   ];
 
   const experience = [
     {
-      company: 'SaaS企業',
+      company: 'SaaS企業（動画配信）',
       period: '2023.04 - 現在',
       role: '正社員 / フルスタックエンジニア',
-      description: '動画配信プラットフォームの開発・運用。フロントエンドからバックエンド、インフラまで一貫して担当。',
-      tech: ['React', 'TypeScript', 'AWS', 'Firebase'],
+      description: '動画配信プラットフォームの開発。Reactでの視聴画面開発、AWS CDKを用いたサーバーレスアーキテクチャの設計・実装。1イベント最大26,000人規模の配信基盤を担当。',
+      tech: ['React', 'TypeScript', 'AWS CDK', 'Lambda', 'Firebase'],
+      current: true
+    },
+    {
+      company: 'AI系企業（製造業向け）',
+      period: '2025.12 - 現在',
+      role: '業務委託 / フルスタックエンジニア',
+      description: '大手製造業向けLLM・RAG検索ツール、株主総会回答システムの開発。アクティブユーザー約300名への導入を実現。',
+      tech: ['Next.js', 'FastAPI', 'Python', 'AWS'],
       current: true
     },
     {
       company: 'AI系スタートアップ',
       period: '2025.01 - 現在',
       role: '業務委託 / フルスタックエンジニア',
-      description: '生成AIを活用したコンテンツプラットフォームの開発。Azure OpenAIを用いたAI機能の設計・実装。',
-      tech: ['Next.js', 'TypeScript', 'Azure'],
+      description: 'AI記事投稿サイト・ドキュメントレビューシステムの開発。Azure OpenAI・Document Intelligenceを活用。',
+      tech: ['Next.js', 'TypeScript', 'Azure OpenAI', 'Azure Functions'],
       current: true
     },
     {
-      company: 'IT企業',
-      period: '2024.04 - 現在',
+      company: 'IT企業（位置情報サービス）',
+      period: '2024.04 - 2025.11',
       role: '業務委託 / フルスタックエンジニア',
-      description: '位置情報サービスの開発。技術選定からインフラ構築まで担当。',
-      tech: ['Next.js', 'TypeScript', 'AWS'],
-      current: true
+      description: 'Webアプリケーションの開発。技術選定からインフラ構築まで一貫して担当。プロダクトのリプレイスから運用まで伴走。',
+      tech: ['Next.js', 'TypeScript', 'Prisma', 'AWS'],
+      current: false
     },
     {
       company: '個人事業主',
       period: '2024.01 - 2024.09',
       role: '受託開発',
-      description: '業務管理Webアプリケーションの受託開発。要件定義から運用まで全工程を単独で担当。',
-      tech: ['Next.js', 'Rails', 'PostgreSQL'],
+      description: '業務管理Webアプリケーションの受託開発。要件定義から運用まで全工程を単独で完遂。',
+      tech: ['Next.js', 'Node.js', 'PostgreSQL'],
       current: false
     },
     {
       company: 'プログラミングスクール',
       period: '2021.11 - 2025.07',
       role: '業務委託 / テックメンター',
-      description: 'プログラミング学習者への技術サポート・コードレビュー。',
+      description: 'プログラミング学習者への技術サポート・コードレビュー。3年8ヶ月にわたりエンジニア育成に貢献。',
       tech: ['Ruby on Rails', 'AWS'],
       current: false
     }
@@ -169,15 +178,15 @@ export default function About() {
           <h2 className='text-xl font-bold text-slate-900 dark:text-slate-100 mb-4'>
             自己紹介
           </h2>
-          <div className='space-y-4 text-base text-slate-600 dark:text-slate-300 leading-relaxed'>
+          <div className='space-y-4 text-sm text-slate-600 dark:text-slate-300 leading-relaxed'>
             <p>
-              「明日やろうは馬鹿やろう」をモットーに、新しい技術や未経験の領域に積極的に挑戦してきたフルスタックエンジニアです。
+              バックエンドからキャリアをスタートし、現在はReact / Next.js / TypeScriptを中心としたフロントエンド開発から、Python / Node.jsのバックエンド、AWS / Azureのクラウド構築まで一貫して担当するフルスタックエンジニアです。
             </p>
             <p>
-              バックエンドからキャリアをスタートし、現在はフロントエンドをメインにBE/FEを横断した開発を行っています。本業で動画配信プラットフォームの開発に携わりながら、複数企業で業務委託エンジニアとしても活動しています。
+              正社員として動画配信プラットフォームの開発に携わりながら、複数企業で業務委託エンジニアとしても活動。LLM・RAGを活用したAIツール、Webアプリケーションの立ち上げなど、技術選定から運用まで一貫して経験しています。
             </p>
             <p>
-              ドライブが趣味で、愛車で自然豊かな場所を巡っています。コードを書く日々と、自然の中でリフレッシュする時間のバランスを大切にしています。
+              本業＋複数の業務委託を並行し、週100時間近く技術に向き合う日々。短期間で複数の技術スタックを習得し、フロントエンド・バックエンド・インフラを横断した開発経験を積んできました。
             </p>
           </div>
         </section>
