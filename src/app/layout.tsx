@@ -127,6 +127,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang='ja' className={notoSansJP.variable}>
       <head>
         <GoogleAnalytics />
+        <link rel='manifest' href='/manifest.json' />
+        <meta name='theme-color' content='#0f172a' />
         <meta name='google-adsense-account' content='ca-pub-9002778711554857'></meta>
         <meta name='thumbnail' content={`${process.env.SITE_URL}${Favicon.src}`}></meta>
         <script

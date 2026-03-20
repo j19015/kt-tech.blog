@@ -1,0 +1,17 @@
+{
+  "name": "kt-tech.blog",
+  "short_name": "kt-tech",
+  "description": "実践的な技術記事とエンジニアリングの知見を発信",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
