@@ -144,10 +144,13 @@
 }
 
 /* Code language label */
+.znc pre:has(code[class*="language-"]) {
+  padding-top: 2em;
+}
 .znc pre code[class*="language-"]::before {
   content: attr(data-lang);
   position: absolute;
-  top: 0;
+  top: 8px;
   left: 12px;
   font-size: 11px;
   font-family: -apple-system, sans-serif;

@@ -201,6 +201,8 @@ export default async function StaticDetailPage({
 
   // [toc]マーカーを除去（ブログ側で目次を自動生成するため）
   processedHtml = processedHtml.replace(/<p>\s*\[toc\]\s*<\/p>/gi, '');
+  processedHtml = processedHtml.replace(/<p>\s*"\[toc\]"\s*<\/p>/gi, '');
+  processedHtml = processedHtml.replace(/"\[toc\]"/gi, '');
   processedHtml = processedHtml.replace(/\[toc\]/gi, '');
 
   // リンクカード生成（正規表現ベース）
