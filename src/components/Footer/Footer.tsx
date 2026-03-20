@@ -34,7 +34,7 @@ export const Footer = () => {
                 href='https://github.com/j19015'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors'
+                className='text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:scale-110 transition-all duration-200'
                 aria-label='GitHub'
               >
                 <Github className='w-5 h-5' />
@@ -43,14 +43,14 @@ export const Footer = () => {
                 href='https://x.com/meow_koki'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors'
+                className='text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:scale-110 transition-all duration-200'
                 aria-label='X (Twitter)'
               >
                 <XIcon className='w-5 h-5' />
               </Link>
               <Link
                 href='/feed.xml'
-                className='text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors'
+                className='text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:scale-110 transition-all duration-200'
                 aria-label='RSS'
               >
                 <Rss className='w-5 h-5' />
