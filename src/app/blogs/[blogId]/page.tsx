@@ -288,11 +288,11 @@ export default async function StaticDetailPage({
           { label: blog.title, current: true }
         ]}
       />
-      <div className='grid grid-cols-2 lg:grid-cols-3 lg:p-4'>
+      <div className='grid grid-cols-1 lg:grid-cols-3 lg:p-4 overflow-hidden'>
         <div className='lg:col-span-1 p-5 pl-7 pt-0 hidden lg:block'>
           <StickyTableOfContents toc={toc} />
         </div>
-        <div className='lg:col-span-2 col-span-3 lg:py-5 lg:px-3 rounded-lg shadow-lg content'>
+        <div className='lg:col-span-2 col-span-1 lg:py-5 lg:px-3 rounded-lg shadow-lg content overflow-hidden'>
           {' '}
           {/* 通常の画面サイズでは2列分のスペースを占有 */}
           <div>
@@ -352,7 +352,7 @@ export default async function StaticDetailPage({
                 </div>
               )}
             </div>
-            <h1 className='p-4 mt-5 text-xl font-bold lg:text-3xl text-foreground'>{blog.title}</h1>
+            <h1 className='p-4 mt-5 text-xl font-bold lg:text-3xl text-foreground break-words'>{blog.title}</h1>
             <ShareButtons title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
             <TableOfContents toc={toc} />
             <div className='p-4 znc markdown text-foreground'>
