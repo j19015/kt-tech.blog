@@ -12,21 +12,21 @@ export default async function StaticDetailPage({
 }: {
   params: Promise<{ tagId: string }>;
 }) {
-  //ページの生成された時間を取得
   const { tagId } = await params;
-  const time = new Date().toLocaleString();
 
-  //リスト一覧とタグ詳細を並列取得
-  const [{ contents }, tag_show] = await Promise.all([
-    getList(),
-    getTagDetail(tagId),
-  ]);
+  let contents, tag_show;
+  try {
+    [{ contents }, tag_show] = await Promise.all([
+      getList(),
+      getTagDetail(tagId),
+    ]);
+  } catch {
+    notFound();
+  }
 
-  //リストを指定のタグで絞り込み
   const filteredContents = contents.filter((blog) => blog.tags?.some((tag) => tag.id === decodeURIComponent(tagId)));
 
-  //コンテンツがない場合
-  if (!filteredContents) {
+  if (!filteredContents || filteredContents.length === 0) {
     notFound();
   }
 

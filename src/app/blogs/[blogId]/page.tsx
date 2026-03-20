@@ -150,10 +150,15 @@ export default async function StaticDetailPage({
   params: Promise<{ blogId: string }>;
 }) {
   const { blogId } = await params;
-  const [blog, { contents }] = await Promise.all([
-    getDetail(blogId),
-    getList(),
-  ]);
+  let blog, contents;
+  try {
+    [blog, { contents }] = await Promise.all([
+      getDetail(blogId),
+      getList(),
+    ]);
+  } catch {
+    notFound();
+  }
   
   // 同じカテゴリまたはタグを持つ関連記事を取得
   const relatedPosts = contents.filter(post => {
