@@ -62,6 +62,7 @@ import { StickyTableOfContents } from '@/components/TableOfContents/StickyTableO
 import { RelatedPosts } from '@/components/RelatedPosts/RelatedPosts';
 import { ShareButtons } from '@/components/ShareButtons/ShareButtons';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
+import { CodeCopyButton } from '@/components/CodeCopyButton/CodeCopyButton';
 
 
 export const runtime = 'edge';
@@ -334,6 +335,7 @@ export default async function StaticDetailPage({
             <TableOfContents toc={toc} />
             <div className='p-4 znc markdown text-foreground'>
               <div dangerouslySetInnerHTML={{ __html: processedHtml }}></div>
+              <CodeCopyButton />
             </div>
             <RelatedPosts posts={relatedPosts} currentPostId={blogId} />
           </div>
