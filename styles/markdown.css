@@ -110,6 +110,33 @@
   background-color: #22272e !important;
 }
 
+/* Code language label */
+.znc pre code[class*="language-"]::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0;
+  left: 12px;
+  font-size: 11px;
+  font-family: -apple-system, sans-serif;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.znc pre code.language-typescript::before { content: 'TypeScript'; }
+.znc pre code.language-javascript::before { content: 'JavaScript'; }
+.znc pre code.language-bash::before { content: 'Bash'; }
+.znc pre code.language-css::before { content: 'CSS'; }
+.znc pre code.language-html::before { content: 'HTML'; }
+.znc pre code.language-json::before { content: 'JSON'; }
+.znc pre code.language-yaml::before { content: 'YAML'; }
+.znc pre code.language-toml::before { content: 'TOML'; }
+.znc pre code.language-python::before { content: 'Python'; }
+.znc pre code.language-ruby::before { content: 'Ruby'; }
+.znc pre code.language-go::before { content: 'Go'; }
+.znc pre code.language-sql::before { content: 'SQL'; }
+.znc pre code.language-tsx::before { content: 'TSX'; }
+.znc pre code.language-jsx::before { content: 'JSX'; }
+
 /* Code copy button */
 .znc pre .copy-btn {
   position: absolute;
