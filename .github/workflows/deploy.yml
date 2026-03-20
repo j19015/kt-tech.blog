@@ -67,3 +67,10 @@ jobs:
             sleep 1
           done
         continue-on-error: true
+
+      - name: Notify search engines
+        run: |
+          curl -s "https://www.google.com/ping?sitemap=https://kt-tech.blog/sitemap.xml" || true
+          curl -s "https://www.bing.com/ping?sitemap=https://kt-tech.blog/sitemap.xml" || true
+          echo "Pinged Google and Bing"
+        continue-on-error: true
