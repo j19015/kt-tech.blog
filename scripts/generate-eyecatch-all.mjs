@@ -2,6 +2,7 @@
 // 使い方: node scripts/generate-eyecatch.mjs [--dry-run]
 import { Client } from '@notionhq/client';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import sharp from 'sharp';
 import https from 'https';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 
@@ -157,13 +158,16 @@ function callImagen(prompt) {
 }
 
 async function uploadToR2(buffer, filename) {
-  const key = `images/eyecatch/${filename}`;
+  const webpBuffer = await sharp(buffer).webp({ quality: 85 }).toBuffer();
+  const webpFilename = filename.replace(/\.png$/, '.webp');
+  const key = `images/eyecatch/${webpFilename}`;
   await s3.send(new PutObjectCommand({
     Bucket: BUCKET_NAME,
     Key: key,
-    Body: buffer,
-    ContentType: 'image/png',
+    Body: webpBuffer,
+    ContentType: 'image/webp',
   }));
+  console.log(`  Converted: PNG ${(buffer.length / 1024).toFixed(0)}KB → WebP ${(webpBuffer.length / 1024).toFixed(0)}KB`);
   return `${BUCKET_URL}/${key}`;
 }
 
