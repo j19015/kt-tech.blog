@@ -11,17 +11,11 @@ export default async function StaticDetailPage({
   params: Promise<{ archive: string }>;
 }) {
   const { archive } = await params;
-
-  let contents;
-  try {
-    ({ contents } = await getList());
-  } catch {
-    notFound();
-  }
+  const { contents } = await getList().catch(() => ({ contents: [], totalCount: 0, offset: 0, limit: 0 }));
 
   const filteredContents = contents.filter((item) => item.createdAt.slice(0, 7) === archive);
 
-  if (!filteredContents || filteredContents.length === 0) {
+  if (filteredContents.length === 0) {
     notFound();
   }
 

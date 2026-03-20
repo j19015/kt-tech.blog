@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getDetail, getList } from '../../../../libs/notion';
+import { getDetail, getList, Blog } from '../../../../libs/notion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faTag } from '@fortawesome/free-solid-svg-icons';
 import MarkdownIt from 'markdown-it';
@@ -150,15 +150,11 @@ export default async function StaticDetailPage({
   params: Promise<{ blogId: string }>;
 }) {
   const { blogId } = await params;
-  let blog, contents;
-  try {
-    [blog, { contents }] = await Promise.all([
-      getDetail(blogId),
-      getList(),
-    ]);
-  } catch {
-    notFound();
-  }
+  const [blog, { contents }] = await Promise.all([
+    getDetail(blogId).catch(() => null),
+    getList().catch(() => ({ contents: [] as Blog[], totalCount: 0, offset: 0, limit: 0 })),
+  ]);
+  if (!blog) notFound();
   
   // 同じカテゴリまたはタグを持つ関連記事を取得
   const relatedPosts = contents.filter(post => {
