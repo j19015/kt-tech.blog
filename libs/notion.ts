@@ -151,9 +151,22 @@ async function blocksToMarkdown(blockId: string): Promise<string> {
       case 'quote': {
         const quoteText = richTextToMarkdown(block.quote.rich_text);
         const quoteColor = block.quote.color || 'default';
-        // quoteもcalloutと同じUIで表示（アイコンは引用マーク）
+        // quoteの子ブロック（リスト等）を取得
+        let quoteChildContent = '';
+        if (block.has_children) {
+          const childBlocks = await notionFetch(`/blocks/${block.id}/children?page_size=100`);
+          for (const child of childBlocks.results) {
+            if (child.type === 'bulleted_list_item') {
+              quoteChildContent += `\n- ${richTextToMarkdown(child.bulleted_list_item.rich_text)}`;
+            } else if (child.type === 'numbered_list_item') {
+              quoteChildContent += `\n1. ${richTextToMarkdown(child.numbered_list_item.rich_text)}`;
+            } else if (child.type === 'paragraph') {
+              quoteChildContent += `\n${richTextToMarkdown(child.paragraph.rich_text)}`;
+            }
+          }
+        }
         lines.push(`:::callout{icon="📌" color="${quoteColor === 'default' ? 'gray_background' : quoteColor}"}`);
-        lines.push(quoteText);
+        lines.push(quoteText + quoteChildContent);
         lines.push(':::');
         break;
       }
