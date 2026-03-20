@@ -2,6 +2,7 @@
 import { BlogProps } from '../../../libs/notion';
 import Link from 'next/link';
 import Image from 'next/image';
+import { FadeIn } from '../FadeIn/FadeIn';
 
 const timeAgo = (date: string) => {
   const diff = Date.now() - new Date(date).getTime();
@@ -19,7 +20,8 @@ export const Index = ({ contents }: BlogProps) => {
     <div className='max-w-3xl mx-auto px-4'>
       <div className='space-y-4'>
         {contents.map((blog) => (
-          <article key={blog.id} className='group'>
+          <FadeIn key={blog.id}>
+          <article className='group'>
             <Link href={`/blogs/${blog.id}`} className='block'>
               <div className='flex gap-4 p-4 h-[140px] sm:h-[150px] rounded-xl bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-lg hover:border-slate-200 dark:hover:border-slate-600 hover:-translate-y-0.5 transition-all duration-300 overflow-hidden'>
                 {/* サムネイル画像 */}
@@ -78,6 +80,7 @@ export const Index = ({ contents }: BlogProps) => {
               </div>
             </Link>
           </article>
+          </FadeIn>
         ))}
       </div>
 

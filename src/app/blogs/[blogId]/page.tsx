@@ -292,7 +292,7 @@ export default async function StaticDetailPage({
         <div className='lg:col-span-1 p-5 pl-7 pt-0 hidden lg:block'>
           <StickyTableOfContents toc={toc} />
         </div>
-        <div className='lg:col-span-2 col-span-1 lg:py-5 lg:px-3 rounded-lg shadow-lg content overflow-hidden'>
+        <div className='lg:col-span-2 col-span-1 lg:py-5 lg:px-3 content overflow-hidden'>
           {' '}
           {/* 通常の画面サイズでは2列分のスペースを占有 */}
           <div>
