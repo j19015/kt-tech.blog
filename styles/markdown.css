@@ -16,12 +16,13 @@
 }
 
 .znc h1 {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-top: 5rem;
-  margin-bottom: 3rem;
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-top: 4rem;
+  margin-bottom: 2rem;
   padding-left: 0.5rem;
   padding-top: 0.2rem;
+  letter-spacing: -0.02em;
 }
 
 /* 見出しアンカーリンク */
@@ -48,14 +49,14 @@
 }
 
 .znc h2 {
-  font-weight: bold;
-  margin-top: 20px;
-  font-size: 1.3rem;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-  padding-left: 10px;
+  font-weight: 700;
+  font-size: 1.4rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  padding-left: 12px;
+  padding-bottom: 0.3rem;
   border-bottom: none !important;
-  border-left: solid 5px rgba(92, 147, 187, 0.3);
+  border-left: solid 4px #3b82f6;
 }
 
 .znc h3 {
@@ -238,7 +239,7 @@
   max-width: 80% !important;
   height: auto;
   display: block;
-  margin: 3rem 0;
+  margin: 2rem auto;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   cursor: zoom-in;
@@ -246,6 +247,17 @@
 }
 .znc img:hover {
   opacity: 0.9;
+}
+.znc img[alt]:not([alt=""]) {
+  margin-bottom: 0.5rem;
+}
+.znc img[alt]:not([alt=""])::after {
+  content: attr(alt);
+  display: block;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-top: 0.5rem;
 }
 .dark .znc img {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
