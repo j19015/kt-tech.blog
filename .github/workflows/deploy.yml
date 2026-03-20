@@ -33,3 +33,31 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Warm CDN cache
+        run: |
+          sleep 10
+          SITE="https://kt-tech.blog"
+          # Main pages
+          for path in "/" "/blogs/page/1" "/about"; do
+            curl -s -o /dev/null -w "WARM %{http_code} %{time_starttransfer}s $path\n" "${SITE}${path}" || true
+          done
+          # Fetch all article slugs from Notion API and warm each
+          SLUGS=$(curl -s -X POST "https://api.notion.com/v1/databases/${{ secrets.NOTION_DATABASE_ID }}/query" \
+            -H "Authorization: Bearer ${{ secrets.NOTION_API_KEY }}" \
+            -H "Notion-Version: 2022-06-28" \
+            -H "Content-Type: application/json" \
+            -d '{"filter":{"property":"Status","select":{"equals":"Published"}},"page_size":100}' \
+            | node -e "
+              const d=require('fs').readFileSync('/dev/stdin','utf8');
+              const j=JSON.parse(d);
+              j.results.forEach(p=>{
+                const slug=p.properties.Slug?.rich_text?.[0]?.plain_text || p.id.replace(/-/g,'');
+                console.log(slug);
+              });
+            ")
+          for slug in $SLUGS; do
+            curl -s -o /dev/null -w "WARM %{http_code} %{time_starttransfer}s /blogs/${slug}\n" "${SITE}/blogs/${slug}" || true
+            sleep 1
+          done
+        continue-on-error: true
