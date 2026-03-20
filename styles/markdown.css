@@ -32,7 +32,7 @@
   margin-bottom: 1.5rem;
   padding-left: 10px;
   border-bottom: none !important;
-  border-left: solid 5px rgba(92, 147, 187, 0.17);
+  border-left: solid 5px rgba(92, 147, 187, 0.3);
 }
 
 .znc h3 {
@@ -50,7 +50,6 @@
 }
 
 .znc ol > li {
-  font-weight: bold;
   padding: 3px;
 }
 /* markerの色は親要素から継承 */
@@ -68,19 +67,22 @@
 }
 
 .znc a {
-  color: #3498db;
+  color: #2563eb;
   text-decoration: none;
   transition: color 0.2s;
 }
+.dark .znc a {
+  color: #60a5fa;
+}
 
 .znc a:hover {
-  color: #5eadf2;
+  color: #1d4ed8;
   text-decoration: underline;
 }
-
-.znc div {
-  position: relative;
+.dark .znc a:hover {
+  color: #93bbfd;
 }
+
 
 .znc code {
   background-color: rgb(var(--md-code-bg-light));
@@ -93,8 +95,19 @@
 .dark .znc code {
   background-color: rgb(var(--md-code-bg-dark));
 }
+.znc pre {
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  overflow-x: auto;
+}
+.dark .znc pre {
+  border-color: #334155;
+}
 .znc pre > code {
-  background-color: #1a2638 !important;
+  background-color: #f6f8fa !important;
+}
+.dark .znc pre > code {
+  background-color: #22272e !important;
 }
 
 .znc blockquote {
@@ -103,6 +116,9 @@
   margin: 10px;
   margin-left: 2rem;
   font-style: italic;
+}
+.dark .znc blockquote {
+  border-left-color: #5eadf2;
 }
 
 .znc hr {
@@ -116,8 +132,11 @@
   height: auto;
   display: block;
   margin: 3rem 0;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.dark .znc img {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .znc p {
@@ -131,9 +150,9 @@
 }
 
 .index_img {
-  width: 700px;
-  height: 260px;
-  object-fit: fill;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -142,27 +161,36 @@
   border-collapse: collapse;
   margin-bottom: 1.5rem;
   display: inline-table !important;
+  border: 1px solid #e2e8f0;
+}
+.dark .znc table {
+  border-color: #475569;
 }
 
 .znc th {
   background: var(--md-table-th-light);
   color: rgb(var(--foreground-rgb));
-  padding: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  font-weight: 600;
 }
 
 .dark .znc th {
   background: var(--md-table-th-dark);
+  border-color: #475569;
 }
 
 .znc td {
-  padding: 0.5rem;
+  padding: 0.75rem;
   background: var(--md-table-td-light);
   text-align: left;
   color: rgb(var(--foreground-rgb));
+  border: 1px solid #e2e8f0;
 }
 
 .dark .znc td {
   background: var(--md-table-td-dark);
+  border-color: #475569;
 }
 
 /* リンクカードがリスト内にある場合のbullet除去 */
@@ -213,7 +241,15 @@
   }
 
   .znc pre {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .znc pre::-webkit-scrollbar {
+    height: 6px;
+  }
+  .znc pre::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 3px;
   }
 
   .znc code {
@@ -227,9 +263,9 @@
     max-width: 100%;
   }
   .index_img {
-    width: 700px;
-    height: 200px;
-    object-fit: fill;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
   }
 }
@@ -246,6 +282,10 @@
   border: 1px solid transparent;
   border-left: 4px solid;
   font-size: 1.05rem;
+  color: #1e293b;
+}
+.dark .znc .callout {
+  color: #e2e8f0;
 }
 
 .znc .callout-icon {

@@ -114,7 +114,7 @@ export const Footer = () => {
             © {new Date().getFullYear()} kt-tech.blog. All rights reserved.
           </p>
           <p className='text-xs text-slate-400 dark:text-slate-500'>
-            Built with Next.js & Cloudflare Workers
+            Built with Next.js & Cloudflare Pages
           </p>
         </div>
       </div>
