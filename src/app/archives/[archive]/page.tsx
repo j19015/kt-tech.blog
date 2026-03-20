@@ -1,3 +1,4 @@
+import { WithSidebar } from '@/components/WithSidebar/WithSidebar';
 import { notFound } from 'next/navigation';
 import { getList } from '../../../../libs/notion';
 import Index from '@/components/Index/Index';
@@ -20,11 +21,11 @@ export default async function StaticDetailPage({
   }
 
   return (
-    <>
-      <div className='text-center mt-1 w-full col-span-2'>
+    <WithSidebar>
+      <div className='text-center mt-1 w-full'>
         <Title title={archive} />
       </div>
       <Index contents={filteredContents} />
-    </>
+    </WithSidebar>
   );
 }

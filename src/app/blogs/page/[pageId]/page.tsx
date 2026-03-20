@@ -1,9 +1,9 @@
 import { notFound } from 'next/navigation';
 import { getList } from '../../../../../libs/notion';
-import Sidebar from '@/components/SIdebar/Sidebar'; // Sidebarのimportを修正
 import Paginate from '@/components/Pagination/Paginate';
 import Index from '@/components/Index/Index';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
+import { WithSidebar } from '@/components/WithSidebar/WithSidebar';
 
 const ITEMS_PER_PAGE = 6; // 1ページあたりのアイテム数
 
@@ -35,11 +35,11 @@ export default async function StaticPaginationPage({
     // コンテンツを表示するロジックをここに追加
 
     return (
-      <>
-        <BreadcrumbNav 
+      <WithSidebar>
+        <BreadcrumbNav
           items={[
             { label: 'Blog', current: true }
-          ]} 
+          ]}
         />
         <Index contents={contentSlice} />
         <Paginate
@@ -47,7 +47,7 @@ export default async function StaticPaginationPage({
           totalPage={Math.ceil(contents.length / ITEMS_PER_PAGE)}
           kind={`/blogs`}
         ></Paginate>
-      </>
+      </WithSidebar>
     );
   } catch (error) {
     console.error('Error fetching data:', error);

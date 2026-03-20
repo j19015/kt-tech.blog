@@ -1,3 +1,4 @@
+import { WithSidebar } from '@/components/WithSidebar/WithSidebar';
 import { notFound } from 'next/navigation';
 import { getList, getCategoryList, getCategoryDetail } from '../../../../libs/notion';
 import Index from '@/components/Index/Index';
@@ -35,7 +36,7 @@ export default async function StaticDetailPage({
   };
 
   return (
-    <>
+    <WithSidebar>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <BreadcrumbNav
         items={[
@@ -47,6 +48,6 @@ export default async function StaticDetailPage({
         <Title title={category_show.name} />
       </div>
       <Index contents={filteredContents} />
-    </>
+    </WithSidebar>
   );
 }
