@@ -46,7 +46,7 @@ export const Index = ({ contents }: BlogProps) => {
                   </h2>
 
                   <div className='space-y-1.5'>
-                    <div className='flex items-center gap-1.5 text-[11px] text-slate-400 dark:text-slate-500'>
+                    <div className='flex items-center gap-1.5 text-[11px] text-slate-400 dark:text-slate-400'>
                       <time className='whitespace-nowrap' title={new Date(blog.createdAt).toLocaleDateString('ja-JP')}>
                         {new Date(blog.createdAt).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' })}
                       </time>
@@ -65,13 +65,13 @@ export const Index = ({ contents }: BlogProps) => {
                         {blog.tags.slice(0, 3).map((tag) => (
                           <span
                             key={tag.id}
-                            className='text-[11px] text-slate-400 dark:text-slate-500 whitespace-nowrap'
+                            className='text-[11px] text-slate-400 dark:text-slate-400 whitespace-nowrap'
                           >
                             #{tag.name}
                           </span>
                         ))}
                         {blog.tags.length > 3 && (
-                          <span className='text-[11px] text-slate-400 dark:text-slate-500'>...</span>
+                          <span className='text-[11px] text-slate-400 dark:text-slate-400'>...</span>
                         )}
                       </div>
                     )}
