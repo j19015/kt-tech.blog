@@ -4,39 +4,43 @@ import { Blog } from '../../libs/notion';
 import Index from '@/components/Index/Index';
 import HeroSection from '@/components/HeroSection/HeroSection';
 
+const siteUrl = process.env.SITE_URL || 'https://kt-tech.blog';
+const description = '実践的な技術記事とエンジニアリングの知見を発信。React, Next.js, TypeScript, Cloudflare, AIなどのモダン技術を中心に。';
+
 export const metadata = {
-  title: 'TOPページ',
-  description:
-    '基本的には技術記事を投稿しています。たまに勉強会への感想や最近の技術を触ってみた感想なども投稿します。',
+  title: 'kt-tech.blog - 技術と創造性が交わる場所',
+  description,
+  alternates: {
+    canonical: siteUrl,
+  },
   openGraph: {
-    title: 'TOPページ',
-    description:
-      '基本的には技術記事を投稿しています。たまに勉強会への感想や最近の技術を触ってみた感想なども投稿します。',
+    title: 'kt-tech.blog - 技術と創造性が交わる場所',
+    description,
     locale: 'ja_JP',
     type: 'website',
+    url: siteUrl,
+    siteName: 'kt-tech.blog',
     images: [
       {
-        url: `${process.env.SITE_URL}/opengraph-image.png`,
+        url: `${siteUrl}/opengraph-image.png`,
+        width: 1200,
+        height: 630,
         alt: 'kt-tech.blog',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'TOPページ',
-    description:
-      '基本的には技術記事を投稿しています。たまに勉強会への感想や最近の技術を触ってみた感想なども投稿します。',
+    title: 'kt-tech.blog - 技術と創造性が交わる場所',
+    description,
     site: '@tech_koki',
     creator: '@tech_koki',
     images: [
       {
-        url: `${process.env.SITE_URL}/opengraph-image.png`,
+        url: `${siteUrl}/opengraph-image.png`,
         alt: 'kt-tech.blog',
       },
     ],
-  },
-  other: {
-    thumbnail: '/opengraph-image.png',
   },
 };
 
@@ -53,8 +57,27 @@ export default async function StaticPage() {
     .filter((article) => article.category?.name !== 'PF')
     .slice(0, 4);
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'kt-tech.blog',
+    url: siteUrl,
+    description,
+    author: {
+      '@type': 'Person',
+      name: 'Koki',
+      url: `${siteUrl}/about`,
+    },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${siteUrl}/searches?text={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <HeroSection />
       <Index contents={latestBlogs} />
       <div className='mt-12 text-center'>
