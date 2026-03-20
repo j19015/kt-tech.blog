@@ -63,6 +63,7 @@ import { RelatedPosts } from '@/components/RelatedPosts/RelatedPosts';
 import { ShareButtons } from '@/components/ShareButtons/ShareButtons';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 import { CodeCopyButton } from '@/components/CodeCopyButton/CodeCopyButton';
+import { PostNavigation } from '@/components/PostNavigation/PostNavigation';
 
 
 export const runtime = 'edge';
@@ -294,7 +295,7 @@ export default async function StaticDetailPage({
             </div>
             {/* メタデータセクション */}
             <div className='p-6 space-y-4'>
-              {/* カテゴリと日付 */}
+              {/* カテゴリと日付と読了時間 */}
               <div className='flex flex-wrap items-center gap-3'>
                 {blog.category && (
                   <Link href={`/categories/${blog.category.id}`}>
@@ -314,6 +315,14 @@ export default async function StaticDetailPage({
                     })}
                   </time>
                 </div>
+                {blog.updatedAt !== blog.createdAt && (
+                  <span className='text-xs text-slate-400 dark:text-slate-500'>
+                    (更新: {new Date(blog.updatedAt).toLocaleDateString('ja-JP')})
+                  </span>
+                )}
+                <span className='text-xs text-slate-400 dark:text-slate-500'>
+                  · 約{Math.max(1, Math.ceil(stripHtml(processedHtml).length / 600))}分で読めます
+                </span>
               </div>
               
               {/* タグ */}
@@ -337,6 +346,7 @@ export default async function StaticDetailPage({
               <div dangerouslySetInnerHTML={{ __html: processedHtml }}></div>
               <CodeCopyButton />
             </div>
+            <PostNavigation currentId={blogId} allPosts={contents} />
             <RelatedPosts posts={relatedPosts} currentPostId={blogId} />
           </div>
         </div>

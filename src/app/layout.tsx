@@ -141,9 +141,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           enableSystem
           disableTransitionOnChange
         >
+          <a href='#main-content' className='sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-4 focus:left-4 focus:px-4 focus:py-2 focus:bg-slate-900 focus:text-white focus:rounded-lg'>
+            メインコンテンツへスキップ
+          </a>
           <ReadingProgress />
           <Header />
-          <main>
+          <main id='main-content'>
             <div className='m-auto mt-5 rounded-lg'>
               <div className='lg:grid grid-cols-2 lg:grid-cols-3 gap-4'>
                 <div className='lg:col-span-2 col-span-3'>{children}</div>

@@ -55,7 +55,7 @@ export default async function StaticPage() {
   // contentsをBlogの配列として定義
   const latestBlogs: Blog[] = contents
     .filter((article) => article.category?.name !== 'PF')
-    .slice(0, 4);
+    .slice(0, 6);
 
   const jsonLd = {
     '@context': 'https://schema.org',

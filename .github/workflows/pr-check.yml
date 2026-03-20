@@ -41,3 +41,4 @@ jobs:
             https://kt-tech.blog
             https://kt-tech.blog/blogs/page/1
           uploadArtifacts: true
+          budgetPath: .github/lighthouse-budget.json

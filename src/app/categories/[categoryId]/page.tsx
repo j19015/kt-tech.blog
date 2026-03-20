@@ -25,13 +25,23 @@ export default async function StaticDetailPage({
     notFound();
   }
 
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: process.env.SITE_URL },
+      { '@type': 'ListItem', position: 2, name: category_show.name },
+    ],
+  };
+
   return (
     <>
-      <BreadcrumbNav 
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      <BreadcrumbNav
         items={[
           { label: 'Category', href: '/categories' },
           { label: category_show.name, current: true }
-        ]} 
+        ]}
       />
       <div className='text-center mt-1 w-full col-span-2'>
         <Title title={category_show.name} />
