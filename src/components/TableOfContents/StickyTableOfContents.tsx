@@ -92,29 +92,29 @@ export const StickyTableOfContents = ({ toc }: { toc: TocItem[] }) => {
   };
 
   return (
-    <div className='sticky top-20 p-4 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900'>
-      <h2 className='text-sm font-bold text-slate-900 dark:text-slate-100 mb-3'>
+    <div className='sticky top-20 p-4 rounded-lg'>
+      <h2 className='text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-4'>
         目次
       </h2>
 
-      <ul ref={tocRef} className='space-y-2 max-h-[60vh] overflow-y-auto'>
+      <ul ref={tocRef} className='space-y-1 max-h-[60vh] overflow-y-auto border-l-2 border-slate-200 dark:border-slate-700'>
         {toc.map((item) => (
           <li
             key={item.id}
             data-toc-id={item.id}
             ref={activeId === item.id ? activeItemRef : null}
-            className={`${item.tag === 'h2' ? 'ml-3' : item.tag === 'h3' ? 'ml-6' : ''}`}
+            className={`${item.tag === 'h2' ? 'pl-3' : item.tag === 'h3' ? 'pl-6' : 'pl-3'}`}
           >
             <a
               href={`#${item.id}`}
               onClick={(e) => handleClick(e, item.id)}
-              className={`block text-sm transition-colors ${
+              className={`block text-sm py-1 transition-all border-l-2 -ml-[2px] ${
                 activeId === item.id
-                  ? 'text-slate-900 dark:text-slate-100 font-medium'
-                  : 'text-slate-500 dark:text-slate-300 hover:text-slate-700 dark:hover:text-slate-300'
+                  ? 'text-blue-600 dark:text-blue-400 font-medium border-blue-500'
+                  : 'text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 border-transparent'
               }`}
             >
-              {item.text}
+              <span className='pl-3'>{item.text}</span>
             </a>
           </li>
         ))}

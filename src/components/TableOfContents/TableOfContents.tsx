@@ -12,7 +12,7 @@ export const TableOfContents = ({ toc }: { toc: any }) => {
   }, [isOpen]);
 
   return (
-    <div className='lg:hidden border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900 my-8 mx-4'>
+    <div className='lg:hidden rounded-lg bg-slate-50 dark:bg-slate-800/50 my-8 mx-4'>
       <button
         onClick={() => setOpen(!isOpen)}
         className='w-full flex justify-between items-center px-4 py-3 text-left'
