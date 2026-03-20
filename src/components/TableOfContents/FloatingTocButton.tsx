@@ -26,7 +26,7 @@ export const FloatingTocButton = ({ toc }: { toc: TocItem[] }) => {
       {isOpen && (
         <>
           <div className='fixed inset-0 z-30 bg-black/20' onClick={() => setIsOpen(false)} />
-          <div className='fixed bottom-36 right-6 z-40 w-72 max-h-[60vh] overflow-y-auto bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl p-4'>
+          <div className='fixed bottom-36 left-4 right-4 z-40 max-h-[60vh] overflow-y-auto bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl p-4'>
             <h3 className='text-sm font-bold text-slate-900 dark:text-slate-100 mb-3'>目次</h3>
             <ul className='space-y-2'>
               {toc.map((item) => (
