@@ -1,3 +1,4 @@
+import { WithSidebar } from '@/components/WithSidebar/WithSidebar';
 import { notFound } from 'next/navigation';
 import { getList, getCategoryList, getCategoryDetail } from '../../../../../../libs/notion';
 import Paginate from '@/components/Pagination/Paginate';
@@ -37,8 +38,8 @@ export default async function StaticPaginationPage({
     // コンテンツを表示するロジックをここに追加
 
     return (
-      <>
-        <div className='text-center mt-1 w-full col-span-2'>
+      <WithSidebar>
+        <div className='text-center mt-1 w-full'>
           <Title title={category.name} />
         </div>
         <Index contents={contentSlice} />
@@ -47,7 +48,7 @@ export default async function StaticPaginationPage({
           totalPage={Math.ceil(filteredContents.length / 6)}
           kind={`/categories/${categoryId}`}
         ></Paginate>
-      </>
+      </WithSidebar>
     );
   } catch (error) {
     console.error('Error fetching data:', error);
