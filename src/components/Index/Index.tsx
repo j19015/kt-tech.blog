@@ -59,15 +59,18 @@ export const Index = ({ contents }: BlogProps) => {
                     </div>
 
                     {blog.tags && blog.tags.length > 0 && (
-                      <div className='flex flex-wrap gap-1.5'>
+                      <div className='flex gap-1.5 overflow-hidden h-4'>
                         {blog.tags.slice(0, 3).map((tag) => (
                           <span
                             key={tag.id}
-                            className='text-[11px] text-slate-400 dark:text-slate-500'
+                            className='text-[11px] text-slate-400 dark:text-slate-500 whitespace-nowrap'
                           >
                             #{tag.name}
                           </span>
                         ))}
+                        {blog.tags.length > 3 && (
+                          <span className='text-[11px] text-slate-400 dark:text-slate-500'>...</span>
+                        )}
                       </div>
                     )}
                   </div>
