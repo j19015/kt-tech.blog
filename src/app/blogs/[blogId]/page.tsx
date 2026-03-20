@@ -64,6 +64,7 @@ import { ShareButtons } from '@/components/ShareButtons/ShareButtons';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 import { CodeCopyButton } from '@/components/CodeCopyButton/CodeCopyButton';
 import { PostNavigation } from '@/components/PostNavigation/PostNavigation';
+import { ImageLightbox } from '@/components/ImageLightbox/ImageLightbox';
 
 
 export const runtime = 'edge';
@@ -345,6 +346,7 @@ export default async function StaticDetailPage({
             <div className='p-4 znc markdown text-foreground'>
               <div dangerouslySetInnerHTML={{ __html: processedHtml }}></div>
               <CodeCopyButton />
+              <ImageLightbox />
             </div>
             <PostNavigation currentId={blogId} allPosts={contents} />
             <RelatedPosts posts={relatedPosts} currentPostId={blogId} />
