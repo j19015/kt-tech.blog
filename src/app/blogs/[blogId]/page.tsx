@@ -402,6 +402,25 @@ export default async function StaticDetailPage({
                   </div>
                 </div>
               </div>
+              {/* Feedback links */}
+              <div className='flex flex-wrap gap-4 pt-4 border-t border-slate-200 dark:border-slate-700'>
+                <a
+                  href={`https://x.com/search?q=${encodeURIComponent(process.env.SITE_URL + '/blogs/' + blogId)}`}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='text-xs text-slate-400 dark:text-slate-500 hover:text-blue-500 transition-colors'
+                >
+                  Xで議論を見る
+                </a>
+                <a
+                  href={`https://github.com/j19015/kt-tech.blog/issues/new?title=${encodeURIComponent('[typo] ' + blog.title)}&body=${encodeURIComponent('記事URL: ' + process.env.SITE_URL + '/blogs/' + blogId + '\n\n誤字・修正内容:\n')}`}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='text-xs text-slate-400 dark:text-slate-500 hover:text-blue-500 transition-colors'
+                >
+                  誤字を報告する
+                </a>
+              </div>
             </div>
             <PostNavigation currentId={blogId} allPosts={contents} />
             <RelatedPosts posts={relatedPosts} currentPostId={blogId} />
