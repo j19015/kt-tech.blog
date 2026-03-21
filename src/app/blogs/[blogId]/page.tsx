@@ -116,7 +116,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: pageUrl,
       publishedTime: blog.publishedAt,
       modifiedTime: blog.updatedAt,
-      authors: ['kt'],
+      authors: ['Koki'],
+      section: blog.category?.name,
+      tags: blog.tags?.map(t => t.name),
       ...(ogImage ? { images: [{ url: ogImage, width: 1200, height: 630, alt: blog.title }] } : {}),
     },
     ...(ogImage ? { other: { thumbnail: ogImage } } : {}),
@@ -250,7 +252,16 @@ export default async function StaticDetailPage({
     image: blog.eyecatch?.url || `${process.env.SITE_URL}/opengraph-image`,
     datePublished: blog.publishedAt,
     dateModified: blog.updatedAt,
-    author: { '@type': 'Person', name: 'kt', url: 'https://kt-tech.blog/about' },
+    inLanguage: 'ja',
+    author: {
+      '@type': 'Person',
+      name: 'Koki',
+      url: 'https://kt-tech.blog/about',
+      sameAs: [
+        'https://github.com/j19015',
+        'https://x.com/meow_koki',
+      ],
+    },
     publisher: {
       '@type': 'Organization',
       name: 'kt-tech.blog',
@@ -262,6 +273,7 @@ export default async function StaticDetailPage({
     },
     keywords: blog.tags?.map(t => t.name).join(', '),
     articleSection: blog.category?.name,
+    thumbnailUrl: blog.eyecatch?.url,
     wordCount: stripHtml(processedHtml).length,
     timeRequired: `PT${Math.max(1, Math.ceil(stripHtml(processedHtml).length / 600))}M`,
   };
