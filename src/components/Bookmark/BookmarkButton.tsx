@@ -32,7 +32,7 @@ export const BookmarkButton = ({ articleId, title }: { articleId: string; title:
   return (
     <button
       onClick={toggle}
-      className={`flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-full border transition-colors ${
+      className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-full border whitespace-nowrap transition-colors ${
         isBookmarked
           ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400'
           : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
