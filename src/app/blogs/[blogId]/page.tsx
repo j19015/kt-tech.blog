@@ -211,6 +211,19 @@ export default async function StaticDetailPage({
   processedHtml = processedHtml.replace(/"\[toc\]"/gi, '');
   processedHtml = processedHtml.replace(/\[toc\]/gi, '');
 
+  // テーブルをスクロール可能なラッパーで囲む（モバイル対応）
+  processedHtml = processedHtml.replace(
+    /<table/g,
+    '<div class="overflow-x-auto -mx-4 px-4"><table'
+  );
+  processedHtml = processedHtml.replace(/<\/table>/g, '</table></div>');
+
+  // 記事本文内画像に lazy loading + async decoding を付与
+  processedHtml = processedHtml.replace(
+    /<img(?![^>]*loading=)/g,
+    '<img loading="lazy" decoding="async"'
+  );
+
   // リンクカード生成（正規表現ベース）
   const linkRegex = /<a[^>]*href="(https?:\/\/[^"]*)"[^>]*>.*?<\/a>/gi;
   const uniqueLinks: string[] = [];
