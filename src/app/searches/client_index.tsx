@@ -1,4 +1,11 @@
 'use client';
+
+declare global {
+  interface Window {
+    gtag: (...args: any[]) => void;
+  }
+}
+
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -35,6 +42,14 @@ export const ClientIndex = ({ contents }: BlogProps) => {
             content.category?.name.toLowerCase().includes(text.toLowerCase())
           ).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
           setBlogContents(filteredContents);
+          if (typeof window !== 'undefined' && window.gtag) {
+            window.gtag('event', 'search', {
+              search_term: text,
+              event_category: 'Search',
+              event_label: filteredContents.length === 0 ? 'zero_results' : 'has_results',
+              value: filteredContents.length,
+            });
+          }
         } else {
           setBlogContents(null);
         }
@@ -80,6 +95,9 @@ export const ClientIndex = ({ contents }: BlogProps) => {
       )}
 
       {/* Search Results - same layout as Index component */}
+      <div aria-live='polite' aria-atomic='true' className='sr-only'>
+        {!isLoading && blogContents && `${blogContents.length}件の検索結果`}
+      </div>
       {!isLoading && blogContents && blogContents.length > 0 ? (
         <div className='max-w-3xl mx-auto px-4'>
           <div className='space-y-4'>

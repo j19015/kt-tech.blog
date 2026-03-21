@@ -19,6 +19,8 @@ import { ThemeProvider } from './providers/ThemeProvider/theme-provider';
 import { ReadingProgress } from '@/components/ReadingProgress/ReadingProgress';
 import { ScrollToTop } from '@/components/ScrollToTop/ScrollToTop';
 import { WebVitals } from '@/components/WebVitals/WebVitals';
+import { ScrollDepthTracker } from '@/components/Analytics/ScrollDepthTracker';
+import { OutboundLinkTracker } from '@/components/Analytics/OutboundLinkTracker';
 config.autoAddCss = false;
 
 const siteName = 'kt-tech.blog';
@@ -149,6 +151,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Footer />
           <ScrollToTop />
           <WebVitals />
+          <ScrollDepthTracker />
+          <OutboundLinkTracker />
         </ThemeProvider>
       </body>
     </html>
