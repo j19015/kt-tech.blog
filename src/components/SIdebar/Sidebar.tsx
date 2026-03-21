@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Form from '../Form/Form';
 import { Clock, FolderOpen, Tag, Calendar, ChevronDown, Shuffle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { ReadingStats } from '../ReadingStats/ReadingStats';
 
 interface SidebarProps {
   latestArticles: any[];
@@ -32,6 +33,7 @@ const SidebarClient = ({ latestArticles, tagList, categoryList, archives, totalC
             <span className='text-lg font-bold text-slate-900 dark:text-slate-100'>{totalCount}</span> 記事
           </p>
         )}
+        <ReadingStats />
         <button
           onClick={handleRandomArticle}
           className='flex items-center gap-1 px-2.5 py-1 text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full transition-colors'
