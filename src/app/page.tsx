@@ -90,7 +90,7 @@ export default async function StaticPage() {
             {/* フィーチャー（大） */}
             {latestBlogs[0] && (
               <Link href={`/blogs/${latestBlogs[0].id}`} className='group block'>
-                <div className='relative aspect-[16/9] lg:aspect-auto lg:h-full lg:min-h-[280px] rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800'>
+                <div className='relative aspect-[16/9] lg:aspect-auto lg:h-full lg:min-h-[420px] rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800'>
                   <Image
                     src={latestBlogs[0].eyecatch?.url || '/images/no_image_generated.png'}
                     alt={latestBlogs[0].title}
