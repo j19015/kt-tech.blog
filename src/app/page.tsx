@@ -46,6 +46,16 @@ export default async function StaticPage() {
   const latestBlogs = allBlogs.slice(0, 9);
   const categories = categoryData.contents.filter(c => c.name !== 'PF');
 
+  // 最近更新された記事（公開後24h以上経過 & 更新日が公開日と異なる）
+  const recentlyUpdated = allBlogs
+    .filter(b => {
+      const created = new Date(b.createdAt).getTime();
+      const updated = new Date(b.updatedAt).getTime();
+      return updated - created > 24 * 60 * 60 * 1000;
+    })
+    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+    .slice(0, 3);
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
@@ -141,6 +151,14 @@ export default async function StaticPage() {
           </div>
           <Index contents={latestBlogs.slice(3)} />
         </section>
+
+        {/* 最近更新された記事 */}
+        {recentlyUpdated.length > 0 && (
+          <section className='mb-12'>
+            <h2 className='text-lg font-bold text-slate-900 dark:text-slate-100 mb-6'>最近更新された記事</h2>
+            <Index contents={recentlyUpdated} />
+          </section>
+        )}
 
         {/* カテゴリセクション */}
         <section className='mb-12'>
