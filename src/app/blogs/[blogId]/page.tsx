@@ -63,6 +63,7 @@ import { RelatedPosts } from '@/components/RelatedPosts/RelatedPosts';
 import { ShareButtons } from '@/components/ShareButtons/ShareButtons';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 import { CodeCopyButton } from '@/components/CodeCopyButton/CodeCopyButton';
+import { ReadingTracker } from '@/components/ReadingStats/ReadingTracker';
 import { PostNavigation } from '@/components/PostNavigation/PostNavigation';
 import { ImageLightbox } from '@/components/ImageLightbox/ImageLightbox';
 import { FloatingTocButton } from '@/components/TableOfContents/FloatingTocButton';
@@ -392,6 +393,7 @@ export default async function StaticDetailPage({
               <div dangerouslySetInnerHTML={{ __html: processedHtml }}></div>
               <CodeCopyButton />
               <ImageLightbox />
+              <ReadingTracker articleId={blogId} />
             </div>
             {/* 記事末シェアCTA + 著者カード */}
             <div className='mt-12 mx-4 p-6 bg-slate-50 dark:bg-slate-800/50 rounded-lg space-y-6'>

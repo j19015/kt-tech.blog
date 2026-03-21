@@ -1,0 +1,10 @@
+/* TEAM */
+Developer: Koki
+Site: https://kt-tech.blog
+GitHub: https://github.com/j19015
+X: https://x.com/meow_koki
+
+/* SITE */
+Standards: HTML5, CSS3, JavaScript
+Components: Next.js 15, React 19, TypeScript, Tailwind CSS
+Software: Notion (CMS), Cloudflare Pages (Hosting)
