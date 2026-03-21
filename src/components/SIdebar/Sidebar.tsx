@@ -86,7 +86,7 @@ const SidebarClient = ({ latestArticles, tagList, categoryList, archives, totalC
               <Link
                 key={category.id}
                 href={`/categories/${category.id}/page/1`}
-                className='text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors'
+                className='text-xs px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors'
               >
                 {category.name}
               </Link>
@@ -105,7 +105,7 @@ const SidebarClient = ({ latestArticles, tagList, categoryList, archives, totalC
               <Link
                 key={archive}
                 href={`/archives/${archive}`}
-                className='text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors'
+                className='text-xs px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors'
               >
                 {archive.replace('-', '年')}月
               </Link>
@@ -124,7 +124,7 @@ const SidebarClient = ({ latestArticles, tagList, categoryList, archives, totalC
               <Link
                 key={tag.id}
                 href={`/tags/${tag.id}`}
-                className='text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors'
+                className='text-xs px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors'
               >
                 #{tag.name}
               </Link>

@@ -16,6 +16,12 @@ export const CodeCopyButton = () => {
           navigator.clipboard.writeText(code.textContent || '').then(() => {
             btn.textContent = 'Copied!';
             btn.classList.add('copied');
+            if (typeof window !== 'undefined' && (window as any).gtag) {
+              (window as any).gtag('event', 'code_copy', {
+                event_category: 'Engagement',
+                event_label: code.className || 'unknown',
+              });
+            }
             setTimeout(() => {
               btn.textContent = 'Copy';
               btn.classList.remove('copied');
