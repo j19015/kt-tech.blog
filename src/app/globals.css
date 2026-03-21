@@ -22,12 +22,13 @@
 body {
   font-family: var(--font-noto-sans-jp), 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
   overflow-anchor: auto;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  overflow-x: hidden;
 }
 /* スムーズスクロール */
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 80px;
+  overflow-x: hidden;
 }
 /* reduced-motion対応 */
 @media (prefers-reduced-motion: reduce) {
