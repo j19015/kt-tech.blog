@@ -88,7 +88,8 @@ export const Header = () => {
       </header>
 
       {/* Mobile Menu Panel */}
-      <div className={`fixed inset-0 z-40 md:hidden bg-white dark:bg-slate-900 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      {isOpen && (
+      <div className='fixed inset-0 z-40 md:hidden bg-white dark:bg-slate-900 animate-fadeIn'>
           <div className='flex flex-col justify-between h-full pt-24 pb-12 px-8'>
             {/* Menu Items */}
             <nav className='space-y-2'>
@@ -129,8 +130,8 @@ export const Header = () => {
               </div>
             </div>
           </div>
-        </div>
       </div>
+      )}
     </>
   );
 };
