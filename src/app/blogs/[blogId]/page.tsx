@@ -64,6 +64,7 @@ import { ShareButtons } from '@/components/ShareButtons/ShareButtons';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 import { CodeCopyButton } from '@/components/CodeCopyButton/CodeCopyButton';
 import { ReadingTracker } from '@/components/ReadingStats/ReadingTracker';
+import { FloatingShareButton } from '@/components/ShareButtons/FloatingShareButton';
 import { PostNavigation } from '@/components/PostNavigation/PostNavigation';
 import { ImageLightbox } from '@/components/ImageLightbox/ImageLightbox';
 import { FloatingTocButton } from '@/components/TableOfContents/FloatingTocButton';
@@ -240,9 +241,12 @@ export default async function StaticDetailPage({
     if (!uniqueLinks.includes(href)) uniqueLinks.push(href);
   }
 
-  const ogpResults = await Promise.all(uniqueLinks.map(href => fetchOGPData(href)));
+  const ogpResults = await Promise.allSettled(uniqueLinks.map(href => fetchOGPData(href)));
   const hrefToOgpData = new Map<string, any>();
-  uniqueLinks.forEach((href, i) => hrefToOgpData.set(href, ogpResults[i]));
+  uniqueLinks.forEach((href, i) => {
+    const result = ogpResults[i];
+    hrefToOgpData.set(href, result.status === 'fulfilled' ? result.value : null);
+  });
 
   // <p>タグ内の単独リンクをリンクカードに置換
   processedHtml = processedHtml.replace(
@@ -433,6 +437,7 @@ export default async function StaticDetailPage({
             <PostNavigation currentId={blogId} allPosts={contents} />
             <RelatedPosts posts={relatedPosts} currentPostId={blogId} />
           <FloatingTocButton toc={toc} />
+          <FloatingShareButton title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
           </div>
         </div>
       </div>
