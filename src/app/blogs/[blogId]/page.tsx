@@ -67,6 +67,7 @@ import { ReadingTracker } from '@/components/ReadingStats/ReadingTracker';
 import { FloatingShareButton } from '@/components/ShareButtons/FloatingShareButton';
 import { PostNavigation } from '@/components/PostNavigation/PostNavigation';
 import { ImageLightbox } from '@/components/ImageLightbox/ImageLightbox';
+import { KeyboardNav } from '@/components/KeyboardNav/KeyboardNav';
 import { FloatingTocButton } from '@/components/TableOfContents/FloatingTocButton';
 
 
@@ -435,6 +436,12 @@ export default async function StaticDetailPage({
               </div>
             </div>
             <PostNavigation currentId={blogId} allPosts={contents} />
+            {(() => {
+              const idx = contents.findIndex(p => p.id === blogId);
+              const prevPost = idx < contents.length - 1 ? contents[idx + 1] : null;
+              const nextPost = idx > 0 ? contents[idx - 1] : null;
+              return <KeyboardNav prevUrl={prevPost ? `/blogs/${prevPost.id}` : undefined} nextUrl={nextPost ? `/blogs/${nextPost.id}` : undefined} />;
+            })()}
             <RelatedPosts posts={relatedPosts} currentPostId={blogId} />
           <FloatingTocButton toc={toc} />
           <FloatingShareButton title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
