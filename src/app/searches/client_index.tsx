@@ -102,7 +102,7 @@ export const ClientIndex = ({ contents }: BlogProps) => {
                 <Link href={`/blogs/${blog.id}`}>
                   <div className='flex flex-col sm:flex-row'>
                     {/* Thumbnail */}
-                    <div className='relative w-full sm:w-48 h-40 sm:h-32 flex-shrink-0 bg-slate-100 dark:bg-slate-800'>
+                    <div className='relative w-full sm:w-48 h-40 sm:h-auto flex-shrink-0 bg-slate-100 dark:bg-slate-800'>
                       <Image
                         src={blog.eyecatch?.url || '/images/no_image_generated.png'}
                         alt={blog.title}
