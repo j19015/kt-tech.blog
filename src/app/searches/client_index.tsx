@@ -3,11 +3,9 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Blog } from '../../../libs/notion';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import { BlogProps } from '../../../libs/notion';
 import Image from 'next/image';
-import { Clock, Search, ArrowRight } from 'lucide-react';
+import { Search, ArrowRight } from 'lucide-react';
 
 const HighlightText = ({ text: content, query }: { text: string; query: string | null }) => {
   if (!query) return <>{content}</>;
@@ -30,7 +28,12 @@ export const ClientIndex = ({ contents }: BlogProps) => {
       setIsLoading(true);
       try {
         if (text) {
-          const filteredContents = await filterData(contents);
+          const filteredContents = contents.filter((content) =>
+            content.body.toLowerCase().includes(text.toLowerCase()) ||
+            content.title.toLowerCase().includes(text.toLowerCase()) ||
+            content.tags?.some(tag => tag.name.toLowerCase().includes(text.toLowerCase())) ||
+            content.category?.name.toLowerCase().includes(text.toLowerCase())
+          ).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
           setBlogContents(filteredContents);
         } else {
           setBlogContents(null);
@@ -42,27 +45,13 @@ export const ClientIndex = ({ contents }: BlogProps) => {
       }
     };
 
-    const filterData = async (contents: Blog[]) => {
-      if (text) {
-        const filteredContents = contents.filter((content) =>
-          content.body.toLowerCase().includes(text.toLowerCase()) ||
-          content.title.toLowerCase().includes(text.toLowerCase()) ||
-          content.tags?.some(tag => tag.name.toLowerCase().includes(text.toLowerCase())) ||
-          content.category?.name.toLowerCase().includes(text.toLowerCase())
-        );
-        return filteredContents.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-      } else {
-        return null;
-      }
-    };
-
     fetchData();
   }, [text, contents]);
 
   return (
     <div className='min-h-screen px-4'>
       {/* Search Header */}
-      <div className='max-w-4xl mx-auto mb-8 pt-4'>
+      <div className='max-w-3xl mx-auto mb-8 pt-4'>
         <h1 className='text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2'>
           検索結果
         </h1>
@@ -90,77 +79,63 @@ export const ClientIndex = ({ contents }: BlogProps) => {
         </div>
       )}
 
-      {/* Search Results */}
+      {/* Search Results - same layout as Index component */}
       {!isLoading && blogContents && blogContents.length > 0 ? (
-        <div className='max-w-4xl mx-auto'>
+        <div className='max-w-3xl mx-auto px-4'>
           <div className='space-y-4'>
             {blogContents.map((blog) => (
-              <article
-                key={blog.id}
-                className='group bg-white dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-colors overflow-hidden'
-              >
-                <Link href={`/blogs/${blog.id}`}>
-                  <div className='flex flex-col sm:flex-row'>
-                    {/* Thumbnail */}
-                    <div className='relative w-full sm:w-48 h-40 sm:h-auto flex-shrink-0 bg-slate-100 dark:bg-slate-800'>
+              <article key={blog.id} className='group'>
+                <Link href={`/blogs/${blog.id}`} className='block'>
+                  <div className='flex gap-4 p-4 h-[140px] sm:h-[150px] rounded-xl bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-lg hover:border-slate-200 dark:hover:border-slate-600 hover:-translate-y-0.5 transition-all duration-300 overflow-hidden'>
+                    {/* サムネイル画像 */}
+                    <div className='flex-shrink-0 relative w-24 sm:w-32 h-full rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-700'>
                       <Image
                         src={blog.eyecatch?.url || '/images/no_image_generated.png'}
                         alt={blog.title}
                         fill
-                        className='object-cover'
+                        className='object-cover group-hover:scale-105 transition-transform duration-300'
                       />
-                      {/* Category Badge */}
-                      {blog.category && (
-                        <div className='absolute bottom-2 left-2'>
-                          <span className='px-2 py-1 bg-white/90 dark:bg-slate-900/90 rounded text-xs text-slate-700 dark:text-slate-300'>
-                            <FontAwesomeIcon icon={faFolderOpen} className='mr-1 w-3 h-3' />
-                            {blog.category.name}
-                          </span>
-                        </div>
+                      {Date.now() - new Date(blog.createdAt).getTime() < 72 * 60 * 60 * 1000 && (
+                        <span className='absolute top-1.5 left-1.5 px-1.5 py-0.5 text-[10px] font-bold bg-red-500 text-white rounded'>
+                          NEW
+                        </span>
                       )}
                     </div>
 
-                    {/* Content */}
-                    <div className='flex-1 p-4'>
-                      <h2 className='text-base font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 mb-2'>
+                    {/* コンテンツ */}
+                    <div className='flex-1 min-w-0 flex flex-col justify-between py-0.5'>
+                      <h2 className='text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 leading-snug'>
                         <HighlightText text={blog.title} query={text} />
                       </h2>
 
-                      {/* Tags */}
-                      {blog.tags && blog.tags.length > 0 && (
-                        <div className='flex flex-wrap gap-1.5 mb-3'>
-                          {blog.tags.slice(0, 3).map((tag) => (
-                            <span
-                              key={tag.id}
-                              className='px-2 py-0.5 bg-slate-100 dark:bg-slate-700 rounded text-xs text-slate-600 dark:text-slate-400'
-                            >
-                              #{tag.name}
-                            </span>
-                          ))}
-                          {blog.tags.length > 3 && (
-                            <span className='text-xs text-slate-500 dark:text-slate-500'>
-                              +{blog.tags.length - 3}
-                            </span>
+                      <div className='space-y-1.5'>
+                        <div className='flex items-center gap-1.5 text-[11px] text-slate-400 dark:text-slate-400'>
+                          <time className='whitespace-nowrap' title={new Date(blog.createdAt).toLocaleDateString('ja-JP')}>
+                            {new Date(blog.createdAt).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' })}
+                          </time>
+                          {blog.category && (
+                            <>
+                              <span className='text-slate-300 dark:text-slate-600'>|</span>
+                              <span className='whitespace-nowrap truncate'>{blog.category.name}</span>
+                            </>
                           )}
                         </div>
-                      )}
 
-                      {/* Meta Info */}
-                      <div className='flex items-center justify-between text-sm text-slate-500 dark:text-slate-400'>
-                        <div className='flex items-center gap-1'>
-                          <Clock className='w-3.5 h-3.5' />
-                          <time>
-                            {new Date(blog.createdAt).toLocaleDateString('ja-JP', {
-                              year: 'numeric',
-                              month: 'short',
-                              day: 'numeric'
-                            })}
-                          </time>
-                        </div>
-                        <span className='flex items-center gap-1 text-blue-600 dark:text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity'>
-                          続きを読む
-                          <ArrowRight className='w-3.5 h-3.5' />
-                        </span>
+                        {blog.tags && blog.tags.length > 0 && (
+                          <div className='flex gap-1.5 overflow-hidden h-4'>
+                            {blog.tags.slice(0, 3).map((tag) => (
+                              <span
+                                key={tag.id}
+                                className='text-[11px] text-slate-400 dark:text-slate-400 whitespace-nowrap'
+                              >
+                                #{tag.name}
+                              </span>
+                            ))}
+                            {blog.tags.length > 3 && (
+                              <span className='text-[11px] text-slate-400 dark:text-slate-400'>...</span>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -170,7 +145,7 @@ export const ClientIndex = ({ contents }: BlogProps) => {
           </div>
         </div>
       ) : !isLoading && blogContents && blogContents.length === 0 ? (
-        <div className='max-w-4xl mx-auto text-center py-16'>
+        <div className='max-w-3xl mx-auto text-center py-16'>
           <Search className='w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-4' />
           <h3 className='text-lg font-medium text-slate-900 dark:text-slate-100 mb-2'>
             検索結果が見つかりませんでした
@@ -187,7 +162,7 @@ export const ClientIndex = ({ contents }: BlogProps) => {
           </Link>
         </div>
       ) : !text ? (
-        <div className='max-w-4xl mx-auto text-center py-16'>
+        <div className='max-w-3xl mx-auto text-center py-16'>
           <Search className='w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-4' />
           <h3 className='text-lg font-medium text-slate-900 dark:text-slate-100 mb-2'>
             キーワードを入力してください
