@@ -393,8 +393,8 @@ export default async function StaticDetailPage({
               )}
             </div>
             <h1 data-article-title className='p-4 mt-5 text-xl font-bold lg:text-3xl text-foreground break-words'>{blog.title}</h1>
-            <div className='flex items-center justify-between px-4'>
-              <ShareButtons title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
+            <ShareButtons title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
+            <div className='px-6 -mt-4 mb-4'>
               <BookmarkButton articleId={blogId} title={blog.title} />
             </div>
             <TableOfContents toc={toc} />
