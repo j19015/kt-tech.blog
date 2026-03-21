@@ -18,6 +18,7 @@ import { Metadata } from 'next';
 import { ThemeProvider } from './providers/ThemeProvider/theme-provider';
 import { ReadingProgress } from '@/components/ReadingProgress/ReadingProgress';
 import { ScrollToTop } from '@/components/ScrollToTop/ScrollToTop';
+import { WebVitals } from '@/components/WebVitals/WebVitals';
 config.autoAddCss = false;
 
 const siteName = 'kt-tech.blog';
@@ -125,6 +126,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type='application/ld+json'
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <link rel='dns-prefetch' href='https://pub-9d03846db4364486bb0806774184931a.r2.dev' />
+        <link rel='preconnect' href='https://pub-9d03846db4364486bb0806774184931a.r2.dev' crossOrigin='anonymous' />
+        <link rel='dns-prefetch' href='https://www.googletagmanager.com' />
+        <link rel='dns-prefetch' href='https://www.google.com' />
       </head>
       <body>
         <ThemeProvider
@@ -143,6 +148,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </main>
           <Footer />
           <ScrollToTop />
+          <WebVitals />
         </ThemeProvider>
       </body>
     </html>

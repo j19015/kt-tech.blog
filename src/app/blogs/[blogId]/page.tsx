@@ -250,8 +250,8 @@ export default async function StaticDetailPage({
     headline: blog.title,
     description: blog.body.replace(/:::callout\{[^}]*\}/g, '').replace(/:::/g, '').replace(/[#*`>\n]/g, ' ').replace(/\s+/g, ' ').slice(0, 160).trim(),
     image: blog.eyecatch?.url || `${process.env.SITE_URL}/opengraph-image`,
-    datePublished: blog.publishedAt,
-    dateModified: blog.updatedAt,
+    datePublished: new Date(blog.publishedAt).toISOString(),
+    dateModified: new Date(blog.updatedAt).toISOString(),
     inLanguage: 'ja',
     author: {
       '@type': 'Person',
@@ -274,6 +274,10 @@ export default async function StaticDetailPage({
     keywords: blog.tags?.map(t => t.name).join(', '),
     articleSection: blog.category?.name,
     thumbnailUrl: blog.eyecatch?.url,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['[data-article-title]', '[data-article-description]'],
+    },
     wordCount: stripHtml(processedHtml).length,
     timeRequired: `PT${Math.max(1, Math.ceil(stripHtml(processedHtml).length / 600))}M`,
   };
@@ -362,7 +366,7 @@ export default async function StaticDetailPage({
                 </div>
               )}
             </div>
-            <h1 className='p-4 mt-5 text-xl font-bold lg:text-3xl text-foreground break-words'>{blog.title}</h1>
+            <h1 data-article-title className='p-4 mt-5 text-xl font-bold lg:text-3xl text-foreground break-words'>{blog.title}</h1>
             <ShareButtons title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
             <TableOfContents toc={toc} />
             <div className='p-4 znc markdown text-foreground'>
