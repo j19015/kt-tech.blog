@@ -32,11 +32,15 @@ export const Index = ({ contents }: BlogProps) => {
                     fill
                     className='object-cover group-hover:scale-105 transition-transform duration-300'
                   />
-                  {Date.now() - new Date(blog.createdAt).getTime() < 72 * 60 * 60 * 1000 && (
+                  {Date.now() - new Date(blog.createdAt).getTime() < 72 * 60 * 60 * 1000 ? (
                     <span className='absolute top-1.5 left-1.5 px-1.5 py-0.5 text-[10px] font-bold bg-red-500 text-white rounded'>
                       NEW
                     </span>
-                  )}
+                  ) : blog.updatedAt && new Date(blog.updatedAt).getTime() - new Date(blog.createdAt).getTime() > 24 * 60 * 60 * 1000 && Date.now() - new Date(blog.updatedAt).getTime() < 7 * 24 * 60 * 60 * 1000 ? (
+                    <span className='absolute top-1.5 left-1.5 px-1.5 py-0.5 text-[10px] font-bold bg-blue-500 text-white rounded'>
+                      更新
+                    </span>
+                  ) : null}
                 </div>
 
                 {/* コンテンツ */}
