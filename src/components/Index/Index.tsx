@@ -50,8 +50,12 @@ export const Index = ({ contents }: BlogProps) => {
                       <time className='whitespace-nowrap' title={new Date(blog.createdAt).toLocaleDateString('ja-JP')}>
                         {new Date(blog.createdAt).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' })}
                       </time>
-                      <span className='text-slate-300 dark:text-slate-600'>|</span>
-                      <span className='whitespace-nowrap'>{Math.max(1, Math.ceil(blog.body.length / 600))}分で読める</span>
+                      {blog.body && blog.body.length > 0 && (
+                        <>
+                          <span className='text-slate-300 dark:text-slate-600'>|</span>
+                          <span className='whitespace-nowrap'>{Math.max(1, Math.ceil(blog.body.length / 600))}分で読める</span>
+                        </>
+                      )}
                       {blog.category && (
                         <>
                           <span className='text-slate-300 dark:text-slate-600'>|</span>
