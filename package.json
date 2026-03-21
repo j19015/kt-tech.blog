@@ -41,6 +41,7 @@
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.2.2",
+    "web-vitals": "^5.1.0",
     "wrangler": "^4.75.0"
   },
   "devDependencies": {
