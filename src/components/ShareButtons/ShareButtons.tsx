@@ -42,7 +42,18 @@ export const ShareButtons = ({ title, url }: ShareButtonsProps) => {
     });
   };
 
+  const trackShare = (platform: string) => {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'share', {
+        event_category: 'Social',
+        event_label: platform,
+        content_type: 'article',
+      });
+    }
+  };
+
   const handleNativeShare = () => {
+    trackShare('native');
     navigator.share({ title, url: shareUrl }).catch(() => {});
   };
 
@@ -70,25 +81,25 @@ export const ShareButtons = ({ title, url }: ShareButtonsProps) => {
               <Share2 className='w-4 h-4' />
             </button>
           )}
-          <a href={shareLinks.x} target='_blank' rel='noopener noreferrer' className={`${btnBase} text-slate-900 dark:text-slate-100 hover:bg-black hover:text-white`} aria-label='Share on X'>
+          <a href={shareLinks.x} target='_blank' rel='noopener noreferrer' onClick={() => trackShare('x')} className={`${btnBase} text-slate-900 dark:text-slate-100 hover:bg-black hover:text-white`} aria-label='Share on X'>
             <XIcon className='w-4 h-4' />
           </a>
-          <a href={shareLinks.facebook} target='_blank' rel='noopener noreferrer' className={`${btnBase} text-[#1877F2] hover:bg-[#1877F2] hover:text-white`} aria-label='Share on Facebook'>
+          <a href={shareLinks.facebook} target='_blank' rel='noopener noreferrer' onClick={() => trackShare('facebook')} className={`${btnBase} text-[#1877F2] hover:bg-[#1877F2] hover:text-white`} aria-label='Share on Facebook'>
             <Facebook className='w-4 h-4' />
           </a>
-          <a href={shareLinks.linkedin} target='_blank' rel='noopener noreferrer' className={`${btnBase} text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white`} aria-label='Share on LinkedIn'>
+          <a href={shareLinks.linkedin} target='_blank' rel='noopener noreferrer' onClick={() => trackShare('linkedin')} className={`${btnBase} text-[#0A66C2] hover:bg-[#0A66C2] hover:text-white`} aria-label='Share on LinkedIn'>
             <Linkedin className='w-4 h-4' />
           </a>
-          <a href={shareLinks.bluesky} target='_blank' rel='noopener noreferrer' className={`${btnBase} text-[#0085FF] hover:bg-[#0085FF] hover:text-white`} aria-label='Share on Bluesky'>
+          <a href={shareLinks.bluesky} target='_blank' rel='noopener noreferrer' onClick={() => trackShare('bluesky')} className={`${btnBase} text-[#0085FF] hover:bg-[#0085FF] hover:text-white`} aria-label='Share on Bluesky'>
             <BlueskyIcon className='w-4 h-4' />
           </a>
-          <a href={shareLinks.line} target='_blank' rel='noopener noreferrer' className={`${btnBase} text-[#00B900] hover:bg-[#00B900] hover:text-white`} aria-label='Share on LINE'>
+          <a href={shareLinks.line} target='_blank' rel='noopener noreferrer' onClick={() => trackShare('line')} className={`${btnBase} text-[#00B900] hover:bg-[#00B900] hover:text-white`} aria-label='Share on LINE'>
             <LineIcon className='w-4 h-4' />
           </a>
-          <a href={shareLinks.hatena} target='_blank' rel='noopener noreferrer' className={`${btnBase} text-[#00A4DE] hover:bg-[#00A4DE] hover:text-white text-xs font-bold`} aria-label='Bookmark on Hatena'>
+          <a href={shareLinks.hatena} target='_blank' rel='noopener noreferrer' onClick={() => trackShare('hatena')} className={`${btnBase} text-[#00A4DE] hover:bg-[#00A4DE] hover:text-white text-xs font-bold`} aria-label='Bookmark on Hatena'>
             B!
           </a>
-          <a href={shareLinks.pocket} target='_blank' rel='noopener noreferrer' className={`${btnBase} text-[#EF3F56] hover:bg-[#EF3F56] hover:text-white`} aria-label='Save to Pocket'>
+          <a href={shareLinks.pocket} target='_blank' rel='noopener noreferrer' onClick={() => trackShare('pocket')} className={`${btnBase} text-[#EF3F56] hover:bg-[#EF3F56] hover:text-white`} aria-label='Save to Pocket'>
             <svg className='w-4 h-4' viewBox='0 0 24 24' fill='currentColor'><path d='M18.813 2.07C21.451 2.276 23 4.031 23 6.653v5.07c0 6.281-5.165 11.372-11.488 11.372S.024 18.004.024 11.723V6.653C.024 4.031 1.572 2.276 4.21 2.07H18.813zM12 16.063l5.406-5.344a1.627 1.627 0 00.012-2.312 1.66 1.66 0 00-2.34.012L12 11.469l-3.078-3.05a1.66 1.66 0 00-2.34-.012 1.627 1.627 0 00.012 2.312L12 16.063z'/></svg>
           </a>
           <button onClick={handleCopyLink} className={`${btnBase} text-slate-500 dark:text-slate-400 hover:bg-slate-600 hover:text-white`} aria-label='Copy link'>
