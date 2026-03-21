@@ -30,6 +30,21 @@ html {
   scroll-padding-top: 80px;
   overflow-x: hidden;
 }
+/* 印刷用スタイル */
+@media print {
+  header, footer, nav, .scroll-to-top, .floating-toc-btn,
+  .reading-progress, .share-buttons, button, .copy-btn,
+  [aria-label="Toggle menu"], [aria-label="Toggle theme"] {
+    display: none !important;
+  }
+  body { background: white !important; color: black !important; }
+  main { padding: 0 !important; }
+  .znc pre { white-space: pre-wrap; word-wrap: break-word; border: 1px solid #ccc; }
+  .znc a { color: black; text-decoration: underline; }
+  .znc a::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #666; }
+  .znc img { max-width: 100% !important; }
+}
+
 /* reduced-motion対応 */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
