@@ -86,10 +86,10 @@ export default async function StaticPage() {
       <div className='max-w-6xl mx-auto px-4'>
         {/* フィーチャー + サブ記事 グリッド */}
         <section className='mb-12'>
-          <div className='grid grid-cols-1 lg:grid-cols-5 gap-4'>
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
             {/* フィーチャー（大） */}
             {latestBlogs[0] && (
-              <Link href={`/blogs/${latestBlogs[0].id}`} className='lg:col-span-3 group block'>
+              <Link href={`/blogs/${latestBlogs[0].id}`} className='group block'>
                 <div className='relative aspect-[16/9] lg:aspect-auto lg:h-full lg:min-h-[280px] rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800'>
                   <Image
                     src={latestBlogs[0].eyecatch?.url || '/images/no_image_generated.png'}
@@ -117,7 +117,7 @@ export default async function StaticPage() {
             )}
 
             {/* サブ記事2件（右縦並び） */}
-            <div className='lg:col-span-2 flex flex-col gap-4'>
+            <div className='flex flex-col gap-4'>
               {latestBlogs.slice(1, 3).map((blog) => (
                 <Link key={blog.id} href={`/blogs/${blog.id}`} className='group block flex-1'>
                   <div className='relative h-full min-h-[160px] rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800'>
