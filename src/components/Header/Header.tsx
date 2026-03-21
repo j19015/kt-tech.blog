@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { ModeToggle } from '../ModeToggle/modeToggle';
 import { Menu, X, Home, BookOpen, User, Search, Github } from 'lucide-react';
+import { SearchModal } from '../SearchModal/SearchModal';
 
 export const Header = () => {
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -70,6 +71,14 @@ export const Header = () => {
                 {item.name}
               </Link>
             ))}
+            <button
+              onClick={() => { const e = new KeyboardEvent('keydown', { key: 'k', metaKey: true }); window.dispatchEvent(e); }}
+              className='flex items-center gap-2 px-3 py-1.5 text-xs text-slate-400 bg-slate-100 dark:bg-slate-800 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors'
+              aria-label='検索'
+            >
+              <Search className='w-3.5 h-3.5' />
+              <kbd className='text-[10px]'>⌘K</kbd>
+            </button>
             <ModeToggle />
           </nav>
 
@@ -132,6 +141,7 @@ export const Header = () => {
           </div>
       </div>
       )}
+      <SearchModal />
     </>
   );
 };
