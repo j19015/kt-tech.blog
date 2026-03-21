@@ -117,10 +117,10 @@ export default async function StaticPage() {
             )}
 
             {/* サブ記事2件（右縦並び） */}
-            <div className='flex flex-col gap-4'>
+            <div className='flex flex-col gap-4 lg:h-full'>
               {latestBlogs.slice(1, 3).map((blog) => (
                 <Link key={blog.id} href={`/blogs/${blog.id}`} className='group block flex-1'>
-                  <div className='relative h-full min-h-[160px] rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800'>
+                  <div className='relative h-full min-h-[160px] lg:min-h-0 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800'>
                     <Image
                       src={blog.eyecatch?.url || '/images/no_image_generated.png'}
                       alt={blog.title}
