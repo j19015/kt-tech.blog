@@ -13,7 +13,7 @@ export default async function StaticPage() {
 
   return (
     <WithSidebar>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<div className='animate-pulse space-y-4 max-w-3xl mx-auto px-4'>{[1,2,3].map(i => <div key={i} className='h-[140px] bg-slate-200 dark:bg-slate-700 rounded-xl' />)}</div>}>
         <ClientIndex contents={contents} />
       </Suspense>
     </WithSidebar>
