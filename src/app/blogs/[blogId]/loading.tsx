@@ -1,6 +1,14 @@
 export default function Loading() {
   return (
     <div className='animate-pulse'>
+      {/* Breadcrumb skeleton */}
+      <div className='flex items-center gap-2 px-4 pt-4 pb-2'>
+        <div className='h-4 w-12 bg-slate-200 dark:bg-slate-700 rounded'></div>
+        <div className='h-4 w-3 bg-slate-200 dark:bg-slate-700 rounded'></div>
+        <div className='h-4 w-12 bg-slate-200 dark:bg-slate-700 rounded'></div>
+        <div className='h-4 w-3 bg-slate-200 dark:bg-slate-700 rounded'></div>
+        <div className='h-4 w-40 bg-slate-200 dark:bg-slate-700 rounded'></div>
+      </div>
       <div className='grid grid-cols-1 lg:grid-cols-3 lg:p-4'>
         {/* TOC skeleton - desktop only */}
         <div className='lg:col-span-1 p-5 pl-7 pt-0 hidden lg:block'>
