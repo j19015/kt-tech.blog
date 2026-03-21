@@ -69,6 +69,7 @@ import { PostNavigation } from '@/components/PostNavigation/PostNavigation';
 import { ImageLightbox } from '@/components/ImageLightbox/ImageLightbox';
 import { KeyboardNav } from '@/components/KeyboardNav/KeyboardNav';
 import { FloatingTocButton } from '@/components/TableOfContents/FloatingTocButton';
+import { BookmarkButton } from '@/components/Bookmark/BookmarkButton';
 
 
 export const runtime = 'edge';
@@ -392,7 +393,10 @@ export default async function StaticDetailPage({
               )}
             </div>
             <h1 data-article-title className='p-4 mt-5 text-xl font-bold lg:text-3xl text-foreground break-words'>{blog.title}</h1>
-            <ShareButtons title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
+            <div className='flex items-center justify-between px-4'>
+              <ShareButtons title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
+              <BookmarkButton articleId={blogId} title={blog.title} />
+            </div>
             <TableOfContents toc={toc} />
             <div className='p-4 znc markdown text-foreground'>
               <div dangerouslySetInnerHTML={{ __html: processedHtml }}></div>
