@@ -7,8 +7,8 @@ export const HeroSection = () => {
     <div className='relative overflow-hidden'>
       {/* Background decoration */}
       <div className='absolute inset-0 -z-10'>
-        <div className='absolute top-10 left-10 w-72 h-72 bg-blue-500/5 dark:bg-blue-400/5 rounded-full blur-3xl' />
-        <div className='absolute bottom-10 right-10 w-96 h-96 bg-purple-500/5 dark:bg-purple-400/5 rounded-full blur-3xl' />
+        <div className='absolute top-10 left-10 w-72 h-72 bg-blue-500/5 dark:bg-blue-400/5 rounded-full blur-3xl animate-pulse' style={{ animationDuration: '4s' }} />
+        <div className='absolute bottom-10 right-10 w-96 h-96 bg-purple-500/5 dark:bg-purple-400/5 rounded-full blur-3xl animate-pulse' style={{ animationDuration: '6s', animationDelay: '2s' }} />
       </div>
 
       <div className='max-w-6xl mx-auto px-4 py-10 lg:py-14'>
