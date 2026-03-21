@@ -12,7 +12,8 @@
 .znc {
   font-family: 游ゴシック体, YuGothic, '游ゴシック Medium', 'Yu Gothic Medium', 游ゴシック,
     'Yu Gothic', メイリオ, sans-serif;
-  line-height: 1.7;
+  line-height: 1.8;
+  font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1.0625rem);
 }
 
 .znc h1 {
@@ -219,14 +220,18 @@
 }
 
 .znc blockquote {
-  border-left: 5px solid #b6c9d6;
-  padding-left: 1rem;
-  margin: 10px;
-  margin-left: 2rem;
+  border-left: 4px solid #94a3b8;
+  padding: 0.75rem 1rem;
+  margin: 1.5rem 0;
+  background: #f8fafc;
+  border-radius: 0 8px 8px 0;
   font-style: italic;
+  color: #475569;
 }
 .dark .znc blockquote {
-  border-left-color: #5eadf2;
+  border-left-color: #60a5fa;
+  background: rgba(30, 41, 59, 0.5);
+  color: #94a3b8;
 }
 
 .znc hr {
