@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <div className='m-auto mt-5 rounded-lg'>
+    <div className='max-w-6xl mx-auto mt-5 px-4 rounded-lg'>
       <div className='lg:grid lg:grid-cols-3 gap-4'>
         {/* Main content skeleton */}
         <div className='lg:col-span-2 animate-pulse'>
