@@ -86,11 +86,11 @@ export default async function StaticPage() {
       <div className='max-w-6xl mx-auto px-4'>
         {/* フィーチャー + サブ記事 グリッド */}
         <section className='mb-12'>
-          <div className='grid grid-cols-1 lg:grid-cols-5 gap-4'>
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
             {/* フィーチャー（大） */}
             {latestBlogs[0] && (
-              <Link href={`/blogs/${latestBlogs[0].id}`} className='lg:col-span-3 group block'>
-                <div className='relative aspect-[16/9] lg:aspect-auto lg:h-full min-h-[280px] rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800'>
+              <Link href={`/blogs/${latestBlogs[0].id}`} className='group block'>
+                <div className='relative aspect-[16/9] lg:aspect-auto lg:h-full lg:min-h-[280px] rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800'>
                   <Image
                     src={latestBlogs[0].eyecatch?.url || '/images/no_image_generated.png'}
                     alt={latestBlogs[0].title}
@@ -99,13 +99,13 @@ export default async function StaticPage() {
                     priority
                   />
                   <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent' />
-                  <div className='absolute bottom-0 left-0 right-0 p-6 lg:p-8'>
+                  <div className='absolute bottom-0 left-0 right-0 p-5 sm:p-6 lg:p-8 overflow-hidden'>
                     {latestBlogs[0].category && (
                       <span className='inline-block px-3 py-1 mb-3 text-sm font-medium bg-white/20 backdrop-blur-sm text-white rounded-full'>
                         {latestBlogs[0].category.name}
                       </span>
                     )}
-                    <h2 className='text-xl sm:text-2xl lg:text-3xl font-bold text-white leading-tight group-hover:text-blue-200 transition-colors line-clamp-2'>
+                    <h2 className='text-lg sm:text-2xl lg:text-3xl font-bold text-white leading-tight group-hover:text-blue-200 transition-colors line-clamp-2'>
                       {latestBlogs[0].title}
                     </h2>
                     <p className='text-sm text-white/50 mt-3'>
@@ -117,10 +117,10 @@ export default async function StaticPage() {
             )}
 
             {/* サブ記事2件（右縦並び） */}
-            <div className='lg:col-span-2 flex flex-col gap-4'>
+            <div className='flex flex-col gap-4 lg:h-full'>
               {latestBlogs.slice(1, 3).map((blog) => (
                 <Link key={blog.id} href={`/blogs/${blog.id}`} className='group block flex-1'>
-                  <div className='relative h-full min-h-[160px] rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800'>
+                  <div className='relative h-full min-h-[160px] lg:min-h-0 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800'>
                     <Image
                       src={blog.eyecatch?.url || '/images/no_image_generated.png'}
                       alt={blog.title}
