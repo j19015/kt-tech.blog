@@ -1,17 +1,31 @@
 {
-  "name": "kt-tech.blog",
+  "name": "kt-tech.blog - 技術と創造性が交わる場所",
   "short_name": "kt-tech",
-  "description": "実践的な技術記事とエンジニアリングの知見を発信",
+  "description": "実践的な技術記事とエンジニアリングの知見を発信。React, Next.js, TypeScript, Cloudflare, AIなどのモダン技術を中心に。",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#0f172a",
   "theme_color": "#0f172a",
+  "orientation": "portrait-primary",
+  "categories": ["education", "technology"],
+  "lang": "ja",
   "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
     {
       "src": "/icon.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

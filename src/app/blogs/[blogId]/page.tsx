@@ -218,6 +218,12 @@ export default async function StaticDetailPage({
   );
   processedHtml = processedHtml.replace(/<\/table>/g, '</table></div>');
 
+  // コードブロックにaria-labelを付与
+  processedHtml = processedHtml.replace(
+    /<pre><code class="language-(\w+)"/g,
+    '<pre role="region" aria-label="$1 code"><code class="language-$1"'
+  );
+
   // 記事本文内画像に lazy loading + async decoding を付与
   processedHtml = processedHtml.replace(
     /<img(?![^>]*loading=)/g,
