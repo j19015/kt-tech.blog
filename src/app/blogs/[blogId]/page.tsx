@@ -165,21 +165,21 @@ export default async function StaticDetailPage({
   ]);
   if (!blog) notFound();
   
-  // 同じカテゴリまたはタグを持つ関連記事を取得
-  const relatedPosts = contents.filter(post => {
-    if (post.id === blogId) return false;
-    
-    // カテゴリが同じ記事を優先
-    if (blog.category && post.category?.id === blog.category.id) return true;
-    
-    // タグが重複する記事も含める
-    if (blog.tags && post.tags) {
-      const blogTagIds = blog.tags.map(t => t.id);
-      return post.tags.some(t => blogTagIds.includes(t.id));
-    }
-    
-    return false;
-  });
+  // 関連記事をスコアリングで取得（タグ重複数 + カテゴリ一致で重み付け）
+  const blogTagIds = blog.tags?.map(t => t.id) || [];
+  const relatedPosts = contents
+    .filter(post => post.id !== blogId)
+    .map(post => {
+      let score = 0;
+      if (blog.category && post.category?.id === blog.category.id) score += 3;
+      if (post.tags) {
+        score += post.tags.filter(t => blogTagIds.includes(t.id)).length;
+      }
+      return { post, score };
+    })
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score)
+    .map(({ post }) => post);
   
   // calloutマーカーをプレースホルダーに変換（markdownToHtmlに通す前）
   const calloutMap = new Map<string, { icon: string; color: string; text: string }>();

@@ -2,7 +2,8 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 import Form from '../Form/Form';
-import { Clock, FolderOpen, Tag, Calendar, ChevronDown } from 'lucide-react';
+import { Clock, FolderOpen, Tag, Calendar, ChevronDown, Shuffle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface SidebarProps {
   latestArticles: any[];
@@ -15,15 +16,31 @@ interface SidebarProps {
 const SidebarClient = ({ latestArticles, tagList, categoryList, archives, totalCount }: SidebarProps) => {
   const [showAllTags, setShowAllTags] = useState(false);
   const visibleTags = showAllTags ? tagList : tagList.slice(0, 15);
+  const router = useRouter();
+
+  const handleRandomArticle = () => {
+    const randomIndex = Math.floor(Math.random() * latestArticles.length);
+    router.push(`/blogs/${latestArticles[randomIndex].id}`);
+  };
 
   return (
     <div className='p-4'>
-      {/* 記事数 */}
-      {totalCount && (
-        <p className='text-center text-xs text-slate-400 dark:text-slate-500 mb-4'>
-          <span className='text-lg font-bold text-slate-900 dark:text-slate-100'>{totalCount}</span> 記事
-        </p>
-      )}
+      {/* 記事数 + ランダム記事 */}
+      <div className='flex items-center justify-center gap-3 mb-4'>
+        {totalCount && (
+          <p className='text-xs text-slate-400 dark:text-slate-500'>
+            <span className='text-lg font-bold text-slate-900 dark:text-slate-100'>{totalCount}</span> 記事
+          </p>
+        )}
+        <button
+          onClick={handleRandomArticle}
+          className='flex items-center gap-1 px-2.5 py-1 text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full transition-colors'
+          aria-label='ランダムな記事を読む'
+        >
+          <Shuffle className='w-3 h-3' />
+          ランダム
+        </button>
+      </div>
 
       {/* 検索フォーム - always full width */}
       <div className='border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-900 mb-6'>
