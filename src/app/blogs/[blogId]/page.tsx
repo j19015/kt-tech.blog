@@ -91,7 +91,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const text = stripHtml(rawHtml);
 
   const description = blog.ogpDescription || text.slice(0, 120).replace(/\n/g, ' ').trim();
-  const ogImage = blog.eyecatch?.url || `${process.env.SITE_URL}/opengraph-image.png`;
+  const ogImage = blog.eyecatch?.url;
   const pageUrl = `${process.env.SITE_URL}/blogs/${blogId}`;
 
   return {
@@ -101,27 +101,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       canonical: pageUrl,
     },
     twitter: {
-      card: 'summary_large_image',
+      card: 'summary_large_image' as const,
       title: blog.title,
       description,
       site: '@meow_koki',
       creator: '@meow_koki',
-      images: [ogImage],
+      ...(ogImage ? { images: [ogImage] } : {}),
     },
     openGraph: {
       title: blog.title,
       description,
       locale: 'ja_JP',
-      type: 'article',
+      type: 'article' as const,
       url: pageUrl,
       publishedTime: blog.publishedAt,
       modifiedTime: blog.updatedAt,
       authors: ['kt'],
-      images: [{ url: ogImage, width: 1200, height: 630, alt: blog.title }],
+      ...(ogImage ? { images: [{ url: ogImage, width: 1200, height: 630, alt: blog.title }] } : {}),
     },
-    other: {
-      thumbnail: ogImage,
-    },
+    ...(ogImage ? { other: { thumbnail: ogImage } } : {}),
   };
 }
 
@@ -249,7 +247,7 @@ export default async function StaticDetailPage({
     '@type': 'Article',
     headline: blog.title,
     description: blog.body.replace(/:::callout\{[^}]*\}/g, '').replace(/:::/g, '').replace(/[#*`>\n]/g, ' ').replace(/\s+/g, ' ').slice(0, 160).trim(),
-    image: blog.eyecatch?.url || `${process.env.SITE_URL}/opengraph-image.png`,
+    image: blog.eyecatch?.url || `${process.env.SITE_URL}/opengraph-image`,
     datePublished: blog.publishedAt,
     dateModified: blog.updatedAt,
     author: { '@type': 'Person', name: 'kt', url: 'https://kt-tech.blog/about' },
