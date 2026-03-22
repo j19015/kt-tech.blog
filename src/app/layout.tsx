@@ -74,7 +74,6 @@ export const metadata: Metadata = {
     google: 'IpGviaJMSPR7SL1E-maff_nCUNmuWWBXYRTLcDHZUcw',
   },
   alternates: {
-    canonical: url,
     types: {
       'application/rss+xml': `${url}/feed.xml`,
     },

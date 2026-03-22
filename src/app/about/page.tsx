@@ -1,4 +1,15 @@
+import { Metadata } from 'next';
 import Link from 'next/link';
+
+const siteUrl = process.env.SITE_URL || 'https://kt-tech.blog';
+
+export const metadata: Metadata = {
+  title: 'About',
+  description: 'フルスタックエンジニア Koki のプロフィール。React, Next.js, TypeScript, AWS, Python などの技術スタックと経歴。',
+  alternates: {
+    canonical: `${siteUrl}/about`,
+  },
+};
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 import { Github } from 'lucide-react';
 import {
