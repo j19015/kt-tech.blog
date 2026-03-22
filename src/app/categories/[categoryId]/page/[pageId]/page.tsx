@@ -4,9 +4,40 @@ import { getList, getCategoryList, getCategoryDetail } from '../../../../../../l
 import Paginate from '@/components/Pagination/Paginate';
 import Index from '@/components/Index/Index';
 import Title from '@/components/Title/Title';
+import { Metadata } from 'next';
 
 const ITEMS_PER_PAGE = 6;
+const siteUrl = process.env.SITE_URL || 'https://kt-tech.blog';
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ categoryId: string; pageId: string }>;
+}): Promise<Metadata> {
+  const { categoryId, pageId } = await params;
+  const category = await getCategoryDetail(decodeURIComponent(categoryId)).catch(() => null);
+  const name = category?.name || decodeURIComponent(categoryId);
+  const title = `${name}の記事一覧${Number(pageId) > 1 ? ` (${pageId}ページ目)` : ''}`;
+  const description = `${name}に関する技術記事の一覧です。`;
+  const url = `${siteUrl}/categories/${categoryId}/page/${pageId}`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary',
+      title,
+      description,
+    },
+  };
+}
 
 export const runtime = 'edge';
 export default async function StaticPaginationPage({

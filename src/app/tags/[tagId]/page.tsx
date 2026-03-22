@@ -5,7 +5,39 @@ import Sidebar from '@/components/SIdebar/Sidebar';
 import Index from '@/components/Index/Index';
 import Title from '@/components/Title/Title';
 import Link from 'next/link';
+import { Metadata } from 'next';
 
+const siteUrl = process.env.SITE_URL || 'https://kt-tech.blog';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ tagId: string }>;
+}): Promise<Metadata> {
+  const { tagId } = await params;
+  const tag = await getTagDetail(decodeURIComponent(tagId)).catch(() => null);
+  const name = tag?.name || decodeURIComponent(tagId);
+  const title = `${name}の記事一覧`;
+  const description = `${name}タグが付けられた技術記事の一覧です。`;
+  const url = `${siteUrl}/tags/${tagId}`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary',
+      title,
+      description,
+    },
+  };
+}
 
 export const runtime = 'edge';
 export default async function StaticDetailPage({
