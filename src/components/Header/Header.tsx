@@ -104,6 +104,23 @@ export const Header = () => {
             <nav className='space-y-2'>
               {menuItems.map((item) => {
                 const Icon = item.icon;
+                if (item.name === 'Search') {
+                  return (
+                    <button
+                      key={item.name}
+                      onClick={() => {
+                        handleMenuClose(item.name);
+                        setTimeout(() => {
+                          window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }));
+                        }, 100);
+                      }}
+                      className='flex items-center gap-4 px-4 py-4 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors w-full'
+                    >
+                      <Icon className='w-5 h-5 text-slate-400 dark:text-slate-500' />
+                      <span className='text-lg font-medium'>{item.name}</span>
+                    </button>
+                  );
+                }
                 return (
                   <Link
                     key={item.name}
