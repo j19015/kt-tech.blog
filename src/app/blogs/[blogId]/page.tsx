@@ -48,7 +48,7 @@ function extractMetaContent(html: string, patterns: string[]): string | undefine
 
 function extractHeadings(html: string): { text: string; id: string; tag: string }[] {
   const headings: { text: string; id: string; tag: string }[] = [];
-  const regex = /<(h[12])[^>]*id=["']([^"']*)["'][^>]*>(.*?)<\/\1>/gi;
+  const regex = /<(h[23])[^>]*id=["']([^"']*)["'][^>]*>(.*?)<\/\1>/gi;
   let match;
   while ((match = regex.exec(html)) !== null) {
     headings.push({ tag: match[1], id: match[2], text: stripHtml(match[3]) });
@@ -221,6 +221,13 @@ export default async function StaticDetailPage({
     '<div class="overflow-x-auto -mx-4 px-4"><table'
   );
   processedHtml = processedHtml.replace(/<\/table>/g, '</table></div>');
+
+  // 記事本文内の見出しレベルを1段下げる（h1→h2, h2→h3, h3→h4）
+  // 記事タイトルが唯一のh1になるようにする（SEO対策）
+  processedHtml = processedHtml
+    .replace(/<h3([^>]*)>/g, '<h4$1>').replace(/<\/h3>/g, '</h4>')
+    .replace(/<h2([^>]*)>/g, '<h3$1>').replace(/<\/h2>/g, '</h3>')
+    .replace(/<h1([^>]*)>/g, '<h2$1>').replace(/<\/h1>/g, '</h2>');
 
   // コードブロックにaria-labelを付与
   processedHtml = processedHtml.replace(
