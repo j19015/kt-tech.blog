@@ -6,6 +6,8 @@ import Index from '@/components/Index/Index';
 import HeroSection from '@/components/HeroSection/HeroSection';
 import { ArrowRight, FolderOpen } from 'lucide-react';
 
+export const runtime = 'edge';
+
 const siteUrl = process.env.SITE_URL || 'https://kt-tech.blog';
 const description = '実践的な技術記事とエンジニアリングの知見を発信。React, Next.js, TypeScript, Cloudflare, AIなどのモダン技術を中心に。';
 
