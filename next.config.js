@@ -18,6 +18,15 @@ const nextConfig = {
   async headers() {
     return [
       {
+        // トップページは新着記事の鮮度を優先して s-maxage を短くする。
+        // Cloudflare Pages では ISR が使えないため、Edge Runtime + このヘッダで
+        // 「5分ごとに裏で作り直す」ISR相当の挙動にしている。
+        source: '/',
+        headers: [
+          { key: 'Cache-Control', value: 'public, s-maxage=300, stale-while-revalidate=86400, max-age=0' },
+        ],
+      },
+      {
         source: '/blogs/:path*',
         headers: [
           { key: 'Cache-Control', value: 'public, s-maxage=3600, stale-while-revalidate=86400, max-age=0' },

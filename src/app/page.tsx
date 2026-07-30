@@ -32,6 +32,12 @@ export const metadata = {
   },
 };
 
+// Edge Runtime でリクエスト時にNotionから取得する。
+// ビルド時プリレンダのままだと新記事がデプロイまで反映されないため
+// （Cloudflare Pages では ISR / revalidate が使えないので Edge + CDNキャッシュで代替）。
+// 鮮度は next.config.js の Cache-Control（s-maxage）で制御する。
+export const runtime = 'edge';
+
 export default async function StaticPage() {
   const [{ contents }, categoryData] = await Promise.all([
     getList(),
