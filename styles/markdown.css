@@ -1,27 +1,37 @@
-/* Markdown用のCSS変数を独立させる */
+/* Markdown用のCSS変数を独立させる。
+   以前は赤み寄りのグレーで、サイト全体の slate（青みグレー）と並ぶと色が濁って見えていた。 */
 :root {
-  --md-code-bg-light: 241 236 236;
-  --md-table-th-light: #e0dbdb;
-  --md-table-td-light: #f8f8f8;
-  --md-code-bg-dark: 69 66 66;
-  --md-table-th-dark: #4b4a4a;
-  --md-table-td-dark: #363636;
+  --md-code-bg-light: 241 245 249; /* slate-100 */
+  --md-table-th-light: #f8fafc; /* slate-50 */
+  --md-table-td-light: transparent;
+  --md-code-bg-dark: 51 65 85; /* slate-700 */
+  --md-table-th-dark: #1e293b; /* slate-800 */
+  --md-table-td-dark: transparent;
 }
 
 /* zncクラス内のスタイル - グローバルCSS変数を上書きしない */
+/* font-family は body の Noto Sans JP を継承する */
 .znc {
-  font-family: 游ゴシック体, YuGothic, '游ゴシック Medium', 'Yu Gothic Medium', 游ゴシック,
-    'Yu Gothic', メイリオ, sans-serif;
-  line-height: 1.8;
+  line-height: 1.9;
   font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1.0625rem);
+  /* 1行が長すぎると行末から次の行頭への視線移動が大きくなり読み疲れる。
+     日本語で35〜45文字/行に収まる幅に制限する。 */
+  max-width: 44rem;
+}
+
+/* 見出しの直後の要素は上マージンを詰める（見出しと本文がくっついて見えるのを防ぎつつ、余白の二重取りを避ける） */
+.znc h1 + *,
+.znc h2 + *,
+.znc h3 + *,
+.znc h4 + * {
+  margin-top: 0;
 }
 
 .znc h1 {
   font-size: 1.75rem;
   font-weight: 800;
-  margin-top: 4rem;
-  margin-bottom: 2rem;
-  padding-left: 0.5rem;
+  margin-top: 3.5rem;
+  margin-bottom: 1.5rem;
   padding-top: 0.2rem;
   letter-spacing: -0.02em;
 }
@@ -49,46 +59,65 @@
   position: relative;
 }
 
+/* 見出しの余白は「上 > 下」を保ちつつ、階層ごとに一定の比率にする。
+   見出しに左バーを使うと引用（左バー）と同じパターンになって見分けがつかないため、
+   見出しは下ボーダー、左バーは引用が持つ、という住み分けにする。 */
 .znc h2 {
   font-weight: 700;
-  font-size: 1.4rem;
-  margin-top: 2.5rem;
-  margin-bottom: 1rem;
-  padding-left: 12px;
-  padding-bottom: 0.3rem;
-  border-bottom: none !important;
-  border-left: solid 4px #3b82f6;
+  font-size: 1.5rem;
+  margin-top: 3rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.4rem;
+  border-left: none;
+  border-bottom: 1px solid #e2e8f0;
+}
+.dark .znc h2 {
+  border-bottom-color: #334155;
 }
 
 .znc h3 {
   font-weight: bold;
-  font-size: 1.1rem;
-  margin-top: 1.2rem;
-  margin-bottom: 0.3rem;
-  padding-left: 10px;
+  font-size: 1.15rem;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
 }
 
+.znc h4 {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* リストは padding-left でマーカーをコンテンツ幅の内側に収め、本文と左端を揃える */
+.znc ul,
+.znc ol {
+  margin: 1.25em 0;
+  padding-left: 1.5em;
+}
 .znc ul {
   list-style-type: disc;
-  margin-left: 2rem;
-  padding-left: 10px;
 }
-
-.znc ol > li {
-  padding: 3px;
+/* ネストで記号を変えて階層を分かるようにする */
+.znc ul ul {
+  list-style-type: circle;
 }
-/* markerの色は親要素から継承 */
-
+.znc ul ul ul {
+  list-style-type: square;
+}
 .znc ol {
   list-style-type: decimal;
-  margin-left: 2rem;
-  padding-left: 10px;
 }
 .znc li {
-  font-size: 1rem;
+  margin-bottom: 0.5em;
 }
-.znc ul > li {
-  padding: 3px;
+.znc li::marker {
+  color: #94a3b8;
+  font-variant-numeric: tabular-nums;
+}
+.znc li > ul,
+.znc li > ol {
+  margin: 0.5em 0;
 }
 
 .znc a {
@@ -100,17 +129,23 @@
   color: #60a5fa;
 }
 
+/* 本文中のリンクは常時下線を出す。
+   色だけで判別させると色覚特性のあるユーザーに伝わらない（WCAG 1.4.1）。 */
 .znc a {
-  text-decoration: none;
-  background-image: linear-gradient(currentColor, currentColor);
-  background-size: 0% 1px;
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  transition: background-size 0.3s, color 0.2s;
+  text-decoration: underline;
+  text-decoration-color: rgba(37, 99, 235, 0.35);
+  text-decoration-thickness: 1px;
+  /* 日本語のディセンダに下線が被らないようにする */
+  text-underline-offset: 0.25em;
+  transition: text-decoration-color 0.2s, text-decoration-thickness 0.2s, color 0.2s;
 }
 .znc a:hover {
   color: #1d4ed8;
-  background-size: 100% 1px;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 2px;
+}
+.dark .znc a {
+  text-decoration-color: rgba(96, 165, 250, 0.4);
 }
 .dark .znc a:hover {
   color: #93bbfd;
@@ -126,11 +161,22 @@
 }
 
 
+/* 'Fira Code' は読み込んでいないため、実際にはOS依存の monospace になっていた。
+   ui-monospace を先頭に置いて各OSの推奨等幅フォントを使う。 */
+.znc code,
+.znc pre code {
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono',
+    'Noto Sans Mono CJK JP', monospace;
+  /* monospace 単体指定だとブラウザが既定サイズを小さく描画するため相対指定にする */
+  font-size: 0.9em;
+  /* => や != が合字で繋がると誤読の元になる */
+  font-variant-ligatures: none;
+}
+
 .znc code {
   background-color: rgb(var(--md-code-bg-light));
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
-  font-family: 'Fira Code', monospace;
   color: rgb(var(--foreground-rgb));
 }
 
@@ -138,20 +184,30 @@
   background-color: rgb(var(--md-code-bg-dark));
 }
 .znc pre {
+  /* 言語ラベル(::before)とCopyボタンの絶対配置の基準。
+     以前はJS側で実行時に position を付けていたため、JSが動くまでラベルが
+     ページ最上部に飛んでいた。 */
+  position: relative;
   border-radius: 8px;
   border: 1px solid #e2e8f0;
   overflow-x: auto;
   margin: 1.5rem 0;
-  counter-reset: line;
+}
+/* 本文の line-height(1.9) を継承するとコードの行間が空きすぎる */
+.znc pre code {
+  line-height: 1.65;
 }
 .dark .znc pre {
   border-color: #334155;
 }
+/* コードブロックの背景。以前はGitHub Dark Dimmed由来の青緑寄りグレーで、
+   サイトの slate 系と色温度が違って浮いていた。
+   ダークは本文背景よりわずかに暗くして「囲まれた領域」に見せる。 */
 .znc pre > code {
-  background-color: #f6f8fa !important;
+  background-color: #f8fafc !important;
 }
 .dark .znc pre > code {
-  background-color: #22272e !important;
+  background-color: #0b1220 !important;
 }
 
 /* Code language label */
@@ -219,19 +275,22 @@
   opacity: 1;
 }
 
-/* 引用: 縦線のみで表現する。
-   callout（背景付きボックス）と役割を視覚的に分けるため背景は敷かない。
-   日本語には斜体字形がなく合成斜体になって読みにくいので font-style も使わない。 */
+/* 引用: 左バー + 薄い背景 + 少し落とした文字色で「他者の言葉」を示す。
+   縦線だけだと本文との差が弱く、見出しの装飾とも紛らわしくなる。
+   日本語には斜体字形がなく合成斜体になって読みにくいので font-style は使わない。 */
 .znc blockquote {
   border-left: 3px solid #cbd5e1;
-  padding: 0.25rem 0 0.25rem 1.25rem;
+  padding: 0.875rem 1.25rem;
   margin: 1.75rem 0;
-  background: none;
+  background: #f1f5f9;
+  border-radius: 0 6px 6px 0;
   font-style: normal;
-  color: inherit;
+  color: #475569;
 }
 .dark .znc blockquote {
   border-left-color: #475569;
+  background: rgba(30, 41, 59, 0.6);
+  color: #cbd5e1;
 }
 .znc blockquote > :first-child {
   margin-top: 0;
@@ -288,7 +347,8 @@
 /* チェックリスト（Notionのto_do） */
 .znc li.task-list-item {
   list-style: none;
-  margin-left: -1.25em;
+  /* ul の padding-left を打ち消してチェックボックスを本文の左端に揃える */
+  margin-left: -1.5em;
 }
 .znc li.task-list-item input[type='checkbox'] {
   margin-right: 0.4em;
@@ -340,8 +400,10 @@
   border-top-color: #334155;
 }
 
+/* スクリーンショットや構成図は情報密度が高いため、コンテナ幅いっぱいに表示する。
+   80%に縮小されていると文字が潰れて読めない。 */
 .znc img {
-  max-width: 80% !important;
+  max-width: 100%;
   height: auto;
   display: block;
   margin: 2rem auto;
@@ -353,29 +415,30 @@
 .znc img:hover {
   opacity: 0.9;
 }
-.znc img[alt]:not([alt=""]) {
-  margin-bottom: 0.5rem;
-}
-.znc img[alt]:not([alt=""])::after {
-  content: attr(alt);
-  display: block;
-  text-align: center;
-  font-size: 0.8rem;
-  color: #94a3b8;
-  margin-top: 0.5rem;
-}
 .dark .znc img {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
-.znc p {
-  padding-left: 10px;
-  padding-bottom: 10px;
-  line-height: 1.85;
+.znc figure {
+  margin: 2rem 0;
+}
+.znc figure img {
+  margin-bottom: 0.5rem;
+}
+.znc figcaption {
+  text-align: center;
+  font-size: 0.85em;
+  color: #64748b;
+  line-height: 1.6;
+}
+.dark .znc figcaption {
+  color: #94a3b8;
 }
 
-.znc p + p {
-  margin-top: 0.5rem;
+/* 段落間は行間（1.9）より明確に広く取り、話題の切り替わりが目で追えるようにする */
+.znc p {
+  margin: 0 0 1.75em;
+  line-height: 1.9;
 }
 
 .index_img {
@@ -385,51 +448,122 @@
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* 横スクロールできることを端のフェードで示す。
+   background-attachment: local を使うと、スクロール位置に応じて影が自動で出入りする（JS不要）。 */
+.znc .table-scroll {
+  --table-scroll-bg: #ffffff;
+  overflow-x: auto;
+  margin: 1.75rem 0;
+  background:
+    linear-gradient(90deg, var(--table-scroll-bg) 30%, rgba(255, 255, 255, 0)) left / 40px 100%
+      no-repeat,
+    linear-gradient(270deg, var(--table-scroll-bg) 30%, rgba(255, 255, 255, 0)) right / 40px 100%
+      no-repeat,
+    radial-gradient(farthest-side at 0 50%, rgba(15, 23, 42, 0.12), rgba(15, 23, 42, 0)) left / 14px
+      100% no-repeat,
+    radial-gradient(farthest-side at 100% 50%, rgba(15, 23, 42, 0.12), rgba(15, 23, 42, 0)) right /
+      14px 100% no-repeat;
+  background-attachment: local, local, scroll, scroll;
+}
+.dark .znc .table-scroll {
+  --table-scroll-bg: #0f172a;
+  background:
+    linear-gradient(90deg, var(--table-scroll-bg) 30%, rgba(15, 23, 42, 0)) left / 40px 100%
+      no-repeat,
+    linear-gradient(270deg, var(--table-scroll-bg) 30%, rgba(15, 23, 42, 0)) right / 40px 100%
+      no-repeat,
+    radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0)) left / 14px 100%
+      no-repeat,
+    radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0)) right / 14px
+      100% no-repeat;
+  background-attachment: local, local, scroll, scroll;
+}
+.znc .table-scroll > table {
+  margin: 0;
+}
+
+/* 表は全セルを罫線で囲むと「Excelの表」に見えて、周囲の角丸カードや
+   柔らかい影と質感が合わない。横罫のみにして余白で構造を見せる。 */
 .znc table {
-  width: 100% !important;
+  width: 100%;
+  /* セルが潰れるより横スクロールさせたい。ラッパー側で overflow-x: auto している */
+  min-width: max-content;
   border-collapse: collapse;
-  margin-bottom: 1.5rem;
-  display: inline-table !important;
+  margin: 1.75rem 0;
+  font-size: 0.925em;
   border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  /* 角丸をセルにも効かせる */
+  overflow: hidden;
 }
 .dark .znc table {
-  border-color: #475569;
+  border-color: #334155;
 }
 
 .znc th {
   background: var(--md-table-th-light);
   color: rgb(var(--foreground-rgb));
-  padding: 0.75rem;
-  border: 1px solid #e2e8f0;
+  padding: 0.625rem 0.875rem;
+  text-align: left;
   font-weight: 600;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .dark .znc th {
   background: var(--md-table-th-dark);
-  border-color: #475569;
+  border-bottom-color: #334155;
 }
 
 .znc td {
-  padding: 0.75rem;
+  padding: 0.625rem 0.875rem;
   background: var(--md-table-td-light);
-  text-align: left;
   color: rgb(var(--foreground-rgb));
-  border: 1px solid #e2e8f0;
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .dark .znc td {
   background: var(--md-table-td-dark);
-  border-color: #475569;
+  border-bottom-color: #1e293b;
 }
 
-/* リンクカードがリスト内にある場合のbullet除去 */
-.znc li .link-card,
-.znc ul .link-card {
-  list-style: none;
+.znc tbody tr:last-child td {
+  border-bottom: none;
 }
-.znc li:has(.link-card) {
+
+/* 列が多い表で行を見失わないようにする */
+.znc tbody tr:nth-child(even) td {
+  background: #f8fafc;
+}
+.dark .znc tbody tr:nth-child(even) td {
+  background: rgba(30, 41, 59, 0.5);
+}
+.znc tbody tr:hover td {
+  background: #f1f5f9;
+}
+.dark .znc tbody tr:hover td {
+  background: rgba(51, 65, 85, 0.6);
+}
+
+/* Markdownの :---: / ---: によるアラインメント指定を効かせる。
+   以前は td { text-align: left } が align属性を上書きしていた。 */
+.znc th[align='right'],
+.znc td[align='right'] {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.znc th[align='center'],
+.znc td[align='center'] {
+  text-align: center;
+}
+
+/* リンクカードがリスト内にある場合はマーカーを消す。
+   以前はリストの margin-left を打ち消すために -2rem を当てていたが、
+   マジックナンバーで崩れやすいのでカード自体の余白だけを調整する。 */
+.znc li > .link-card {
+  margin: 0.5rem 0;
+}
+.znc li:has(> .link-card) {
   list-style: none;
-  margin-left: -2rem;
 }
 
 /* 空段落の非表示 */
@@ -457,20 +591,15 @@
     font-size: 1rem;
   }
 
-  .znc p {
-    font-size: 1rem;
-  }
+  /* 本文・コード・引用の文字サイズは .znc の clamp() に任せる。
+     ここで rem 固定にすると画面幅による大小関係が逆転してしまう。 */
 
-  .znc ul {
-    margin-left: 1rem;
-  }
-
+  .znc ul,
   .znc ol {
-    margin-left: 1rem;
+    padding-left: 1.25em;
   }
 
   .znc pre {
-    font-size: 0.85rem;
     -webkit-overflow-scrolling: touch;
   }
   .znc pre::-webkit-scrollbar {
@@ -481,16 +610,6 @@
     border-radius: 3px;
   }
 
-  .znc code {
-    font-size: 0.9rem;
-  }
-
-  .znc blockquote {
-    font-size: 1rem;
-  }
-  .znc img {
-    max-width: 100%;
-  }
   .index_img {
     width: 100%;
     aspect-ratio: 16 / 9;
