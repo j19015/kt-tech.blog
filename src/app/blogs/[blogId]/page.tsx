@@ -49,6 +49,8 @@ import { ImageLightbox } from '@/components/ImageLightbox/ImageLightbox';
 import { KeyboardNav } from '@/components/KeyboardNav/KeyboardNav';
 import { FloatingTocButton } from '@/components/TableOfContents/FloatingTocButton';
 import { BookmarkButton } from '@/components/Bookmark/BookmarkButton';
+import { SeriesNav } from '@/components/Series/SeriesNav';
+import { findSeriesOf } from '@/lib/series';
 import { isPublic } from '@/lib/blog';
 import { calloutKindFromColor, CALLOUT_META } from '@/lib/callout';
 // カレンダー・フォルダの3アイコンのために FontAwesome 一式を読み込んでいたので lucide に統一
@@ -155,6 +157,12 @@ export default async function StaticDetailPage({
   // 前後記事・関連記事はPF記事を除いた一覧から選ぶ。
   // 一覧に出ていない記事へ飛ばされると導線が破綻するため。
   const navPosts = contents.filter(isPublic);
+
+  // 連載。連載名と順序は Notion のプロパティで持つので、新しい保存先は増やしていない。
+  const seriesContext = findSeriesOf(navPosts, blog);
+  const nextInSeries = seriesContext
+    ? seriesContext.series.posts[seriesContext.index + 1] ?? null
+    : null;
 
   // 関連記事をスコアリングで取得（タグ重複数 + カテゴリ一致で重み付け）
   const blogTagIds = blog.tags?.map(t => t.id) || [];
@@ -410,6 +418,18 @@ export default async function StaticDetailPage({
                 priority
               />
             </header>
+            {/* 連載の目次は本文より前。途中から流入した読者に、
+                これが何回目でどこから読むべきかを最初に伝えるため。 */}
+            {seriesContext && (
+              <div className='mx-4'>
+                <SeriesNav
+                  seriesName={seriesContext.series.name}
+                  seriesHref={`/series/${encodeURIComponent(seriesContext.series.slug)}`}
+                  posts={seriesContext.series.posts.map((p) => ({ id: p.id, title: p.title }))}
+                  currentIndex={seriesContext.index}
+                />
+              </div>
+            )}
             <TableOfContents toc={toc} />
             <div className='p-4 znc markdown text-foreground'>
               <div dangerouslySetInnerHTML={{ __html: processedHtml }}></div>
@@ -487,6 +507,26 @@ export default async function StaticDetailPage({
                 </a>
               </div>
             </div>
+            {/* 連載の続きは公開日順の前後記事より優先して出す。
+                PostNavigation は公開日順なので、連載の間に別記事を挟むと順序が崩れる。 */}
+            {nextInSeries && seriesContext && (
+              <div className='mt-10 mx-4'>
+                <Link
+                  href={`/blogs/${nextInSeries.id}`}
+                  className='flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 transition-colors hover:border-blue-400 hover:bg-blue-50/50 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-blue-500 dark:hover:bg-slate-700/50'
+                >
+                  <span className='min-w-0 flex-1'>
+                    <span className='block text-xs text-slate-500 dark:text-slate-400'>
+                      連載の次の記事（{seriesContext.index + 2} / {seriesContext.series.posts.length}）
+                    </span>
+                    <span className='mt-0.5 block font-semibold text-slate-900 dark:text-slate-100'>
+                      {nextInSeries.title}
+                    </span>
+                  </span>
+                  <span aria-hidden='true' className='shrink-0 text-slate-400'>→</span>
+                </Link>
+              </div>
+            )}
             <PostNavigation currentId={blogId} allPosts={navPosts} />
             {(() => {
               const idx = navPosts.findIndex(p => p.id === blogId);

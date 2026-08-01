@@ -3,6 +3,7 @@ import { BlogProps } from '../../../libs/notion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FadeIn } from '../FadeIn/FadeIn';
+import { Library } from 'lucide-react';
 
 const timeAgo = (date: string) => {
   const diff = Date.now() - new Date(date).getTime();
@@ -47,9 +48,24 @@ export const Index = ({ contents }: BlogProps) => {
 
                 {/* コンテンツ */}
                 <div className='flex-1 min-w-0 flex flex-col justify-between py-0.5'>
-                  <h2 className='text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 leading-snug'>
-                    {blog.title}
-                  </h2>
+                  <div className='min-w-0'>
+                    {/* 連載バッジ。一覧の時点で「これは連載の一部」と分かると、
+                        途中の回を単発記事だと思って読み始めるのを防げる */}
+                    {blog.series && (
+                      <span className='mb-1 flex items-center gap-1 text-[10px] font-semibold text-blue-600 dark:text-blue-400'>
+                        <Library className='h-3 w-3 shrink-0' aria-hidden='true' />
+                        <span className='truncate'>{blog.series.name}</span>
+                        {blog.series.order > 0 && (
+                          <span className='shrink-0 tabular-nums text-slate-400 dark:text-slate-500'>
+                            #{blog.series.order}
+                          </span>
+                        )}
+                      </span>
+                    )}
+                    <h2 className='text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 leading-snug'>
+                      {blog.title}
+                    </h2>
+                  </div>
 
                   <div className='space-y-1.5'>
                     <div className='flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400'>

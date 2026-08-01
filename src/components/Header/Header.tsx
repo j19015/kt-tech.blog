@@ -4,13 +4,14 @@ import Image from 'next/image';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import { ModeToggle } from '../ModeToggle/modeToggle';
-import { Menu, X, Home, BookOpen, User, Search, Github } from 'lucide-react';
+import { Menu, X, Home, BookOpen, User, Search, Github, Library } from 'lucide-react';
 import { SearchModal } from '../SearchModal/SearchModal';
 import { useDialog } from '@/lib/useDialog';
 
 const MENU_ITEMS = [
   { name: 'Home', href: '/', icon: Home },
   { name: 'Blog', href: '/blogs/page/1', icon: BookOpen },
+  { name: 'Series', href: '/series', icon: Library },
   { name: 'About', href: '/about', icon: User },
 ];
 

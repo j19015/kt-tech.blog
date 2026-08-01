@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { getList, getCategoryList, getTagList } from '../../libs/notion';
 import { ITEMS_PER_PAGE, isPublic } from '@/lib/blog';
+import { groupBySeries } from '@/lib/series';
 
 export const runtime = 'edge';
 
@@ -51,6 +52,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }));
 
+  // Series pages
+  const seriesList = groupBySeries(contents);
+  const seriesEntries: MetadataRoute.Sitemap = seriesList.map((series) => ({
+    url: `${siteUrl}/series/${encodeURIComponent(series.slug)}`,
+    lastModified: new Date(series.updatedAt),
+    changeFrequency: 'weekly' as const,
+    priority: 0.6,
+  }));
+
   // Archive pages (unique year-month from articles)
   const archiveMonths = new Set(
     allBlogs.map((b) => {
@@ -90,6 +100,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly',
       priority: 0.6,
     },
+    ...(seriesList.length > 0
+      ? [
+          {
+            url: `${siteUrl}/series`,
+            lastModified: latestUpdated,
+            changeFrequency: 'weekly' as const,
+            priority: 0.6,
+          },
+        ]
+      : []),
   ];
 
   return [
@@ -97,6 +117,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...paginationEntries,
     ...categoryEntries,
     ...tagEntries,
+    ...seriesEntries,
     ...archiveEntries,
     ...blogEntries,
   ];
