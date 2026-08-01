@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Library } from 'lucide-react';
 import type { Blog } from '../../../libs/notion';
 import { TagChip } from '../Chip/Chip';
+import { getArticleBadge } from '@/lib/articleStatus';
 
 /**
  * 記事一覧のカード。
@@ -23,10 +24,6 @@ const timeAgo = (date: string) => {
   if (days < 365) return `${Math.floor(days / 30)}ヶ月前`;
   return `${Math.floor(days / 365)}年前`;
 };
-
-const NEW_WINDOW_MS = 72 * 60 * 60 * 1000;
-const UPDATED_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
-const MEANINGFUL_UPDATE_MS = 24 * 60 * 60 * 1000;
 
 /** キーワードに一致した箇所を目立たせる */
 export const HighlightText = ({ text, terms }: { text: string; terms?: string[] }) => {
@@ -59,13 +56,7 @@ type Props = {
 };
 
 export const PostCard = ({ blog, terms, footer }: Props) => {
-  const now = Date.now();
-  const isNew = now - new Date(blog.createdAt).getTime() < NEW_WINDOW_MS;
-  const isUpdated =
-    !isNew &&
-    Boolean(blog.updatedAt) &&
-    new Date(blog.updatedAt).getTime() - new Date(blog.createdAt).getTime() > MEANINGFUL_UPDATE_MS &&
-    now - new Date(blog.updatedAt).getTime() < UPDATED_WINDOW_MS;
+  const badge = getArticleBadge(blog);
 
   return (
     <article className='group'>
@@ -82,11 +73,11 @@ export const PostCard = ({ blog, terms, footer }: Props) => {
               sizes='(max-width: 640px) 96px, 128px'
               className='object-cover group-hover:scale-105 transition-transform duration-300'
             />
-            {isNew ? (
+            {badge === 'new' ? (
               <span className='absolute top-1.5 left-1.5 px-1.5 py-0.5 text-[10px] font-bold bg-red-500 text-white rounded'>
                 NEW
               </span>
-            ) : isUpdated ? (
+            ) : badge === 'updated' ? (
               <span className='absolute top-1.5 left-1.5 px-1.5 py-0.5 text-[10px] font-bold bg-blue-500 text-white rounded'>
                 更新
               </span>

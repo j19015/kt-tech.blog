@@ -5,9 +5,11 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 interface PostNavigationProps {
   currentId: string;
   allPosts: Blog[];
+  /** 「同じカテゴリの記事」のように、何の中での前後なのかを示すラベル */
+  scopeLabel?: string | null;
 }
 
-export const PostNavigation = ({ currentId, allPosts }: PostNavigationProps) => {
+export const PostNavigation = ({ currentId, allPosts, scopeLabel }: PostNavigationProps) => {
   const currentIndex = allPosts.findIndex((p) => p.id === currentId);
   if (currentIndex === -1) return null;
 
@@ -25,8 +27,8 @@ export const PostNavigation = ({ currentId, allPosts }: PostNavigationProps) => 
             className='group p-4 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-colors'
           >
             <span className='flex items-center gap-1 text-xs text-slate-500 dark:text-slate-500 mb-1'>
-              <ChevronLeft className='w-3 h-3' />
-              前の記事
+              <ChevronLeft className='w-3 h-3' aria-hidden='true' />
+              {scopeLabel ? `${scopeLabel} の前の記事` : '前の記事'}
             </span>
             <p className='text-sm text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-slate-100 line-clamp-2 transition-colors'>
               {prev.title}
@@ -39,8 +41,8 @@ export const PostNavigation = ({ currentId, allPosts }: PostNavigationProps) => 
             className='group p-4 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-colors text-right'
           >
             <span className='flex items-center justify-end gap-1 text-xs text-slate-500 dark:text-slate-500 mb-1'>
-              次の記事
-              <ChevronRight className='w-3 h-3' />
+              {scopeLabel ? `${scopeLabel} の次の記事` : '次の記事'}
+              <ChevronRight className='w-3 h-3' aria-hidden='true' />
             </span>
             <p className='text-sm text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-slate-100 line-clamp-2 transition-colors'>
               {next.title}

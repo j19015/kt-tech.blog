@@ -1,4 +1,5 @@
 import { cache } from 'react';
+import { embedToHtml } from '../src/lib/embed';
 
 // Notion REST API を直接fetch（Edge Runtime互換、@notionhq/client不使用）
 const NOTION_API_BASE = 'https://api.notion.com/v1';
@@ -140,16 +141,21 @@ async function blockToMarkdown(block: any, indent: string): Promise<string | nul
     // 見出しの絵文字は残す。書き手が意図して付けた視覚的な手がかりなので、
     // 本文から消してしまう理由がない。目次が煩雑になるのを避けたいだけなら
     // 目次を作る側（extractHeadings）で落とせば足りる。
+    //
+    // レベルは1段下げる。ページの <h1> は記事タイトルなので、本文の
+    // Notion heading_1 をそのまま # にすると h1 が複数になり、
+    // 「どれが記事タイトルか」がスクリーンリーダーにも検索エンジンにも
+    // 判別できなくなる。見た目は markdown.css 側を1段ずらして合わせてある。
     case 'heading_1':
-      return `${indent}# ${richTextToPlain(block.heading_1.rich_text)}`;
+      return `${indent}## ${richTextToPlain(block.heading_1.rich_text)}`;
     case 'heading_2': {
       const h2Text = richTextToPlain(block.heading_2.rich_text).trim();
       // 「目次」見出しはスキップ（ブログ側で自動生成するため）
       if (h2Text === '目次') return null;
-      return `${indent}## ${h2Text}`;
+      return `${indent}### ${h2Text}`;
     }
     case 'heading_3':
-      return `${indent}### ${richTextToPlain(block.heading_3.rich_text)}`;
+      return `${indent}#### ${richTextToPlain(block.heading_3.rich_text)}`;
     case 'paragraph': {
       // 目次はブログ側で自動生成するので、目印として書かれた `[toc]` の段落は落とす。
       // 以前はレンダリング後のHTMLに対して4本の正規表現を当てていたため、
@@ -269,6 +275,19 @@ async function blockToMarkdown(block: any, indent: string): Promise<string | nul
         rows.forEach((row: any) => lines.push(toRow(row.table_row.cells)));
       }
       return lines.join('\n');
+    }
+    case 'embed':
+    case 'video':
+    case 'link_preview': {
+      // これまで default に落ちて丸ごと消えていた。YouTube の解説動画も
+      // CodeSandbox の動くサンプルも、公開されたページには何も残らなかった。
+      const url: string | undefined =
+        block[block.type]?.url ?? block[block.type]?.external?.url ?? block[block.type]?.file?.url;
+      if (!url) return null;
+      const html = embedToHtml(url);
+      // 埋め込みに対応していないURLは素のリンクとして出し、
+      // レンダリング側のリンクカード化に任せる
+      return `${indent}${html ?? url}`;
     }
     default:
       // 未対応ブロックは出力できないため、開発時に気づけるよう警告する

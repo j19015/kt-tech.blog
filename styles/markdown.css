@@ -20,14 +20,17 @@
 }
 
 /* 見出しの直後の要素は上マージンを詰める（見出しと本文がくっついて見えるのを防ぎつつ、余白の二重取りを避ける） */
-.znc h1 + *,
 .znc h2 + *,
 .znc h3 + *,
-.znc h4 + * {
+.znc h4 + *,
+.znc h5 + * {
   margin-top: 0;
 }
 
-.znc h1 {
+/* 本文の見出しは h2 から始まる（h1 は記事タイトル）。
+   Notion の heading_1/2/3 が h2/h3/h4 になるので、
+   見た目が変わらないようにスタイルも1段ずらしてある。 */
+.znc h2 {
   font-size: 1.75rem;
   font-weight: 800;
   margin-top: 3.5rem;
@@ -54,9 +57,9 @@
 .dark .znc .heading-anchor {
   color: #475569;
 }
-.znc h1:hover .heading-anchor,
 .znc h2:hover .heading-anchor,
 .znc h3:hover .heading-anchor,
+.znc h4:hover .heading-anchor,
 .znc .heading-anchor:hover,
 .znc .heading-anchor:focus-visible {
   opacity: 1;
@@ -74,7 +77,7 @@
 /* 見出しの余白は「上 > 下」を保ちつつ、階層ごとに一定の比率にする。
    見出しに左バーを使うと引用（左バー）と同じパターンになって見分けがつかないため、
    見出しは下ボーダー、左バーは引用が持つ、という住み分けにする。 */
-.znc h2 {
+.znc h3 {
   font-weight: 700;
   font-size: 1.5rem;
   margin-top: 3rem;
@@ -83,18 +86,18 @@
   border-left: none;
   border-bottom: 1px solid #e2e8f0;
 }
-.dark .znc h2 {
+.dark .znc h3 {
   border-bottom-color: #334155;
 }
 
-.znc h3 {
+.znc h4 {
   font-weight: bold;
   font-size: 1.15rem;
   margin-top: 2rem;
   margin-bottom: 0.75rem;
 }
 
-.znc h4 {
+.znc h5 {
   font-weight: bold;
   font-size: 1rem;
   margin-top: 1.5rem;
@@ -763,23 +766,23 @@
   display: none;
 }
 
-/* メディアクエリを追加 */
+/* メディアクエリを追加。見出しのレベルずらしに合わせて h2〜h5 にしている */
 @media (max-width: 768px) {
-  .znc h1 {
+  .znc h2 {
     font-size: 1.3rem !important;
     margin-top: 2rem !important;
     margin-bottom: 1rem !important;
   }
 
-  .znc h2 {
+  .znc h3 {
     font-size: 1.2rem;
   }
 
-  .znc h3 {
+  .znc h4 {
     font-size: 1.1rem;
   }
 
-  .znc h4 {
+  .znc h5 {
     font-size: 1rem;
   }
 
@@ -963,4 +966,113 @@
   .table-contents > h1 {
     font-size: 1.3rem !important;
   }
+}
+
+/* 脚注（markdown-it-footnote）
+   本文中の参照は小さく上付きに、リストは本文の後ろに区切って置く。 */
+.znc .footnotes {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  font-size: 0.9em;
+  color: #475569;
+}
+.dark .znc .footnotes {
+  border-top-color: #334155;
+  color: #cbd5e1;
+}
+/* プラグインが出す <hr> は上の border-top と二重になる */
+.znc .footnotes-sep {
+  display: none;
+}
+.znc .footnotes ol {
+  margin: 0;
+}
+.znc .footnote-ref a {
+  text-decoration: none;
+  font-size: 0.8em;
+  vertical-align: super;
+}
+.znc .footnote-backref {
+  text-decoration: none;
+  margin-left: 0.3em;
+}
+/* 脚注へ飛んだときに、どれに飛んだのか分かるようにする */
+.znc .footnotes li:target {
+  background: #eff6ff;
+  border-radius: 4px;
+}
+.dark .znc .footnotes li:target {
+  background: rgba(30, 58, 138, 0.35);
+}
+
+/* 埋め込み（YouTube / CodeSandbox など）
+   aspect-ratio を先に確保して、読み込み時のレイアウトシフトを防ぐ。 */
+.znc .embed {
+  position: relative;
+  margin: 1.5rem 0;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #0f172a;
+}
+.znc .embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+/* YouTube はサムネイル + 再生ボタンで置いておき、押されたら iframe にする */
+.znc .embed__play {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.znc .embed__play img {
+  /* .znc img の余白・角丸・影を打ち消す */
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: inherit;
+}
+.znc .embed__play-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 68px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.75);
+  transition: background 0.2s;
+}
+.znc .embed__play-icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-40%, -50%);
+  border-style: solid;
+  border-width: 9px 0 9px 15px;
+  border-color: transparent transparent transparent #ffffff;
+}
+.znc .embed__play:hover .embed__play-icon,
+.znc .embed__play:focus-visible .embed__play-icon {
+  background: #dc2626;
+}
+.znc .embed noscript a {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  color: #ffffff;
 }

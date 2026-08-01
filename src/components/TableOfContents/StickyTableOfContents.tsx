@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import { tocDepth } from '@/lib/toc';
 
 
 interface TocItem {
@@ -91,7 +92,7 @@ export const StickyTableOfContents = ({ toc }: { toc: TocItem[] }) => {
               activeId === item.id
                 ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/40'
                 : 'border-slate-200 dark:border-slate-700'
-            } ${item.tag === 'h2' ? 'ml-2' : ''}`}
+            } ${['', 'ml-1', 'ml-2'][tocDepth(item.tag)]}`}
           >
             <a
               href={`#${item.id}`}
@@ -101,7 +102,11 @@ export const StickyTableOfContents = ({ toc }: { toc: TocItem[] }) => {
               // h3 は字下げを pl で取る。折り返した2行目も一緒に下がるので、
               // ml と違って「h2の2行目」と「h3の1行目」が見分けられる。
               className={`block py-1.5 line-clamp-2 transition-colors ${
-                item.tag === 'h3' ? 'pl-7 text-xs' : 'pl-3 text-sm'
+                tocDepth(item.tag) === 0
+                  ? 'pl-3 text-sm'
+                  : tocDepth(item.tag) === 1
+                    ? 'pl-7 text-xs'
+                    : 'pl-10 text-xs'
               } ${
                 activeId === item.id
                   ? 'text-blue-600 dark:text-blue-400 font-medium'

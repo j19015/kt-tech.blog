@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
+import { tocDepth } from '@/lib/toc';
 
 export const TableOfContents = ({ toc }: { toc: any }) => {
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -31,9 +32,7 @@ export const TableOfContents = ({ toc }: { toc: any }) => {
           {toc.map((data: any) => (
             <li
               key={data.id}
-              className={`${
-                data.tag === 'h2' ? 'ml-4' : data.tag === 'h3' ? 'ml-8' : ''
-              }`}
+              className={['', 'ml-4', 'ml-8'][tocDepth(data.tag)]}
             >
               <a
                 href={`#${data.id}`}
