@@ -44,9 +44,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  // Tag pages
+  // Tag pages（1ページ目のURLを正とする。/tags/{id} はそこへリダイレクトする）
   const tagEntries: MetadataRoute.Sitemap = tagData.contents.map((tag) => ({
-    url: `${siteUrl}/tags/${encodeURIComponent(tag.id)}`,
+    url: `${siteUrl}/tags/${encodeURIComponent(tag.id)}/page/1`,
     lastModified: latestUpdated,
     changeFrequency: 'weekly' as const,
     priority: 0.5,
@@ -69,7 +69,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   );
   const archiveEntries: MetadataRoute.Sitemap = Array.from(archiveMonths).map((month) => ({
-    url: `${siteUrl}/archives/${month}`,
+    url: `${siteUrl}/archives/${month}/page/1`,
     lastModified: latestUpdated,
     changeFrequency: 'monthly' as const,
     priority: 0.4,
@@ -99,6 +99,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: latestUpdated,
       changeFrequency: 'weekly',
       priority: 0.6,
+    },
+    {
+      url: `${siteUrl}/privacy`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
+      url: `${siteUrl}/contact`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
     },
     ...(seriesList.length > 0
       ? [

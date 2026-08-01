@@ -111,7 +111,7 @@ const SidebarClient = ({ latestArticles, randomPool, tagList, categoryList, arch
             {archives.map((archive) => (
               <Link
                 key={archive}
-                href={`/archives/${archive}`}
+                href={`/archives/${archive}/page/1`}
                 className='text-xs px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors'
               >
                 {formatArchive(archive)}
@@ -130,7 +130,7 @@ const SidebarClient = ({ latestArticles, randomPool, tagList, categoryList, arch
             {visibleTags.map((tag) => (
               <Link
                 key={tag.id}
-                href={`/tags/${tag.id}`}
+                href={`/tags/${encodeURIComponent(tag.id)}/page/1`}
                 className='text-xs px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors'
               >
                 #{tag.name}

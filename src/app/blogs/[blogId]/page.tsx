@@ -37,7 +37,6 @@ function extractHeadings(html: string): { text: string; id: string; tag: string 
   return headings;
 }
 import type { Metadata, ResolvingMetadata } from 'next';
-import { TableOfContents } from '@/components/TableOfContents/TableOfContents';
 import { StickyTableOfContents } from '@/components/TableOfContents/StickyTableOfContents';
 import { RelatedPosts } from '@/components/RelatedPosts/RelatedPosts';
 import { ShareButtons } from '@/components/ShareButtons/ShareButtons';
@@ -446,7 +445,9 @@ export default async function StaticDetailPage({
                 />
               </div>
             )}
-            <TableOfContents toc={toc} />
+            {/* モバイルの目次は右下のFABに一本化した。
+                以前は本文上のアコーディオンとFABが同時に存在し、
+                同じものが2つ出ていたうえ、アコーディオンは本文の先頭を占有していた。 */}
             <div className='p-4 znc text-foreground'>
               {/* 技術記事は古くなるのが早い。本文に入る直前で知らせる。
                   日付はタイトルの上にあるが、読み始めると画面外に出てしまう。 */}
@@ -477,7 +478,7 @@ export default async function StaticDetailPage({
                 </h2>
                 <div className='flex flex-wrap gap-2'>
                   {blog.tags.map((tag) => (
-                    <TagChip key={tag.id} name={tag.name} href={`/tags/${tag.id}`} />
+                    <TagChip key={tag.id} name={tag.name} href={`/tags/${encodeURIComponent(tag.id)}/page/1`} />
                   ))}
                 </div>
               </div>
