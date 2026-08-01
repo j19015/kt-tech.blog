@@ -6,7 +6,6 @@
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#0f172a",
-  "orientation": "portrait-primary",
   "categories": ["education", "technology"],
   "lang": "ja",
   "icons": [

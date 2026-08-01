@@ -7,6 +7,7 @@
  */
 import MarkdownIt from 'markdown-it';
 import anchor from 'markdown-it-anchor';
+import { stripEmoji } from './emoji';
 
 import hljs from 'highlight.js/lib/core';
 
@@ -279,7 +280,8 @@ md.renderer.rules.code_block = (tokens, idx) => `${renderFence('', tokens[idx].c
  * ただし URL のフラグメントや属性値で扱いに困る記号だけは落とす。
  */
 export function headingSlug(text: string): string {
-  return String(text)
+  // 絵文字はIDに入れても意味がなく、URLに載ると読みにくいので落とす
+  return stripEmoji(String(text))
     .trim()
     .toLowerCase()
     .replace(/["'<>`#%\\/?&=+]/g, '')
