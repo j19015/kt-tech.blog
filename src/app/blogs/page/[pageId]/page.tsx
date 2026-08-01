@@ -51,7 +51,9 @@ export default async function StaticPaginationPage({
   return (
     <WithSidebar>
       <BreadcrumbNav items={[{ label: 'Blog', current: true }]} />
-      <Index contents={contentSlice} />
+      <div className='max-w-3xl mx-auto px-4'>
+        <Index contents={contentSlice} />
+      </div>
       <Paginate currentPage={currentPage} totalPage={totalPage} kind='/blogs' />
     </WithSidebar>
   );

@@ -162,14 +162,22 @@
 .dark .znc a:hover {
   color: #93bbfd;
 }
-/* 外部リンクアイコン（リンクカード内は除外） */
-.znc a[href^="http"]:not([href*="kt-tech.blog"]):not(.link-card a):not(.link-card-body a)::after {
-  content: ' ↗';
-  font-size: 0.75em;
-  opacity: 0.5;
+/* 外部リンクアイコン
+   以前は `:not(.link-card a)` のように :not() の中で子孫セレクタを使っていた。
+   これは Selectors Level 4 の機能で対応ブラウザが限られ、非対応環境では
+   セレクタ全体が無効になる（後続の content:none が被害を隠していた）。
+   複雑な :not() はやめ、打ち消しは後続ルールに任せる。 */
+.znc a[href^="http"]:not([href*="kt-tech.blog"])::after {
+  content: '↗';
+  display: inline-block;
+  margin-left: 0.15em;
+  /* 0.5 では本文が薄い箇所でほぼ見えなかった */
+  font-size: 0.8em;
+  opacity: 0.6;
+  vertical-align: super;
 }
 .znc .link-card a::after {
-  content: none !important;
+  content: none;
 }
 
 
@@ -189,7 +197,7 @@
   background-color: rgb(var(--md-code-bg-light));
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
-  color: rgb(var(--foreground-rgb));
+  color: hsl(var(--foreground));
 }
 
 .dark .znc code {
@@ -675,7 +683,7 @@
 
 .znc th {
   background: var(--md-table-th-light);
-  color: rgb(var(--foreground-rgb));
+  color: hsl(var(--foreground));
   padding: 0.625rem 0.875rem;
   text-align: left;
   font-weight: 600;
@@ -690,7 +698,7 @@
 .znc td {
   padding: 0.625rem 0.875rem;
   background: var(--md-table-td-light);
-  color: rgb(var(--foreground-rgb));
+  color: hsl(var(--foreground));
   border-bottom: 1px solid #f1f5f9;
 }
 

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Library } from 'lucide-react';
 import type { Blog } from '../../../libs/notion';
+import { TagChip } from '../Chip/Chip';
 
 /**
  * 記事一覧のカード。
@@ -141,13 +142,14 @@ export const PostCard = ({ blog, terms, footer }: Props) => {
 
             {blog.tags && blog.tags.length > 0 && (
               <div className='flex flex-wrap gap-1.5'>
+                {/* カード全体がリンクなので、タグは入れ子リンクにせず表示だけにする */}
                 {blog.tags.slice(0, 3).map((tag) => (
-                  <span key={tag.id} className='text-[11px] text-slate-500 dark:text-slate-400 whitespace-nowrap'>
-                    #{tag.name}
-                  </span>
+                  <TagChip key={tag.id} name={tag.name} />
                 ))}
                 {blog.tags.length > 3 && (
-                  <span className='text-[11px] text-slate-500 dark:text-slate-400'>...</span>
+                  <span className='self-center text-[11px] text-slate-500 dark:text-slate-400'>
+                    +{blog.tags.length - 3}
+                  </span>
                 )}
               </div>
             )}

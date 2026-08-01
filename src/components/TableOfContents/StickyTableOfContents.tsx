@@ -85,18 +85,24 @@ export const StickyTableOfContents = ({ toc }: { toc: TocItem[] }) => {
             key={item.id}
             data-toc-id={item.id}
             ref={activeId === item.id ? activeItemRef : null}
+            // 現在地は左のバーの色だけで示していたが、目次が長いと見つけにくい。
+            // 薄い背景を敷いて、視線がすぐ戻れるようにする。
             className={`border-l-2 transition-all ${
               activeId === item.id
-                ? 'border-blue-500'
+                ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/40'
                 : 'border-slate-200 dark:border-slate-700'
-            } ${item.tag === 'h2' ? 'ml-2' : item.tag === 'h3' ? 'ml-5' : ''}`}
+            } ${item.tag === 'h2' ? 'ml-2' : ''}`}
           >
             <a
               href={`#${item.id}`}
               onClick={() => handleClick(item.id)}
               title={item.text}
-              // 長い見出しで目次が縦に伸びすぎないよう2行までにする
-              className={`block text-sm py-1.5 pl-3 line-clamp-2 transition-colors ${
+              // 長い見出しで目次が縦に伸びすぎないよう2行までにする。
+              // h3 は字下げを pl で取る。折り返した2行目も一緒に下がるので、
+              // ml と違って「h2の2行目」と「h3の1行目」が見分けられる。
+              className={`block py-1.5 line-clamp-2 transition-colors ${
+                item.tag === 'h3' ? 'pl-7 text-xs' : 'pl-3 text-sm'
+              } ${
                 activeId === item.id
                   ? 'text-blue-600 dark:text-blue-400 font-medium'
                   : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'

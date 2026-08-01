@@ -55,8 +55,9 @@ import { SeriesNav } from '@/components/Series/SeriesNav';
 import { findSeriesOf } from '@/lib/series';
 import { isPublic } from '@/lib/blog';
 import { calloutKindFromColor, CALLOUT_META } from '@/lib/callout';
+import { CategoryChip, TagChip } from '@/components/Chip/Chip';
 // カレンダー・フォルダの3アイコンのために FontAwesome 一式を読み込んでいたので lucide に統一
-import { Calendar, FolderOpen, Pencil, MessageCircle } from 'lucide-react';
+import { Calendar, Pencil, MessageCircle } from 'lucide-react';
 
 
 export const runtime = 'edge';
@@ -350,7 +351,16 @@ export default async function StaticDetailPage({
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: process.env.SITE_URL },
       { '@type': 'ListItem', position: 2, name: 'Blog', item: `${process.env.SITE_URL}/blogs/page/1` },
-      { '@type': 'ListItem', position: 3, name: blog.title },
+      // 画面のパンくずと同じ階層にする。以前は画面側にカテゴリが無いのに
+      // JSON-LD にも無く、しかも最後がタイトルで両者が食い違っていた。
+      ...(blog.category
+        ? [{
+            '@type': 'ListItem',
+            position: 3,
+            name: blog.category.name,
+            item: `${process.env.SITE_URL}/categories/${blog.category.id}/page/1`,
+          }]
+        : []),
     ],
   };
 
@@ -358,11 +368,20 @@ export default async function StaticDetailPage({
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      {/* 最後をタイトルではなくカテゴリにする。
+          タイトルは直下の <h1> にあるので重複するうえ、
+          モバイルでは max-w-[200px] に切られて13文字程度しか読めなかった。
+          カテゴリなら Home > Blog > カテゴリ という階層が正しく伝わり、
+          カテゴリ一覧への導線にもなる。 */}
       <BreadcrumbNav
-        items={[
-          { label: 'Blog', href: '/blogs/page/1' },
-          { label: blog.title, current: true }
-        ]}
+        items={
+          blog.category
+            ? [
+                { label: 'Blog', href: '/blogs/page/1' },
+                { label: blog.category.name, current: true },
+              ]
+            : [{ label: 'Blog', current: true }]
+        }
       />
       {/* 本文を先に置き、目次は order で右に回す。
           DOM順を本文優先にすることで、スクリーンリーダーと検索エンジンにも本文が先に届く。
@@ -381,13 +400,11 @@ export default async function StaticDetailPage({
 
               <div className='mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm'>
                 {blog.category && (
-                  <Link
+                  <CategoryChip
+                    name={blog.category.name}
                     href={`/categories/${blog.category.id}/page/1`}
-                    className='inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors'
-                  >
-                    <FolderOpen className='w-3.5 h-3.5' aria-hidden='true' />
-                    {blog.category.name}
-                  </Link>
+                    size='sm'
+                  />
                 )}
                 <span className='inline-flex items-center gap-1.5 text-slate-500 dark:text-slate-400'>
                   <Calendar className='w-3.5 h-3.5' aria-hidden='true' />
@@ -436,7 +453,7 @@ export default async function StaticDetailPage({
               </div>
             )}
             <TableOfContents toc={toc} />
-            <div className='p-4 znc markdown text-foreground'>
+            <div className='p-4 znc text-foreground'>
               <div dangerouslySetInnerHTML={{ __html: processedHtml }}></div>
               <CodeBlockEnhancer />
               <MermaidLoader />
@@ -452,13 +469,7 @@ export default async function StaticDetailPage({
                 </h2>
                 <div className='flex flex-wrap gap-2'>
                   {blog.tags.map((tag) => (
-                    <Link
-                      key={tag.id}
-                      href={`/tags/${tag.id}`}
-                      className='inline-flex items-center px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-full text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors'
-                    >
-                      #{tag.name}
-                    </Link>
+                    <TagChip key={tag.id} name={tag.name} href={`/tags/${tag.id}`} />
                   ))}
                 </div>
               </div>
