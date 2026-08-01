@@ -10,7 +10,7 @@ type PaginateProps = {
 const Paginate = ({ currentPage, totalPage, kind }: PaginateProps) => {
   return (
     <div className="flex justify-center mt-12 mb-8">
-      <nav className="flex items-center gap-2">
+      <nav className="flex items-center gap-2" aria-label="ページネーション">
         {currentPage > 1 && (
           <Link
             href={`${kind}/page/${currentPage - 1}`}
@@ -27,15 +27,24 @@ const Paginate = ({ currentPage, totalPage, kind }: PaginateProps) => {
               page === totalPage ||
               (page >= currentPage - 2 && page <= currentPage + 2)
             ) {
-              return (
+              const base =
+                "min-w-[36px] h-9 flex items-center justify-center text-sm rounded-lg transition-all";
+              // 現在ページは自分自身へのリンクにせず、aria-current で現在地を伝える。
+              // 色の差だけだとスクリーンリーダーには同格のリンクの羅列に聞こえる。
+              return currentPage === page ? (
+                <span
+                  key={page}
+                  aria-current="page"
+                  className={`${base} bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-medium`}
+                >
+                  {page}
+                </span>
+              ) : (
                 <Link
                   href={`${kind}/page/${page}`}
                   key={page}
-                  className={`min-w-[36px] h-9 flex items-center justify-center text-sm rounded-lg transition-all ${
-                    currentPage === page
-                      ? "bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-medium"
-                      : "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200"
-                  }`}
+                  aria-label={`${page}ページ目`}
+                  className={`${base} text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200`}
                 >
                   {page}
                 </Link>
@@ -45,7 +54,7 @@ const Paginate = ({ currentPage, totalPage, kind }: PaginateProps) => {
               (page === currentPage + 3 && currentPage < totalPage - 3)
             ) {
               return (
-                <span key={page} className="px-2 text-slate-400 dark:text-slate-600">
+                <span key={page} aria-hidden="true" className="px-2 text-slate-400 dark:text-slate-600">
                   ...
                 </span>
               );

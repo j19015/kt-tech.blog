@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import { getList } from '../../../../libs/notion';
 import Index from '@/components/Index/Index';
 import Title from '@/components/Title/Title';
+import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
+import { isPublic, formatArchive } from '@/lib/blog';
 import { Metadata } from 'next';
 
 const siteUrl = process.env.SITE_URL || 'https://kt-tech.blog';
@@ -45,7 +47,9 @@ export default async function StaticDetailPage({
   const { archive } = await params;
   const { contents } = await getList().catch(() => ({ contents: [], totalCount: 0, offset: 0, limit: 0 }));
 
-  const filteredContents = contents.filter((item) => item.createdAt.slice(0, 7) === archive);
+  const filteredContents = contents
+    .filter(isPublic)
+    .filter((item) => item.createdAt.slice(0, 7) === archive);
 
   if (filteredContents.length === 0) {
     notFound();
@@ -53,9 +57,8 @@ export default async function StaticDetailPage({
 
   return (
     <WithSidebar>
-      <div className='text-center mt-1 w-full'>
-        <Title title={archive} />
-      </div>
+      <BreadcrumbNav items={[{ label: formatArchive(archive), current: true }]} />
+      <Title title={formatArchive(archive)} type='archive' count={filteredContents.length} />
       <Index contents={filteredContents} />
     </WithSidebar>
   );

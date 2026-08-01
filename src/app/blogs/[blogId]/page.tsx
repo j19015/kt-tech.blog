@@ -70,6 +70,7 @@ import { ImageLightbox } from '@/components/ImageLightbox/ImageLightbox';
 import { KeyboardNav } from '@/components/KeyboardNav/KeyboardNav';
 import { FloatingTocButton } from '@/components/TableOfContents/FloatingTocButton';
 import { BookmarkButton } from '@/components/Bookmark/BookmarkButton';
+import { isPublic } from '@/lib/blog';
 
 
 export const runtime = 'edge';
@@ -168,10 +169,14 @@ export default async function StaticDetailPage({
     getList().catch(() => ({ contents: [] as Blog[], totalCount: 0, offset: 0, limit: 0 })),
   ]);
   if (!blog) notFound();
-  
+
+  // 前後記事・関連記事はPF記事を除いた一覧から選ぶ。
+  // 一覧に出ていない記事へ飛ばされると導線が破綻するため。
+  const navPosts = contents.filter(isPublic);
+
   // 関連記事をスコアリングで取得（タグ重複数 + カテゴリ一致で重み付け）
   const blogTagIds = blog.tags?.map(t => t.id) || [];
-  const relatedPosts = contents
+  const relatedPosts = navPosts
     .filter(post => post.id !== blogId)
     .map(post => {
       let score = 0;
@@ -381,7 +386,7 @@ export default async function StaticDetailPage({
               {/* カテゴリと日付と読了時間 */}
               <div className='flex flex-wrap items-center gap-3'>
                 {blog.category && (
-                  <Link href={`/categories/${blog.category.id}`}>
+                  <Link href={`/categories/${blog.category.id}/page/1`}>
                     <span className='inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-full text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors'>
                       <FontAwesomeIcon icon={faFolderOpen} className='w-3.5 h-3.5' />
                       {blog.category.name}
@@ -469,11 +474,11 @@ export default async function StaticDetailPage({
                 </a>
               </div>
             </div>
-            <PostNavigation currentId={blogId} allPosts={contents} />
+            <PostNavigation currentId={blogId} allPosts={navPosts} />
             {(() => {
-              const idx = contents.findIndex(p => p.id === blogId);
-              const prevPost = idx < contents.length - 1 ? contents[idx + 1] : null;
-              const nextPost = idx > 0 ? contents[idx - 1] : null;
+              const idx = navPosts.findIndex(p => p.id === blogId);
+              const prevPost = idx >= 0 && idx < navPosts.length - 1 ? navPosts[idx + 1] : null;
+              const nextPost = idx > 0 ? navPosts[idx - 1] : null;
               return <KeyboardNav prevUrl={prevPost ? `/blogs/${prevPost.id}` : undefined} nextUrl={nextPost ? `/blogs/${nextPost.id}` : undefined} />;
             })()}
             <RelatedPosts posts={relatedPosts} currentPostId={blogId} />

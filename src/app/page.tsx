@@ -5,6 +5,7 @@ import { Blog } from '../../libs/notion';
 import Index from '@/components/Index/Index';
 import HeroSection from '@/components/HeroSection/HeroSection';
 import { ArrowRight, FolderOpen } from 'lucide-react';
+import { isPublic } from '@/lib/blog';
 
 const siteUrl = process.env.SITE_URL || 'https://kt-tech.blog';
 const description = '実践的な技術記事とエンジニアリングの知見を発信。React, Next.js, TypeScript, Cloudflare, AIなどのモダン技術を中心に。';
@@ -48,7 +49,7 @@ export default async function StaticPage() {
     return <h1>No Contents</h1>;
   }
 
-  const allBlogs: Blog[] = contents.filter((article) => article.category?.name !== 'PF');
+  const allBlogs: Blog[] = contents.filter(isPublic);
   const latestBlogs = allBlogs.slice(0, 9);
   const categories = categoryData.contents.filter(c => c.name !== 'PF');
 
