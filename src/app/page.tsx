@@ -96,8 +96,9 @@ export default async function StaticPage() {
                 <div className='relative aspect-[16/9] lg:aspect-auto lg:h-full lg:min-h-[420px] rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800'>
                   <Image
                     src={latestBlogs[0].eyecatch?.url || '/images/no_image_generated.png'}
-                    alt={latestBlogs[0].title}
+                    alt=''
                     fill
+                    sizes='(max-width: 1024px) 100vw, 600px'
                     className='object-cover group-hover:scale-105 transition-transform duration-500'
                     priority
                   />
@@ -126,8 +127,9 @@ export default async function StaticPage() {
                   <div className='relative h-full aspect-[16/9] lg:aspect-auto lg:min-h-0 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800'>
                     <Image
                       src={blog.eyecatch?.url || '/images/no_image_generated.png'}
-                      alt={blog.title}
+                      alt=''
                       fill
+                      sizes='(max-width: 1024px) 100vw, 600px'
                       className='object-cover group-hover:scale-105 transition-transform duration-500'
                     />
                     <div className='absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10' />

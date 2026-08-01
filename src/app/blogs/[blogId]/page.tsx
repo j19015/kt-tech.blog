@@ -6,28 +6,92 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faTag } from '@fortawesome/free-solid-svg-icons';
 import MarkdownIt from 'markdown-it';
 import anchor from 'markdown-it-anchor';
-import hljs from 'highlight.js';
+import hljs from 'highlight.js/lib/core';
 import '../../../../styles/markdown.css';
 import '../../../../styles/hljs-theme.css';
+
+// highlight.js の既定エントリは190以上の言語定義を含み、Workersのバンドルサイズを圧迫する。
+// 記事で実際に使う言語だけを登録する。
+import bash from 'highlight.js/lib/languages/bash';
+import css from 'highlight.js/lib/languages/css';
+import diff from 'highlight.js/lib/languages/diff';
+import dockerfile from 'highlight.js/lib/languages/dockerfile';
+import go from 'highlight.js/lib/languages/go';
+import graphql from 'highlight.js/lib/languages/graphql';
+import ini from 'highlight.js/lib/languages/ini';
+import java from 'highlight.js/lib/languages/java';
+import javascript from 'highlight.js/lib/languages/javascript';
+import json from 'highlight.js/lib/languages/json';
+import markdown from 'highlight.js/lib/languages/markdown';
+import php from 'highlight.js/lib/languages/php';
+import python from 'highlight.js/lib/languages/python';
+import ruby from 'highlight.js/lib/languages/ruby';
+import rust from 'highlight.js/lib/languages/rust';
+import scss from 'highlight.js/lib/languages/scss';
+import sql from 'highlight.js/lib/languages/sql';
+import typescript from 'highlight.js/lib/languages/typescript';
+import xml from 'highlight.js/lib/languages/xml';
+import yaml from 'highlight.js/lib/languages/yaml';
+
+const LANGUAGES: Record<string, any> = {
+  bash, css, diff, dockerfile, go, graphql, java, javascript, json, markdown,
+  php, python, ruby, rust, scss, sql, typescript, xml, yaml,
+  ini, // toml も ini で色付けできる
+};
+Object.entries(LANGUAGES).forEach(([name, lang]) => hljs.registerLanguage(name, lang));
+// よく使われる別名
+hljs.registerAliases(['sh', 'shell', 'zsh'], { languageName: 'bash' });
+hljs.registerAliases(['js', 'jsx'], { languageName: 'javascript' });
+hljs.registerAliases(['ts', 'tsx'], { languageName: 'typescript' });
+hljs.registerAliases(['html', 'vue', 'svg'], { languageName: 'xml' });
+hljs.registerAliases(['yml'], { languageName: 'yaml' });
+hljs.registerAliases(['toml'], { languageName: 'ini' });
+hljs.registerAliases(['py'], { languageName: 'python' });
+hljs.registerAliases(['rb'], { languageName: 'ruby' });
 
 function escapeHtml(str: string): string {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+// コードブロック右上に出す言語ラベル。
+// 以前はCSSに言語ごとの ::before をハードコードしていたため、
+// 列挙外の言語ではラベルが空文字になり、余白だけが2em空いていた。
+// 別名も含めて引けるようにしておく。
+// hljs.getLanguage().name は "HTML, XML" のような文字列を返すことがあり、正規化には使えない。
+const LANG_LABELS: Record<string, string> = {
+  bash: 'Bash', sh: 'Bash', shell: 'Bash', zsh: 'Bash',
+  css: 'CSS', scss: 'SCSS',
+  diff: 'Diff', dockerfile: 'Dockerfile',
+  go: 'Go', graphql: 'GraphQL',
+  ini: 'INI', toml: 'TOML',
+  java: 'Java',
+  javascript: 'JavaScript', js: 'JavaScript', jsx: 'JSX',
+  typescript: 'TypeScript', ts: 'TypeScript', tsx: 'TSX',
+  json: 'JSON', markdown: 'Markdown',
+  php: 'PHP',
+  python: 'Python', py: 'Python',
+  ruby: 'Ruby', rb: 'Ruby',
+  rust: 'Rust', sql: 'SQL',
+  xml: 'XML', html: 'HTML', vue: 'Vue', svg: 'SVG',
+  yaml: 'YAML', yml: 'YAML',
+};
+
 const md: MarkdownIt = new MarkdownIt({
   html: true,
   linkify: true,
-  typographer: true,
+  // typographer は "..." を … に、-- を – に変換してしまう。
+  // 技術記事ではコマンドやJSONの引用符が壊れるため無効にする。
+  typographer: false,
   highlight: (str: string, lang: string): string => {
     if (lang && hljs.getLanguage(lang)) {
       try {
-        return `<pre><code class="hljs language-${lang}">${hljs.highlight(str, { language: lang }).value}</code></pre>`;
+        const label = LANG_LABELS[lang.toLowerCase()] ?? lang.toUpperCase();
+        return `<pre class="has-lang" role="region" aria-label="${escapeHtml(label)}のコード"><code class="hljs language-${lang}" data-lang="${escapeHtml(label)}">${hljs.highlight(str, { language: lang }).value}</code></pre>`;
       } catch { /* fallthrough */ }
     }
-    try {
-      return `<pre><code class="hljs">${hljs.highlightAuto(str).value}</code></pre>`;
-    } catch { /* fallthrough */ }
-    return `<pre><code class="hljs">${escapeHtml(str)}</code></pre>`;
+    // 言語指定がない場合は自動判定に頼らず、そのままエスケープして出す。
+    // 誤判定した色付けは読み手を混乱させるうえ、Edge の CPU 時間も余計に使う。
+    return `<pre role="region" aria-label="コード"><code class="hljs">${escapeHtml(str)}</code></pre>`;
   },
 });
 md.use(anchor, { permalink: false, slugify: (s: string) => encodeURIComponent(String(s).trim().toLowerCase().replace(/\s+/g, '-')) });
@@ -46,9 +110,11 @@ function extractMetaContent(html: string, patterns: string[]): string | undefine
   return undefined;
 }
 
+// h3 まで拾う。以前は h1/h2 しか拾っておらず、目次コンポーネント側にある
+// h3 用のインデント分岐が一度も使われていなかった。
 function extractHeadings(html: string): { text: string; id: string; tag: string }[] {
   const headings: { text: string; id: string; tag: string }[] = [];
-  const regex = /<(h[12])[^>]*id=["']([^"']*)["'][^>]*>(.*?)<\/\1>/gi;
+  const regex = /<(h[123])[^>]*id=["']([^"']*)["'][^>]*>(.*?)<\/\1>/gi;
   let match;
   while ((match = regex.exec(html)) !== null) {
     headings.push({ tag: match[1], id: match[2], text: stripHtml(match[3]) });
@@ -81,10 +147,12 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { blogId } = await params;
-  const blog = await getDetail(blogId);
-
-  // optionally access and extend (rather than replace) parent metadata
-  const previousImages = blog.eyecatch || [];
+  // 記事が見つからない場合はここで例外を投げず、本体側の notFound() に任せる。
+  // catch がないと、存在しないURLが404ではなく500として扱われてしまう。
+  const blog = await getDetail(blogId).catch(() => null);
+  if (!blog) {
+    return { title: '記事が見つかりません', robots: { index: false, follow: false } };
+  }
 
   // markdown->平文（Edge互換）
   const cleanBody = blog.body
@@ -244,12 +312,6 @@ export default async function StaticDetailPage({
   processedHtml = processedHtml.replace(/<table/g, '<div class="table-scroll"><table');
   processedHtml = processedHtml.replace(/<\/table>/g, '</table></div>');
 
-  // コードブロックにaria-labelを付与
-  processedHtml = processedHtml.replace(
-    /<pre><code class="language-(\w+)"/g,
-    '<pre role="region" aria-label="$1 code"><code class="language-$1"'
-  );
-
   // 記事本文内画像に lazy loading + async decoding を付与
   processedHtml = processedHtml.replace(
     /<img(?![^>]*loading=)/g,
@@ -269,33 +331,39 @@ export default async function StaticDetailPage({
     '<li class="task-list-item">$1'
   );
 
-  // リンクカード生成（正規表現ベース）
-  const linkRegex = /<a[^>]*href="(https?:\/\/[^"]*)"[^>]*>.*?<\/a>/gi;
-  const uniqueLinks: string[] = [];
-  let linkMatch;
-  while ((linkMatch = linkRegex.exec(processedHtml)) !== null) {
-    const href = linkMatch[1];
-    if (!uniqueLinks.includes(href)) uniqueLinks.push(href);
-  }
+  // リンクカード化するのは <p> 内に単独で置かれたリンクだけ。
+  // 以前は本文中のインラインリンクも含めた全リンクにOGP取得をかけており、
+  // 大半の結果を捨てたうえで TTFB とWorkersのサブリクエスト数を消費していた。
+  const CARD_LINK_RE = /<p>\s*<a[^>]*href="(https?:\/\/[^"]*)"[^>]*>[^<]*<\/a>\s*<\/p>/gi;
+  const cardLinks = Array.from(
+    new Set(Array.from(processedHtml.matchAll(CARD_LINK_RE), (m) => m[1]))
+  );
 
-  const ogpResults = await Promise.allSettled(uniqueLinks.map(href => fetchOGPData(href)));
+  const ogpResults = await Promise.allSettled(cardLinks.map((href) => fetchOGPData(href)));
   const hrefToOgpData = new Map<string, any>();
-  uniqueLinks.forEach((href, i) => {
+  cardLinks.forEach((href, i) => {
     const result = ogpResults[i];
     hrefToOgpData.set(href, result.status === 'fulfilled' ? result.value : null);
   });
 
   // <p>タグ内の単独リンクをリンクカードに置換
-  processedHtml = processedHtml.replace(
-    /<p>\s*<a[^>]*href="(https?:\/\/[^"]*)"[^>]*>[^<]*<\/a>\s*<\/p>/gi,
-    (fullMatch, href) => {
-      const meta = hrefToOgpData.get(href);
-      const title = meta?.title || new URL(href).hostname;
-      const favicon = `https://www.google.com/s2/favicons?domain=${new URL(href).hostname}&sz=128`;
-      const image = meta?.image || favicon;
-      return `<div class="link-card mt-3 mb-3"><a href="${href}" target="_blank" rel="noopener noreferrer"><div class="link-card-body"><div class="link-card-info"><div class="link-card-title">${title}</div><div class="link-card-url">${href}</div></div><img src="${image}" class="link-card-thumbnail" /></div></a></div>`;
+  processedHtml = processedHtml.replace(CARD_LINK_RE, (_fullMatch, href: string) => {
+    const meta = hrefToOgpData.get(href);
+    let hostname: string;
+    try {
+      hostname = new URL(href).hostname;
+    } catch {
+      return _fullMatch;
     }
-  );
+    // 外部サイトから取ってきた値なので必ずエスケープする
+    const title = escapeHtml(meta?.title || hostname);
+    const safeHref = escapeHtml(href);
+    const favicon = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(hostname)}&sz=128`;
+    const thumbnail = meta?.image
+      ? `<img src="${escapeHtml(meta.image)}" alt="" class="link-card-thumbnail" loading="lazy" />`
+      : '';
+    return `<div class="link-card${thumbnail ? '' : ' link-card--no-image'}"><a href="${safeHref}" target="_blank" rel="noopener noreferrer"><div class="link-card-body"><div class="link-card-info"><div class="link-card-title">${title}</div><div class="link-card-url"><img src="${favicon}" alt="" class="link-card-favicon" loading="lazy" />${escapeHtml(hostname)}</div></div>${thumbnail}</div></a></div>`;
+  });
 
   // 目次生成（正規表現ベース）
   const toc = extractHeadings(processedHtml);

@@ -1,3 +1,5 @@
+import { cache } from 'react';
+
 // Notion REST API を直接fetch（Edge Runtime互換、@notionhq/client不使用）
 const NOTION_API_BASE = 'https://api.notion.com/v1';
 const NOTION_VERSION = '2022-06-28';
@@ -60,11 +62,6 @@ const DATABASE_ID = process.env.NOTION_DATABASE_ID || '2eca0ffb73d181ffba0aecf7c
 if (!process.env.NOTION_API_KEY) {
   throw new Error('NOTION_API_KEY is required');
 }
-
-// notionFetchを使用（上で定義済み）
-
-// ビルド時のAPI呼び出し削減用キャッシュ
-let listCache: { contents: Blog[]; totalCount: number; offset: number; limit: number } | null = null;
 
 // Notionのrich_textからプレーンテキストを取得
 function richTextToPlain(richText: any[]): string {
@@ -317,13 +314,11 @@ async function pageToBlog(page: any, fetchBody: boolean = false): Promise<Blog> 
   };
 }
 
-// ブログ一覧を取得（キャッシュ付き）
-export const getList = async (queries?: { limit?: number; orders?: string }) => {
-  if (listCache) {
-    const limit = queries?.limit || 100;
-    return { ...listCache, contents: listCache.contents.slice(0, limit), limit };
-  }
-
+// ブログ一覧を取得
+// cache() で同一リクエスト内のみメモ化する。
+// 以前はモジュールスコープの変数に貯めていたが、Cloudflare Workers の isolate は
+// 複数リクエストで再利用されるため、生きている isolate では古い一覧が返り続けていた。
+export const getList = cache(async () => {
   const allPages: any[] = [];
   let cursor: string | undefined;
 
@@ -341,14 +336,12 @@ export const getList = async (queries?: { limit?: number; orders?: string }) => 
 
   const contents = await Promise.all(allPages.map((page) => pageToBlog(page, false)));
 
-  listCache = { contents, totalCount: contents.length, offset: 0, limit: contents.length };
-
-  const limit = queries?.limit || 100;
-  return { contents: contents.slice(0, limit), totalCount: contents.length, offset: 0, limit };
-};
+  return { contents, totalCount: contents.length, offset: 0, limit: contents.length };
+});
 
 // ブログの詳細を取得 (slugで検索)
-export const getDetail = async (slug: string) => {
+// generateMetadata と本体の両方から呼ばれるため、メモ化しないとNotion APIを2往復する
+export const getDetail = cache(async (slug: string) => {
   // まずSlugプロパティで検索
   const response = await notionFetch(`/databases/${DATABASE_ID}/query`, {
     method: 'POST',
@@ -366,18 +359,21 @@ export const getDetail = async (slug: string) => {
   }
 
   return pageToBlog(response.results[0], true);
-};
+});
+
+// データベースのスキーマ（タグ・カテゴリの選択肢）を取得
+// getTagList / getCategoryList / それぞれのDetail から呼ばれるので、
+// メモ化しないと1ページの描画で同じスキーマを4回取りに行くことになる
+const getDatabaseSchema = cache(async () => notionFetch(`/databases/${DATABASE_ID}`));
 
 // タグ一覧を取得
-export const getTagList = async () => {
-  // Notionのデータベーススキーマからタグオプションを取得
-  const db = await notionFetch(`/databases/${DATABASE_ID}`);
-  const tagsProperty = (db.properties as any).Tags;
-  const options = tagsProperty?.multi_select?.options || [];
+export const getTagList = cache(async () => {
+  const db = await getDatabaseSchema();
+  const options = (db.properties as any).Tags?.multi_select?.options || [];
 
   const contents: Tag[] = options.map((opt: any) => pageToTag(opt.name));
   return { contents, totalCount: contents.length, offset: 0, limit: contents.length };
-};
+});
 
 // タグの詳細を取得
 export const getTagDetail = async (tagId: string) => {
@@ -389,14 +385,13 @@ export const getTagDetail = async (tagId: string) => {
 };
 
 // カテゴリ一覧を取得
-export const getCategoryList = async () => {
-  const db = await notionFetch(`/databases/${DATABASE_ID}`);
-  const categoryProperty = (db.properties as any).Category;
-  const options = categoryProperty?.select?.options || [];
+export const getCategoryList = cache(async () => {
+  const db = await getDatabaseSchema();
+  const options = (db.properties as any).Category?.select?.options || [];
 
   const contents: Category[] = options.map((opt: any) => pageToCategory(opt.name));
   return { contents, totalCount: contents.length, offset: 0, limit: contents.length };
-};
+});
 
 // カテゴリの詳細を取得
 export const getCategoryDetail = async (categoryId: string) => {

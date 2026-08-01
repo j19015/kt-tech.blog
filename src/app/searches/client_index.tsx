@@ -109,8 +109,9 @@ export const ClientIndex = ({ contents }: BlogProps) => {
                     <div className='flex-shrink-0 relative w-24 sm:w-32 h-full rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-700'>
                       <Image
                         src={blog.eyecatch?.url || '/images/no_image_generated.png'}
-                        alt={blog.title}
+                        alt=''
                         fill
+                        sizes='(max-width: 640px) 96px, 128px'
                         className='object-cover group-hover:scale-105 transition-transform duration-300'
                       />
                       {Date.now() - new Date(blog.createdAt).getTime() < 72 * 60 * 60 * 1000 && (

@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ModeToggle } from '../ModeToggle/modeToggle';
 import { Menu, X, Home, BookOpen, User, Search, Github } from 'lucide-react';
 import { SearchModal } from '../SearchModal/SearchModal';
@@ -9,7 +9,9 @@ export const Header = () => {
   const [isOpen, setOpen] = useState<boolean>(false);
   const [selected, setSelected] = useState<string>('Home');
   const [hidden, setHidden] = useState(false);
-  const [lastY, setLastY] = useState(0);
+  // 直前のスクロール位置は state にしない。
+  // state にすると更新のたびに再レンダーが走り、下の useEffect がリスナーを張り直してしまう。
+  const lastY = useRef(0);
 
   useEffect(() => {
     if (isOpen) {
@@ -22,19 +24,22 @@ export const Header = () => {
     };
   }, [isOpen]);
 
+  // 依存配列がないと毎レンダーでリスナーを付け外しすることになる
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const y = window.scrollY;
-      if (y > 100 && y > lastY) {
-        setHidden(true);
-      } else {
-        setHidden(false);
-      }
-      setLastY(y);
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        setHidden(y > 100 && y > lastY.current);
+        lastY.current = y;
+        ticking = false;
+      });
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  });
+  }, []);
 
   const handleMenuClose = (menuName: string) => {
     setOpen(false);
