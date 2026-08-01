@@ -29,11 +29,20 @@ body {
   overflow-wrap: anywhere;
   line-break: strict;
 }
-/* スムーズスクロール */
 html {
-  scroll-behavior: smooth;
+  /* 固定ヘッダー分のオフセット。アンカーで飛んだ見出しが隠れないようにする */
   scroll-padding-top: 80px;
   overflow-x: hidden;
+}
+/* scroll-behavior を html に置くと全てのスクロールに効く。
+   App Router のページ遷移時のスクロール先頭移動や、戻るときの位置復元まで
+   アニメーションしてしまい、「ページが変わった後にゆっくり上へ動く」状態だった。
+   目次とトップへ戻るボタンは JS 側で明示的に smooth を指定しているので、
+   ここでは素のアンカーリンクだけを対象にする。 */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(:target) {
+    scroll-behavior: smooth;
+  }
 }
 /* 印刷用スタイル */
 /* 印刷用スタイル。

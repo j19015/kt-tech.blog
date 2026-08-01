@@ -6,6 +6,7 @@ import Index from '@/components/Index/Index';
 import HeroSection from '@/components/HeroSection/HeroSection';
 import { ArrowRight, FolderOpen } from 'lucide-react';
 import { isPublic } from '@/lib/blog';
+import { isRecentlyUpdated } from '@/lib/articleStatus';
 
 const siteUrl = process.env.SITE_URL || 'https://kt-tech.blog';
 const description = '実践的な技術記事とエンジニアリングの知見を発信。React, Next.js, TypeScript, Cloudflare, AIなどのモダン技術を中心に。';
@@ -53,13 +54,12 @@ export default async function StaticPage() {
   const latestBlogs = allBlogs.slice(0, 9);
   const categories = categoryData.contents.filter(c => c.name !== 'PF');
 
-  // 最近更新された記事（公開後24h以上経過 & 更新日が公開日と異なる）
+  // 最近更新された記事。一覧カードの「更新」バッジと同じ判定を使う。
+  // 以前はここだけ期間の上限が無く、1年前に更新した記事がずっと居座り、
+  // しかもカード側には（7日を過ぎているので）更新バッジが出ない、という
+  // 矛盾した見え方になっていた。
   const recentlyUpdated = allBlogs
-    .filter(b => {
-      const created = new Date(b.createdAt).getTime();
-      const updated = new Date(b.updatedAt).getTime();
-      return updated - created > 24 * 60 * 60 * 1000;
-    })
+    .filter((b) => isRecentlyUpdated(b))
     .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
     .slice(0, 3);
 

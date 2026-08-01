@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { List, X } from 'lucide-react';
+import { tocDepth } from '@/lib/toc';
 
 interface TocItem {
   id: string;
@@ -32,7 +33,7 @@ export const FloatingTocButton = ({ toc }: { toc: TocItem[] }) => {
             <h3 className='text-sm font-bold text-slate-900 dark:text-slate-100 mb-3'>目次</h3>
             <ul className='space-y-2'>
               {toc.map((item) => (
-                <li key={item.id} className={item.tag === 'h2' ? 'ml-2' : item.tag === 'h3' ? 'ml-5' : ''}>
+                <li key={item.id} className={['', 'ml-3', 'ml-6'][tocDepth(item.tag)]}>
                   <a
                     href={`#${item.id}`}
                     onClick={() => setIsOpen(false)}

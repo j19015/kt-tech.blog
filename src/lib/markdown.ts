@@ -7,6 +7,7 @@
  */
 import MarkdownIt from 'markdown-it';
 import anchor from 'markdown-it-anchor';
+import footnote from 'markdown-it-footnote';
 import { stripEmoji } from './emoji';
 
 import hljs from 'highlight.js/lib/core';
@@ -288,6 +289,10 @@ export function headingSlug(text: string): string {
     .replace(/\s+/g, '-');
 }
 
+// 脚注。「※ ただし Node 20 未満では〜」のような補足を本文の流れから
+// 外に出せるようにする。これまでは括弧書きで挟むか callout を使うしかなく、
+// callout だと「注意喚起」と「余談」が見分けられなかった。
+md.use(footnote);
 md.use(anchor, {
   slugify: headingSlug,
   // 見出しの右側に本物のリンクを置く。

@@ -21,11 +21,11 @@ function extractMetaContent(html: string, patterns: string[]): string | undefine
   return undefined;
 }
 
-// h3 まで拾う。以前は h1/h2 しか拾っておらず、目次コンポーネント側にある
-// h3 用のインデント分岐が一度も使われていなかった。
+// 本文の見出しは h2 から始まる（h1 は記事タイトル）ので h2〜h4 を拾う。
+// Notion の heading_1/2/3 がそれぞれ h2/h3/h4 になる。
 function extractHeadings(html: string): { text: string; id: string; tag: string }[] {
   const headings: { text: string; id: string; tag: string }[] = [];
-  const regex = /<(h[123])[^>]*id=["']([^"']*)["'][^>]*>(.*?)<\/\1>/gi;
+  const regex = /<(h[234])[^>]*id=["']([^"']*)["'][^>]*>(.*?)<\/\1>/gi;
   let match;
   while ((match = regex.exec(html)) !== null) {
     // 見出し内のパーマリンク（<a class="heading-anchor">#</a>）を落としてから
@@ -44,6 +44,7 @@ import { ShareButtons } from '@/components/ShareButtons/ShareButtons';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 import { CodeBlockEnhancer } from '@/components/CodeBlock/CodeBlockEnhancer';
 import { MermaidLoader } from '@/components/Mermaid/MermaidLoader';
+import { EmbedPlayer } from '@/components/Embed/EmbedPlayer';
 import { ReadingTracker } from '@/components/ReadingStats/ReadingTracker';
 import { FloatingShareButton } from '@/components/ShareButtons/FloatingShareButton';
 import { PostNavigation } from '@/components/PostNavigation/PostNavigation';
@@ -55,6 +56,8 @@ import { SeriesNav } from '@/components/Series/SeriesNav';
 import { findSeriesOf } from '@/lib/series';
 import { isPublic } from '@/lib/blog';
 import { calloutKindFromColor, CALLOUT_META } from '@/lib/callout';
+import { isStale } from '@/lib/articleStatus';
+import { relatedPosts, navigationScope } from '@/lib/related';
 import { CategoryChip, TagChip } from '@/components/Chip/Chip';
 // カレンダー・フォルダの3アイコンのために FontAwesome 一式を読み込んでいたので lucide に統一
 import { Calendar, Pencil, MessageCircle } from 'lucide-react';
@@ -167,21 +170,12 @@ export default async function StaticDetailPage({
     ? seriesContext.series.posts[seriesContext.index + 1] ?? null
     : null;
 
-  // 関連記事をスコアリングで取得（タグ重複数 + カテゴリ一致で重み付け）
-  const blogTagIds = blog.tags?.map(t => t.id) || [];
-  const relatedPosts = navPosts
-    .filter(post => post.id !== blogId)
-    .map(post => {
-      let score = 0;
-      if (blog.category && post.category?.id === blog.category.id) score += 3;
-      if (post.tags) {
-        score += post.tags.filter(t => blogTagIds.includes(t.id)).length;
-      }
-      return { post, score };
-    })
-    .filter(({ score }) => score > 0)
-    .sort((a, b) => b.score - a.score)
-    .map(({ post }) => post);
+  // 関連記事。タグの希少性で重み付けし、同じ連載を最優先する。
+  const related = relatedPosts(navPosts, blog);
+
+  // 前後記事は連載内 → 同カテゴリ内 → 全体、の順で範囲を決める。
+  // 全記事の公開日順だと React の記事の「次」が無関係なインフラ記事になる。
+  const navScope = navigationScope(navPosts, blog);
   
   // calloutマーカーをプレースホルダーに変換（markdownToHtmlに通す前）
   // 前後を %% で囲うのは、CALLOUT1 が CALLOUT10 の先頭にマッチして
@@ -454,9 +448,23 @@ export default async function StaticDetailPage({
             )}
             <TableOfContents toc={toc} />
             <div className='p-4 znc text-foreground'>
+              {/* 技術記事は古くなるのが早い。本文に入る直前で知らせる。
+                  日付はタイトルの上にあるが、読み始めると画面外に出てしまう。 */}
+              {isStale(blog) && (
+                <div className='callout callout--warning'>
+                  <div className='callout__label'>
+                    <span className='callout__icon' aria-hidden='true'>⚠️</span>
+                    情報の鮮度について
+                  </div>
+                  <div className='callout__body'>
+                    この記事は最終更新から1年以上経過しています。内容が古くなっている可能性があります。
+                  </div>
+                </div>
+              )}
               <div dangerouslySetInnerHTML={{ __html: processedHtml }}></div>
               <CodeBlockEnhancer />
               <MermaidLoader />
+              <EmbedPlayer />
               <ImageLightbox />
               <ReadingTracker articleId={blogId} />
             </div>
@@ -543,14 +551,16 @@ export default async function StaticDetailPage({
                 </Link>
               </div>
             )}
-            <PostNavigation currentId={blogId} allPosts={navPosts} />
+            <PostNavigation currentId={blogId} allPosts={navScope.posts} scopeLabel={navScope.label} />
             {(() => {
-              const idx = navPosts.findIndex(p => p.id === blogId);
-              const prevPost = idx >= 0 && idx < navPosts.length - 1 ? navPosts[idx + 1] : null;
-              const nextPost = idx > 0 ? navPosts[idx - 1] : null;
+              // j/k のショートカットも前後記事ナビと同じ範囲を辿らせる。
+              // 別々に index を計算していたため、表示と挙動がずれていた。
+              const idx = navScope.posts.findIndex((p) => p.id === blogId);
+              const prevPost = idx >= 0 && idx < navScope.posts.length - 1 ? navScope.posts[idx + 1] : null;
+              const nextPost = idx > 0 ? navScope.posts[idx - 1] : null;
               return <KeyboardNav prevUrl={prevPost ? `/blogs/${prevPost.id}` : undefined} nextUrl={nextPost ? `/blogs/${nextPost.id}` : undefined} />;
             })()}
-            <RelatedPosts posts={relatedPosts} currentPostId={blogId} />
+            <RelatedPosts posts={related} currentPostId={blogId} />
           <FloatingTocButton toc={toc} />
           <FloatingShareButton title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
           </article>
