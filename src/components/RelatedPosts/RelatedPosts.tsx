@@ -37,8 +37,9 @@ export const RelatedPosts = ({ posts, currentPostId }: RelatedPostsProps) => {
               <div className='relative aspect-[16/9] mb-3 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800'>
                 <Image
                   src={post.eyecatch?.url || '/images/no_image_generated.png'}
-                  alt={post.title}
+                  alt=''
                   fill
+                  sizes='(max-width: 640px) 100vw, 250px'
                   className='object-cover group-hover:scale-105 transition-transform duration-300'
                 />
                 {post.category && (

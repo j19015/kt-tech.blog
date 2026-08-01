@@ -131,6 +131,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel='preconnect' href='https://pub-9d03846db4364486bb0806774184931a.r2.dev' crossOrigin='anonymous' />
         <link rel='dns-prefetch' href='https://www.googletagmanager.com' />
         <link rel='dns-prefetch' href='https://www.google.com' />
+        {/* JS無効時、スクロール連動で表示する要素が非表示のままにならないようにする */}
+        <noscript>
+          <style>{'.fade-in-pending{opacity:1!important;transform:none!important}'}</style>
+        </noscript>
       </head>
       <body>
         <ThemeProvider

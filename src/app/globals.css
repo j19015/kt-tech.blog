@@ -305,26 +305,44 @@ body {
   right: 0;
 }
 
+/* 0.3px はサブピクセルで端末により消える/濃く出るうえ、
+   枠色に本文色をそのまま使っていたため記事の中で必要以上に主張していた。 */
 .link-card {
   -webkit-box-align: center;
-  border: 0.3px solid rgb(var(--foreground-rgb)) !important;
+  border: 1px solid rgb(226 232 240);
   border-radius: 8px;
   display: flex;
-  -webkit-box-pack: justify;
   justify-content: space-between;
   overflow: hidden;
   text-decoration: none;
   overflow-wrap: anywhere;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  margin: 1.5rem 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+}
+.dark .link-card {
+  border-color: rgb(51 65 85);
 }
 
 .link-card > a {
   color: rgb(var(--foreground-rgb)) !important;
   width: 100%;
+  text-decoration: none !important;
 }
 
 .link-card:hover {
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-color: rgb(148 163 184);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.link-card-favicon {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: -2px;
+  margin-right: 0.4em;
+  border-radius: 2px;
 }
 
 .link-card-body {
