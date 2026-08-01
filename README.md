@@ -76,4 +76,4 @@ public/           # 静的ファイル, manifest.json, llms.txt
 
 ## Author
 
-**Koki** - [@meow_koki](https://x.com/meow_koki) - [GitHub](https://github.com/j19015)
+**Koki** - [@tech_koki](https://x.com/tech_koki) - [GitHub](https://github.com/j19015)

@@ -40,7 +40,7 @@ export const Footer = () => {
                 <Github className='w-5 h-5' />
               </Link>
               <Link
-                href='https://x.com/meow_koki'
+                href='https://x.com/tech_koki'
                 target='_blank'
                 rel='noopener noreferrer'
                 className='text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:scale-110 transition-all duration-200'

@@ -177,8 +177,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: 'summary_large_image' as const,
       title: blog.title,
       description,
-      site: '@meow_koki',
-      creator: '@meow_koki',
+      site: '@tech_koki',
+      creator: '@tech_koki',
       ...(ogImage ? { images: [ogImage] } : {}),
     },
     openGraph: {
@@ -388,7 +388,7 @@ export default async function StaticDetailPage({
       url: 'https://kt-tech.blog/about',
       sameAs: [
         'https://github.com/j19015',
-        'https://x.com/meow_koki',
+        'https://x.com/tech_koki',
       ],
     },
     publisher: {
