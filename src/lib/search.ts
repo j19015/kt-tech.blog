@@ -1,7 +1,7 @@
 import type { Blog } from '../../libs/notion';
 
 /** 記事のどこがキーワードに一致したか */
-export type MatchField = 'title' | 'description' | 'tag' | 'category';
+export type MatchField = 'title' | 'description' | 'tag' | 'category' | 'series';
 
 export type SearchHit = {
   blog: Blog;
@@ -32,12 +32,21 @@ export function parseQuery(raw: string): string[] {
  * 注意: 本文は対象外。`getList()` は本文を取得しない（`pageToBlog(page, false)`）ので、
  * `blog.body` は常に空文字列になる。以前は body も条件に入っていたが、
  * 常に false になるだけの分岐だった。
+ * 代わりに、書き手が明示した要約（Summary）を概要に含めている。
+ * 本文そのものより短いが、記事の要点は拾える。
  */
 export function matchBlog(blog: Blog, terms: string[]): MatchField[] | null {
   if (terms.length === 0) return null;
 
   const title = blog.title.toLowerCase();
-  const description = (blog.ogpDescription || '').toLowerCase();
+  // 概要には OGP Description と要約の両方を含める。
+  // 要約は書き手が「この記事でわかること」として書いた文なので、
+  // 本文が引けない以上、いちばん情報量の多い手がかりになる。
+  const description = [blog.ogpDescription, ...(blog.summary ?? [])]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+  const series = (blog.series?.name || '').toLowerCase();
   const tags = (blog.tags || []).map((t) => t.name.toLowerCase());
   const category = (blog.category?.name || '').toLowerCase();
 
@@ -48,6 +57,7 @@ export function matchBlog(blog: Blog, terms: string[]): MatchField[] | null {
     if (description.includes(term)) { matched.add('description'); hit = true; }
     if (tags.some((t) => t.includes(term))) { matched.add('tag'); hit = true; }
     if (category.includes(term)) { matched.add('category'); hit = true; }
+    if (series.includes(term)) { matched.add('series'); hit = true; }
     // 1語でもどこにも無ければ AND 条件を満たさない
     if (!hit) return null;
   }
@@ -62,6 +72,8 @@ export function matchBlog(blog: Blog, terms: string[]): MatchField[] | null {
  */
 const FIELD_WEIGHT: Record<MatchField, number> = {
   title: 4,
+  // 連載名での一致は「その連載を探している」意図が強い
+  series: 3,
   tag: 2,
   category: 2,
   description: 1,
@@ -88,4 +100,5 @@ export const MATCH_LABELS: Record<MatchField, string> = {
   description: '概要',
   tag: 'タグ',
   category: 'カテゴリ',
+  series: '連載名',
 };

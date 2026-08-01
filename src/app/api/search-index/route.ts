@@ -18,7 +18,8 @@ export async function GET() {
     const index = contents.filter(isPublic).map((blog) => ({
       id: blog.id,
       title: blog.title,
-      description: blog.ogpDescription ?? '',
+      // 「この記事でわかること」も候補の絞り込みに使う
+      description: [blog.ogpDescription, ...(blog.summary ?? [])].filter(Boolean).join(' '),
       tags: blog.tags?.map((t) => t.name) ?? [],
       category: blog.category?.name ?? '',
       series: blog.series?.name ?? '',
