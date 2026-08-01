@@ -1,12 +1,13 @@
 import { WithSidebar } from '@/components/WithSidebar/WithSidebar';
 import { notFound } from 'next/navigation';
-import { getList, getCategoryList, getCategoryDetail } from '../../../../../../libs/notion';
+import { getList, getCategoryDetail, Blog } from '../../../../../../libs/notion';
 import Paginate from '@/components/Pagination/Paginate';
 import Index from '@/components/Index/Index';
 import Title from '@/components/Title/Title';
+import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
+import { ITEMS_PER_PAGE, isPublic } from '@/lib/blog';
 import { Metadata } from 'next';
 
-const ITEMS_PER_PAGE = 6;
 const siteUrl = process.env.SITE_URL || 'https://kt-tech.blog';
 
 export async function generateMetadata({
@@ -46,47 +47,44 @@ export default async function StaticPaginationPage({
   params: Promise<{ categoryId: string; pageId: string }>;
 }) {
   const { categoryId, pageId } = await params;
-  if (!pageId) {
+  const currentPage = parseInt(pageId, 10);
+  if (!Number.isInteger(currentPage) || currentPage < 1) {
     notFound();
   }
 
-  // ページ番号からコンテンツの範囲を計算
-  const currentPage = parseInt(pageId, 10);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const [{ contents }, category] = await Promise.all([
+    getList().catch(() => ({ contents: [] as Blog[], totalCount: 0, offset: 0, limit: 0 })),
+    getCategoryDetail(categoryId).catch(() => null),
+  ]);
+  if (!category) notFound();
 
-  // コンテンツを取得
-  try {
-    //リスト一覧とカテゴリ詳細を並列取得
-    const [{ contents }, category] = await Promise.all([
-      getList(),
-      getCategoryDetail(categoryId),
-    ]);
+  const filteredContents = contents
+    .filter(isPublic)
+    .filter((blog) => blog.category?.id === decodeURIComponent(categoryId));
 
-    const filteredContents = contents.filter((blog) => blog.category?.id === decodeURIComponent(categoryId));
-    const contentSlice = filteredContents.slice(startIndex, endIndex);
-
-    // コンテンツを表示するロジックをここに追加
-
-    return (
-      <WithSidebar>
-        <div className='text-center mt-1 w-full'>
-          <Title title={category.name} />
-        </div>
-        <Index contents={contentSlice} />
-        <Paginate
-          currentPage={Number(pageId)}
-          totalPage={Math.ceil(filteredContents.length / 6)}
-          kind={`/categories/${categoryId}`}
-        ></Paginate>
-      </WithSidebar>
-    );
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return (
-      <>
-        <p>Error fetching data.</p>
-      </>
-    );
+  const totalPage = Math.max(1, Math.ceil(filteredContents.length / ITEMS_PER_PAGE));
+  if (filteredContents.length === 0 || currentPage > totalPage) {
+    notFound();
   }
+
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const contentSlice = filteredContents.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  return (
+    <WithSidebar>
+      <BreadcrumbNav
+        items={[
+          { label: 'Category', href: '/categories' },
+          { label: category.name, current: true },
+        ]}
+      />
+      <Title title={category.name} type='category' count={filteredContents.length} />
+      <Index contents={contentSlice} />
+      <Paginate
+        currentPage={currentPage}
+        totalPage={totalPage}
+        kind={`/categories/${categoryId}`}
+      />
+    </WithSidebar>
+  );
 }

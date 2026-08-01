@@ -1,10 +1,10 @@
 import { WithSidebar } from '@/components/WithSidebar/WithSidebar';
 import { notFound } from 'next/navigation';
-import { getList, getTagList, getTagDetail } from '../../../../libs/notion';
-import Sidebar from '@/components/SIdebar/Sidebar';
+import { getList, getTagDetail } from '../../../../libs/notion';
 import Index from '@/components/Index/Index';
 import Title from '@/components/Title/Title';
-import Link from 'next/link';
+import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
+import { isPublic } from '@/lib/blog';
 import { Metadata } from 'next';
 
 const siteUrl = process.env.SITE_URL || 'https://kt-tech.blog';
@@ -53,17 +53,23 @@ export default async function StaticDetailPage({
   ]);
   if (!tag_show) notFound();
 
-  const filteredContents = contents.filter((blog) => blog.tags?.some((tag) => tag.id === decodeURIComponent(tagId)));
+  const filteredContents = contents
+    .filter(isPublic)
+    .filter((blog) => blog.tags?.some((tag) => tag.id === decodeURIComponent(tagId)));
 
-  if (!filteredContents || filteredContents.length === 0) {
+  if (filteredContents.length === 0) {
     notFound();
   }
 
   return (
     <WithSidebar>
-      <div className='text-center mt-1 w-full'>
-        <Title title={tag_show.name} />
-      </div>
+      <BreadcrumbNav
+        items={[
+          { label: 'Tag', href: '/tags' },
+          { label: tag_show.name, current: true },
+        ]}
+      />
+      <Title title={tag_show.name} type='tag' count={filteredContents.length} />
       <Index contents={filteredContents} />
     </WithSidebar>
   );

@@ -1,34 +1,37 @@
 import { getList, getTagList, getCategoryList } from '../../../libs/notion';
+import { isPublic } from '@/lib/blog';
 import SidebarClient from './Sidebar';
 
 const Sidebar = async () => {
   // データを並列で取得
   const [blogData, tagData, categoryData] = await Promise.all([
-    getList({ limit: 10, orders: '-createdAt' }),
+    getList(),
     getTagList(),
     getCategoryList()
   ]);
 
-  const latestArticles = blogData.contents;
+  const posts = blogData.contents.filter(isPublic);
   const tagList = tagData.contents;
-  const categoryList = categoryData.contents;
+  const categoryList = categoryData.contents.filter((c) => c.name !== 'PF');
 
-  // アーカイブの生成
+  // アーカイブは全記事から集計する。
+  // 以前は直近10件だけを見ていたため、過去の月がアーカイブに出てこなかった。
   const uniqueArchives = new Set<string>();
-  blogData.contents.forEach((blog) => {
+  posts.forEach((blog) => {
     const date = new Date(blog.createdAt);
-    const yearMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-    uniqueArchives.add(yearMonth);
+    uniqueArchives.add(`${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`);
   });
   const archives = Array.from(uniqueArchives).sort().reverse();
 
   return (
     <SidebarClient
-      latestArticles={latestArticles}
+      latestArticles={posts.slice(0, 5)}
+      // 「ランダム」は全記事から選びたいので、ID とタイトルだけ別途渡す
+      randomPool={posts.map((p) => p.id)}
       tagList={tagList}
       categoryList={categoryList}
       archives={archives}
-      totalCount={blogData.totalCount}
+      totalCount={posts.length}
     />
   );
 };

@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { getList, getCategoryList, getTagList } from '../../libs/notion';
+import { ITEMS_PER_PAGE, isPublic } from '@/lib/blog';
 
 export const runtime = 'edge';
 
@@ -11,7 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getTagList(),
   ]);
 
-  const allBlogs = contents.filter((a) => a.category?.name !== 'PF');
+  const allBlogs = contents.filter(isPublic);
   const latestUpdated = allBlogs.length > 0
     ? new Date(Math.max(...allBlogs.map((b) => new Date(b.updatedAt).getTime())))
     : new Date();
@@ -24,9 +25,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // Pagination pages
-  const ITEMS_PER_PAGE = 6;
-  const totalPages = Math.ceil(allBlogs.length / ITEMS_PER_PAGE);
+  // Pagination pages（件数は一覧ページと同じ定数を使う）
+  const totalPages = Math.max(1, Math.ceil(allBlogs.length / ITEMS_PER_PAGE));
   const paginationEntries: MetadataRoute.Sitemap = Array.from({ length: totalPages }, (_, i) => ({
     url: `${siteUrl}/blogs/page/${i + 1}`,
     lastModified: latestUpdated,
@@ -77,6 +77,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.5,
+    },
+    {
+      url: `${siteUrl}/categories`,
+      lastModified: latestUpdated,
+      changeFrequency: 'weekly',
+      priority: 0.6,
+    },
+    {
+      url: `${siteUrl}/tags`,
+      lastModified: latestUpdated,
+      changeFrequency: 'weekly',
+      priority: 0.6,
     },
   ];
 

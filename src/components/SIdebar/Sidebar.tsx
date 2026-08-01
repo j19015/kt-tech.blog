@@ -5,23 +5,28 @@ import Form from '../Form/Form';
 import { Clock, FolderOpen, Tag, Calendar, ChevronDown, Shuffle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { ReadingStats } from '../ReadingStats/ReadingStats';
+import { formatArchive } from '@/lib/blog';
 
 interface SidebarProps {
   latestArticles: any[];
+  /** ランダム遷移の候補となる全記事のID */
+  randomPool: string[];
   tagList: any[];
   categoryList: any[];
   archives: string[];
   totalCount?: number;
 }
 
-const SidebarClient = ({ latestArticles, tagList, categoryList, archives, totalCount }: SidebarProps) => {
+const SidebarClient = ({ latestArticles, randomPool, tagList, categoryList, archives, totalCount }: SidebarProps) => {
   const [showAllTags, setShowAllTags] = useState(false);
   const visibleTags = showAllTags ? tagList : tagList.slice(0, 15);
   const router = useRouter();
 
+  // 以前は直近10件からしか選んでおらず「ランダム」の名に反していた
   const handleRandomArticle = () => {
-    const randomIndex = Math.floor(Math.random() * latestArticles.length);
-    router.push(`/blogs/${latestArticles[randomIndex].id}`);
+    if (randomPool.length === 0) return;
+    const id = randomPool[Math.floor(Math.random() * randomPool.length)];
+    router.push(`/blogs/${id}`);
   };
 
   return (
@@ -109,7 +114,7 @@ const SidebarClient = ({ latestArticles, tagList, categoryList, archives, totalC
                 href={`/archives/${archive}`}
                 className='text-xs px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors'
               >
-                {archive.replace('-', '年')}月
+                {formatArchive(archive)}
               </Link>
             ))}
           </div>

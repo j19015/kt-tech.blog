@@ -51,8 +51,13 @@ export const Index = ({ contents }: BlogProps) => {
 
                   <div className='space-y-1.5'>
                     <div className='flex items-center gap-1.5 text-[11px] text-slate-400 dark:text-slate-400'>
-                      <time className='whitespace-nowrap' title={new Date(blog.createdAt).toLocaleDateString('ja-JP')}>
-                        {new Date(blog.createdAt).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' })}
+                      {/* 相対表記だと「いつの記事か」が直感的に分かる。技術記事は鮮度が重要 */}
+                      <time
+                        className='whitespace-nowrap'
+                        dateTime={blog.createdAt}
+                        title={new Date(blog.createdAt).toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}
+                      >
+                        {timeAgo(blog.createdAt)}
                       </time>
                       {blog.body && blog.body.length > 0 && (
                         <>

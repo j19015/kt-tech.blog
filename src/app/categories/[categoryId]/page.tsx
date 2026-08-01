@@ -1,53 +1,15 @@
-import { WithSidebar } from '@/components/WithSidebar/WithSidebar';
-import { notFound } from 'next/navigation';
-import { getList, getCategoryList, getCategoryDetail } from '../../../../libs/notion';
-import Index from '@/components/Index/Index';
-import Title from '@/components/Title/Title';
-import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
-
+import { redirect } from 'next/navigation';
 
 export const runtime = 'edge';
-export default async function StaticDetailPage({
+
+// /categories/{id} と /categories/{id}/page/1 は同じ内容なので1本化する。
+// 以前は前者だけページネーションがなく全件表示で、遷移元によってどちらに飛ぶかも
+// バラバラだった（重複コンテンツ）。
+export default async function CategoryIndexPage({
   params,
 }: {
   params: Promise<{ categoryId: string }>;
 }) {
   const { categoryId } = await params;
-
-  const [{ contents }, category_show] = await Promise.all([
-    getList().catch(() => ({ contents: [], totalCount: 0, offset: 0, limit: 0 })),
-    getCategoryDetail(categoryId).catch(() => null),
-  ]);
-  if (!category_show) notFound();
-
-  const filteredContents = contents.filter((blog) => blog.category?.id === decodeURIComponent(categoryId));
-
-  if (filteredContents.length === 0) {
-    notFound();
-  }
-
-  const breadcrumbJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: process.env.SITE_URL },
-      { '@type': 'ListItem', position: 2, name: category_show.name },
-    ],
-  };
-
-  return (
-    <WithSidebar>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-      <BreadcrumbNav
-        items={[
-          { label: 'Category', href: '/categories' },
-          { label: category_show.name, current: true }
-        ]}
-      />
-      <div className='text-center mt-1 w-full col-span-2'>
-        <Title title={category_show.name} />
-      </div>
-      <Index contents={filteredContents} />
-    </WithSidebar>
-  );
+  redirect(`/categories/${categoryId}/page/1`);
 }
