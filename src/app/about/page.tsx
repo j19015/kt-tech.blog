@@ -181,7 +181,7 @@ export default function About() {
               <Github className='w-5 h-5' />
             </Link>
             <Link
-              href='https://x.com/meow_koki'
+              href='https://x.com/tech_koki'
               target='_blank'
               rel='noopener noreferrer'
               className='text-slate-500 dark:text-slate-400'
@@ -360,7 +360,7 @@ export default function About() {
           <p className='text-sm text-slate-600 dark:text-slate-300'>
             ご興味を持っていただけた方は、
             <Link
-              href='https://x.com/meow_koki'
+              href='https://x.com/tech_koki'
               target='_blank'
               rel='noopener noreferrer'
               className='text-slate-700 dark:text-slate-300 underline mx-1'

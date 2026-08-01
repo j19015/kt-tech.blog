@@ -28,8 +28,8 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'kt-tech.blog - 技術と創造性が交わる場所',
     description,
-    site: '@meow_koki',
-    creator: '@meow_koki',
+    site: '@tech_koki',
+    creator: '@tech_koki',
   },
 };
 
