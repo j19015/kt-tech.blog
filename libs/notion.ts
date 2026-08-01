@@ -93,8 +93,8 @@ function pageToCategory(name: string): Category {
   return { id, name, createdAt: now, updatedAt: now, publishedAt: now, revisedAt: now };
 }
 
-// Notionのブロックをマークダウンに変換
-async function blocksToMarkdown(blockId: string): Promise<string> {
+// 子ブロックを全件取得する（Notion APIは1回あたり最大100件しか返さない）
+async function fetchAllChildren(blockId: string): Promise<any[]> {
   const blocks: any[] = [];
   let cursor: string | undefined;
 
@@ -106,123 +106,158 @@ async function blocksToMarkdown(blockId: string): Promise<string> {
     cursor = response.has_more ? response.next_cursor : undefined;
   } while (cursor);
 
-  const lines: string[] = [];
+  return blocks;
+}
+
+// リスト系ブロックが連続する場合は空行を挟まない。
+// 空行を挟むとmarkdown-itがloose list扱いにして各項目を<p>で包むため、行間が崩れる。
+const LIST_BLOCK_TYPES = new Set(['bulleted_list_item', 'numbered_list_item', 'to_do']);
+
+// Markdownのテーブルは | をセル区切りとして解釈するため、セル内の | はエスケープする。
+// 改行もテーブルを壊すので <br> に置き換える。
+function escapeTableCell(text: string): string {
+  return text.replace(/\|/g, '\\|').replace(/\r?\n/g, '<br>');
+}
+
+// リスト項目と、その子ブロックを字下げして返す。
+// CommonMarkでは子リストを親マーカーの文字数ぶん字下げする必要がある（"- "なら2、"1. "なら3）。
+async function listItemToMarkdown(
+  block: any,
+  indent: string,
+  marker: string,
+  body: string
+): Promise<string> {
+  const line = `${indent}${marker}${body}`;
+  if (!block.has_children) return line;
+  const children = await blocksToMarkdown(block.id, indent + ' '.repeat(marker.length));
+  return children ? `${line}\n${children}` : line;
+}
+
+// 1ブロックをMarkdownに変換する。出力する必要のないブロックは null を返す。
+async function blockToMarkdown(block: any, indent: string): Promise<string | null> {
+  switch (block.type) {
+    case 'heading_1':
+      return `${indent}# ${stripEmoji(richTextToPlain(block.heading_1.rich_text))}`;
+    case 'heading_2': {
+      const h2Text = stripEmoji(richTextToPlain(block.heading_2.rich_text));
+      // 「目次」見出しはスキップ（ブログ側で自動生成するため）
+      if (h2Text === '目次') return null;
+      return `${indent}## ${h2Text}`;
+    }
+    case 'heading_3':
+      return `${indent}### ${stripEmoji(richTextToPlain(block.heading_3.rich_text))}`;
+    case 'paragraph':
+      return `${indent}${richTextToMarkdown(block.paragraph.rich_text)}`;
+    case 'bulleted_list_item':
+      return listItemToMarkdown(block, indent, '- ', richTextToMarkdown(block.bulleted_list_item.rich_text));
+    case 'numbered_list_item':
+      return listItemToMarkdown(block, indent, '1. ', richTextToMarkdown(block.numbered_list_item.rich_text));
+    case 'to_do': {
+      // チェックボックスは表示専用。<li>のクラス付けはレンダリング側で行う。
+      const checked = block.to_do.checked ? ' checked' : '';
+      const body = `<input type="checkbox" disabled${checked}> ${richTextToMarkdown(block.to_do.rich_text)}`;
+      return listItemToMarkdown(block, indent, '- ', body);
+    }
+    case 'code': {
+      const code = richTextToPlain(block.code.rich_text)
+        .split('\n')
+        .map((line: string) => `${indent}${line}`)
+        .join('\n');
+      return `${indent}\`\`\`${block.code.language || ''}\n${code}\n${indent}\`\`\``;
+    }
+    case 'image': {
+      const url = block.image.type === 'external'
+        ? block.image.external.url
+        : block.image.file.url;
+      const caption = block.image.caption ? richTextToPlain(block.image.caption) : '';
+      return `${indent}![${caption}](${url})`;
+    }
+    case 'bookmark':
+      return block.bookmark.url ? `${indent}${block.bookmark.url}` : null;
+    case 'divider':
+      return `${indent}---`;
+    case 'quote': {
+      // 引用は blockquote として出力する。calloutに変換すると補足Tipsと見分けがつかなくなる。
+      const text = richTextToMarkdown(block.quote.rich_text);
+      const children = block.has_children ? await blocksToMarkdown(block.id) : '';
+      const body = children ? `${text}\n\n${children}` : text;
+      return body
+        .split('\n')
+        .map((line) => `${indent}>${line ? ` ${line}` : ''}`)
+        .join('\n');
+    }
+    case 'callout': {
+      const icon = block.callout.icon?.emoji || 'ℹ️';
+      const color = block.callout.color || 'default';
+      const text = richTextToMarkdown(block.callout.rich_text);
+      const children = block.has_children ? await blocksToMarkdown(block.id) : '';
+      const body = children ? `${text}\n\n${children}` : text;
+      // ::: マーカーはレンダリング側が行頭のものだけを拾うため、字下げしない。
+      // リスト内のcalloutはリストから抜けた見た目になるが、マーカーが壊れるよりは良い。
+      return `:::callout{icon="${icon}" color="${color}"}\n${body}\n:::`;
+    }
+    case 'toggle': {
+      // 折りたたみは <details> にする。子ブロックを取らないと中身が丸ごと消えてしまう。
+      const summary = richTextToMarkdown(block.toggle.rich_text);
+      const children = block.has_children ? await blocksToMarkdown(block.id, indent) : '';
+      if (!children) return `${indent}${summary}`;
+      // 前後に空行を挟むことで、<details>内のMarkdownがそのまま解釈される
+      return `${indent}<details>\n${indent}<summary>${summary}</summary>\n\n${children}\n\n${indent}</details>`;
+    }
+    case 'table_of_contents':
+      // 目次は自動生成するのでスキップ
+      return null;
+    case 'table': {
+      const rows = (await fetchAllChildren(block.id)).filter((row: any) => row.type === 'table_row');
+      if (rows.length === 0) return null;
+
+      const width: number = block.table?.table_width ?? rows[0].table_row.cells.length;
+      const hasHeader: boolean = block.table?.has_column_header ?? true;
+      const toRow = (cells: any[]) =>
+        `${indent}| ${Array.from({ length: width }, (_, i) =>
+          escapeTableCell(richTextToMarkdown(cells[i] ?? []))
+        ).join(' | ')} |`;
+      const separator = `${indent}| ${Array.from({ length: width }, () => '---').join(' | ')} |`;
+
+      const lines: string[] = [];
+      if (hasHeader) {
+        lines.push(toRow(rows[0].table_row.cells), separator);
+        rows.slice(1).forEach((row: any) => lines.push(toRow(row.table_row.cells)));
+      } else {
+        // Markdownのテーブルはヘッダー行が必須なので、空のヘッダーを置いて全行をデータとして扱う
+        lines.push(`${indent}|${' |'.repeat(width)}`, separator);
+        rows.forEach((row: any) => lines.push(toRow(row.table_row.cells)));
+      }
+      return lines.join('\n');
+    }
+    default:
+      // 未対応ブロックは出力できないため、開発時に気づけるよう警告する
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn(`[notion] 未対応のブロックをスキップしました: type=${block.type} id=${block.id}`);
+      }
+      return null;
+  }
+}
+
+// Notionのブロックをマークダウンに変換
+// indent はリストのネスト表現に使う
+async function blocksToMarkdown(blockId: string, indent = ''): Promise<string> {
+  const blocks = await fetchAllChildren(blockId);
+  const parts: { type: string; text: string }[] = [];
 
   for (const block of blocks) {
-    switch (block.type) {
-      case 'heading_1':
-        lines.push(`# ${stripEmoji(richTextToPlain(block.heading_1.rich_text))}`);
-        break;
-      case 'heading_2': {
-        const h2Text = stripEmoji(richTextToPlain(block.heading_2.rich_text));
-        // 「目次」見出しはスキップ（ブログ側で自動生成するため）
-        if (h2Text === '目次') break;
-        lines.push(`## ${h2Text}`);
-        break;
-      }
-      case 'heading_3':
-        lines.push(`### ${stripEmoji(richTextToPlain(block.heading_3.rich_text))}`);
-        break;
-      case 'paragraph':
-        lines.push(richTextToMarkdown(block.paragraph.rich_text));
-        break;
-      case 'bulleted_list_item':
-        lines.push(`- ${richTextToMarkdown(block.bulleted_list_item.rich_text)}`);
-        break;
-      case 'numbered_list_item':
-        lines.push(`1. ${richTextToMarkdown(block.numbered_list_item.rich_text)}`);
-        break;
-      case 'code':
-        lines.push(`\`\`\`${block.code.language || ''}\n${richTextToPlain(block.code.rich_text)}\n\`\`\``);
-        break;
-      case 'image': {
-        const url = block.image.type === 'external'
-          ? block.image.external.url
-          : block.image.file.url;
-        const caption = block.image.caption ? richTextToPlain(block.image.caption) : '';
-        lines.push(`![${caption}](${url})`);
-        break;
-      }
-      case 'bookmark':
-        lines.push(block.bookmark.url || '');
-        break;
-      case 'divider':
-        // 区切り線は出力しない（見出しで十分区切られるため）
-        break;
-      case 'quote': {
-        const quoteText = richTextToMarkdown(block.quote.rich_text);
-        const quoteColor = block.quote.color || 'default';
-        // quoteの子ブロック（リスト等）を取得
-        let quoteChildContent = '';
-        if (block.has_children) {
-          const childBlocks = await notionFetch(`/blocks/${block.id}/children?page_size=100`);
-          for (const child of childBlocks.results) {
-            if (child.type === 'bulleted_list_item') {
-              quoteChildContent += `\n- ${richTextToMarkdown(child.bulleted_list_item.rich_text)}`;
-            } else if (child.type === 'numbered_list_item') {
-              quoteChildContent += `\n1. ${richTextToMarkdown(child.numbered_list_item.rich_text)}`;
-            } else if (child.type === 'paragraph') {
-              quoteChildContent += `\n${richTextToMarkdown(child.paragraph.rich_text)}`;
-            }
-          }
-        }
-        lines.push(`:::callout{icon="📌" color="${quoteColor === 'default' ? 'gray_background' : quoteColor}"}`);
-        lines.push(quoteText + quoteChildContent);
-        lines.push(':::');
-        break;
-      }
-      case 'callout': {
-        const icon = block.callout.icon?.emoji || 'ℹ️';
-        const text = richTextToMarkdown(block.callout.rich_text);
-        const color = block.callout.color || 'default';
-        // calloutの子ブロック（リスト等）を取得
-        let childContent = '';
-        if (block.has_children) {
-          const childBlocks = await notionFetch(`/blocks/${block.id}/children?page_size=100`);
-          for (const child of childBlocks.results) {
-            if (child.type === 'bulleted_list_item') {
-              childContent += `\n- ${richTextToMarkdown(child.bulleted_list_item.rich_text)}`;
-            } else if (child.type === 'numbered_list_item') {
-              childContent += `\n1. ${richTextToMarkdown(child.numbered_list_item.rich_text)}`;
-            } else if (child.type === 'paragraph') {
-              childContent += `\n${richTextToMarkdown(child.paragraph.rich_text)}`;
-            }
-          }
-        }
-        lines.push(`:::callout{icon="${icon}" color="${color}"}`);
-        lines.push(text + childContent);
-        lines.push(':::');
-        break;
-      }
-      case 'toggle':
-        lines.push(richTextToMarkdown(block.toggle.rich_text));
-        break;
-      case 'table_of_contents':
-        // 目次は自動生成するのでスキップ
-        break;
-      case 'table': {
-        // テーブルの子ブロック(行)を取得
-        const tableRows = await notionFetch(`/blocks/${block.id}/children`);
-        const rows = tableRows.results as any[];
-        rows.forEach((row: any, idx: number) => {
-          if (row.type === 'table_row') {
-            const cells = row.table_row.cells.map((cell: any[]) => richTextToPlain(cell));
-            lines.push(`| ${cells.join(' | ')} |`);
-            if (idx === 0) {
-              lines.push(`| ${cells.map(() => '---').join(' | ')} |`);
-            }
-          }
-        });
-        break;
-      }
-      default:
-        // 未対応ブロックはスキップ
-        break;
-    }
-    lines.push('');
+    const text = await blockToMarkdown(block, indent);
+    if (text === null) continue;
+    parts.push({ type: block.type, text });
   }
 
-  return lines.join('\n');
+  return parts
+    .map((part, i) => {
+      if (i === 0) return part.text;
+      const tight = LIST_BLOCK_TYPES.has(part.type) && LIST_BLOCK_TYPES.has(parts[i - 1].type);
+      return `${tight ? '\n' : '\n\n'}${part.text}`;
+    })
+    .join('');
 }
 
 // rich_textをマークダウン形式に変換 (インライン装飾対応)
@@ -231,10 +266,17 @@ function richTextToMarkdown(richText: any[]): string {
   if (!richText) return '';
   return richText.map((t: any) => {
     let text = t.plain_text;
-    if (t.annotations?.code) text = `\`${text}\``;
-    if (t.annotations?.bold) text = `<strong>${text}</strong>`;
-    if (t.annotations?.italic) text = `<em>${text}</em>`;
-    if (t.annotations?.strikethrough) text = `<del>${text}</del>`;
+    const annotations = t.annotations || {};
+    if (annotations.code) text = `\`${text}\``;
+    if (annotations.bold) text = `<strong>${text}</strong>`;
+    if (annotations.italic) text = `<em>${text}</em>`;
+    if (annotations.strikethrough) text = `<del>${text}</del>`;
+    if (annotations.underline) text = `<u>${text}</u>`;
+    // 背景色ハイライトのみ <mark> として残す。
+    // 文字色はサイトの配色を壊すため反映しない。
+    if (typeof annotations.color === 'string' && annotations.color.endsWith('_background')) {
+      text = `<mark class="mark-${annotations.color.replace('_background', '')}">${text}</mark>`;
+    }
     if (t.href) text = `[${text}](${t.href})`;
     return text;
   }).join('');
