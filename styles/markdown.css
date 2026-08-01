@@ -36,27 +36,39 @@
   letter-spacing: -0.02em;
 }
 
-/* 見出しアンカーリンク */
-.znc h1[id]::before,
-.znc h2[id]::before,
-.znc h3[id]::before {
-  content: '#';
-  position: absolute;
-  left: -1.2em;
+/* 見出しアンカーリンク
+   以前は ::before で見出しの左外（left: -1.2em）に `#` を描いていたが、
+   1. 疑似要素なのでクリックできず、
+   2. 本文コンテナの外にはみ出すので親の overflow で切られ、
+   3. hover 依存でタッチ端末では存在すら分からない、
+   という三重に機能していない状態だった。
+   markdown-it-anchor に実際の <a> を出させ、見出しの右側に置く。 */
+.znc .heading-anchor {
+  margin-left: 0.35em;
   color: #cbd5e1;
   font-weight: 400;
+  text-decoration: none;
   opacity: 0;
   transition: opacity 0.2s;
 }
-.znc h1[id]:hover::before,
-.znc h2[id]:hover::before,
-.znc h3[id]:hover::before {
+.dark .znc .heading-anchor {
+  color: #475569;
+}
+.znc h1:hover .heading-anchor,
+.znc h2:hover .heading-anchor,
+.znc h3:hover .heading-anchor,
+.znc .heading-anchor:hover,
+.znc .heading-anchor:focus-visible {
   opacity: 1;
 }
-.znc h1[id],
-.znc h2[id],
-.znc h3[id] {
-  position: relative;
+.znc .heading-anchor:hover {
+  color: #64748b;
+}
+/* タッチ端末には hover がないので、うっすら常時見せる */
+@media (hover: none) {
+  .znc .heading-anchor {
+    opacity: 0.45;
+  }
 }
 
 /* 見出しの余白は「上 > 下」を保ちつつ、階層ごとに一定の比率にする。
@@ -183,91 +195,257 @@
 .dark .znc code {
   background-color: rgb(var(--md-code-bg-dark));
 }
-.znc pre {
-  /* 言語ラベル(::before)とCopyボタンの絶対配置の基準。
-     以前はJS側で実行時に position を付けていたため、JSが動くまでラベルが
-     ページ最上部に飛んでいた。 */
+/* コードブロック
+   ヘッダー（ファイル名 / 言語 / コピー）+ 本体 のラッパー構造。
+   以前は <pre> に絶対配置で言語ラベルとコピーボタンを重ねていたため、
+   ファイル名を出す場所がなく、ボタンは hover するまで存在に気づけなかった。 */
+.znc .code-block {
   position: relative;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-  overflow-x: auto;
   margin: 1.5rem 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  /* 角丸の内側に <pre> の背景がはみ出さないようにする */
+  overflow: hidden;
+  background: #f8fafc;
+}
+.dark .znc .code-block {
+  border-color: #334155;
+  background: #0b1220;
+}
+
+.znc .code-block__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.5rem 0.375rem 0.875rem;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f1f5f9;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: #64748b;
+}
+.dark .znc .code-block__bar {
+  border-bottom-color: #1e293b;
+  background: #111c2f;
+  color: #94a3b8;
+}
+
+/* ファイル名は主役なので少し強く、言語ラベルは補助情報として右端に寄せる */
+.znc .code-block__name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  color: #334155;
+}
+.dark .znc .code-block__name {
+  color: #cbd5e1;
+}
+.znc .code-block__lang {
+  flex: 0 0 auto;
+  letter-spacing: 0.04em;
+}
+
+.znc .code-block__btn {
+  flex: 0 0 auto;
+  padding: 2px 10px;
+  font: inherit;
+  color: #475569;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.dark .znc .code-block__btn {
+  color: #cbd5e1;
+  background: #1e293b;
+  border-color: #475569;
+}
+.znc .code-block__btn:hover {
+  background: #e2e8f0;
+}
+.dark .znc .code-block__btn:hover {
+  background: #334155;
+}
+.znc .code-block__btn.is-copied {
+  color: #16a34a;
+  border-color: #86efac;
+}
+.dark .znc .code-block__btn.is-copied {
+  color: #4ade80;
+  border-color: #166534;
+}
+
+.znc .code-block pre {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  overflow-x: auto;
+  max-height: 40rem;
 }
 /* 本文の line-height(1.9) を継承するとコードの行間が空きすぎる */
-.znc pre code {
+.znc .code-block pre code {
   line-height: 1.65;
-}
-.dark .znc pre {
-  border-color: #334155;
 }
 /* コードブロックの背景。以前はGitHub Dark Dimmed由来の青緑寄りグレーで、
    サイトの slate 系と色温度が違って浮いていた。
    ダークは本文背景よりわずかに暗くして「囲まれた領域」に見せる。 */
-.znc pre > code {
+.znc .code-block pre > code {
   background-color: #f8fafc !important;
 }
-.dark .znc pre > code {
+.dark .znc .code-block pre > code {
   background-color: #0b1220 !important;
 }
-
-/* Code language label
-   ラベルはサーバー側で data-lang として埋める。
-   以前は :has() と言語ごとのハードコードに頼っていたため、
-   未対応言語ではラベルが空のまま余白だけ空き、Firefox 121未満では
-   :has() が効かずラベルがコードに重なっていた。 */
-.znc pre.has-lang {
-  padding-top: 2em;
-}
-.znc pre code[data-lang]::before {
-  content: attr(data-lang);
-  position: absolute;
-  top: 8px;
-  left: 12px;
-  font-size: 11px;
-  font-family: -apple-system, sans-serif;
-  color: #94a3b8;
-  letter-spacing: 0.05em;
+/* 横スクロールできるコードはキーボード操作のため focusable にしてある。
+   フォーカスリングが見えないと、どこにいるのか分からなくなる */
+.znc .code-block pre:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: -2px;
 }
 
-/* Code copy button */
-.znc pre .copy-btn {
+/* 折りたたみ
+   設定ファイル全文を貼ると画面数枚分の高さになり、本文の流れが途切れる。
+   閾値を超えたものだけ CodeBlockEnhancer が畳む。 */
+.znc .code-block.is-collapsed pre {
+  max-height: 15rem;
+  /* 横スクロールは畳んでいる間も残す。長い行が読めないと畳む意味がない */
+  overflow-y: hidden;
+}
+.znc .code-block.is-collapsed::after {
+  content: '';
   position: absolute;
-  top: 8px;
-  right: 8px;
-  padding: 4px 10px;
-  font-size: 12px;
-  font-family: -apple-system, sans-serif;
-  color: #64748b;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.2s, background 0.2s;
+  /* 「すべて表示」ボタン（line-height 1.5rem + padding 0.75rem + border 1px）の上に敷く */
+  inset: auto 0 calc(2.25rem + 1px) 0;
+  height: 4rem;
+  pointer-events: none;
+  background: linear-gradient(rgba(248, 250, 252, 0), #f8fafc);
 }
-.dark .znc pre .copy-btn {
-  color: #94a3b8;
-  background: rgba(30, 41, 59, 0.9);
-  border-color: #475569;
+.dark .znc .code-block.is-collapsed::after {
+  background: linear-gradient(rgba(11, 18, 32, 0), #0b1220);
 }
-.znc pre:hover .copy-btn {
-  opacity: 1;
-}
-/* タッチ端末には hover が無く、opacity:0 のままでは永久にコピーできない */
-@media (hover: none) {
-  .znc pre .copy-btn {
-    opacity: 1;
-  }
-}
-.znc pre .copy-btn:hover {
+.znc .code-block__expand {
+  display: block;
+  width: 100%;
+  padding: 0.375rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.75rem;
+  line-height: 1.5rem;
+  color: #475569;
   background: #f1f5f9;
+  border: 0;
+  border-top: 1px solid #e2e8f0;
+  cursor: pointer;
 }
-.dark .znc pre .copy-btn:hover {
-  background: #334155;
+.dark .znc .code-block__expand {
+  color: #cbd5e1;
+  background: #111c2f;
+  border-top-color: #1e293b;
 }
-.znc pre .copy-btn.copied {
+.znc .code-block__expand:hover {
+  background: #e2e8f0;
+}
+.dark .znc .code-block__expand:hover {
+  background: #1e293b;
+}
+
+/* 行単位の装飾（diff / 行ハイライト）
+   背景色を横スクロール範囲いっぱいに伸ばすため、左右の padding を
+   <code> から各行へ移し、<code> を max-content 幅にしている。 */
+.znc code.has-code-lines {
+  display: block;
+  min-width: max-content;
+  padding-left: 0;
+  padding-right: 0;
+}
+.znc .code-line {
+  display: inline-block;
+  min-width: 100%;
+  padding: 0 1em;
+}
+.znc .code-line--added {
+  background: rgba(34, 197, 94, 0.14);
+  box-shadow: inset 3px 0 0 #22c55e;
+}
+.znc .code-line--removed {
+  background: rgba(239, 68, 68, 0.14);
+  box-shadow: inset 3px 0 0 #ef4444;
+}
+.znc .code-line--marked {
+  background: rgba(59, 130, 246, 0.12);
+  box-shadow: inset 3px 0 0 #3b82f6;
+}
+/* +/- は擬似要素で出す。本文としては存在しないので、
+   コピーしたときに差分記号が混ざらない */
+.znc code.has-diff .code-line {
+  position: relative;
+  padding-left: 2em;
+}
+.znc code.has-diff .code-line::before {
+  position: absolute;
+  left: 0.75em;
+  user-select: none;
+}
+.znc .code-line--added::before {
+  content: '+';
   color: #16a34a;
-  opacity: 1;
+}
+.znc .code-line--removed::before {
+  content: '-';
+  color: #dc2626;
+}
+.dark .znc .code-line--added::before {
+  color: #4ade80;
+}
+.dark .znc .code-line--removed::before {
+  color: #f87171;
+}
+
+/* Mermaid
+   サーバーは定義をコードのまま出し、クライアントで SVG に差し替える。
+   描画が済むまで（あるいは JS が無い場合は最後まで）定義が読める。 */
+.znc .mermaid-block {
+  margin: 1.5rem 0;
+}
+.znc .mermaid-block__figure {
+  display: none;
+}
+.znc .mermaid-block.is-rendered .mermaid-block__figure {
+  display: block;
+  overflow-x: auto;
+  padding: 1rem;
+  text-align: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+}
+.dark .znc .mermaid-block.is-rendered .mermaid-block__figure {
+  border-color: #334155;
+  background: #0b1220;
+}
+.znc .mermaid-block__figure svg {
+  max-width: 100%;
+  height: auto;
+}
+.znc .mermaid-block.is-rendered .mermaid-block__source {
+  display: none;
+}
+.znc .mermaid-block__source {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+.dark .znc .mermaid-block__source {
+  border-color: #334155;
+}
+.znc .mermaid-block__source > code {
+  background-color: #f8fafc !important;
+}
+.dark .znc .mermaid-block__source > code {
+  background-color: #0b1220 !important;
 }
 
 /* 引用: 左バー + 薄い背景 + 少し落とした文字色で「他者の言葉」を示す。

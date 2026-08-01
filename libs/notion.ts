@@ -143,8 +143,14 @@ async function blockToMarkdown(block: any, indent: string): Promise<string | nul
     }
     case 'heading_3':
       return `${indent}### ${stripEmoji(richTextToPlain(block.heading_3.rich_text))}`;
-    case 'paragraph':
+    case 'paragraph': {
+      // 目次はブログ側で自動生成するので、目印として書かれた `[toc]` の段落は落とす。
+      // 以前はレンダリング後のHTMLに対して4本の正規表現を当てていたため、
+      // コードブロック内に書いた `[toc]` まで消えて記法の解説記事が書けなかった。
+      // 段落ブロック単位で判定すればコードには一切触れない。
+      if (/^"?\[toc\]"?$/i.test(richTextToPlain(block.paragraph.rich_text).trim())) return null;
       return `${indent}${richTextToMarkdown(block.paragraph.rich_text)}`;
+    }
     case 'bulleted_list_item':
       return listItemToMarkdown(block, indent, '- ', richTextToMarkdown(block.bulleted_list_item.rich_text));
     case 'numbered_list_item':
@@ -160,7 +166,20 @@ async function blockToMarkdown(block: any, indent: string): Promise<string | nul
         .split('\n')
         .map((line: string) => `${indent}${line}`)
         .join('\n');
-      return `${indent}\`\`\`${block.code.language || ''}\n${code}\n${indent}\`\`\``;
+      // Notion の言語名は "plain text" のように空白を含むことがある。
+      // 情報文字列の区切りは空白なので、そのまま出すと言語が "plain" として扱われる。
+      const raw = (block.code.language || '').trim().toLowerCase().replace(/\s+/g, '-');
+      const lang = raw === 'plain-text' ? 'text' : raw;
+      // コードブロックのキャプションはファイル名を書く用途で使われる。
+      // Zenn と同じ `言語:ファイル名` 形式で情報文字列に載せる
+      // （キャプション側に `{1,3-5}` と書けば行ハイライトの指定もそのまま通る）。
+      // 情報文字列は1行で完結させる必要があるので、改行とバッククォートは潰す。
+      // そのまま流すとフェンスが壊れて、コードが本文として描画されてしまう。
+      const caption = block.code.caption
+        ? richTextToPlain(block.code.caption).replace(/\s+/g, ' ').replace(/`/g, '').trim()
+        : '';
+      const info = caption ? `${lang || 'text'}:${caption}` : lang;
+      return `${indent}\`\`\`${info}\n${code}\n${indent}\`\`\``;
     }
     case 'image': {
       const url = block.image.type === 'external'
