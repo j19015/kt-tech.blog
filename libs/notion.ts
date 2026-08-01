@@ -28,11 +28,23 @@ export type Series = {
   order: number;
 };
 
+/** 更新履歴の1行。`YYYY-MM-DD 内容` の形で書かれたものを分解したもの */
+export type ChangelogEntry = {
+  date: string;
+  description: string;
+};
+
 export type Blog = {
   id: string; // Slug (microCMS IDまたはNotion page ID)
   title: string;
   body: string;
   ogpDescription?: string;
+  /** 「この記事でわかること」。Notion の Summary プロパティを改行で分割したもの */
+  summary?: string[];
+  /** 前提知識・動作環境。Notion の Prerequisites プロパティ */
+  prerequisites?: string;
+  /** 更新履歴。Notion の Changelog プロパティ */
+  changelog?: ChangelogEntry[];
   eyecatch?: { url: string; height?: number; width?: number };
   category?: Category;
   tags?: Tag[];
@@ -376,6 +388,23 @@ function richTextToMarkdown(richText: any[]): string {
   }).join('');
 }
 
+/**
+ * 更新履歴のテキストを解釈する。
+ *
+ * `2026-07-15  Next.js 15.1 での挙動変更を追記` のように
+ * 1行1件で書かれたものを想定する。日付で始まらない行は無視する
+ * （見出しやメモを混ぜても表示が壊れないようにするため）。
+ */
+function parseChangelog(text: string): ChangelogEntry[] {
+  return text
+    .split('\n')
+    .map((line) => line.trim().match(/^(\d{4}[-/]\d{1,2}[-/]\d{1,2})\s+(.+)$/))
+    .filter((m): m is RegExpMatchArray => m !== null)
+    .map((m) => ({ date: m[1].replace(/\//g, '-'), description: m[2].trim() }))
+    // 新しい順に並べる。書き手が古い順に書いていても表示は揃う
+    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+}
+
 // NotionのページからBlog型に変換
 async function pageToBlog(page: any, fetchBody: boolean = false): Promise<Blog> {
   const props = page.properties;
@@ -388,6 +417,16 @@ async function pageToBlog(page: any, fetchBody: boolean = false): Promise<Blog> 
   const ogpDescription = richTextToPlain(props['OGP Description']?.rich_text || []) || '';
   const createdDate = props.Created?.date?.start || page.created_time;
   const id = slug || page.id.replace(/-/g, '');
+
+  // 「この記事でわかること」と更新履歴。連載と同じく、プロパティが未作成の
+  // データベースでも落ちないよう全て省略可能に扱う。
+  // 書き手が埋めていない記事はこれまで通りの表示になる。
+  const summary = richTextToPlain(props.Summary?.rich_text || [])
+    .split('\n')
+    .map((line: string) => line.replace(/^[-・*]\s*/, '').trim())
+    .filter(Boolean);
+  const prerequisites = richTextToPlain(props.Prerequisites?.rich_text || []).trim();
+  const changelog = parseChangelog(richTextToPlain(props.Changelog?.rich_text || []));
 
   // 連載。プロパティが未作成のデータベースでも落ちないよう、全て省略可能に扱う。
   const seriesName = (props.Series?.select?.name || '').trim();
@@ -405,6 +444,9 @@ async function pageToBlog(page: any, fetchBody: boolean = false): Promise<Blog> 
     title,
     body,
     ogpDescription: ogpDescription || undefined,
+    summary: summary.length > 0 ? summary : undefined,
+    prerequisites: prerequisites || undefined,
+    changelog: changelog.length > 0 ? changelog : undefined,
     eyecatch: eyecatchUrl ? { url: eyecatchUrl, width: 1200, height: 630 } : undefined,
     category: categoryName ? pageToCategory(categoryName) : undefined,
     tags,
