@@ -8,6 +8,7 @@
 import MarkdownIt from 'markdown-it';
 import anchor from 'markdown-it-anchor';
 import footnote from 'markdown-it-footnote';
+import katex from '@vscode/markdown-it-katex';
 import { stripEmoji } from './emoji';
 
 import hljs from 'highlight.js/lib/core';
@@ -293,6 +294,13 @@ export function headingSlug(text: string): string {
 // 外に出せるようにする。これまでは括弧書きで挟むか callout を使うしかなく、
 // callout だと「注意喚起」と「余談」が見分けられなかった。
 md.use(footnote);
+// 数式。KaTeX は DOM に依存しない純粋な文字列変換なので Edge でも動き、
+// サーバー側で HTML まで作れる（クライアントに KaTeX の JS を送らずに済む）。
+md.use(katex, {
+  // 数式が壊れていてもページ全体を落とさず、その箇所だけ赤字で出す
+  throwOnError: false,
+  errorColor: '#dc2626',
+});
 md.use(anchor, {
   slugify: headingSlug,
   // 見出しの右側に本物のリンクを置く。

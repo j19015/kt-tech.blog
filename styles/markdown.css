@@ -1076,3 +1076,22 @@
   left: 0.5rem;
   color: #ffffff;
 }
+
+/* 数式（KaTeX）
+   長い数式は本文幅に収まらないので、はみ出す分だけ横スクロールさせる。 */
+.znc .katex-display {
+  margin: 1.75rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  /* スクロールバーが数式に重ならないよう下に余白を取る */
+  padding-bottom: 0.5rem;
+}
+/* KaTeX は色を指定しないので本文色を継承する。ダークでもそのまま読める */
+.znc .katex {
+  font-size: 1.05em;
+}
+/* 構文エラーの箇所。throwOnError: false のとき赤字で出る */
+.znc .katex-error {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+}
