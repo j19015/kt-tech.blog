@@ -36,10 +36,13 @@ export const ShareButtons = ({ title, url }: ShareButtonsProps) => {
   const encodedTitle = encodeURIComponent(title);
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(shareUrl).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    navigator.clipboard
+      .writeText(shareUrl)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(() => {});
   };
 
   const trackShare = (platform: string) => {
@@ -62,7 +65,6 @@ export const ShareButtons = ({ title, url }: ShareButtonsProps) => {
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
     line: `https://line.me/R/msg/text/?${encodedTitle}%20${encodedUrl}`,
     hatena: `https://b.hatena.ne.jp/entry/${shareUrl}`,
-    pocket: `https://getpocket.com/save?url=${encodedUrl}&title=${encodedTitle}`,
     linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
     bluesky: `https://bsky.app/intent/compose?text=${encodedTitle}%20${encodedUrl}`,
   };
@@ -98,9 +100,6 @@ export const ShareButtons = ({ title, url }: ShareButtonsProps) => {
           </a>
           <a href={shareLinks.hatena} target='_blank' rel='noopener noreferrer' onClick={() => trackShare('hatena')} className={`${btnBase} text-[#00A4DE] hover:bg-[#00A4DE] hover:text-white text-xs font-bold`} aria-label='Bookmark on Hatena'>
             B!
-          </a>
-          <a href={shareLinks.pocket} target='_blank' rel='noopener noreferrer' onClick={() => trackShare('pocket')} className={`${btnBase} text-[#EF3F56] hover:bg-[#EF3F56] hover:text-white`} aria-label='Save to Pocket'>
-            <svg className='w-4 h-4' viewBox='0 0 24 24' fill='currentColor'><path d='M18.813 2.07C21.451 2.276 23 4.031 23 6.653v5.07c0 6.281-5.165 11.372-11.488 11.372S.024 18.004.024 11.723V6.653C.024 4.031 1.572 2.276 4.21 2.07H18.813zM12 16.063l5.406-5.344a1.627 1.627 0 00.012-2.312 1.66 1.66 0 00-2.34.012L12 11.469l-3.078-3.05a1.66 1.66 0 00-2.34-.012 1.627 1.627 0 00.012 2.312L12 16.063z'/></svg>
           </a>
           <button onClick={handleCopyLink} className={`${btnBase} text-slate-500 dark:text-slate-400 hover:bg-slate-600 hover:text-white`} aria-label='Copy link'>
             {copied ? <Check className='w-4 h-4 text-green-500' /> : <Link2 className='w-4 h-4' />}

@@ -9,12 +9,14 @@ export const CodeCopyButton = () => {
 
       const btn = document.createElement('button');
       btn.className = 'copy-btn';
-      btn.textContent = 'Copy';
+      btn.type = 'button';
+      btn.textContent = 'コピー';
+      btn.setAttribute('aria-label', 'コードをコピー');
       btn.addEventListener('click', () => {
         const code = pre.querySelector('code');
         if (code) {
           navigator.clipboard.writeText(code.textContent || '').then(() => {
-            btn.textContent = 'Copied!';
+            btn.textContent = 'コピーしました';
             btn.classList.add('copied');
             if (typeof window !== 'undefined' && (window as any).gtag) {
               (window as any).gtag('event', 'code_copy', {
@@ -23,9 +25,13 @@ export const CodeCopyButton = () => {
               });
             }
             setTimeout(() => {
-              btn.textContent = 'Copy';
+              btn.textContent = 'コピー';
               btn.classList.remove('copied');
             }, 2000);
+          }).catch(() => {
+            // HTTPS外や権限拒否で失敗することがある。無反応だと壊れて見えるので伝える
+            btn.textContent = 'コピーできませんでした';
+            setTimeout(() => { btn.textContent = 'コピー'; }, 2000);
           });
         }
       });

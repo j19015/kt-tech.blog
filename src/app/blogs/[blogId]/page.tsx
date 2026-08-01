@@ -435,10 +435,11 @@ export default async function StaticDetailPage({
         <div className='lg:col-span-1 p-5 pl-7 pt-0 hidden lg:block'>
           <StickyTableOfContents toc={toc} />
         </div>
-        <div className='lg:col-span-2 col-span-1 lg:py-5 lg:px-3 content overflow-hidden'>
-          {' '}
-          {/* 通常の画面サイズでは2列分のスペースを占有 */}
-          <div>
+        {/* overflow: hidden はスクロールコンテナを作り、scroll-padding-top や
+            将来の sticky 要素に影響する。横のはみ出しだけを止めれば足りる。 */}
+        <div className='lg:col-span-2 col-span-1 lg:py-5 lg:px-3 content [overflow-x:clip]'>
+          {/* 記事本文はランドマークとして辿れるよう article にする */}
+          <article>
             <div className='p-4'>
               <Image
                 src={blog.eyecatch?.url || '/images/no_image_generated.png'}
@@ -463,7 +464,7 @@ export default async function StaticDetailPage({
                 )}
                 <div className='flex items-center gap-2 text-muted-foreground'>
                   <FontAwesomeIcon icon={faCalendarAlt} className='w-4 h-4' />
-                  <time className='text-sm'>
+                  <time className='text-sm' dateTime={blog.createdAt}>
                     {new Date(blog.createdAt).toLocaleDateString('ja-JP', {
                       year: 'numeric',
                       month: 'long',
@@ -472,11 +473,11 @@ export default async function StaticDetailPage({
                   </time>
                 </div>
                 {blog.updatedAt !== blog.createdAt && (
-                  <span className='text-xs text-slate-400 dark:text-slate-500'>
-                    (更新: {new Date(blog.updatedAt).toLocaleDateString('ja-JP')})
-                  </span>
+                  <time className='text-xs text-slate-500 dark:text-slate-400' dateTime={blog.updatedAt}>
+                    最終更新: {new Date(blog.updatedAt).toLocaleDateString('ja-JP')}
+                  </time>
                 )}
-                <span className='text-xs text-slate-400 dark:text-slate-500'>
+                <span className='text-xs text-slate-500 dark:text-slate-500'>
                   · 約{Math.max(1, Math.ceil(stripHtml(processedHtml).length / 600))}分で読めます
                 </span>
               </div>
@@ -528,7 +529,7 @@ export default async function StaticDetailPage({
                   href={`https://x.com/search?q=${encodeURIComponent(process.env.SITE_URL + '/blogs/' + blogId)}`}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='text-xs text-slate-400 dark:text-slate-500 hover:text-blue-500 transition-colors'
+                  className='text-xs text-slate-500 dark:text-slate-500 hover:text-blue-500 transition-colors'
                 >
                   Xで議論を見る
                 </a>
@@ -536,7 +537,7 @@ export default async function StaticDetailPage({
                   href={`https://github.com/j19015/kt-tech.blog/issues/new?title=${encodeURIComponent('[typo] ' + blog.title)}&body=${encodeURIComponent('記事URL: ' + process.env.SITE_URL + '/blogs/' + blogId + '\n\n誤字・修正内容:\n')}`}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='text-xs text-slate-400 dark:text-slate-500 hover:text-blue-500 transition-colors'
+                  className='text-xs text-slate-500 dark:text-slate-500 hover:text-blue-500 transition-colors'
                 >
                   誤字を報告する
                 </a>
@@ -552,7 +553,7 @@ export default async function StaticDetailPage({
             <RelatedPosts posts={relatedPosts} currentPostId={blogId} />
           <FloatingTocButton toc={toc} />
           <FloatingShareButton title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
-          </div>
+          </article>
         </div>
       </div>
     </>

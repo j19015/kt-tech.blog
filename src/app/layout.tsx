@@ -116,7 +116,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <html lang='ja' className={notoSansJP.variable}>
+    // next-themes は hydration 前にインラインスクリプトで <html> に class を足すため、
+    // suppressHydrationWarning がないと毎回 hydration mismatch の警告が出る
+    <html lang='ja' className={notoSansJP.variable} suppressHydrationWarning>
       <head>
         <GoogleAnalytics />
         <link rel='manifest' href='/manifest.json' />

@@ -1,4 +1,5 @@
 'use client';
+import { Fragment } from 'react';
 import Link from 'next/link';
 import {
   Breadcrumb,
@@ -31,12 +32,16 @@ export const BreadcrumbNav = ({ items }: BreadcrumbNavProps) => {
               </Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
+          {/* BreadcrumbList は <ol> なので直下に <div> を置くとHTMLとして不正になり、
+              スクリーンリーダーがリストとして認識しなくなる。Fragment で並べる。 */}
           {items.map((item, index) => (
-            <div key={index} className='flex items-center gap-2'>
+            <Fragment key={`${item.label}-${index}`}>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 {item.current ? (
-                  <BreadcrumbPage className='truncate max-w-[200px] sm:max-w-[400px]'>{item.label}</BreadcrumbPage>
+                  <BreadcrumbPage className='truncate max-w-[200px] sm:max-w-[400px]' title={item.label}>
+                    {item.label}
+                  </BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink asChild>
                     <Link href={item.href || '#'} prefetch={false}>
@@ -45,7 +50,7 @@ export const BreadcrumbNav = ({ items }: BreadcrumbNavProps) => {
                   </BreadcrumbLink>
                 )}
               </BreadcrumbItem>
-            </div>
+            </Fragment>
           ))}
         </BreadcrumbList>
       </Breadcrumb>

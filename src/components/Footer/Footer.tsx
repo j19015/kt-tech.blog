@@ -34,7 +34,7 @@ export const Footer = () => {
                 href='https://github.com/j19015'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:scale-110 transition-all duration-200'
+                className='text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:scale-110 transition-all duration-200'
                 aria-label='GitHub'
               >
                 <Github className='w-5 h-5' />
@@ -43,14 +43,14 @@ export const Footer = () => {
                 href='https://x.com/tech_koki'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:scale-110 transition-all duration-200'
+                className='text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:scale-110 transition-all duration-200'
                 aria-label='X (Twitter)'
               >
                 <XIcon className='w-5 h-5' />
               </Link>
               <Link
                 href='/feed.xml'
-                className='text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:scale-110 transition-all duration-200'
+                className='text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:scale-110 transition-all duration-200'
                 aria-label='RSS'
               >
                 <Rss className='w-5 h-5' />
@@ -130,10 +130,10 @@ export const Footer = () => {
 
         {/* コピーライト */}
         <div className='mt-10 pt-6 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-2'>
-          <p className='text-xs text-slate-400 dark:text-slate-500'>
+          <p className='text-xs text-slate-500 dark:text-slate-500'>
             © {new Date().getFullYear()} kt-tech.blog. All rights reserved.
           </p>
-          <p className='text-xs text-slate-400 dark:text-slate-500'>
+          <p className='text-xs text-slate-500 dark:text-slate-500'>
             Built with Next.js & Cloudflare Pages
           </p>
         </div>

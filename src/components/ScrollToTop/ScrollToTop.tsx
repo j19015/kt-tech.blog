@@ -24,6 +24,10 @@ export const ScrollToTop = () => {
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
       }`}
       aria-label='トップへ戻る'
+      // 非表示のときは支援技術からも隠し、Tabでフォーカスが飛ばないようにする。
+      // opacity-0 だけでは「見えないボタン」が読み上げ・タブ順に残ってしまう。
+      aria-hidden={!isVisible}
+      tabIndex={isVisible ? 0 : -1}
     >
       <ArrowUp className='w-5 h-5' />
     </button>

@@ -34,7 +34,7 @@ const SidebarClient = ({ latestArticles, randomPool, tagList, categoryList, arch
       {/* 記事数 + ランダム記事 */}
       <div className='flex items-center justify-center gap-3 mb-4'>
         {totalCount && (
-          <p className='text-xs text-slate-400 dark:text-slate-500'>
+          <p className='text-xs text-slate-500 dark:text-slate-500'>
             <span className='text-lg font-bold text-slate-900 dark:text-slate-100'>{totalCount}</span> 記事
           </p>
         )}
@@ -74,7 +74,7 @@ const SidebarClient = ({ latestArticles, randomPool, tagList, categoryList, arch
                 <p className='text-sm text-slate-600 dark:text-slate-300 line-clamp-2 group-hover:text-slate-900 dark:group-hover:text-slate-100 transition-colors'>
                   {article.title}
                 </p>
-                <p className='text-xs text-slate-400 dark:text-slate-500 mt-1'>
+                <p className='text-xs text-slate-500 dark:text-slate-500 mt-1'>
                   {new Date(article.createdAt).toLocaleDateString('ja-JP')}
                 </p>
               </Link>
