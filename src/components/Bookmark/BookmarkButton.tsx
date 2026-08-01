@@ -1,29 +1,22 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { Bookmark, BookmarkCheck } from 'lucide-react';
-
-const STORAGE_KEY = 'kt-tech-bookmarks';
+import { addBookmark, removeBookmark, isBookmarked as checkBookmarked } from '@/lib/bookmarks';
 
 export const BookmarkButton = ({ articleId, title }: { articleId: string; title: string }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
-    try {
-      const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]') as { id: string }[];
-      setIsBookmarked(stored.some(b => b.id === articleId));
-    } catch {}
+    setIsBookmarked(checkBookmarked(articleId));
   }, [articleId]);
 
   const toggle = () => {
     try {
-      const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]') as { id: string; title: string; savedAt: string }[];
       if (isBookmarked) {
-        const filtered = stored.filter(b => b.id !== articleId);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+        removeBookmark(articleId);
         setIsBookmarked(false);
       } else {
-        stored.unshift({ id: articleId, title, savedAt: new Date().toISOString() });
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(stored.slice(0, 50)));
+        addBookmark({ id: articleId, title, savedAt: new Date().toISOString() });
         setIsBookmarked(true);
       }
     } catch {}
@@ -39,7 +32,7 @@ export const BookmarkButton = ({ articleId, title }: { articleId: string; title:
       }`}
       aria-label={isBookmarked ? 'ブックマークを解除' : 'ブックマークに追加'}
     >
-      {isBookmarked ? <BookmarkCheck className='w-3.5 h-3.5' /> : <Bookmark className='w-3.5 h-3.5' />}
+      {isBookmarked ? <BookmarkCheck className='w-3.5 h-3.5' aria-hidden='true' /> : <Bookmark className='w-3.5 h-3.5' aria-hidden='true' />}
       {isBookmarked ? '保存済み' : 'あとで読む'}
     </button>
   );

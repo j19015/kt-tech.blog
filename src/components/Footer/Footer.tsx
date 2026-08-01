@@ -90,6 +90,11 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
+                <Link href='/bookmarks' className='text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 transition-colors'>
+                  Bookmarks
+                </Link>
+              </li>
+              <li>
                 <Link href='/searches' className='text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 transition-colors'>
                   Search
                 </Link>

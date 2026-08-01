@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import { ModeToggle } from '../ModeToggle/modeToggle';
-import { Menu, X, Home, BookOpen, User, Search, Github, Library } from 'lucide-react';
+import { Menu, X, Home, BookOpen, User, Search, Github, Library, Bookmark } from 'lucide-react';
 import { SearchModal } from '../SearchModal/SearchModal';
 import { useDialog } from '@/lib/useDialog';
 
@@ -173,6 +173,21 @@ export const Header = () => {
                 <Search className='w-5 h-5 text-slate-400 dark:text-slate-500' aria-hidden='true' />
                 <span className='text-lg font-medium'>Search</span>
               </button>
+              {/* 「あとで読む」で保存した記事の置き場。
+                  デスクトップのヘッダーは項目を増やしたくないのでモバイルとフッターに置く */}
+              <Link
+                href='/bookmarks'
+                onClick={closeMenu}
+                aria-current={isActive('/bookmarks') ? 'page' : undefined}
+                className={`flex items-center gap-4 px-4 py-4 rounded-xl transition-colors ${
+                  isActive('/bookmarks')
+                    ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100'
+                    : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                <Bookmark className='w-5 h-5 text-slate-400 dark:text-slate-500' aria-hidden='true' />
+                <span className='text-lg font-medium'>Bookmarks</span>
+              </Link>
             </nav>
 
             {/* Bottom section */}
