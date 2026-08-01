@@ -58,6 +58,8 @@ import { FloatingTocButton } from '@/components/TableOfContents/FloatingTocButto
 import { BookmarkButton } from '@/components/Bookmark/BookmarkButton';
 import { SeriesNav } from '@/components/Series/SeriesNav';
 import { ArticleAside } from '@/components/ArticleAside/ArticleAside';
+import { ArticleSummary } from '@/components/ArticleSummary/ArticleSummary';
+import { ArticleChangelog } from '@/components/ArticleSummary/ArticleChangelog';
 import { findSeriesOf } from '@/lib/series';
 import { isPublic } from '@/lib/blog';
 import { calloutKindFromColor, CALLOUT_META } from '@/lib/callout';
@@ -90,7 +92,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const rawHtml = md.render(cleanBody);
   const text = stripHtml(rawHtml);
 
-  const description = blog.ogpDescription || text.slice(0, 120).replace(/\n/g, ' ').trim();
+  // 説明文の優先順位は OGP Description → 要約 → 本文の先頭。
+  // 本文の切り出しは導入の雑談から始まることが多く、検索結果で役に立たない。
+  const description =
+    blog.ogpDescription ||
+    (blog.summary?.length ? blog.summary.join('、').slice(0, 120) : '') ||
+    text.slice(0, 120).replace(/\n/g, ' ').trim();
   const ogImage = blog.eyecatch?.url;
   const pageUrl = `${process.env.SITE_URL}/blogs/${blogId}`;
 
@@ -311,6 +318,7 @@ export default async function StaticDetailPage({
     // リンク記法 `[文字](url)` や表の `|`、リストの `-` が説明文に混ざっていた。
     // レンダリング後のHTMLから起こした平文を使えば、記法は残らない。
     description: (blog.ogpDescription || plainText).replace(/\s+/g, ' ').slice(0, 160).trim(),
+    ...(blog.summary?.length ? { abstract: blog.summary.join(' / ') } : {}),
     image: blog.eyecatch?.url || `${process.env.SITE_URL}/opengraph-image`,
     datePublished: new Date(blog.publishedAt).toISOString(),
     dateModified: new Date(blog.updatedAt).toISOString(),
@@ -451,6 +459,11 @@ export default async function StaticDetailPage({
                 />
               </div>
             )}
+            {/* 検索から来た読者は数秒で「自分の課題が解決するか」を判断する。
+                目次の前に結論と前提を置く。 */}
+            <div className='mx-4'>
+              <ArticleSummary blog={blog} />
+            </div>
             {/* モバイルの目次は右下のFABに一本化した。
                 以前は本文上のアコーディオンとFABが同時に存在し、
                 同じものが2つ出ていたうえ、アコーディオンは本文の先頭を占有していた。 */}
@@ -475,6 +488,7 @@ export default async function StaticDetailPage({
               <ImageLightbox />
               <ReadingTracker articleId={blogId} />
             </div>
+            {blog.changelog && <ArticleChangelog entries={blog.changelog} />}
             {/* 記事末: タグ → シェア/著者/フィードバック → 前後記事 → 関連記事。
                 以前はシェアが記事上部と末尾の2箇所にあり、著者カードもリンク先がなかった。 */}
             {blog.tags && blog.tags.length > 0 && (
