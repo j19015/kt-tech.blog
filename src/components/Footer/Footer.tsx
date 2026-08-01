@@ -75,6 +75,11 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
+                <Link href='/series' className='text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 transition-colors'>
+                  Series
+                </Link>
+              </li>
+              <li>
                 <Link href='/categories' className='text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 transition-colors'>
                   Categories
                 </Link>

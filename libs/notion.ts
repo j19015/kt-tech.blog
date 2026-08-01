@@ -20,6 +20,13 @@ async function notionFetch(path: string, options: { method?: string; body?: any;
 }
 
 // 既存のmicrocms.tsと同じ型インターフェースを維持
+/** 連載。Notion の `Series`（Select）と `SeriesOrder`（Number）から作る */
+export type Series = {
+  name: string;
+  /** 連載内の順序。未設定なら 0（公開日順にフォールバックする） */
+  order: number;
+};
+
 export type Blog = {
   id: string; // Slug (microCMS IDまたはNotion page ID)
   title: string;
@@ -28,6 +35,7 @@ export type Blog = {
   eyecatch?: { url: string; height?: number; width?: number };
   category?: Category;
   tags?: Tag[];
+  series?: Series;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
@@ -311,6 +319,10 @@ async function pageToBlog(page: any, fetchBody: boolean = false): Promise<Blog> 
   const createdDate = props.Created?.date?.start || page.created_time;
   const id = slug || page.id.replace(/-/g, '');
 
+  // 連載。プロパティが未作成のデータベースでも落ちないよう、全て省略可能に扱う。
+  const seriesName = (props.Series?.select?.name || '').trim();
+  const seriesOrder = typeof props.SeriesOrder?.number === 'number' ? props.SeriesOrder.number : 0;
+
   let body = '';
   if (fetchBody) {
     body = await blocksToMarkdown(page.id);
@@ -326,6 +338,7 @@ async function pageToBlog(page: any, fetchBody: boolean = false): Promise<Blog> 
     eyecatch: eyecatchUrl ? { url: eyecatchUrl, width: 1200, height: 630 } : undefined,
     category: categoryName ? pageToCategory(categoryName) : undefined,
     tags,
+    series: seriesName ? { name: seriesName, order: seriesOrder } : undefined,
     createdAt,
     updatedAt: page.last_edited_time,
     publishedAt: createdAt,
