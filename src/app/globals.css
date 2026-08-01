@@ -23,6 +23,11 @@ body {
   font-family: var(--font-noto-sans-jp), 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
   overflow-anchor: auto;
   overflow-x: hidden;
+  /* 日本語の禁則処理を効かせる。break-all は英単語や識別子を
+     1文字単位で分断してしまうため使わない。 */
+  word-break: normal;
+  overflow-wrap: anywhere;
+  line-break: strict;
 }
 /* スムーズスクロール */
 html {
@@ -79,14 +84,12 @@ html {
 body {
   margin: 0;
   padding: 0;
-  word-break: break-all;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-main {
-  font-family: 游ゴシック体, YuGothic, '游ゴシック Medium', 'Yu Gothic Medium', 游ゴシック,
-    'Yu Gothic', メイリオ, sans-serif;
-}
+/* フォントは body の Noto Sans JP に統一する。
+   以前は main と .znc で游ゴシックに上書きしていたため、
+   読み込んだ Noto Sans JP が本文で使われず、ヘッダー/フッターとも字面が揃っていなかった。 */
 
 :root {
   --foreground-rgb: 15, 23, 42;
@@ -311,7 +314,7 @@ body {
   justify-content: space-between;
   overflow: hidden;
   text-decoration: none;
-  word-break: break-all;
+  overflow-wrap: anywhere;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 

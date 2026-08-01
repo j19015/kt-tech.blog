@@ -234,10 +234,9 @@ export default async function StaticDetailPage({
   );
 
   // テーブルをスクロール可能なラッパーで囲む（モバイル対応）
-  processedHtml = processedHtml.replace(
-    /<table/g,
-    '<div class="overflow-x-auto -mx-4 px-4"><table'
-  );
+  // スクロールできることが分からないと「表が途中で切れている」と誤解されるため、
+  // CSS側で端にフェードを出す（.table-scroll）
+  processedHtml = processedHtml.replace(/<table/g, '<div class="table-scroll"><table');
   processedHtml = processedHtml.replace(/<\/table>/g, '</table></div>');
 
   // コードブロックにaria-labelを付与
@@ -250,6 +249,13 @@ export default async function StaticDetailPage({
   processedHtml = processedHtml.replace(
     /<img(?![^>]*loading=)/g,
     '<img loading="lazy" decoding="async"'
+  );
+
+  // alt付きの単独画像を figure/figcaption にしてキャプションを表示する。
+  // img は置換要素なので ::after でキャプションを出すことはできない。
+  processedHtml = processedHtml.replace(
+    /<p>(<img [^>]*?alt="([^"]+)"[^>]*>)<\/p>/g,
+    (_match, img, alt) => `<figure>${img}<figcaption>${alt}</figcaption></figure>`
   );
 
   // チェックリスト(to_do)の <li> にクラスを付ける（マーカー除去とインデント調整のため）

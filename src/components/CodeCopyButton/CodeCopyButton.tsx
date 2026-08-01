@@ -29,7 +29,7 @@ export const CodeCopyButton = () => {
           });
         }
       });
-      (pre as HTMLElement).style.position = 'relative';
+      // position は markdown.css の .znc pre で指定済み
       pre.appendChild(btn);
     });
   }, []);
