@@ -74,7 +74,7 @@ export const ClientIndex = ({ contents }: BlogProps) => {
         </form>
         <p className='mt-2 text-xs text-slate-500 dark:text-slate-400'>
           スペース区切りで複数のキーワードを指定すると、すべてを含む記事を探します。
-          タイトル・概要・タグ・カテゴリが対象です。
+          タイトル・概要・タグ・カテゴリ・連載名が対象です。
         </p>
 
         {text && (
