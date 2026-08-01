@@ -122,7 +122,7 @@ NEXT_PUBLIC_R2_BUCKET_URL=xxx    # R2パブリックURL
 3. **Notion API**: REST API直接fetch（SDKはcrypto依存で使えない）
 4. **画像ドメイン**: `next.config.js` の `remotePatterns` に追加が必要
 5. **callout UI**: Notionのcalloutブロックは `:::callout` マーカー → プレースホルダー → HTML変換の3段階処理
-6. **見出し**: 絵文字は `stripEmoji()` で自動除去される
+6. **見出し**: 絵文字は本文にそのまま残す。目次とアンカーIDを作るときだけ `stripEmoji()`（`src/lib/emoji.ts`）で落とす
 7. **ビルド**: `npx @cloudflare/next-on-pages` で一括ビルド（`--skip-build`不可）
 8. **`.npmrc`**: `legacy-peer-deps=true` が必要（vercel build互換）
 9. **コミットメッセージ**: wrangler deployで日本語が拒否されるためCI/CDではASCII指定

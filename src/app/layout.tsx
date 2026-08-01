@@ -121,9 +121,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <GoogleAnalytics />
         <link rel='manifest' href='/manifest.json' />
-        <meta name='theme-color' content='#0f172a' />
+        {/* 1色固定だとライトモードでもブラウザのバーが暗いままになる。
+            OSの設定に合わせて出し分ける */}
+        <meta name='theme-color' media='(prefers-color-scheme: light)' content='#ffffff' />
+        <meta name='theme-color' media='(prefers-color-scheme: dark)' content='#0f172a' />
         <meta name='google-adsense-account' content='ca-pub-9002778711554857'></meta>
-        <meta name='thumbnail' content={`${process.env.SITE_URL}${Favicon.src}`}></meta>
+        {/* SITE_URL が未設定だと "undefined/favicon.ico" という壊れたURLを出していた。
+            metadata 側と同じ既定値にそろえる */}
+        <meta name='thumbnail' content={`${url}${Favicon.src}`}></meta>
         <script
           type='application/ld+json'
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

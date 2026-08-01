@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getDetail, getList, Blog } from '../../../../libs/notion';
 import { md, escapeHtml } from '@/lib/markdown';
+import { stripEmoji } from '@/lib/emoji';
 import '../../../../styles/markdown.css';
 import '../../../../styles/hljs-theme.css';
 
@@ -30,7 +31,8 @@ function extractHeadings(html: string): { text: string; id: string; tag: string 
     // 見出し内のパーマリンク（<a class="heading-anchor">#</a>）を落としてから
     // テキスト化する。残すと目次の項目名が「はじめに#」になってしまう。
     const inner = match[3].replace(/<a class="heading-anchor"[\s\S]*?<\/a>/g, '');
-    headings.push({ tag: match[1], id: match[2], text: stripHtml(inner) });
+    // 絵文字は本文の見出しには残すが、目次では落として一覧を読みやすく保つ
+    headings.push({ tag: match[1], id: match[2], text: stripEmoji(stripHtml(inner)) });
   }
   return headings;
 }
@@ -305,7 +307,10 @@ export default async function StaticDetailPage({
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: blog.title,
-    description: blog.body.replace(/:::callout\{[^}]*\}/g, '').replace(/:::/g, '').replace(/[#*`>\n]/g, ' ').replace(/\s+/g, ' ').slice(0, 160).trim(),
+    // 以前は blog.body（Markdown）から記号を数種類だけ削っていたため、
+    // リンク記法 `[文字](url)` や表の `|`、リストの `-` が説明文に混ざっていた。
+    // レンダリング後のHTMLから起こした平文を使えば、記法は残らない。
+    description: (blog.ogpDescription || plainText).replace(/\s+/g, ' ').slice(0, 160).trim(),
     image: blog.eyecatch?.url || `${process.env.SITE_URL}/opengraph-image`,
     datePublished: new Date(blog.publishedAt).toISOString(),
     dateModified: new Date(blog.updatedAt).toISOString(),

@@ -76,10 +76,6 @@ function richTextToPlain(richText: any[]): string {
   return richText?.map((t: any) => t.plain_text).join('') || '';
 }
 
-// 見出しテキストから絵文字を除去
-function stripEmoji(text: string): string {
-  return text.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]/gu, '').trim();
-}
 
 // NotionのページプロパティからBlog型に変換
 function nameToSlug(name: string): string {
@@ -141,16 +137,19 @@ async function listItemToMarkdown(
 // 1ブロックをMarkdownに変換する。出力する必要のないブロックは null を返す。
 async function blockToMarkdown(block: any, indent: string): Promise<string | null> {
   switch (block.type) {
+    // 見出しの絵文字は残す。書き手が意図して付けた視覚的な手がかりなので、
+    // 本文から消してしまう理由がない。目次が煩雑になるのを避けたいだけなら
+    // 目次を作る側（extractHeadings）で落とせば足りる。
     case 'heading_1':
-      return `${indent}# ${stripEmoji(richTextToPlain(block.heading_1.rich_text))}`;
+      return `${indent}# ${richTextToPlain(block.heading_1.rich_text)}`;
     case 'heading_2': {
-      const h2Text = stripEmoji(richTextToPlain(block.heading_2.rich_text));
+      const h2Text = richTextToPlain(block.heading_2.rich_text).trim();
       // 「目次」見出しはスキップ（ブログ側で自動生成するため）
       if (h2Text === '目次') return null;
       return `${indent}## ${h2Text}`;
     }
     case 'heading_3':
-      return `${indent}### ${stripEmoji(richTextToPlain(block.heading_3.rich_text))}`;
+      return `${indent}### ${richTextToPlain(block.heading_3.rich_text)}`;
     case 'paragraph': {
       // 目次はブログ側で自動生成するので、目印として書かれた `[toc]` の段落は落とす。
       // 以前はレンダリング後のHTMLに対して4本の正規表現を当てていたため、
@@ -190,9 +189,12 @@ async function blockToMarkdown(block: any, indent: string): Promise<string | nul
       return `${indent}\`\`\`${info}\n${code}\n${indent}\`\`\``;
     }
     case 'image': {
+      // Notion がアップロード画像に返す URL は署名付きで、有効期限が1時間しかない。
+      // 記事HTMLは CDN に最大24時間残るので、そのまま埋めると画像が404になる。
+      // 失効しない自前のURLを挟み、実際の署名付きURLはリクエスト時に取り直す。
       const url = block.image.type === 'external'
         ? block.image.external.url
-        : block.image.file.url;
+        : `/api/notion-image/${block.id}`;
       const caption = block.image.caption ? richTextToPlain(block.image.caption) : '';
       return `${indent}![${caption}](${url})`;
     }
@@ -204,7 +206,21 @@ async function blockToMarkdown(block: any, indent: string): Promise<string | nul
       // 引用は blockquote として出力する。calloutに変換すると補足Tipsと見分けがつかなくなる。
       const text = richTextToMarkdown(block.quote.rich_text);
       const children = block.has_children ? await blocksToMarkdown(block.id) : '';
-      const body = children ? `${text}\n\n${children}` : text;
+      let body = children ? `${text}\n\n${children}` : text;
+
+      // 最終行が `— 出典` で始まっていれば <cite> として切り出す。
+      // 技術記事の引用は公式ドキュメントや書籍からが大半で、出典が無いと
+      // 引用としての価値が落ちる。これまでは書き手が本文に手で書くしかなく、
+      // 表記もバラバラだった。`—`（em dash）/`―`/`--` を目印にする。
+      const lines = body.split('\n');
+      const cite = lines[lines.length - 1]?.match(/^\s*(?:—|―|--)\s*(.+?)\s*$/);
+      if (cite && lines.length > 1) {
+        lines.pop();
+        // 空行を挟んで独立した段落にする。詰めると引用本文と地続きに見える
+        while (lines.length > 0 && lines[lines.length - 1].trim() === '') lines.pop();
+        body = `${lines.join('\n')}\n\n<cite>${cite[1]}</cite>`;
+      }
+
       return body
         .split('\n')
         .map((line) => `${indent}>${line ? ` ${line}` : ''}`)
