@@ -2,97 +2,9 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getDetail, getList, Blog } from '../../../../libs/notion';
-import MarkdownIt from 'markdown-it';
-import anchor from 'markdown-it-anchor';
-import hljs from 'highlight.js/lib/core';
+import { md, escapeHtml } from '@/lib/markdown';
 import '../../../../styles/markdown.css';
 import '../../../../styles/hljs-theme.css';
-
-// highlight.js の既定エントリは190以上の言語定義を含み、Workersのバンドルサイズを圧迫する。
-// 記事で実際に使う言語だけを登録する。
-import bash from 'highlight.js/lib/languages/bash';
-import css from 'highlight.js/lib/languages/css';
-import diff from 'highlight.js/lib/languages/diff';
-import dockerfile from 'highlight.js/lib/languages/dockerfile';
-import go from 'highlight.js/lib/languages/go';
-import graphql from 'highlight.js/lib/languages/graphql';
-import ini from 'highlight.js/lib/languages/ini';
-import java from 'highlight.js/lib/languages/java';
-import javascript from 'highlight.js/lib/languages/javascript';
-import json from 'highlight.js/lib/languages/json';
-import markdown from 'highlight.js/lib/languages/markdown';
-import php from 'highlight.js/lib/languages/php';
-import python from 'highlight.js/lib/languages/python';
-import ruby from 'highlight.js/lib/languages/ruby';
-import rust from 'highlight.js/lib/languages/rust';
-import scss from 'highlight.js/lib/languages/scss';
-import sql from 'highlight.js/lib/languages/sql';
-import typescript from 'highlight.js/lib/languages/typescript';
-import xml from 'highlight.js/lib/languages/xml';
-import yaml from 'highlight.js/lib/languages/yaml';
-
-const LANGUAGES: Record<string, any> = {
-  bash, css, diff, dockerfile, go, graphql, java, javascript, json, markdown,
-  php, python, ruby, rust, scss, sql, typescript, xml, yaml,
-  ini, // toml も ini で色付けできる
-};
-Object.entries(LANGUAGES).forEach(([name, lang]) => hljs.registerLanguage(name, lang));
-// よく使われる別名
-hljs.registerAliases(['sh', 'shell', 'zsh'], { languageName: 'bash' });
-hljs.registerAliases(['js', 'jsx'], { languageName: 'javascript' });
-hljs.registerAliases(['ts', 'tsx'], { languageName: 'typescript' });
-hljs.registerAliases(['html', 'vue', 'svg'], { languageName: 'xml' });
-hljs.registerAliases(['yml'], { languageName: 'yaml' });
-hljs.registerAliases(['toml'], { languageName: 'ini' });
-hljs.registerAliases(['py'], { languageName: 'python' });
-hljs.registerAliases(['rb'], { languageName: 'ruby' });
-
-function escapeHtml(str: string): string {
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
-// コードブロック右上に出す言語ラベル。
-// 以前はCSSに言語ごとの ::before をハードコードしていたため、
-// 列挙外の言語ではラベルが空文字になり、余白だけが2em空いていた。
-// 別名も含めて引けるようにしておく。
-// hljs.getLanguage().name は "HTML, XML" のような文字列を返すことがあり、正規化には使えない。
-const LANG_LABELS: Record<string, string> = {
-  bash: 'Bash', sh: 'Bash', shell: 'Bash', zsh: 'Bash',
-  css: 'CSS', scss: 'SCSS',
-  diff: 'Diff', dockerfile: 'Dockerfile',
-  go: 'Go', graphql: 'GraphQL',
-  ini: 'INI', toml: 'TOML',
-  java: 'Java',
-  javascript: 'JavaScript', js: 'JavaScript', jsx: 'JSX',
-  typescript: 'TypeScript', ts: 'TypeScript', tsx: 'TSX',
-  json: 'JSON', markdown: 'Markdown',
-  php: 'PHP',
-  python: 'Python', py: 'Python',
-  ruby: 'Ruby', rb: 'Ruby',
-  rust: 'Rust', sql: 'SQL',
-  xml: 'XML', html: 'HTML', vue: 'Vue', svg: 'SVG',
-  yaml: 'YAML', yml: 'YAML',
-};
-
-const md: MarkdownIt = new MarkdownIt({
-  html: true,
-  linkify: true,
-  // typographer は "..." を … に、-- を – に変換してしまう。
-  // 技術記事ではコマンドやJSONの引用符が壊れるため無効にする。
-  typographer: false,
-  highlight: (str: string, lang: string): string => {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        const label = LANG_LABELS[lang.toLowerCase()] ?? lang.toUpperCase();
-        return `<pre class="has-lang" role="region" aria-label="${escapeHtml(label)}のコード"><code class="hljs language-${lang}" data-lang="${escapeHtml(label)}">${hljs.highlight(str, { language: lang }).value}</code></pre>`;
-      } catch { /* fallthrough */ }
-    }
-    // 言語指定がない場合は自動判定に頼らず、そのままエスケープして出す。
-    // 誤判定した色付けは読み手を混乱させるうえ、Edge の CPU 時間も余計に使う。
-    return `<pre role="region" aria-label="コード"><code class="hljs">${escapeHtml(str)}</code></pre>`;
-  },
-});
-md.use(anchor, { permalink: false, slugify: (s: string) => encodeURIComponent(String(s).trim().toLowerCase().replace(/\s+/g, '-')) });
 
 // Edge Runtime互換のHTML操作ヘルパー（cheerio不使用）
 function stripHtml(html: string): string {
@@ -115,7 +27,10 @@ function extractHeadings(html: string): { text: string; id: string; tag: string 
   const regex = /<(h[123])[^>]*id=["']([^"']*)["'][^>]*>(.*?)<\/\1>/gi;
   let match;
   while ((match = regex.exec(html)) !== null) {
-    headings.push({ tag: match[1], id: match[2], text: stripHtml(match[3]) });
+    // 見出し内のパーマリンク（<a class="heading-anchor">#</a>）を落としてから
+    // テキスト化する。残すと目次の項目名が「はじめに#」になってしまう。
+    const inner = match[3].replace(/<a class="heading-anchor"[\s\S]*?<\/a>/g, '');
+    headings.push({ tag: match[1], id: match[2], text: stripHtml(inner) });
   }
   return headings;
 }
@@ -125,7 +40,8 @@ import { StickyTableOfContents } from '@/components/TableOfContents/StickyTableO
 import { RelatedPosts } from '@/components/RelatedPosts/RelatedPosts';
 import { ShareButtons } from '@/components/ShareButtons/ShareButtons';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
-import { CodeCopyButton } from '@/components/CodeCopyButton/CodeCopyButton';
+import { CodeBlockEnhancer } from '@/components/CodeBlock/CodeBlockEnhancer';
+import { MermaidLoader } from '@/components/Mermaid/MermaidLoader';
 import { ReadingTracker } from '@/components/ReadingStats/ReadingTracker';
 import { FloatingShareButton } from '@/components/ShareButtons/FloatingShareButton';
 import { PostNavigation } from '@/components/PostNavigation/PostNavigation';
@@ -157,9 +73,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // markdown->平文（Edge互換）
   const cleanBody = blog.body
     .replace(/:::callout\{[^}]*\}/g, '')
-    .replace(/:::/g, '')
-    .replace(/\[toc\]/gi, '')
-    .replace(/"\[toc\]"/gi, '');
+    .replace(/:::/g, '');
   const rawHtml = md.render(cleanBody);
   const text = stripHtml(rawHtml);
 
@@ -300,12 +214,6 @@ export default async function StaticDetailPage({
       () => calloutHtml
     );
   });
-
-  // [toc]マーカーを除去（ブログ側で目次を自動生成するため）
-  processedHtml = processedHtml.replace(/<p>\s*\[toc\]\s*<\/p>/gi, '');
-  processedHtml = processedHtml.replace(/<p>\s*"\[toc\]"\s*<\/p>/gi, '');
-  processedHtml = processedHtml.replace(/"\[toc\]"/gi, '');
-  processedHtml = processedHtml.replace(/\[toc\]/gi, '');
 
   // 見出し行を持たないNotionテーブルは、Markdownの制約上ダミーの空ヘッダーを挟んでいる。
   // 空のままだと灰色の帯だけが残るので取り除く。
@@ -505,7 +413,8 @@ export default async function StaticDetailPage({
             <TableOfContents toc={toc} />
             <div className='p-4 znc markdown text-foreground'>
               <div dangerouslySetInnerHTML={{ __html: processedHtml }}></div>
-              <CodeCopyButton />
+              <CodeBlockEnhancer />
+              <MermaidLoader />
               <ImageLightbox />
               <ReadingTracker articleId={blogId} />
             </div>

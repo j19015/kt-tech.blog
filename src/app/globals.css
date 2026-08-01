@@ -44,9 +44,15 @@ html {
   footer,
   nav,
   button,
-  .copy-btn,
   .link-card,
   .print\:hidden {
+    display: none !important;
+  }
+  /* 折りたたまれたコードが途中で切れたまま印刷されないようにする */
+  .znc .code-block.is-collapsed pre {
+    max-height: none !important;
+  }
+  .znc .code-block.is-collapsed::after {
     display: none !important;
   }
   body {
