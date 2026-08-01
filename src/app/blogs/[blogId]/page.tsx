@@ -2,8 +2,6 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getDetail, getList, Blog } from '../../../../libs/notion';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarAlt, faTag } from '@fortawesome/free-solid-svg-icons';
 import MarkdownIt from 'markdown-it';
 import anchor from 'markdown-it-anchor';
 import hljs from 'highlight.js/lib/core';
@@ -122,7 +120,6 @@ function extractHeadings(html: string): { text: string; id: string; tag: string 
   return headings;
 }
 import type { Metadata, ResolvingMetadata } from 'next';
-import { faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import { TableOfContents } from '@/components/TableOfContents/TableOfContents';
 import { StickyTableOfContents } from '@/components/TableOfContents/StickyTableOfContents';
 import { RelatedPosts } from '@/components/RelatedPosts/RelatedPosts';
@@ -137,6 +134,9 @@ import { KeyboardNav } from '@/components/KeyboardNav/KeyboardNav';
 import { FloatingTocButton } from '@/components/TableOfContents/FloatingTocButton';
 import { BookmarkButton } from '@/components/Bookmark/BookmarkButton';
 import { isPublic } from '@/lib/blog';
+import { calloutKindFromColor, CALLOUT_META } from '@/lib/callout';
+// カレンダー・フォルダの3アイコンのために FontAwesome 一式を読み込んでいたので lucide に統一
+import { Calendar, FolderOpen, Pencil, MessageCircle } from 'lucide-react';
 
 
 export const runtime = 'edge';
@@ -285,7 +285,15 @@ export default async function StaticDetailPage({
     const isSingleParagraph =
       /^<p>[\s\S]*<\/p>$/.test(rendered) && !rendered.slice(3, -4).includes('<p>');
     const textHtml = isSingleParagraph ? rendered.slice(3, -4) : rendered;
-    const calloutHtml = `<div class="callout callout-${color}"><span class="callout-icon" aria-hidden="true">${icon}</span><div class="callout-content">${textHtml}</div></div>`;
+    // 色ではなく「意味」でクラスを付け、種別ラベルを添える。
+    // 色だけでは何の注意書きなのかが伝わらない。
+    const kind = calloutKindFromColor(color);
+    const meta = CALLOUT_META[kind];
+    const calloutHtml =
+      `<div class="callout callout--${kind}">` +
+      `<div class="callout__label"><span class="callout__icon" aria-hidden="true">${icon || meta.icon}</span>${meta.label}</div>` +
+      `<div class="callout__body">${textHtml}</div>` +
+      `</div>`;
     // 置換文字列を関数で渡し、本文中の $& などが置換パターンとして解釈されるのを防ぐ
     processedHtml = processedHtml.replace(
       new RegExp(`<p>${placeholder}</p>|${placeholder}`, 'g'),
@@ -372,6 +380,10 @@ export default async function StaticDetailPage({
     notFound();
   }
 
+  // 読了時間は本文・JSON-LDで同じ値を使う
+  const plainText = stripHtml(processedHtml);
+  const readingMinutes = Math.max(1, Math.ceil(plainText.length / 600));
+
   // JSON-LD 構造化データ
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -407,8 +419,8 @@ export default async function StaticDetailPage({
       '@type': 'SpeakableSpecification',
       cssSelector: ['[data-article-title]', '[data-article-description]'],
     },
-    wordCount: stripHtml(processedHtml).length,
-    timeRequired: `PT${Math.max(1, Math.ceil(stripHtml(processedHtml).length / 600))}M`,
+    wordCount: plainText.length,
+    timeRequired: `PT${readingMinutes}M`,
   };
 
   const breadcrumbJsonLd = {
@@ -431,76 +443,65 @@ export default async function StaticDetailPage({
           { label: blog.title, current: true }
         ]}
       />
-      <div className='grid grid-cols-1 lg:grid-cols-3 lg:p-4'>
-        <div className='lg:col-span-1 p-5 pl-7 pt-0 hidden lg:block'>
-          <StickyTableOfContents toc={toc} />
-        </div>
-        {/* overflow: hidden はスクロールコンテナを作り、scroll-padding-top や
-            将来の sticky 要素に影響する。横のはみ出しだけを止めれば足りる。 */}
-        <div className='lg:col-span-2 col-span-1 lg:py-5 lg:px-3 content [overflow-x:clip]'>
+      {/* 本文を先に置き、目次は order で右に回す。
+          DOM順を本文優先にすることで、スクリーンリーダーと検索エンジンにも本文が先に届く。
+          左に目次があると本文の開始位置が右にずれ、視線の起点が補助情報になっていた。 */}
+      <div className='max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 lg:p-4'>
+        <div className='lg:col-span-2 lg:order-1 content [overflow-x:clip]'>
           {/* 記事本文はランドマークとして辿れるよう article にする */}
           <article>
-            <div className='p-4'>
-              <Image
-                src={blog.eyecatch?.url || '/images/no_image_generated.png'}
-                alt={blog.title}
-                width={1200}
-                height={630}
-                className='rounded-lg w-full'
-                priority
-              />
-            </div>
-            {/* メタデータセクション */}
-            <div className='p-6 space-y-4'>
-              {/* カテゴリと日付と読了時間 */}
-              <div className='flex flex-wrap items-center gap-3'>
+            {/* タイトル → メタ → 本文 の順にする。
+                以前はアイキャッチとメタ情報が先で、記事を開いた瞬間に
+                何の記事か分かるまでスクロールが必要だった。 */}
+            <header className='px-4'>
+              <h1 data-article-title className='text-2xl lg:text-3xl font-bold text-foreground break-words leading-tight'>
+                {blog.title}
+              </h1>
+
+              <div className='mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm'>
                 {blog.category && (
-                  <Link href={`/categories/${blog.category.id}/page/1`}>
-                    <span className='inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-full text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors'>
-                      <FontAwesomeIcon icon={faFolderOpen} className='w-3.5 h-3.5' />
-                      {blog.category.name}
-                    </span>
+                  <Link
+                    href={`/categories/${blog.category.id}/page/1`}
+                    className='inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 dark:bg-slate-800 rounded-full text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors'
+                  >
+                    <FolderOpen className='w-3.5 h-3.5' aria-hidden='true' />
+                    {blog.category.name}
                   </Link>
                 )}
-                <div className='flex items-center gap-2 text-muted-foreground'>
-                  <FontAwesomeIcon icon={faCalendarAlt} className='w-4 h-4' />
-                  <time className='text-sm' dateTime={blog.createdAt}>
+                <span className='inline-flex items-center gap-1.5 text-slate-500 dark:text-slate-400'>
+                  <Calendar className='w-3.5 h-3.5' aria-hidden='true' />
+                  <time dateTime={blog.createdAt}>
                     {new Date(blog.createdAt).toLocaleDateString('ja-JP', {
                       year: 'numeric',
                       month: 'long',
-                      day: 'numeric'
+                      day: 'numeric',
                     })}
                   </time>
-                </div>
+                </span>
                 {blog.updatedAt !== blog.createdAt && (
-                  <time className='text-xs text-slate-500 dark:text-slate-400' dateTime={blog.updatedAt}>
-                    最終更新: {new Date(blog.updatedAt).toLocaleDateString('ja-JP')}
+                  <time className='text-slate-500 dark:text-slate-400' dateTime={blog.updatedAt}>
+                    最終更新 {new Date(blog.updatedAt).toLocaleDateString('ja-JP')}
                   </time>
                 )}
-                <span className='text-xs text-slate-500 dark:text-slate-500'>
-                  · 約{Math.max(1, Math.ceil(stripHtml(processedHtml).length / 600))}分で読めます
-                </span>
+                <span className='text-slate-500 dark:text-slate-400'>約{readingMinutes}分で読めます</span>
               </div>
-              
-              {/* タグ */}
-              {blog.tags && blog.tags.length > 0 && (
-                <div className='flex flex-wrap gap-2'>
-                  {blog.tags.map((tag) => (
-                    <Link key={tag.id} href={`/tags/${tag.id}`}>
-                      <span className='inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 rounded-full text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors'>
-                        <FontAwesomeIcon icon={faTag} className='w-3 h-3' />
-                        {tag.name}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-            <h1 data-article-title className='p-4 mt-5 text-xl font-bold lg:text-3xl text-foreground break-words'>{blog.title}</h1>
-            <ShareButtons title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
-            <div className='px-6 -mt-4 mb-4'>
-              <BookmarkButton articleId={blogId} title={blog.title} />
-            </div>
+
+              <div className='mt-4'>
+                <BookmarkButton articleId={blogId} title={blog.title} />
+              </div>
+
+              {/* アイキャッチは自動生成の抽象画像で内容を説明しないため、
+                  高さを抑えて本文までの距離を縮める */}
+              <Image
+                src={blog.eyecatch?.url || '/images/no_image_generated.png'}
+                alt=''
+                width={1200}
+                height={630}
+                sizes='(max-width: 1024px) 100vw, 700px'
+                className='mt-6 rounded-lg w-full aspect-[21/9] object-cover'
+                priority
+              />
+            </header>
             <TableOfContents toc={toc} />
             <div className='p-4 znc markdown text-foreground'>
               <div dangerouslySetInnerHTML={{ __html: processedHtml }}></div>
@@ -508,38 +509,72 @@ export default async function StaticDetailPage({
               <ImageLightbox />
               <ReadingTracker articleId={blogId} />
             </div>
-            {/* 記事末シェアCTA + 著者カード */}
-            <div className='mt-12 mx-4 p-6 bg-slate-50 dark:bg-slate-800/50 rounded-lg space-y-6'>
+            {/* 記事末: タグ → シェア/著者/フィードバック → 前後記事 → 関連記事。
+                以前はシェアが記事上部と末尾の2箇所にあり、著者カードもリンク先がなかった。 */}
+            {blog.tags && blog.tags.length > 0 && (
+              <div className='mt-12 mx-4'>
+                <h2 className='text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3'>
+                  この記事のタグ
+                </h2>
+                <div className='flex flex-wrap gap-2'>
+                  {blog.tags.map((tag) => (
+                    <Link
+                      key={tag.id}
+                      href={`/tags/${tag.id}`}
+                      className='inline-flex items-center px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-full text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors'
+                    >
+                      #{tag.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className='mt-8 mx-4 p-6 bg-slate-50 dark:bg-slate-800/50 rounded-lg space-y-6'>
               <div className='text-center'>
-                <p className='text-sm text-slate-600 dark:text-slate-400 mb-3'>この記事が役に立ったら共有しよう</p>
+                <p className='text-sm text-slate-600 dark:text-slate-300 mb-3'>この記事が役に立ったら共有しよう</p>
                 <ShareButtons title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
               </div>
               <div className='border-t border-slate-200 dark:border-slate-700 pt-6'>
-                <div className='flex items-center gap-4'>
-                  <img src='/images/meow_koki.webp' alt='Koki' className='w-12 h-12 rounded-full object-cover' />
+                {/* 著者カードはどこにもリンクしておらず、行き止まりになっていた */}
+                <Link href='/about' className='group flex items-center gap-4'>
+                  <Image
+                    src='/images/meow_koki.webp'
+                    alt=''
+                    width={48}
+                    height={48}
+                    className='rounded-full object-cover'
+                  />
                   <div>
-                    <p className='font-bold text-slate-900 dark:text-slate-100'>Koki</p>
-                    <p className='text-xs text-slate-500 dark:text-slate-400'>フルスタックエンジニア / React, Next.js, TypeScript</p>
+                    <p className='font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors'>
+                      Koki
+                    </p>
+                    <p className='text-xs text-slate-500 dark:text-slate-400'>
+                      フルスタックエンジニア / React, Next.js, TypeScript
+                    </p>
                   </div>
-                </div>
+                </Link>
               </div>
-              {/* Feedback links */}
-              <div className='flex flex-wrap gap-4 pt-4 border-t border-slate-200 dark:border-slate-700'>
-                <a
-                  href={`https://x.com/search?q=${encodeURIComponent(process.env.SITE_URL + '/blogs/' + blogId)}`}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='text-xs text-slate-500 dark:text-slate-500 hover:text-blue-500 transition-colors'
-                >
-                  Xで議論を見る
-                </a>
+              {/* フィードバック導線。以前は text-slate-400 の極小文字で埋もれていた */}
+              <div className='flex flex-wrap gap-4 pt-4 border-t border-slate-200 dark:border-slate-700 text-sm'>
                 <a
                   href={`https://github.com/j19015/kt-tech.blog/issues/new?title=${encodeURIComponent('[typo] ' + blog.title)}&body=${encodeURIComponent('記事URL: ' + process.env.SITE_URL + '/blogs/' + blogId + '\n\n誤字・修正内容:\n')}`}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='text-xs text-slate-500 dark:text-slate-500 hover:text-blue-500 transition-colors'
+                  className='inline-flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors'
                 >
-                  誤字を報告する
+                  <Pencil className='w-3.5 h-3.5' aria-hidden='true' />
+                  誤字・間違いを報告する
+                </a>
+                {/* 検索結果ページ（多くの場合0件）ではなく、感想を書ける投稿画面に送る */}
+                <a
+                  href={`https://x.com/intent/tweet?text=${encodeURIComponent(blog.title)}&url=${encodeURIComponent(`${process.env.SITE_URL}/blogs/${blogId}`)}`}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='inline-flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors'
+                >
+                  <MessageCircle className='w-3.5 h-3.5' aria-hidden='true' />
+                  Xで感想を書く
                 </a>
               </div>
             </div>
@@ -554,6 +589,10 @@ export default async function StaticDetailPage({
           <FloatingTocButton toc={toc} />
           <FloatingShareButton title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
           </article>
+        </div>
+        {/* 目次は視覚的には右、DOM順では本文のあと */}
+        <div className='lg:col-span-1 lg:order-2 hidden lg:block'>
+          <StickyTableOfContents toc={toc} />
         </div>
       </div>
     </>

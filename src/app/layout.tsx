@@ -9,9 +9,7 @@ const notoSansJP = Noto_Sans_JP({
   variable: '--font-noto-sans-jp',
 });
 import { Footer } from '../../src/components/Footer/Footer';
-import { config } from '@fortawesome/fontawesome-svg-core';
 import GoogleAnalytics from '@/components/GoogleAnalytics/GoogleAnalytics';
-import '@fortawesome/fontawesome-svg-core/styles.css';
 import Favicon from './favicon.ico';
 import icon from './icon.png';
 import { Metadata } from 'next';
@@ -21,7 +19,6 @@ import { ScrollToTop } from '@/components/ScrollToTop/ScrollToTop';
 import { WebVitals } from '@/components/WebVitals/WebVitals';
 import { ScrollDepthTracker } from '@/components/Analytics/ScrollDepthTracker';
 import { OutboundLinkTracker } from '@/components/Analytics/OutboundLinkTracker';
-config.autoAddCss = false;
 
 const siteName = 'kt-tech.blog';
 const description = 'フルスタックエンジニアKokiの技術ブログ。React, Next.js, TypeScript, AWSなどの最新技術情報と実践的な開発ノウハウを共有。';
