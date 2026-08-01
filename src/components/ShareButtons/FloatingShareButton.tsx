@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { Share2, Check } from 'lucide-react';
+import { FAB_BASE, FAB_SLOT, FAB_Z } from '@/lib/fab';
 
 export const FloatingShareButton = ({ title, url }: { title: string; url: string }) => {
   const [copied, setCopied] = useState(false);
@@ -24,8 +25,7 @@ export const FloatingShareButton = ({ title, url }: { title: string; url: string
   return (
     <button
       onClick={handleShare}
-      // ScrollToTop(bottom-6) と 目次FAB(bottom-[4.5rem]) の上に等間隔で並べる
-      className='fixed bottom-[8rem] right-6 z-30 w-11 h-11 flex items-center justify-center rounded-full bg-slate-700/80 dark:bg-slate-200/80 text-white dark:text-slate-900 backdrop-blur-sm shadow-lg hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors lg:hidden'
+      className={`${FAB_BASE} ${FAB_SLOT.third} ${FAB_Z.share} bg-slate-700/80 text-white backdrop-blur-sm hover:bg-slate-800 dark:bg-slate-200/80 dark:text-slate-900 dark:hover:bg-slate-100 lg:hidden`}
       aria-label={copied ? 'URLをコピーしました' : 'この記事を共有'}
     >
       {copied ? <Check className='w-5 h-5' aria-hidden='true' /> : <Share2 className='w-5 h-5' aria-hidden='true' />}

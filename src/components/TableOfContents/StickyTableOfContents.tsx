@@ -1,13 +1,8 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
-import { tocDepth } from '@/lib/toc';
+import { tocDepth, type TocItem } from '@/lib/toc';
 
 
-interface TocItem {
-  id: string;
-  text: string;
-  tag: string;
-}
 
 export const StickyTableOfContents = ({ toc }: { toc: TocItem[] }) => {
   const [activeId, setActiveId] = useState<string>('');

@@ -42,7 +42,7 @@ export default async function TagsPage() {
           {tags.map((tag) => (
             <li key={tag.id}>
               <Link
-                href={`/tags/${tag.id}`}
+                href={`/tags/${encodeURIComponent(tag.id)}/page/1`}
                 className='inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-sm'
               >
                 #{tag.name}
