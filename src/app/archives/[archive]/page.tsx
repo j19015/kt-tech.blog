@@ -59,7 +59,9 @@ export default async function StaticDetailPage({
     <WithSidebar>
       <BreadcrumbNav items={[{ label: formatArchive(archive), current: true }]} />
       <Title title={formatArchive(archive)} type='archive' count={filteredContents.length} />
-      <Index contents={filteredContents} />
+      <div className='max-w-3xl mx-auto px-4'>
+        <Index contents={filteredContents} />
+      </div>
     </WithSidebar>
   );
 }

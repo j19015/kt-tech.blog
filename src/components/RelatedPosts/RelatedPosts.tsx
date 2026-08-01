@@ -2,7 +2,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Blog } from '../../../libs/notion';
-import { Clock, FolderOpen, ArrowRight } from 'lucide-react';
+import { Clock, ArrowRight } from 'lucide-react';
+import { CategoryChip } from '../Chip/Chip';
 
 interface RelatedPostsProps {
   posts: Blog[];
@@ -29,7 +30,15 @@ export const RelatedPosts = ({ posts, currentPostId }: RelatedPostsProps) => {
         </Link>
       </div>
 
-      <div className='grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-5'>
+      {/* 件数に応じて列数を決める。3カラム固定だと2件のとき右が空いて
+          「読み込みに失敗した」ようにも見えていた。
+          モバイルの gap-10(40px) はデスクトップの 20px より広く、
+          縦積みしたときに1つのまとまりとして読めなかったので揃える。 */}
+      <div
+        className={`grid grid-cols-1 gap-5 ${
+          relatedPosts.length >= 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2'
+        }`}
+      >
         {relatedPosts.map((post) => (
           <article key={post.id} className='group'>
             <Link href={`/blogs/${post.id}`} className='block'>
@@ -42,16 +51,16 @@ export const RelatedPosts = ({ posts, currentPostId }: RelatedPostsProps) => {
                   sizes='(max-width: 640px) 100vw, 250px'
                   className='object-cover group-hover:scale-105 transition-transform duration-300'
                 />
-                {post.category && (
-                  <div className='absolute bottom-2 left-2'>
-                    <span className='px-2 py-0.5 bg-white/90 dark:bg-slate-900/90 rounded text-xs text-slate-700 dark:text-slate-300'>
-                      {post.category.name}
-                    </span>
-                  </div>
-                )}
               </div>
 
               {/* Content */}
+              {/* カテゴリは画像に重ねず下に出す。明るいアイキャッチの上では
+                  半透明の背景越しの文字が読めなかった */}
+              {post.category && (
+                <div className='mb-2'>
+                  <CategoryChip name={post.category.name} size='sm' />
+                </div>
+              )}
               <h3 className='text-sm font-medium text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 mb-2'>
                 {post.title}
               </h3>

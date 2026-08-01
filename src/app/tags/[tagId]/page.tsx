@@ -70,7 +70,9 @@ export default async function StaticDetailPage({
         ]}
       />
       <Title title={tag_show.name} type='tag' count={filteredContents.length} />
-      <Index contents={filteredContents} />
+      <div className='max-w-3xl mx-auto px-4'>
+        <Index contents={filteredContents} />
+      </div>
     </WithSidebar>
   );
 }
