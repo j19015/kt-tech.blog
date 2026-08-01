@@ -6,6 +6,11 @@ import { md, escapeHtml } from '@/lib/markdown';
 import { stripEmoji } from '@/lib/emoji';
 import '../../../../styles/markdown.css';
 import '../../../../styles/hljs-theme.css';
+// KaTeX の CSS は数式の有無に関わらず記事ページで読み込まれる（約23KB、gzipで7KB程度）。
+// dangerouslySetInnerHTML で本文を描画している以上、記事ごとに出し分けられないため。
+// フォントは実際に数式の字形が使われたときだけ取得されるので、
+// 数式のない記事でフォントの転送は発生しない。
+import 'katex/dist/katex.min.css';
 
 // Edge Runtime互換のHTML操作ヘルパー（cheerio不使用）
 function stripHtml(html: string): string {

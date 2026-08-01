@@ -276,6 +276,11 @@ async function blockToMarkdown(block: any, indent: string): Promise<string | nul
       }
       return lines.join('\n');
     }
+    case 'equation': {
+      // これまで default に落ちて、ブロック数式は跡形もなく消えていた
+      const expression = block.equation?.expression;
+      return expression ? `${indent}$$\n${indent}${expression}\n${indent}$$` : null;
+    }
     case 'embed':
     case 'video':
     case 'link_preview': {
@@ -326,12 +331,26 @@ async function blocksToMarkdown(blockId: string, indent = ''): Promise<string> {
 // 書けば実行されてしまう状態だった。記事を書けるのは本人だけなので実害は
 // 限定的だが、意図せずタグが壊れる事故のほうが起きやすい。
 function escapeInlineText(text: string): string {
-  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return (
+    text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      // Notion の数式は equation 型として別に届くので、本文に出てくる $ は
+      // ただのドル記号。実体参照にしておかないと「$100 から $200」のような
+      // 文が数式として解釈されてしまう。
+      .replace(/\$/g, '&#36;')
+  );
 }
 
 function richTextToMarkdown(richText: any[]): string {
   if (!richText) return '';
   return richText.map((t: any) => {
+    // 数式は plain_text に LaTeX ソースがそのまま入っている。
+    // エスケープする前に取り出さないと、\frac{...} が本文に生で出てしまう。
+    if (t.type === 'equation' && t.equation?.expression) {
+      return `$${t.equation.expression}$`;
+    }
     const annotations = t.annotations || {};
     // インラインコードの中身は markdown-it 側でエスケープされる。
     // ここで先にエスケープすると `&lt;` がそのまま画面に出てしまう。
