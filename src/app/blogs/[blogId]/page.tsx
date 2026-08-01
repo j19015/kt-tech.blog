@@ -52,6 +52,7 @@ import { KeyboardNav } from '@/components/KeyboardNav/KeyboardNav';
 import { FloatingTocButton } from '@/components/TableOfContents/FloatingTocButton';
 import { BookmarkButton } from '@/components/Bookmark/BookmarkButton';
 import { SeriesNav } from '@/components/Series/SeriesNav';
+import { ArticleAside } from '@/components/ArticleAside/ArticleAside';
 import { findSeriesOf } from '@/lib/series';
 import { isPublic } from '@/lib/blog';
 import { calloutKindFromColor, CALLOUT_META } from '@/lib/callout';
@@ -566,9 +567,11 @@ export default async function StaticDetailPage({
           <FloatingShareButton title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
           </article>
         </div>
-        {/* 目次は視覚的には右、DOM順では本文のあと */}
+        {/* 目次は視覚的には右、DOM順では本文のあと。
+            サイドバーが出ないページなので、目次の下に回遊導線を足す。 */}
         <div className='lg:col-span-1 lg:order-2 hidden lg:block'>
           <StickyTableOfContents toc={toc} />
+          <ArticleAside blog={blog} latest={navPosts.filter((p) => p.id !== blogId).slice(0, 5)} />
         </div>
       </div>
     </>

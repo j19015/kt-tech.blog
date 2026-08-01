@@ -321,12 +321,23 @@ async function blocksToMarkdown(blockId: string, indent = ''): Promise<string> {
 
 // rich_textをマークダウン形式に変換 (インライン装飾対応)
 // bold/italic/codeが混在する場合はHTMLタグで出力して確実に変換
+// レンダリング側の markdown-it は html: true で動くため、本文に生の <  > が
+// 残っているとそのままタグとして解釈される。Notion に `<img onerror=...>` と
+// 書けば実行されてしまう状態だった。記事を書けるのは本人だけなので実害は
+// 限定的だが、意図せずタグが壊れる事故のほうが起きやすい。
+function escapeInlineText(text: string): string {
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 function richTextToMarkdown(richText: any[]): string {
   if (!richText) return '';
   return richText.map((t: any) => {
-    let text = t.plain_text;
     const annotations = t.annotations || {};
-    if (annotations.code) text = `\`${text}\``;
+    // インラインコードの中身は markdown-it 側でエスケープされる。
+    // ここで先にエスケープすると `&lt;` がそのまま画面に出てしまう。
+    let text = annotations.code
+      ? `\`${t.plain_text}\``
+      : escapeInlineText(t.plain_text);
     if (annotations.bold) text = `<strong>${text}</strong>`;
     if (annotations.italic) text = `<em>${text}</em>`;
     if (annotations.strikethrough) text = `<del>${text}</del>`;
@@ -336,7 +347,12 @@ function richTextToMarkdown(richText: any[]): string {
     if (typeof annotations.color === 'string' && annotations.color.endsWith('_background')) {
       text = `<mark class="mark-${annotations.color.replace('_background', '')}">${text}</mark>`;
     }
-    if (t.href) text = `[${text}](${t.href})`;
+    if (t.href) {
+      // リンク先は <...> で囲む。素の `[text](url)` だと URL に空白や ) が
+      // 含まれるだけでリンクが壊れ、後続の本文まで巻き込む。
+      // javascript: などの危険なスキームは markdown-it の validateLink が既に弾く。
+      text = `[${text}](<${String(t.href).replace(/[<>]/g, encodeURIComponent)}>)`;
+    }
     return text;
   }).join('');
 }
