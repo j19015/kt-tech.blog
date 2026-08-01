@@ -613,148 +613,140 @@
   }
 }
 
-/* Callout / Tips UI */
+/* Callout / Tips UI
+   色ではなく種別（note/tip/important/warning/caution）でスタイルを決める。
+   ラベルを添えることで、色が判別できない環境でも意味が伝わる。 */
 .znc .callout {
+  margin: 1.5rem 0;
+  padding: 0.875rem 1.125rem;
+  border-radius: 8px;
+  border: 1px solid;
+  border-left-width: 4px;
+  /* 本文と同じ文字サイズにする。補足情報が本文より大きいのは不自然だった */
+  font-size: inherit;
+  line-height: 1.85;
+}
+
+.znc .callout__label {
   display: flex;
-  gap: 1rem;
-  padding: 1.25rem 1.5rem;
-  margin: 2rem 0;
-  border-radius: 0.75rem;
-  font-style: normal;
-  line-height: 1.8;
-  border: 1px solid transparent;
-  border-left: 4px solid;
-  font-size: 1.05rem;
-  color: #1e293b;
-}
-.dark .znc .callout {
-  color: #e2e8f0;
+  align-items: center;
+  gap: 0.4em;
+  font-weight: 700;
+  font-size: 0.875em;
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.02em;
 }
 
-.znc .callout-icon {
-  font-size: 1.5rem;
+.znc .callout__icon {
+  /* 絵文字は環境ごとに字形も縦位置も違うので、行の高さに合わせて中央に置く */
+  font-size: 1.05em;
+  line-height: 1;
   flex-shrink: 0;
-  margin-top: 0.15rem;
 }
 
-.znc .callout-content {
-  flex: 1;
-  min-width: 0;
+.znc .callout__body > :first-child {
+  margin-top: 0;
 }
-
-/* 複数段落のcalloutでも段落の区切りが分かるようにする */
-.znc .callout-content p {
-  padding: 0;
-  margin: 0 0 0.75em;
-}
-.znc .callout-content > :last-child {
+.znc .callout__body > :last-child {
   margin-bottom: 0;
 }
-
-.znc .callout-content strong {
-  font-weight: 700;
+.znc .callout__body p {
+  margin: 0 0 0.75em;
+  padding: 0;
 }
-
-.znc .callout-content code {
+.znc .callout__body ul,
+.znc .callout__body ol {
+  margin: 0.5em 0;
+}
+.znc .callout__body code {
   font-size: 0.9em;
 }
 
-/* デフォルト: グレー背景 */
-.znc .callout-default,
-.znc .callout-gray_background {
-  background: #f3f4f6;
-  border-color: #d1d5db;
-  border-left-color: #6b7280;
-}
-.dark .znc .callout-default,
-.dark .znc .callout-gray_background {
-  background: rgba(148, 163, 184, 0.20);
-  border-color: rgba(148, 163, 184, 0.35);
+/* 種別ごとの配色。
+   ダークも半透明ではなく実色で定義する（半透明は下の背景に依存して読みにくくなる）。 */
+.znc .callout--note {
+  background: #f8fafc;
+  border-color: #e2e8f0;
   border-left-color: #94a3b8;
 }
-
-/* 青: 情報・メモ */
-.znc .callout-blue_background {
-  background: #e8f4fd;
-  border-color: #7cb9e8;
-  border-left-color: #2563eb;
+.znc .callout--note .callout__label {
+  color: #475569;
 }
-.dark .znc .callout-blue_background {
-  background: rgba(37, 99, 235, 0.22);
-  border-color: rgba(59, 130, 246, 0.40);
-  border-left-color: #60a5fa;
+.dark .znc .callout--note {
+  background: #1a2436;
+  border-color: #2b3a52;
+  border-left-color: #94a3b8;
+}
+.dark .znc .callout--note .callout__label {
+  color: #cbd5e1;
 }
 
-/* 緑: 成功・Tips */
-.znc .callout-green_background {
-  background: #e6f9ed;
-  border-color: #6ee7a0;
+.znc .callout--tip {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
   border-left-color: #16a34a;
 }
-.dark .znc .callout-green_background {
-  background: rgba(22, 163, 74, 0.22);
-  border-color: rgba(34, 197, 94, 0.40);
+.znc .callout--tip .callout__label {
+  color: #15803d;
+}
+.dark .znc .callout--tip {
+  background: #10291b;
+  border-color: #1a4030;
   border-left-color: #4ade80;
 }
-
-/* 黄色: 注意・警告 */
-.znc .callout-yellow_background {
-  background: #fef9e7;
-  border-color: #f5d44e;
-  border-left-color: #ca8a04;
+.dark .znc .callout--tip .callout__label {
+  color: #86efac;
 }
-.dark .znc .callout-yellow_background {
-  background: rgba(202, 138, 4, 0.22);
-  border-color: rgba(234, 179, 8, 0.40);
+
+.znc .callout--important {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  border-left-color: #2563eb;
+}
+.znc .callout--important .callout__label {
+  color: #1d4ed8;
+}
+.dark .znc .callout--important {
+  background: #16273f;
+  border-color: #1e3a5f;
+  border-left-color: #60a5fa;
+}
+.dark .znc .callout--important .callout__label {
+  color: #93c5fd;
+}
+
+.znc .callout--warning {
+  background: #fffbeb;
+  border-color: #fde68a;
+  border-left-color: #d97706;
+}
+.znc .callout--warning .callout__label {
+  color: #b45309;
+}
+.dark .znc .callout--warning {
+  background: #2e2410;
+  border-color: #4a3a15;
   border-left-color: #facc15;
 }
+.dark .znc .callout--warning .callout__label {
+  color: #fcd34d;
+}
 
-/* 赤: 危険・重要 */
-.znc .callout-red_background {
-  background: #fde8e8;
-  border-color: #f87171;
+.znc .callout--caution {
+  background: #fef2f2;
+  border-color: #fecaca;
   border-left-color: #dc2626;
 }
-.dark .znc .callout-red_background {
-  background: rgba(220, 38, 38, 0.22);
-  border-color: rgba(239, 68, 68, 0.40);
+.znc .callout--caution .callout__label {
+  color: #b91c1c;
+}
+.dark .znc .callout--caution {
+  background: #2e1618;
+  border-color: #4a2226;
   border-left-color: #f87171;
 }
-
-/* 紫 */
-.znc .callout-purple_background {
-  background: #f3e8ff;
-  border-color: #c084fc;
-  border-left-color: #7c3aed;
-}
-.dark .znc .callout-purple_background {
-  background: rgba(124, 58, 237, 0.22);
-  border-color: rgba(168, 85, 247, 0.40);
-  border-left-color: #a78bfa;
-}
-
-/* ピンク */
-.znc .callout-pink_background {
-  background: #fce7f3;
-  border-color: #f472b6;
-  border-left-color: #db2777;
-}
-.dark .znc .callout-pink_background {
-  background: rgba(219, 39, 119, 0.22);
-  border-color: rgba(236, 72, 153, 0.40);
-  border-left-color: #f472b6;
-}
-
-/* オレンジ */
-.znc .callout-orange_background {
-  background: #fff3e0;
-  border-color: #fb923c;
-  border-left-color: #ea580c;
-}
-.dark .znc .callout-orange_background {
-  background: rgba(234, 88, 12, 0.22);
-  border-color: rgba(249, 115, 22, 0.40);
-  border-left-color: #fb923c;
+.dark .znc .callout--caution .callout__label {
+  color: #fca5a5;
 }
 
 /* ブログの目次のCSS - グローバル変数を上書きしない */
