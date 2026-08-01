@@ -186,12 +186,14 @@ export default async function StaticDetailPage({
     .map(({ post }) => post);
   
   // calloutマーカーをプレースホルダーに変換（markdownToHtmlに通す前）
+  // 前後を %% で囲うのは、CALLOUT1 が CALLOUT10 の先頭にマッチして
+  // 11個目以降のcalloutが壊れるのを防ぐため
   const calloutMap = new Map<string, { icon: string; color: string; text: string }>();
   let calloutIndex = 0;
   const bodyPreprocessed = blog.body.replace(
     /:::callout\{icon="([^"]*)" color="([^"]*)"\}\n([\s\S]*?)\n:::/g,
     (_, icon, color, text) => {
-      const placeholder = `CALLOUT_PLACEHOLDER_${calloutIndex++}`;
+      const placeholder = `%%CALLOUT${calloutIndex++}%%`;
       calloutMap.set(placeholder, { icon, color, text });
       return placeholder;
     }
@@ -203,10 +205,19 @@ export default async function StaticDetailPage({
   let processedHtml = html;
   calloutMap.forEach(({ icon, color, text }, placeholder) => {
     // テキスト先頭の絵文字がiconと重複する場合は除去
-    let cleanText = text.replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]+\s*/u, '').trim();
-    const textHtml = md.render(cleanText).replace(/<\/?p>/g, '').trim();
-    const calloutHtml = `<div class="callout callout-${color}"><span class="callout-icon">${icon}</span><div class="callout-content">${textHtml}</div></div>`;
-    processedHtml = processedHtml.replace(new RegExp(`<p>${placeholder}</p>|${placeholder}`, 'g'), calloutHtml);
+    const cleanText = text.replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]+\s*/u, '').trim();
+    const rendered = md.render(cleanText).trim();
+    // 単一段落のときだけ <p> を外す。
+    // 無条件に全ての <p> を除去すると、複数段落のcalloutが1段落に潰れてしまう。
+    const isSingleParagraph =
+      /^<p>[\s\S]*<\/p>$/.test(rendered) && !rendered.slice(3, -4).includes('<p>');
+    const textHtml = isSingleParagraph ? rendered.slice(3, -4) : rendered;
+    const calloutHtml = `<div class="callout callout-${color}"><span class="callout-icon" aria-hidden="true">${icon}</span><div class="callout-content">${textHtml}</div></div>`;
+    // 置換文字列を関数で渡し、本文中の $& などが置換パターンとして解釈されるのを防ぐ
+    processedHtml = processedHtml.replace(
+      new RegExp(`<p>${placeholder}</p>|${placeholder}`, 'g'),
+      () => calloutHtml
+    );
   });
 
   // [toc]マーカーを除去（ブログ側で目次を自動生成するため）
@@ -214,6 +225,13 @@ export default async function StaticDetailPage({
   processedHtml = processedHtml.replace(/<p>\s*"\[toc\]"\s*<\/p>/gi, '');
   processedHtml = processedHtml.replace(/"\[toc\]"/gi, '');
   processedHtml = processedHtml.replace(/\[toc\]/gi, '');
+
+  // 見出し行を持たないNotionテーブルは、Markdownの制約上ダミーの空ヘッダーを挟んでいる。
+  // 空のままだと灰色の帯だけが残るので取り除く。
+  processedHtml = processedHtml.replace(
+    /<thead>\s*<tr>(?:\s*<th[^>]*>\s*<\/th>)+\s*<\/tr>\s*<\/thead>/g,
+    ''
+  );
 
   // テーブルをスクロール可能なラッパーで囲む（モバイル対応）
   processedHtml = processedHtml.replace(
@@ -232,6 +250,12 @@ export default async function StaticDetailPage({
   processedHtml = processedHtml.replace(
     /<img(?![^>]*loading=)/g,
     '<img loading="lazy" decoding="async"'
+  );
+
+  // チェックリスト(to_do)の <li> にクラスを付ける（マーカー除去とインデント調整のため）
+  processedHtml = processedHtml.replace(
+    /<li>(\s*<input type="checkbox")/g,
+    '<li class="task-list-item">$1'
   );
 
   // リンクカード生成（正規表現ベース）
