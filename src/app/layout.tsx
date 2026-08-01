@@ -106,7 +106,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `${url}/searches?keyword={search_term_string}`
+        // サイト内の検索フォームは全て `text` を送る。ここだけ `keyword` になっており、
+        // 検索エンジン経由で来た人は空の検索ページに着地していた。
+        urlTemplate: `${url}/searches?text={search_term_string}`
       },
       'query-input': 'required name=search_term_string'
     }

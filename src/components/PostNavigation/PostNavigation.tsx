@@ -48,6 +48,15 @@ export const PostNavigation = ({ currentId, allPosts }: PostNavigationProps) => 
           </Link>
         ) : <div />}
       </div>
+      {/* j / k のショートカットはどこにも書かれておらず、誰も気づけなかった。
+          hover のない端末（=キーボードが無いことが多い）では出さない。 */}
+      <p className='mt-4 hidden text-center text-[11px] text-slate-400 dark:text-slate-500 [@media(hover:hover)]:block'>
+        キーボードの
+        <kbd className='mx-1 rounded bg-slate-100 px-1.5 py-0.5 text-[10px] dark:bg-slate-800'>j</kbd>
+        で次の記事、
+        <kbd className='mx-1 rounded bg-slate-100 px-1.5 py-0.5 text-[10px] dark:bg-slate-800'>k</kbd>
+        で前の記事に移動できます
+      </p>
     </nav>
   );
 };
