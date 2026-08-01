@@ -115,6 +115,43 @@ NEXT_PUBLIC_BUCKET_NAME=xxx      # R2バケット名
 NEXT_PUBLIC_R2_BUCKET_URL=xxx    # R2パブリックURL
 ```
 
+## Notion のデータベースプロパティ
+
+必須のもの以外は、埋めなくても記事は問題なく表示される（プロパティ自体が
+未作成のデータベースでも落ちない）。
+
+| プロパティ | 型 | 必須 | 用途 |
+|---|---|---|---|
+| `Title` | Title | ○ | 記事タイトル |
+| `Slug` | Text | | URL。未設定ならページIDを使う |
+| `Status` | Select | ○ | `Published` のものだけ公開される |
+| `Created` | Date | | 公開日。未設定なら Notion の作成日時 |
+| `Category` | Select | | カテゴリ。`PF` は一覧・検索・関連記事から除外される |
+| `Tags` | Multi-select | | タグ |
+| `Eyecatch` | URL | | アイキャッチ。未設定ならページのカバー画像 |
+| `OGP Description` | Text | | 検索結果・OGPの説明文 |
+| `Summary` | Text（複数行） | | 「この記事でわかること」。改行で1項目 |
+| `Prerequisites` | Text | | 対象読者・動作環境。要約の下に出る |
+| `Changelog` | Text（複数行） | | 更新履歴。`YYYY-MM-DD 内容` を1行1件。日付で始まらない行は無視される |
+| `Series` | Select | | 連載名 |
+| `SeriesOrder` | Number | | 連載内の順序。未設定なら公開日順にフォールバック |
+
+## 本文の書き方（Notion ブロックの扱い）
+
+| Notion での書き方 | 出力 |
+|---|---|
+| Heading 1 / 2 / 3 | `h2` / `h3` / `h4`（`h1` は記事タイトルなので1段下げる） |
+| コードブロックのキャプション | ファイル名として表示。`言語:ファイル名` 形式（Zenn 記法） |
+| 同キャプションに `{1,3-5}` | その行をハイライト |
+| コードブロックの言語 `diff ts` | 差分表示。行頭の `+` / `-` を色分けする |
+| コードブロックの言語 `mermaid` | 図として描画（クライアント側） |
+| Equation（ブロック/インライン） | KaTeX で数式に |
+| Embed / Video（YouTube・CodeSandbox 等） | 埋め込み。判別できないURLはリンクカード |
+| Quote の最終行 `— 出典` | `<cite>` として切り出す |
+| Callout の色 | 種別に対応（gray/brown→メモ、green→Tips、blue/purple→ポイント、yellow/orange→注意、red/pink→重要） |
+| 本文に `[^1]` と `[^1]: 説明` | 脚注 |
+| `[toc]` だけの段落 | 目次の目印として除去される（コードブロック内の `[toc]` は残る） |
+
 ## 開発時の注意点
 
 1. **Edge Runtime**: 動的ルートには必ず `export const runtime = 'edge'` を設定
@@ -126,6 +163,15 @@ NEXT_PUBLIC_R2_BUCKET_URL=xxx    # R2パブリックURL
 7. **ビルド**: `npx @cloudflare/next-on-pages` で一括ビルド（`--skip-build`不可）
 8. **`.npmrc`**: `legacy-peer-deps=true` が必要（vercel build互換）
 9. **コミットメッセージ**: wrangler deployで日本語が拒否されるためCI/CDではASCII指定
+10. **Workerバンドルサイズ**: Edge向けビルドは非同期チャンクを分割せず1ファイルに畳み込む。
+    クライアント専用の重いライブラリ（mermaid など）は `next/dynamic` の `ssr: false` で
+    隔離しないと Worker のバンドルに載る（`src/components/Mermaid/MermaidLoader.tsx` 参照）
+11. **Notion画像の署名切れ**: アップロード画像のURLは1時間で失効するため、本文には
+    `/api/notion-image/[blockId]` を埋めてリクエスト時に取り直す
+12. **色**: `--foreground` / `--background`（shadcn のトークン、値は slate）に一本化。
+    `--foreground-rgb` 系は廃止済み
+13. **CSP**: `next.config.js` に Report-Only で入れてある。配信環境の Console に違反が
+    出なくなったら `Content-Security-Policy` にキー名を変えて有効化する
 
 ## 重要なコマンド
 
