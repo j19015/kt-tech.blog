@@ -112,7 +112,8 @@ export default async function StaticPage() {
                     <h2 className='text-lg sm:text-2xl lg:text-3xl font-bold text-white leading-tight group-hover:text-blue-200 transition-colors line-clamp-2'>
                       {latestBlogs[0].title}
                     </h2>
-                    <p className='text-sm text-white/50 mt-3'>
+                    {/* 明るいアイキャッチの上だと /50 では日付がほぼ消えていた */}
+                    <p className='text-sm text-white/80 mt-3'>
                       {new Date(latestBlogs[0].createdAt).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </p>
                   </div>

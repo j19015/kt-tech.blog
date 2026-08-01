@@ -253,6 +253,12 @@
 .znc pre:hover .copy-btn {
   opacity: 1;
 }
+/* タッチ端末には hover が無く、opacity:0 のままでは永久にコピーできない */
+@media (hover: none) {
+  .znc pre .copy-btn {
+    opacity: 1;
+  }
+}
 .znc pre .copy-btn:hover {
   background: #f1f5f9;
 }

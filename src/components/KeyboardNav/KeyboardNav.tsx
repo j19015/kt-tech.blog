@@ -14,6 +14,10 @@ export const KeyboardNav = ({ prevUrl, nextUrl }: Props) => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
       if (e.metaKey || e.ctrlKey || e.altKey) return;
+      // IME変換中や編集可能な領域では発火させない。
+      // 変換中の「j」でページ遷移するとバグにしか見えない。
+      if (e.isComposing) return;
+      if ((e.target as HTMLElement | null)?.isContentEditable) return;
 
       if (e.key === 'j' && nextUrl) {
         router.push(nextUrl);

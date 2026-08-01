@@ -36,18 +36,58 @@ html {
   overflow-x: hidden;
 }
 /* 印刷用スタイル */
+/* 印刷用スタイル。
+   以前は .scroll-to-top / .floating-toc-btn / .reading-progress / .share-buttons を
+   消そうとしていたが、これらのクラスはコード上に存在せず（Tailwindのみ）何も消えていなかった。 */
 @media print {
-  header, footer, nav, .scroll-to-top, .floating-toc-btn,
-  .reading-progress, .share-buttons, button, .copy-btn,
-  [aria-label="Toggle menu"], [aria-label="Toggle theme"] {
+  header,
+  footer,
+  nav,
+  button,
+  .copy-btn,
+  .link-card,
+  .print\:hidden {
     display: none !important;
   }
-  body { background: white !important; color: black !important; }
-  main { padding: 0 !important; }
-  .znc pre { white-space: pre-wrap; word-wrap: break-word; border: 1px solid #ccc; }
-  .znc a { color: black; text-decoration: underline; }
-  .znc a::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #666; }
-  .znc img { max-width: 100% !important; }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  main {
+    padding: 0 !important;
+  }
+  .znc {
+    max-width: none;
+  }
+  .znc pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    border: 1px solid #ccc;
+  }
+  .znc a {
+    color: black;
+    text-decoration: underline;
+  }
+  .znc a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.8em;
+    color: #666;
+  }
+  .znc img {
+    max-width: 100% !important;
+  }
+  /* コードや表がページ境界で分断されないようにする */
+  .znc pre,
+  .znc table,
+  .znc figure,
+  .znc .callout,
+  .znc blockquote {
+    break-inside: avoid;
+  }
+  .znc h2,
+  .znc h3 {
+    break-after: avoid;
+  }
 }
 
 /* reduced-motion対応 */

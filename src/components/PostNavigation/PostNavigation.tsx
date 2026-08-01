@@ -24,7 +24,7 @@ export const PostNavigation = ({ currentId, allPosts }: PostNavigationProps) => 
             href={`/blogs/${prev.id}`}
             className='group p-4 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-colors'
           >
-            <span className='flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 mb-1'>
+            <span className='flex items-center gap-1 text-xs text-slate-500 dark:text-slate-500 mb-1'>
               <ChevronLeft className='w-3 h-3' />
               前の記事
             </span>
@@ -38,7 +38,7 @@ export const PostNavigation = ({ currentId, allPosts }: PostNavigationProps) => 
             href={`/blogs/${next.id}`}
             className='group p-4 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-colors text-right'
           >
-            <span className='flex items-center justify-end gap-1 text-xs text-slate-400 dark:text-slate-500 mb-1'>
+            <span className='flex items-center justify-end gap-1 text-xs text-slate-500 dark:text-slate-500 mb-1'>
               次の記事
               <ChevronRight className='w-3 h-3' />
             </span>

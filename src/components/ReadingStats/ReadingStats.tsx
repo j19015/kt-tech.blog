@@ -30,7 +30,7 @@ export const ReadingStats = () => {
   if (count === 0) return null;
 
   return (
-    <div className='flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500'>
+    <div className='flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-500'>
       <BookOpen className='w-3.5 h-3.5' />
       <span>{count}記事読了</span>
     </div>

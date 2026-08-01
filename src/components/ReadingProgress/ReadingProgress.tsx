@@ -29,7 +29,9 @@ export const ReadingProgress = () => {
   if (!isBlogPost) return null;
 
   return (
-    <div className='fixed top-0 left-0 w-full h-1 z-50 bg-slate-200 dark:bg-slate-800'>
+    // 進捗はスクロール位置そのものなので支援技術には冗長。装飾として隠す。
+    // z-index はヘッダー(z-50)より手前にしないとヘッダーの下に隠れる。
+    <div aria-hidden='true' className='fixed top-0 left-0 w-full h-1 z-[60] bg-slate-200 dark:bg-slate-800'>
       <div
         className='h-full bg-slate-900 dark:bg-slate-100 transition-all duration-150 ease-out'
         style={{ width: `${progress}%` }}
