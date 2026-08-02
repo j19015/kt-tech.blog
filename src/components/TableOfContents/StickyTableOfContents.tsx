@@ -1,6 +1,7 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
-import { tocDepth, type TocItem } from '@/lib/toc';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { ChevronRight } from 'lucide-react';
+import { tocDepth, groupToc, shouldCollapse, type TocItem } from '@/lib/toc';
 
 /** 階層ごとの字下げ。左のレールからの距離を段階的に広げる */
 const INDENT = ['pl-4', 'pl-8', 'pl-12'] as const;
@@ -81,6 +82,13 @@ export const StickyTableOfContents = ({ toc }: { toc: TocItem[] }) => {
   // ヘッダー分のオフセットは globals.css の scroll-padding-top が担当する。
   const handleClick = (id: string) => setActiveId(id);
 
+  const groups = useMemo(() => groupToc(toc), [toc]);
+  const collapse = useMemo(() => shouldCollapse(toc), [toc]);
+
+  // 読んでいる章とは別に、ユーザーが自分で開いた章。
+  // 「この先どんな話が続くのか」を、そこまでスクロールせずに覗けるようにする。
+  const [peekedId, setPeekedId] = useState<string | null>(null);
+
   if (toc.length === 0) return null;
 
   return (
@@ -91,36 +99,109 @@ export const StickyTableOfContents = ({ toc }: { toc: TocItem[] }) => {
 
       {/* レールは <ul> 側に1本だけ通す。
           以前は項目ごとに border-l を持たせたうえで階層別に ml をずらしていたため、
-          縦線が段違いに途切れて並び、左端がガタついていた。 */}
-      {/* 高さの制限とスクロールは親のレール（[data-toc-rail]）が持つ。
-          ここで overflow を持つと、レールとの二重スクロールになる。 */}
+          縦線が段違いに途切れて並び、左端がガタついていた。
+          高さの制限とスクロールは親のレール（[data-toc-rail]）が持つ。 */}
       <ul ref={listRef} className='border-l border-slate-200 dark:border-slate-700'>
-        {toc.map((item) => {
-          const isActive = activeId === item.id;
+        {groups.map((group, gi) => {
+          // 読んでいる章だけ下位見出しを開く。
+          // 見出しの多い記事で全部並べると目次が本文より長くなり、
+          // 内側にスクロールバーが出て全体像が見えなくなる。
+          const key = group.parent?.id ?? `group-${gi}`;
+          const isCurrent =
+            group.parent?.id === activeId || group.children.some((child) => child.id === activeId);
+          const isOpen = !collapse || isCurrent || peekedId === key;
+          const panelId = `toc-group-${gi}`;
           return (
-            <li key={item.id} data-toc-id={item.id}>
-              <a
-                href={`#${item.id}`}
-                onClick={() => handleClick(item.id)}
-                title={item.text}
-                aria-current={isActive ? 'location' : undefined}
-                // 現在地は -ml-px の太い線で共通レールを上書きする。
-                // レール自体は動かないので段差にならない。
-                className={`-ml-px block border-l-2 py-1.5 pr-2 leading-snug transition-colors ${
-                  INDENT[tocDepth(item.tag)]
-                } ${tocDepth(item.tag) === 0 ? 'text-[13px]' : 'text-xs'} ${
-                  isActive
-                    ? 'border-blue-500 bg-blue-50 font-medium text-blue-600 dark:bg-blue-950/40 dark:text-blue-400'
-                    : 'border-transparent text-slate-500 hover:bg-slate-50 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-800/60 dark:hover:text-slate-200'
-                }`}
-              >
-                {/* 2行までに収める。3行以上の見出しが並ぶと目次が本文より長くなる */}
-                <span className='line-clamp-2'>{item.text}</span>
-              </a>
+            <li key={key}>
+              {group.parent && (
+                <TocLink
+                  item={group.parent}
+                  activeId={activeId}
+                  onSelect={handleClick}
+                  toggle={
+                    collapse && group.children.length > 0
+                      ? {
+                          isOpen,
+                          panelId,
+                          // 読んでいる章は閉じても次のスクロールで開き直るだけなので、畳ませない
+                          onToggle: () => setPeekedId(isOpen && !isCurrent ? null : key),
+                        }
+                      : undefined
+                  }
+                />
+              )}
+              {group.children.length > 0 && (
+                <ul id={panelId} hidden={!isOpen}>
+                  {group.children.map((child) => (
+                    <li key={child.id}>
+                      <TocLink item={child} activeId={activeId} onSelect={handleClick} />
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           );
         })}
       </ul>
     </nav>
+  );
+};
+
+/** 目次の1項目。章見出しと小見出しで見た目を変える */
+const TocLink = ({
+  item,
+  activeId,
+  onSelect,
+  toggle,
+}: {
+  item: TocItem;
+  activeId: string;
+  onSelect: (id: string) => void;
+  /** 下位見出しの開閉。折りたたむ必要のない目次では渡さない */
+  toggle?: { isOpen: boolean; panelId: string; onToggle: () => void };
+}) => {
+  const isActive = activeId === item.id;
+  const depth = tocDepth(item.tag);
+  return (
+    // 現在地は -ml-px の太い線で共通レールを上書きする。
+    // レール自体は動かないので段差にならない。
+    // 開閉ボタンはリンクの隣に置く。リンクの中に入れると
+    // 「小見出しを覗きたいだけ」でも本文が飛んでしまう。
+    <div
+      className={`-ml-px flex items-start border-l-2 transition-colors ${
+        isActive
+          ? 'border-blue-500 bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400'
+          : 'border-transparent text-slate-500 hover:bg-slate-50 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-800/60 dark:hover:text-slate-200'
+      }`}
+    >
+      <a
+        href={`#${item.id}`}
+        onClick={() => onSelect(item.id)}
+        title={item.text}
+        data-toc-id={item.id}
+        aria-current={isActive ? 'location' : undefined}
+        className={`min-w-0 flex-1 py-1.5 pr-1 leading-snug ${INDENT[depth]} ${
+          depth === 0 ? 'text-[13px]' : 'text-xs'
+        } ${isActive ? 'font-medium' : ''}`}
+      >
+        {/* 2行までに収める。3行以上の見出しが並ぶと目次が本文より長くなる */}
+        <span className='line-clamp-2'>{item.text}</span>
+      </a>
+      {toggle && (
+        <button
+          type='button'
+          onClick={toggle.onToggle}
+          aria-expanded={toggle.isOpen}
+          aria-controls={toggle.panelId}
+          aria-label={`${item.text} の小見出しを${toggle.isOpen ? '閉じる' : '開く'}`}
+          className='shrink-0 self-stretch px-1.5 text-slate-400 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-200'
+        >
+          <ChevronRight
+            className={`h-3.5 w-3.5 transition-transform ${toggle.isOpen ? 'rotate-90' : ''}`}
+            aria-hidden='true'
+          />
+        </button>
+      )}
+    </div>
   );
 };
