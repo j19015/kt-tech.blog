@@ -589,8 +589,17 @@ export default async function StaticDetailPage({
         {/* 目次は視覚的には右、DOM順では本文のあと。
             サイドバーが出ないページなので、目次の下に回遊導線を足す。 */}
         <div className='lg:col-span-1 lg:order-2 hidden lg:block'>
-          <StickyTableOfContents toc={toc} />
-          <ArticleAside blog={blog} latest={navPosts.filter((p) => p.id !== blogId).slice(0, 5)} />
+          {/* 目次と回遊導線をまとめて1つの sticky なレールにする。
+              目次だけを sticky にすると、その下に置いた導線は通常フローに残って
+              すぐ画面外に流れてしまい、記事を読み終えた頃には見えない。
+              スクロールも1本にまとめる（入れ子のスクロール領域は操作しづらい）。 */}
+          <div
+            data-toc-rail
+            className='sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto overscroll-contain rounded-lg bg-white/50 p-4 backdrop-blur-sm dark:bg-slate-900/50'
+          >
+            <StickyTableOfContents toc={toc} />
+            <ArticleAside blog={blog} latest={navPosts.filter((p) => p.id !== blogId).slice(0, 5)} />
+          </div>
         </div>
       </div>
     </>

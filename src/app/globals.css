@@ -22,7 +22,15 @@
 body {
   font-family: var(--font-noto-sans-jp), 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
   overflow-anchor: auto;
-  overflow-x: hidden;
+  /* hidden ではなく clip。
+     overflow-x: hidden は overflow-y を auto に計算させるため body 自体が
+     スクロールコンテナになり、中の position: sticky が「実際にはスクロールしない
+     body」に貼り付いて一切追従しなくなる（実測: 1000px スクロールで目次が
+     top -920px まで流れていた）。clip はスクロールコンテナを作らないので、
+     はみ出しを切る目的は果たしつつ sticky が生きる。
+     Safari 16 未満では clip が効かず横スクロールが出うるが、
+     レイアウトが壊れるわけではないので許容する。 */
+  overflow-x: clip;
   /* 日本語の禁則処理を効かせる。break-all は英単語や識別子を
      1文字単位で分断してしまうため使わない。 */
   word-break: normal;

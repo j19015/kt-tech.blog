@@ -2,16 +2,24 @@
 import { useState, useEffect, useRef } from 'react';
 import { tocDepth, type TocItem } from '@/lib/toc';
 
-
+/** 階層ごとの字下げ。左のレールからの距離を段階的に広げる */
+const INDENT = ['pl-4', 'pl-8', 'pl-12'] as const;
 
 export const StickyTableOfContents = ({ toc }: { toc: TocItem[] }) => {
   const [activeId, setActiveId] = useState<string>('');
-  const tocRef = useRef<HTMLUListElement>(null);
-  const activeItemRef = useRef<HTMLLIElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
 
-  // 以前はスクロールイベントごとに getElementById と offsetTop を見出しの数だけ実行していた。
-  // offsetTop / scrollHeight の読み取りは強制同期レイアウトを起こすため、
-  // スクロール中に毎フレーム走るとジャンクの原因になる。
+  // 現在地の判定。
+  //
+  // スクロールイベントで毎フレーム位置を測ると強制同期レイアウトでジャンクの
+  // 原因になるので、IntersectionObserver を「何か変わった」の合図としてだけ使い、
+  // そのタイミングで見出しの位置を1回読んで判定する（見出しは多くても数十個）。
+  //
+  // 「画面上部の帯に入った見出し」だけで判定していたときは、目次のリンクや
+  // ブラウザ内検索で一気に飛ぶと、帯を素通りした見出しに IO が反応せず
+  // 現在地が前のままになっていた（実測: 1500px から 4000px へ飛ばすと
+  // 5つ手前の見出しが選ばれたままだった）。
+  // 「ヘッダーより上にある最後の見出し」を選べば、どこへ飛んでも正しくなる。
   useEffect(() => {
     if (toc.length === 0 || typeof IntersectionObserver === 'undefined') return;
 
@@ -20,46 +28,52 @@ export const StickyTableOfContents = ({ toc }: { toc: TocItem[] }) => {
       .filter((el): el is HTMLElement => el !== null);
     if (elements.length === 0) return;
 
-    const visible = new Set<string>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) visible.add(entry.target.id);
-          else visible.delete(entry.target.id);
-        });
-        // 目次の並び順で最初に見えているものを現在地とする
-        const current = toc.find((item) => visible.has(item.id));
-        if (current) setActiveId(current.id);
-      },
-      // ヘッダー分を除いた画面上部30%に入った見出しを「現在地」とみなす
-      { rootMargin: '-80px 0px -70% 0px', threshold: 0 }
-    );
+    const HEADER_OFFSET = 96;
+    const update = () => {
+      let current = elements[0];
+      for (const el of elements) {
+        if (el.getBoundingClientRect().top <= HEADER_OFFSET) current = el;
+        else break;
+      }
+      setActiveId(current.id);
+    };
 
+    const observer = new IntersectionObserver(update, {
+      // 見出しが画面上部の帯を出入りするたびに再判定する
+      rootMargin: `-${HEADER_OFFSET}px 0px -60% 0px`,
+      threshold: 0,
+    });
     elements.forEach((el) => observer.observe(el));
-    setActiveId(toc[0].id);
+    update();
     return () => observer.disconnect();
   }, [toc]);
 
-  // アクティブなアイテムが変更されたときに目次内でスクロール
+  // 現在地が目次の表示範囲から外れたときだけ、目次側をスクロールして追いかける。
   useEffect(() => {
-    if (activeId && tocRef.current) {
-      const activeElement = tocRef.current.querySelector(`[data-toc-id="${activeId}"]`);
-      if (activeElement) {
-        const tocContainer = tocRef.current;
-        const elementTop = (activeElement as HTMLElement).offsetTop;
-        const elementHeight = (activeElement as HTMLElement).offsetHeight;
-        const containerHeight = tocContainer.offsetHeight;
-        const containerScrollTop = tocContainer.scrollTop;
+    const list = listRef.current;
+    if (!activeId || !list) return;
+    const item = list.querySelector<HTMLElement>(`[data-toc-id="${activeId}"]`);
+    if (!item) return;
 
-        // アクティブな要素が見えるように目次をスクロール
-        const targetScrollTop = elementTop - containerHeight / 2 + elementHeight / 2;
-        
-        tocContainer.scrollTo({
-          top: targetScrollTop,
-          behavior: 'smooth'
-        });
-      }
-    }
+    // offsetTop は「直近の position 指定済み祖先」からの距離なので、
+    // sticky な祖先を基準にしてしまい ul のスクロール量とずれていた。
+    // 矩形の差分で取れば、どこを基準にしていても正しい相対位置になる。
+    // スクロールするのは目次の <ul> ではなく、右カラム全体のレール。
+    // 見つからなければ何もしない（モバイルなど、レールが無い場所で暴発させない）。
+    const rail = list.closest<HTMLElement>('[data-toc-rail]');
+    if (!rail) return;
+
+    const itemRect = item.getBoundingClientRect();
+    const railRect = rail.getBoundingClientRect();
+    const isVisible = itemRect.top >= railRect.top && itemRect.bottom <= railRect.bottom;
+    // 見えているのに毎回スクロールすると、読んでいる最中に目次が勝手に動いて落ち着かない
+    if (isVisible) return;
+
+    rail.scrollTo({
+      top:
+        rail.scrollTop + (itemRect.top - railRect.top) - rail.clientHeight / 2 + itemRect.height / 2,
+      behavior: 'smooth',
+    });
   }, [activeId]);
 
   // preventDefault + pushState をやめ、ブラウザ標準のアンカー移動に任せる。
@@ -70,48 +84,42 @@ export const StickyTableOfContents = ({ toc }: { toc: TocItem[] }) => {
   if (toc.length === 0) return null;
 
   return (
-    <nav aria-label='目次' className='sticky top-20 p-4 rounded-lg bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm'>
-      <h2 className='text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4'>
+    <nav aria-label='目次'>
+      <h2 className='mb-3 px-1 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400'>
         目次
       </h2>
 
-      <ul ref={tocRef} className='space-y-0.5 max-h-[60vh] overflow-y-auto'>
-        {toc.map((item) => (
-          <li
-            key={item.id}
-            data-toc-id={item.id}
-            ref={activeId === item.id ? activeItemRef : null}
-            // 現在地は左のバーの色だけで示していたが、目次が長いと見つけにくい。
-            // 薄い背景を敷いて、視線がすぐ戻れるようにする。
-            className={`border-l-2 transition-all ${
-              activeId === item.id
-                ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/40'
-                : 'border-slate-200 dark:border-slate-700'
-            } ${['', 'ml-1', 'ml-2'][tocDepth(item.tag)]}`}
-          >
-            <a
-              href={`#${item.id}`}
-              onClick={() => handleClick(item.id)}
-              title={item.text}
-              // 長い見出しで目次が縦に伸びすぎないよう2行までにする。
-              // h3 は字下げを pl で取る。折り返した2行目も一緒に下がるので、
-              // ml と違って「h2の2行目」と「h3の1行目」が見分けられる。
-              className={`block py-1.5 line-clamp-2 transition-colors ${
-                tocDepth(item.tag) === 0
-                  ? 'pl-3 text-sm'
-                  : tocDepth(item.tag) === 1
-                    ? 'pl-7 text-xs'
-                    : 'pl-10 text-xs'
-              } ${
-                activeId === item.id
-                  ? 'text-blue-600 dark:text-blue-400 font-medium'
-                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
-              }`}
-            >
-              {item.text}
-            </a>
-          </li>
-        ))}
+      {/* レールは <ul> 側に1本だけ通す。
+          以前は項目ごとに border-l を持たせたうえで階層別に ml をずらしていたため、
+          縦線が段違いに途切れて並び、左端がガタついていた。 */}
+      {/* 高さの制限とスクロールは親のレール（[data-toc-rail]）が持つ。
+          ここで overflow を持つと、レールとの二重スクロールになる。 */}
+      <ul ref={listRef} className='border-l border-slate-200 dark:border-slate-700'>
+        {toc.map((item) => {
+          const isActive = activeId === item.id;
+          return (
+            <li key={item.id} data-toc-id={item.id}>
+              <a
+                href={`#${item.id}`}
+                onClick={() => handleClick(item.id)}
+                title={item.text}
+                aria-current={isActive ? 'location' : undefined}
+                // 現在地は -ml-px の太い線で共通レールを上書きする。
+                // レール自体は動かないので段差にならない。
+                className={`-ml-px block border-l-2 py-1.5 pr-2 leading-snug transition-colors ${
+                  INDENT[tocDepth(item.tag)]
+                } ${tocDepth(item.tag) === 0 ? 'text-[13px]' : 'text-xs'} ${
+                  isActive
+                    ? 'border-blue-500 bg-blue-50 font-medium text-blue-600 dark:bg-blue-950/40 dark:text-blue-400'
+                    : 'border-transparent text-slate-500 hover:bg-slate-50 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-800/60 dark:hover:text-slate-200'
+                }`}
+              >
+                {/* 2行までに収める。3行以上の見出しが並ぶと目次が本文より長くなる */}
+                <span className='line-clamp-2'>{item.text}</span>
+              </a>
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );
