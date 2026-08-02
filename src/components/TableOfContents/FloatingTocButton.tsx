@@ -25,7 +25,7 @@ export const FloatingTocButton = ({ toc }: { toc: TocItem[] }) => {
           <div className={`fixed inset-0 ${FAB_OVERLAY_Z} bg-black/20`} onClick={() => setIsOpen(false)} />
           <nav
             aria-label='目次'
-            className={`fixed bottom-[11rem] left-4 right-4 ${FAB_PANEL_Z} max-h-[60vh] overflow-y-auto rounded-xl border border-slate-200 bg-white p-4 shadow-xl dark:border-slate-700 dark:bg-slate-900`}
+            className={`scrollbar-slim fixed bottom-[11rem] left-4 right-4 ${FAB_PANEL_Z} max-h-[60vh] overflow-y-auto overscroll-contain rounded-xl border border-slate-200 bg-white p-4 shadow-xl dark:border-slate-700 dark:bg-slate-900`}
           >
             <h3 className='text-sm font-bold text-slate-900 dark:text-slate-100 mb-3'>目次</h3>
             <ul className='space-y-2'>

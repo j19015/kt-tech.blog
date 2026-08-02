@@ -595,7 +595,7 @@ export default async function StaticDetailPage({
               スクロールも1本にまとめる（入れ子のスクロール領域は操作しづらい）。 */}
           <div
             data-toc-rail
-            className='sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto overscroll-contain rounded-lg bg-white/50 p-4 backdrop-blur-sm dark:bg-slate-900/50'
+            className='scrollbar-slim sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto overscroll-contain rounded-lg bg-white/50 p-4 backdrop-blur-sm dark:bg-slate-900/50'
           >
             <StickyTableOfContents toc={toc} />
             <ArticleAside blog={blog} latest={navPosts.filter((p) => p.id !== blogId).slice(0, 5)} />
