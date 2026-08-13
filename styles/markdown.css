@@ -849,11 +849,12 @@
    ラベルを添えることで、色が判別できない環境でも意味が伝わる。 */
 .znc .callout {
   margin: 1.5rem 0;
-  padding: 0.875rem 1.125rem;
-  border-radius: 8px;
+  padding: 1.25rem;
+  /* 記事冒頭の「この記事でわかること」(ArticleSummary) と同じ 12px に揃える */
+  border-radius: 12px;
+  /* 全周を細い線で囲む。左だけ 4px の帯を立てると引用ブロックと同じ形になり、
+     補足のはずが本文より強く主張してしまう */
   border: 1px solid;
-  border-left-width: 4px;
-  /* 本文と同じ文字サイズにする。補足情報が本文より大きいのは不自然だった */
   font-size: inherit;
   line-height: 1.85;
 }
@@ -864,8 +865,15 @@
   gap: 0.4em;
   font-weight: 700;
   font-size: 0.875em;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
   letter-spacing: 0.02em;
+  /* ラベルの色は種別で変えない。色で意味を伝えるのは枠線とアイコンに任せ、
+     文字は本文と同じ濃さに置く（ArticleSummary の見出しと同じ考え方）。
+     ラベルまで色を持つと、1つの囲みの中に色が増えて騒がしくなる */
+  color: #1e293b;
+}
+.dark .znc .callout__label {
+  color: #f1f5f9;
 }
 
 .znc .callout__icon {
@@ -894,90 +902,54 @@
 }
 
 /* 種別ごとの配色。
-   ダークも半透明ではなく実色で定義する（半透明は下の背景に依存して読みにくくなる）。 */
+   ダークも半透明ではなく実色で定義する（半透明は下の背景に依存して読みにくくなる）。
+
+   背景は本文の地に近い薄さに留め、種別は主に**枠線の色**で伝える。
+   面を塗り分けると、補足が並んだときにページが色の帯だらけになる
+   （「この記事でわかること」が静かに見えるのは、面を塗っていないため）。 */
 .znc .callout--note {
   background: #f8fafc;
-  border-color: #e2e8f0;
-  border-left-color: #94a3b8;
-}
-.znc .callout--note .callout__label {
-  color: #475569;
+  border-color: #d8dfe8;
 }
 .dark .znc .callout--note {
-  background: #1a2436;
+  background: #161d2b;
   border-color: #2b3a52;
-  border-left-color: #94a3b8;
-}
-.dark .znc .callout--note .callout__label {
-  color: #cbd5e1;
 }
 
 .znc .callout--tip {
-  background: #f0fdf4;
-  border-color: #bbf7d0;
-  border-left-color: #16a34a;
-}
-.znc .callout--tip .callout__label {
-  color: #15803d;
+  background: #f6fdf9;
+  border-color: #b7e4c9;
 }
 .dark .znc .callout--tip {
-  background: #10291b;
-  border-color: #1a4030;
-  border-left-color: #4ade80;
-}
-.dark .znc .callout--tip .callout__label {
-  color: #86efac;
+  background: #12211a;
+  border-color: #24503a;
 }
 
 .znc .callout--important {
-  background: #eff6ff;
+  background: #f7fafe;
   border-color: #bfdbfe;
-  border-left-color: #2563eb;
-}
-.znc .callout--important .callout__label {
-  color: #1d4ed8;
 }
 .dark .znc .callout--important {
-  background: #16273f;
-  border-color: #1e3a5f;
-  border-left-color: #60a5fa;
-}
-.dark .znc .callout--important .callout__label {
-  color: #93c5fd;
+  background: #141d2e;
+  border-color: #24406b;
 }
 
 .znc .callout--warning {
-  background: #fffbeb;
-  border-color: #fde68a;
-  border-left-color: #d97706;
-}
-.znc .callout--warning .callout__label {
-  color: #b45309;
+  background: #fffdf5;
+  border-color: #f2d68c;
 }
 .dark .znc .callout--warning {
-  background: #2e2410;
-  border-color: #4a3a15;
-  border-left-color: #facc15;
-}
-.dark .znc .callout--warning .callout__label {
-  color: #fcd34d;
+  background: #211c11;
+  border-color: #574321;
 }
 
 .znc .callout--caution {
-  background: #fef2f2;
-  border-color: #fecaca;
-  border-left-color: #dc2626;
-}
-.znc .callout--caution .callout__label {
-  color: #b91c1c;
+  background: #fff8f8;
+  border-color: #f5bcbc;
 }
 .dark .znc .callout--caution {
-  background: #2e1618;
-  border-color: #4a2226;
-  border-left-color: #f87171;
-}
-.dark .znc .callout--caution .callout__label {
-  color: #fca5a5;
+  background: #211416;
+  border-color: #5c2a2e;
 }
 
 /* ブログの目次のCSS - グローバル変数を上書きしない */
