@@ -44,6 +44,7 @@ function extractHeadings(html: string): { text: string; id: string; tag: string 
 }
 import type { Metadata, ResolvingMetadata } from 'next';
 import { StickyTableOfContents } from '@/components/TableOfContents/StickyTableOfContents';
+import { TocRail } from '@/components/TableOfContents/TocRail';
 import { RelatedPosts } from '@/components/RelatedPosts/RelatedPosts';
 import { ShareButtons } from '@/components/ShareButtons/ShareButtons';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
@@ -617,13 +618,10 @@ export default async function StaticDetailPage({
               目次だけを sticky にすると、その下に置いた導線は通常フローに残って
               すぐ画面外に流れてしまい、記事を読み終えた頃には見えない。
               スクロールも1本にまとめる（入れ子のスクロール領域は操作しづらい）。 */}
-          <div
-            data-toc-rail
-            className='scrollbar-slim sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto overscroll-contain rounded-lg bg-white/50 p-4 backdrop-blur-sm dark:bg-slate-900/50'
-          >
+          <TocRail>
             <StickyTableOfContents toc={toc} />
             <ArticleAside blog={blog} latest={navPosts.filter((p) => p.id !== blogId).slice(0, 5)} />
-          </div>
+          </TocRail>
         </div>
       </div>
     </>
