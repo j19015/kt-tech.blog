@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Library, Check, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { getReadArticles } from '@/lib/readArticles';
+import { seriesMetaOf } from '@/lib/seriesMeta';
 
 export type SeriesCarouselPost = { id: string; title: string; publishedAt: string };
 
@@ -98,41 +99,58 @@ export const SeriesCarousel = ({ seriesName, seriesHref, posts, currentIndex }: 
   // 「全1回」のスライダーは矢印も効かず、ただの重複した導線になる。
   if (posts.length < 2) return null;
 
+  // 連載の説明は記事単位の Notion ではなくコード側（seriesMeta.ts）にある。
+  // 連載名から直接引けるので、記事ページ側に props を増やさずここで解決する。
+  const tagline = seriesMetaOf(seriesName)?.tagline;
+
   const mask = `linear-gradient(to right, ${
     overflow.left ? `transparent 0, #000 ${EDGE_FADE}px` : '#000 0'
   }, ${overflow.right ? `#000 calc(100% - ${EDGE_FADE}px), transparent 100%` : '#000 100%'})`;
 
+  // 上に区切り線を引かない。すぐ上の PostNavigation が線を持っているので、
+  // ここにも引くと「連載の次の記事 / 前後 / 連載全体」がそれぞれ罫線で囲まれ、
+  // 同じ連載の話が3つの別々のセクションに見える。
+  // 線は「連載の話」と「連載外（関連記事）」の境目の1本だけにする。
   return (
     <section
       aria-label={`連載「${seriesName}」の記事`}
-      className='mt-16 pt-8 px-4 border-t border-slate-200 dark:border-slate-700'
+      className='mt-12 px-4'
     >
-      <div className='mb-4 flex items-center gap-3'>
-        <div className='flex min-w-0 items-center gap-2'>
-          <Library className='h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400' aria-hidden='true' />
-          <h2 className='truncate text-lg font-bold text-slate-900 dark:text-slate-100'>{seriesName}</h2>
-          <span className='shrink-0 text-sm text-slate-500 dark:text-slate-400'>全{posts.length}回</span>
+      <div className='mb-4'>
+        <div className='flex items-center gap-3'>
+          <div className='flex min-w-0 items-center gap-2'>
+            <Library className='h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400' aria-hidden='true' />
+            <h2 className='truncate text-lg font-bold text-slate-900 dark:text-slate-100'>{seriesName}</h2>
+            <span className='shrink-0 text-sm text-slate-500 dark:text-slate-400'>全{posts.length}回</span>
+          </div>
+          <div className='ml-auto flex shrink-0 items-center gap-1'>
+            <button
+              type='button'
+              onClick={() => scrollByCard(-1)}
+              disabled={!overflow.left}
+              aria-label='前の記事を表示'
+              className='rounded-full border border-slate-200 p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 disabled:pointer-events-none disabled:opacity-30 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700/50 dark:hover:text-slate-100'
+            >
+              <ChevronLeft className='h-4 w-4' aria-hidden='true' />
+            </button>
+            <button
+              type='button'
+              onClick={() => scrollByCard(1)}
+              disabled={!overflow.right}
+              aria-label='次の記事を表示'
+              className='rounded-full border border-slate-200 p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 disabled:pointer-events-none disabled:opacity-30 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700/50 dark:hover:text-slate-100'
+            >
+              <ChevronRight className='h-4 w-4' aria-hidden='true' />
+            </button>
+          </div>
         </div>
-        <div className='ml-auto flex shrink-0 items-center gap-1'>
-          <button
-            type='button'
-            onClick={() => scrollByCard(-1)}
-            disabled={!overflow.left}
-            aria-label='前の記事を表示'
-            className='rounded-full border border-slate-200 p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 disabled:pointer-events-none disabled:opacity-30 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700/50 dark:hover:text-slate-100'
-          >
-            <ChevronLeft className='h-4 w-4' aria-hidden='true' />
-          </button>
-          <button
-            type='button'
-            onClick={() => scrollByCard(1)}
-            disabled={!overflow.right}
-            aria-label='次の記事を表示'
-            className='rounded-full border border-slate-200 p-1.5 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 disabled:pointer-events-none disabled:opacity-30 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700/50 dark:hover:text-slate-100'
-          >
-            <ChevronRight className='h-4 w-4' aria-hidden='true' />
-          </button>
-        </div>
+        {/* 連載の説明は1行だけ。ここは「連載とは何か」を読ませる場所ではなく、
+            読み終えた読者が次の1本を選ぶ場所なので、全文を出すと選択の邪魔になる。
+            続きは「この連載の一覧を見る」の先にある。
+            未登録の連載では何も出さない（seriesMeta.ts に無くても壊れない）。 */}
+        {tagline && (
+          <p className='mt-1 line-clamp-1 text-sm text-slate-500 dark:text-slate-400'>{tagline}</p>
+        )}
       </div>
 
       {/* 端のフェードは「まだ続きがある」ことを見た目で伝えるためのもの。
