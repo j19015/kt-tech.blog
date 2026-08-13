@@ -105,22 +105,41 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const ogImage = blog.eyecatch?.url;
   const pageUrl = `${process.env.SITE_URL}/blogs/${blogId}`;
 
+  // 検索結果のタイトルは日本語で30文字ほどで切られる。そこに
+  // 「| kt-tech.blog」（14文字）が後ろから食い込むので、先頭に使える幅は
+  // 実質20文字を切る。「【設定・環境構築】Gemma 4 を Ollama で…」のように、
+  // その貴重な先頭をカテゴリ名が9文字前後占め、検索語に当たる部分が
+  // 省略記号の向こうへ押し出されていた。カテゴリは記事ページにチップとして
+  // 別に出しているので、メタ情報からは落とす。
+  //
+  // ただし落とすのは【】の中身が**カテゴリ名と一致するときだけ**。
+  // 古い記事は【Ubuntu24.04LTS】【React × Github Pages】のように
+  // 技術名を【】に入れており、ここを機械的に削ると検索語そのものが
+  // タイトルから消える（この2本は流入の上位を占めている）。
+  //
+  // ページ内の見出し（h1）や一覧の表示は blog.title のままなので、見た目は変わらない。
+  const categoryPrefix = blog.category?.name ? `【${blog.category.name}】` : null;
+  const metaTitle =
+    categoryPrefix && blog.title.startsWith(categoryPrefix)
+      ? blog.title.slice(categoryPrefix.length).trim()
+      : blog.title;
+
   return {
-    title: blog.title,
+    title: metaTitle,
     description,
     alternates: {
       canonical: pageUrl,
     },
     twitter: {
       card: 'summary_large_image' as const,
-      title: blog.title,
+      title: metaTitle,
       description,
       site: '@tech_koki',
       creator: '@tech_koki',
       ...(ogImage ? { images: [ogImage] } : {}),
     },
     openGraph: {
-      title: blog.title,
+      title: metaTitle,
       description,
       locale: 'ja_JP',
       type: 'article' as const,
