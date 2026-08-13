@@ -148,6 +148,101 @@ export const figures: Record<string, Figure> = {
       <text x="190" y="392" text-anchor="middle" font-size="11" class="fig-t-accent">色は CSS 変数 → ライト / ダークに追従</text>
     </svg>`,
   },
+
+  'multiplexer-layers': {
+    caption:
+      'tmux と herdr は同じ枠に収まるので入れ替えるだけで済む。cmux は上の2層を1つのアプリとして持つため、選んだ時点で Ghostty を手放すことになる。色を付けた枠が、選択によって置き換わる部分。',
+    svg: `<svg viewBox="0 0 760 300" role="img" aria-label="tmuxとherdrはマルチプレクサ層だけを入れ替えるのに対し、cmuxはターミナルエミュレータとマルチプレクサの2層を1つのアプリとして持つことを示す対比図">
+      ${arrowDefs('mx')}
+      <line x1="384" y1="14" x2="384" y2="272" stroke="currentColor" stroke-width="1" stroke-dasharray="3 5" opacity=".3"></line>
+
+      <text x="24" y="22" font-size="12.5" fill="currentColor" class="fig-label">A. 中身だけ入れ替える</text>
+
+      <rect x="24" y="34" width="344" height="48" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="196" y="56" text-anchor="middle" font-size="12.5" fill="currentColor">Ghostty</text>
+      <text x="196" y="73" text-anchor="middle" font-size="11" fill="currentColor" opacity=".72">ターミナルエミュレータ（そのまま）</text>
+
+      <rect x="24" y="96" width="344" height="62" rx="3" fill="none" class="fig-s-accent" stroke-width="2"></rect>
+      <text x="196" y="120" text-anchor="middle" font-size="13" class="fig-t-accent">tmux ⇄ herdr</text>
+      <text x="196" y="140" text-anchor="middle" font-size="11" class="fig-t-accent" opacity=".85">マルチプレクサ（ここだけ交換）</text>
+
+      <rect x="24" y="172" width="166" height="48" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="107" y="201" text-anchor="middle" font-size="12" fill="currentColor">claude</text>
+      <rect x="202" y="172" width="166" height="48" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="285" y="201" text-anchor="middle" font-size="12" fill="currentColor">zsh</text>
+
+      <text x="24" y="246" font-size="11.5" fill="currentColor" opacity=".8">SSH 先でも動く / Linux でも動く</text>
+
+      <text x="400" y="22" font-size="12.5" fill="currentColor" class="fig-label">B. ターミナルごと乗り換える</text>
+
+      <rect x="400" y="34" width="336" height="124" rx="3" fill="none" class="fig-s-accent" stroke-width="2"></rect>
+      <text x="568" y="76" text-anchor="middle" font-size="13" class="fig-t-accent">cmux</text>
+      <text x="568" y="97" text-anchor="middle" font-size="11" fill="currentColor" opacity=".72">libghostty を内蔵</text>
+      <text x="568" y="128" text-anchor="middle" font-size="11" class="fig-t-accent" opacity=".85">上の2層を1つのアプリが持つ</text>
+
+      <rect x="400" y="172" width="160" height="48" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="480" y="201" text-anchor="middle" font-size="12" fill="currentColor">claude</text>
+      <rect x="576" y="172" width="160" height="48" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="656" y="201" text-anchor="middle" font-size="12" fill="currentColor">埋め込みブラウザ</text>
+
+      <text x="400" y="246" font-size="11.5" fill="currentColor" opacity=".8">macOS 専用 / SSH 先では使えない</text>
+    </svg>`,
+  },
+
+  'multiplexer-axis': {
+    caption:
+      '同じ層にいても向いている先が違う。tmux が中央なのは劣っているからではなく、エージェントという概念を持たない汎用ツールだから。縦位置に意味はなく、ラベルの重なりを避けているだけ。',
+    svg: `<svg viewBox="0 0 760 180" role="img" aria-label="人間が操作しやすい方向とエージェントが操作しやすい方向の軸上に、cmuxが人間寄り、herdrがエージェント寄り、tmuxが中央に位置することを示す図">
+      ${arrowDefs('ax')}
+
+      <line x1="90" y1="104" x2="670" y2="104" stroke="currentColor" stroke-width="1.5" opacity=".45" marker-end="url(#ax-ink)" marker-start="url(#ax-ink)"></line>
+
+      <text x="90" y="130" font-size="11.5" fill="currentColor" opacity=".8">人間が操作しやすい</text>
+      <text x="670" y="130" text-anchor="end" font-size="11.5" fill="currentColor" opacity=".8">エージェントが操作しやすい</text>
+
+      <circle cx="176" cy="104" r="6" fill="currentColor"></circle>
+      <line x1="176" y1="98" x2="176" y2="72" stroke="currentColor" stroke-width="1.5"></line>
+      <text x="176" y="62" text-anchor="middle" font-size="13" fill="currentColor" class="fig-label">cmux</text>
+      <text x="176" y="42" text-anchor="middle" font-size="11" fill="currentColor" opacity=".72">縦タブ・通知・埋め込みブラウザ</text>
+
+      <circle cx="380" cy="104" r="6" fill="currentColor"></circle>
+      <line x1="380" y1="110" x2="380" y2="140" stroke="currentColor" stroke-width="1.5"></line>
+      <text x="380" y="158" text-anchor="middle" font-size="13" fill="currentColor" class="fig-label">tmux</text>
+      <text x="380" y="175" text-anchor="middle" font-size="11" fill="currentColor" opacity=".72">どちらにも特化しない汎用ツール</text>
+
+      <circle cx="588" cy="104" r="6" fill="currentColor"></circle>
+      <line x1="588" y1="98" x2="588" y2="72" stroke="currentColor" stroke-width="1.5"></line>
+      <text x="588" y="62" text-anchor="middle" font-size="13" fill="currentColor" class="fig-label">herdr</text>
+      <text x="588" y="42" text-anchor="middle" font-size="11" fill="currentColor" opacity=".72">状態検知・待機 API・エージェント間の連携</text>
+    </svg>`,
+  },
+
+  'herdr-selfmatch': {
+    caption:
+      'pane run はコマンド文字列をペインに打ち込むので、その文字列自体が画面に残る。待ち受ける語がコマンドに含まれていると、実行前のエコーに当たって即座に成功が返る。出力にしか現れない値を待つか、行頭・行末のアンカーを付けて回避する。',
+    svg: `<svg viewBox="0 0 760 252" role="img" aria-label="herdrのwait-outputがコマンド自身のエコーにマッチして、実行完了を待たずに0.08秒で返ってしまう仕組みを示した図">
+      ${arrowDefs('sm')}
+
+      <text x="24" y="22" font-size="12.5" fill="currentColor" class="fig-label">1. pane run が送る文字列</text>
+      <rect x="24" y="32" width="420" height="38" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="40" y="56" font-size="12.5" fill="currentColor">sleep 5 &amp;&amp; echo <tspan class="fig-t-deny">MARKER</tspan></text>
+      <text x="456" y="56" font-size="11.5" fill="currentColor" opacity=".72">MARKER で待つ、と指定したつもり</text>
+
+      <text x="24" y="102" font-size="12.5" fill="currentColor" class="fig-label">2. ペインの画面に出るもの</text>
+      <rect x="24" y="112" width="712" height="88" rx="3" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".45"></rect>
+
+      <text x="44" y="142" font-size="12" fill="currentColor" opacity=".85">% sleep 5 &amp;&amp; echo <tspan class="fig-t-deny">MARKER</tspan></text>
+      <line x1="300" y1="138" x2="340" y2="138" class="fig-s-deny" stroke-width="1.8" marker-end="url(#sm-deny)"></line>
+      <text x="352" y="142" font-size="11.5" class="fig-t-deny">コマンド自体のエコー。送った瞬間に出る</text>
+      <text x="352" y="160" font-size="11" class="fig-t-deny" opacity=".85">wait-output はここに当たり、t=0.08s で返る</text>
+
+      <text x="44" y="184" font-size="12" class="fig-t-allow">MARKER</text>
+      <line x1="300" y1="180" x2="340" y2="180" class="fig-s-allow" stroke-width="1.8" marker-end="url(#sm-allow)"></line>
+      <text x="352" y="184" font-size="11.5" class="fig-t-allow">本当の実行結果。t=5s に出る</text>
+
+      <text x="24" y="234" font-size="12" class="fig-t-deny">→ 5秒待つつもりが、実行前に「完了」が返る</text>
+    </svg>`,
+  },
 };
 
 /**
