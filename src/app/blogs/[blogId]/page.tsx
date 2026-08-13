@@ -246,7 +246,12 @@ export default async function StaticDetailPage({
     }
   );
 
-  const html = md.render(bodyWithFigures);
+  // Notion のエディタは `:::figure{...}` を独自記法のブロックとみなして、
+  // 閉じの `:::` を本文に残すことがある。callout は上でブロックごと消費しているので、
+  // ここに残る単独行の `:::` はその余りだけ。落とさないと段落として描画されてしまう。
+  const bodyWithoutStrayFence = bodyWithFigures.replace(/^:::[ \t]*$/gm, '');
+
+  const html = md.render(bodyWithoutStrayFence);
 
   // プレースホルダーをcallout HTMLに置換
   let processedHtml = html;
