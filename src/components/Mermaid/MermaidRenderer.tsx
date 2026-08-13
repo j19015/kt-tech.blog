@@ -29,6 +29,18 @@ export const MermaidRenderer = () => {
           // 失敗時に mermaid が body 直下へ独自のエラー図を差し込むのを止める
           suppressErrorRendering: true,
           fontFamily: 'inherit',
+          themeVariables: {
+            // 矢印につけたラベルの下敷きの色。既定値は図の背景と揃っておらず、
+            // ラベルが線や隣のノードに重なって読めなくなっていた。
+            // .mermaid-block__figure の background と同じ値にする。
+            edgeLabelBackground: resolvedTheme === 'dark' ? '#0b1220' : '#ffffff',
+          },
+          flowchart: {
+            // 日本語のラベルは英字より横に伸びやすく、既定の折り返し幅だと
+            // ノードの枠から文字がはみ出して切れていた
+            wrappingWidth: 200,
+            useMaxWidth: true,
+          },
         });
 
         for (let i = 0; i < blocks.length; i += 1) {

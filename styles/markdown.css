@@ -441,6 +441,25 @@
   max-width: 100%;
   height: auto;
 }
+/* 矢印のラベル。mermaid 側の themeVariables でも下敷きの色を渡しているが、
+   バージョンによっては foreignObject の中の要素に効かないので、こちらでも塗る。
+   透明のままだと線や隣のノードに重なって読めない。 */
+.znc .mermaid-block__figure .edgeLabel,
+.znc .mermaid-block__figure .edgeLabel p,
+.znc .mermaid-block__figure .edgeLabel span {
+  background-color: #ffffff;
+  color: #334155;
+}
+.dark .znc .mermaid-block__figure .edgeLabel,
+.dark .znc .mermaid-block__figure .edgeLabel p,
+.dark .znc .mermaid-block__figure .edgeLabel span {
+  background-color: #0b1220;
+  color: #cbd5e1;
+}
+/* ラベルの文字が線に触れて読みにくいので、下敷きに少し余白を持たせる */
+.znc .mermaid-block__figure .edgeLabel p {
+  padding: 0 0.25em;
+}
 .znc .mermaid-block.is-rendered .mermaid-block__source {
   display: none;
 }
