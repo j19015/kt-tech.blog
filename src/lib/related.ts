@@ -22,8 +22,18 @@ const TAG_WEIGHT = 2;
 const RECENCY_WEIGHT = 1;
 const RECENCY_HORIZON_DAYS = 730;
 
-export function relatedPosts(all: Blog[], current: Blog, limit = 3): Blog[] {
-  const others = all.filter((p) => p.id !== current.id);
+/**
+ * @param excludeIds 候補から外す記事。別の枠（連載カルーセル等）で既に見せている記事を
+ *   重ねて出さないために使う。タグの希少度は `all` 全体から計算するので、
+ *   ここで除いてもスコアの尺度は変わらない。
+ */
+export function relatedPosts(
+  all: Blog[],
+  current: Blog,
+  limit = 3,
+  excludeIds?: ReadonlySet<string>
+): Blog[] {
+  const others = all.filter((p) => p.id !== current.id && !excludeIds?.has(p.id));
 
   // タグの出現数。希少なタグほど「関連している」という情報量が大きい
   const tagFreq = new Map<string, number>();

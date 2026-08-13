@@ -59,6 +59,7 @@ import { KeyboardNav } from '@/components/KeyboardNav/KeyboardNav';
 import { FloatingTocButton } from '@/components/TableOfContents/FloatingTocButton';
 import { BookmarkButton } from '@/components/Bookmark/BookmarkButton';
 import { SeriesNav } from '@/components/Series/SeriesNav';
+import { SeriesCarousel } from '@/components/Series/SeriesCarousel';
 import { ArticleAside } from '@/components/ArticleAside/ArticleAside';
 import { ArticleSummary } from '@/components/ArticleSummary/ArticleSummary';
 import { ArticleChangelog } from '@/components/ArticleSummary/ArticleChangelog';
@@ -186,7 +187,15 @@ export default async function StaticDetailPage({
     : null;
 
   // 関連記事。タグの希少性で重み付けし、同じ連載を最優先する。
-  const related = relatedPosts(navPosts, blog);
+  // ただし連載の記事は記事末の SeriesCarousel で全部見せているので、候補から外す。
+  // 連載は他の何より高い重み付けなので、外さないと関連記事の3枠が
+  // カルーセルと同じ記事で埋まり、同じものが上下に2回並ぶ。
+  const related = relatedPosts(
+    navPosts,
+    blog,
+    3,
+    seriesContext ? new Set(seriesContext.series.posts.map((p) => p.id)) : undefined
+  );
 
   // 前後記事は連載内 → 同カテゴリ内 → 全体、の順で範囲を決める。
   // 全記事の公開日順だと React の記事の「次」が無関係なインフラ記事になる。
@@ -606,6 +615,20 @@ export default async function StaticDetailPage({
               const nextPost = idx > 0 ? navScope.posts[idx - 1] : null;
               return <KeyboardNav prevUrl={prevPost ? `/blogs/${prevPost.id}` : undefined} nextUrl={nextPost ? `/blogs/${nextPost.id}` : undefined} />;
             })()}
+            {/* 記事末の導線は、範囲が狭い順に「次の1本 → 前後 → 連載全体 → 連載外」。
+                連載は読者にとって一番強い文脈なので、関連記事より前に置く。 */}
+            {seriesContext && (
+              <SeriesCarousel
+                seriesName={seriesContext.series.name}
+                seriesHref={`/series/${encodeURIComponent(seriesContext.series.slug)}`}
+                posts={seriesContext.series.posts.map((p) => ({
+                  id: p.id,
+                  title: p.title,
+                  publishedAt: p.publishedAt,
+                }))}
+                currentIndex={seriesContext.index}
+              />
+            )}
             <RelatedPosts posts={related} currentPostId={blogId} />
           <FloatingTocButton toc={toc} />
           <FloatingShareButton title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
