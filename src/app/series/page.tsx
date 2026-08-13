@@ -4,6 +4,7 @@ import { Library } from 'lucide-react';
 import { getList } from '../../../libs/notion';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 import { groupBySeries } from '@/lib/series';
+import { seriesMetaOf } from '@/lib/seriesMeta';
 import { formatArchive } from '@/lib/blog';
 
 const siteUrl = process.env.SITE_URL || 'https://kt-tech.blog';
@@ -44,10 +45,32 @@ export default async function SeriesIndexPage() {
                   <h2 className='min-w-0 flex-1 font-bold text-slate-900 dark:text-slate-100'>{series.name}</h2>
                   <span className='shrink-0 text-xs text-slate-500 dark:text-slate-400'>全{series.posts.length}回</span>
                 </div>
-                {/* 第1回のタイトルまで見せると、何の話の連載かが一覧で分かる */}
-                <p className='mt-2 truncate text-sm text-slate-600 dark:text-slate-300'>
-                  1. {series.posts[0].title}
-                </p>
+                {seriesMetaOf(series.name) && (
+                  <p className='mt-2 text-sm text-slate-500 dark:text-slate-400'>
+                    {seriesMetaOf(series.name)!.tagline}
+                  </p>
+                )}
+                {/* 収録記事のタイトルを数本見せる。連載名だけでは何の話か分からない。
+                    1本だけ出すと番号が「1.」だけ孤立して意味をなさないので、
+                    順序が伝わる最小の本数として3本並べ、残りは件数で示す。 */}
+                <ol className='mt-2 space-y-1'>
+                  {series.posts.slice(0, 3).map((post, i) => (
+                    <li
+                      key={post.id}
+                      className='flex gap-2 text-sm text-slate-600 dark:text-slate-300'
+                    >
+                      <span className='shrink-0 tabular-nums text-slate-400 dark:text-slate-500'>
+                        {i + 1}.
+                      </span>
+                      <span className='min-w-0 truncate'>{post.title}</span>
+                    </li>
+                  ))}
+                </ol>
+                {series.posts.length > 3 && (
+                  <p className='mt-1.5 pl-6 text-xs text-slate-400 dark:text-slate-500'>
+                    ほか{series.posts.length - 3}回
+                  </p>
+                )}
                 <p className='mt-1 text-xs text-slate-400 dark:text-slate-500'>
                   最終更新 {formatArchive(series.updatedAt.slice(0, 7))}
                 </p>

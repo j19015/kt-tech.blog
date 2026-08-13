@@ -5,6 +5,7 @@ import { Library, BookOpen } from 'lucide-react';
 import { getList } from '../../../../libs/notion';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 import { groupBySeries } from '@/lib/series';
+import { seriesMetaOf } from '@/lib/seriesMeta';
 import { SeriesPostList } from '@/components/Series/SeriesPostList';
 
 const siteUrl = process.env.SITE_URL || 'https://kt-tech.blog';
@@ -34,7 +35,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const title = `${series.name}（全${series.posts.length}回）`;
-  const description = `連載「${series.name}」の記事一覧です。第1回から順に読めます。`;
+  // 連載ごとの説明があればそれを使う。定型文のままだと連載が増えるほど
+  // 検索結果で見分けのつかないページが並ぶ。
+  const description =
+    seriesMetaOf(series.name)?.tagline ??
+    `連載「${series.name}」の記事一覧です。第1回から順に読めます。`;
   const url = `${siteUrl}/series/${seriesSlug}`;
 
   return {
@@ -64,6 +69,11 @@ export default async function SeriesDetailPage({ params }: Props) {
         <Library className='h-5 w-5 shrink-0 text-blue-600 dark:text-blue-400' aria-hidden='true' />
         <h1 className='text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-100'>{series.name}</h1>
       </div>
+      {seriesMetaOf(series.name) && (
+        <p className='mt-3 px-2 text-slate-600 dark:text-slate-300'>
+          {seriesMetaOf(series.name)!.tagline}
+        </p>
+      )}
       <p className='mt-2 px-2 text-sm text-slate-500 dark:text-slate-400'>全{series.posts.length}回</p>
 
       <Link
