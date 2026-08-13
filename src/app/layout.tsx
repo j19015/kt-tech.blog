@@ -1,13 +1,13 @@
 import './globals.css';
-import { Noto_Sans_JP } from 'next/font/google';
+// Noto Sans JP はリポジトリに取り込んである（public/fonts/noto-sans-jp）。
+// next/font/google はビルドのたびに Google Fonts へ CSS を取りに行き、応答が途中で切れると
+// URL の抽出に失敗してビルドごと落ちる。実際にデプロイが1回落ちている
+// （run 31674916871 の1回目 / next/font の loader.js:122）。
+// 中身・unicode-range・fallback のメトリクスは next/font が出していたものと同一で、
+// 更新は node scripts/vendor-noto-sans-jp.mjs で行う。
+import '../../styles/noto-sans-jp.css';
+import { NOTO_SANS_JP_PRELOAD } from '@/lib/font-preload';
 import { Header } from '../../src/components/Header/Header';
-
-const notoSansJP = Noto_Sans_JP({
-  subsets: ['latin'],
-  weight: ['400', '500', '700'],
-  display: 'swap',
-  variable: '--font-noto-sans-jp',
-});
 import { Footer } from '../../src/components/Footer/Footer';
 import GoogleAnalytics from '@/components/GoogleAnalytics/GoogleAnalytics';
 import Favicon from './favicon.ico';
@@ -117,9 +117,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     // next-themes は hydration 前にインラインスクリプトで <html> に class を足すため、
     // suppressHydrationWarning がないと毎回 hydration mismatch の警告が出る
-    <html lang='ja' className={notoSansJP.variable} suppressHydrationWarning>
+    <html lang='ja' suppressHydrationWarning>
       <head>
         <GoogleAnalytics />
+        {/* 日本語のサブセットは unicode-range 任せで必要な分だけ読まれる。
+            最初に要る latin だけ先に取りに行かせる（next/font の subsets: ['latin'] と同じ）。
+            フォントは同一オリジンでも CORS で取りに行くので crossOrigin が要る */}
+        <link
+          rel='preload'
+          href={NOTO_SANS_JP_PRELOAD}
+          as='font'
+          type='font/woff2'
+          crossOrigin='anonymous'
+        />
         <link rel='manifest' href='/manifest.json' />
         {/* 1色固定だとライトモードでもブラウザのバーが暗いままになる。
             OSの設定に合わせて出し分ける */}

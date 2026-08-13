@@ -1,0 +1,7 @@
+# Cloudflare Pages のヘッダ設定（ビルド時に .vercel/output/static/_headers として配置される）。
+#
+# フォントのファイル名は Google が付けた内容ハッシュなので、中身が変われば名前も変わる。
+# next/font が使っていた /_next/static/media/ と同じく1年 immutable にしておかないと、
+# ページを開くたびに33個のサブセットへ条件付きリクエストが飛ぶ。
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
