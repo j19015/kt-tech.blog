@@ -1095,3 +1095,85 @@
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.9em;
 }
+
+/* ------------------------------------------------------------------
+   図解 UI（本文の `:::figure{id="..."}` から生成）
+   SVG側は色を直書きせず、ここで定義した変数を参照するクラスを使う。
+   これでライト/ダークの切り替えにそのまま追従する。
+   ------------------------------------------------------------------ */
+.znc .figure {
+  margin: 2.5rem 0;
+  /* 図の意味色。ライト時 */
+  --fig-allow: #0b6355;
+  --fig-deny: #9b3226;
+  --fig-accent: #9a5d06;
+}
+.dark .znc .figure {
+  --fig-allow: #52bfa9;
+  --fig-deny: #e08578;
+  --fig-accent: #dfa455;
+}
+
+/* 狭い画面では図を縮めず、横スクロールさせる。
+   viewBox で縮めると図中の 11px の文字が読めなくなるため
+   （コードブロックやテーブルと同じ方針）。 */
+.znc .figure-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.znc .figure svg {
+  display: block;
+  width: 100%;
+  min-width: 540px;
+  height: auto;
+  padding: 1rem 0.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #334155;
+}
+.dark .znc .figure svg {
+  border-color: #334155;
+  background: #0b1220;
+  color: #cbd5e1;
+}
+
+.znc .figure figcaption {
+  margin-top: 0.85rem;
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: #64748b;
+}
+.dark .znc .figure figcaption {
+  color: #94a3b8;
+}
+
+/* 図中の小見出しラベル */
+.znc .figure .fig-label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+}
+
+/* 意味色のクラス（fill / stroke） */
+.znc .figure .fig-t-allow,
+.znc .figure .fig-f-allow {
+  fill: var(--fig-allow);
+}
+.znc .figure .fig-t-deny,
+.znc .figure .fig-f-deny {
+  fill: var(--fig-deny);
+}
+.znc .figure .fig-t-accent {
+  fill: var(--fig-accent);
+}
+.znc .figure .fig-s-allow {
+  stroke: var(--fig-allow);
+}
+.znc .figure .fig-s-deny {
+  stroke: var(--fig-deny);
+}
+.znc .figure .fig-s-accent {
+  stroke: var(--fig-accent);
+}

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { getDetail, getList, Blog } from '../../../../libs/notion';
 import { md, escapeHtml } from '@/lib/markdown';
 import { stripEmoji } from '@/lib/emoji';
+import { FIGURE_PATTERN, renderFigure } from '@/figures';
 import '../../../../styles/markdown.css';
 import '../../../../styles/hljs-theme.css';
 // KaTeX の CSS は数式の有無に関わらず記事ページで読み込まれる（約23KB、gzipで7KB程度）。
@@ -43,6 +44,7 @@ function extractHeadings(html: string): { text: string; id: string; tag: string 
 }
 import type { Metadata, ResolvingMetadata } from 'next';
 import { StickyTableOfContents } from '@/components/TableOfContents/StickyTableOfContents';
+import { TocRail } from '@/components/TableOfContents/TocRail';
 import { RelatedPosts } from '@/components/RelatedPosts/RelatedPosts';
 import { ShareButtons } from '@/components/ShareButtons/ShareButtons';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
@@ -87,6 +89,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   // markdown->平文（Edge互換）
   const cleanBody = blog.body
+    .replace(/:::figure\{[^}]*\}/g, '')
     .replace(/:::callout\{[^}]*\}/g, '')
     .replace(/:::/g, '');
   const rawHtml = md.render(cleanBody);
@@ -203,10 +206,32 @@ export default async function StaticDetailPage({
     }
   );
 
-  const html = md.render(bodyPreprocessed);
+  // 図解マーカー `:::figure{id="..."}` をプレースホルダーに変換
+  // （SVGをそのままmarkdown-itに通すと整形で壊れるため、レンダリング後に差し込む）
+  const figureMap = new Map<string, string>();
+  let figureIndex = 0;
+  const bodyWithFigures = bodyPreprocessed.replace(
+    FIGURE_PATTERN,
+    (marker: string, id: string) => {
+      const figureHtml = renderFigure(id);
+      if (!figureHtml) return marker; // 未定義のidはマーカーを残す（記事側の誤記に気づけるように）
+      const placeholder = `FIGURE_PLACEHOLDER_${figureIndex++}`;
+      figureMap.set(placeholder, figureHtml);
+      return placeholder;
+    }
+  );
+
+  const html = md.render(bodyWithFigures);
 
   // プレースホルダーをcallout HTMLに置換
   let processedHtml = html;
+
+  figureMap.forEach((figureHtml, placeholder) => {
+    processedHtml = processedHtml.replace(
+      new RegExp(`<p>${placeholder}</p>|${placeholder}`, 'g'),
+      figureHtml
+    );
+  });
   calloutMap.forEach(({ icon, color, text }, placeholder) => {
     // テキスト先頭の絵文字がiconと重複する場合は除去
     const cleanText = text.replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]+\s*/u, '').trim();
@@ -593,13 +618,10 @@ export default async function StaticDetailPage({
               目次だけを sticky にすると、その下に置いた導線は通常フローに残って
               すぐ画面外に流れてしまい、記事を読み終えた頃には見えない。
               スクロールも1本にまとめる（入れ子のスクロール領域は操作しづらい）。 */}
-          <div
-            data-toc-rail
-            className='scrollbar-slim sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto overscroll-contain rounded-lg bg-white/50 p-4 backdrop-blur-sm dark:bg-slate-900/50'
-          >
+          <TocRail>
             <StickyTableOfContents toc={toc} />
             <ArticleAside blog={blog} latest={navPosts.filter((p) => p.id !== blogId).slice(0, 5)} />
-          </div>
+          </TocRail>
         </div>
       </div>
     </>
