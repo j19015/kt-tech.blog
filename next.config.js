@@ -18,6 +18,15 @@ const nextConfig = {
   async headers() {
     return [
       {
+        // 取り込んだ Noto Sans JP。ファイル名が内容ハッシュなので長期キャッシュしてよい。
+        // 配信環境では public/_headers が効くが、ローカルの next start でも同じになるよう
+        // ここにも書いておく。
+        source: '/fonts/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      {
         // トップページは新着記事の鮮度を優先して s-maxage を短くする。
         // Cloudflare Pages では ISR が使えないため、Edge Runtime + このヘッダで
         // 「5分ごとに裏で作り直す」ISR相当の挙動にしている。
