@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { getDetail, getList, Blog } from '../../../../libs/notion';
 import { md, escapeHtml } from '@/lib/markdown';
 import { stripEmoji } from '@/lib/emoji';
+import { FIGURE_PATTERN, renderFigure } from '@/figures';
 import '../../../../styles/markdown.css';
 import '../../../../styles/hljs-theme.css';
 // KaTeX の CSS は数式の有無に関わらず記事ページで読み込まれる（約23KB、gzipで7KB程度）。
@@ -87,6 +88,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   // markdown->平文（Edge互換）
   const cleanBody = blog.body
+    .replace(/:::figure\{[^}]*\}/g, '')
     .replace(/:::callout\{[^}]*\}/g, '')
     .replace(/:::/g, '');
   const rawHtml = md.render(cleanBody);
@@ -203,10 +205,32 @@ export default async function StaticDetailPage({
     }
   );
 
-  const html = md.render(bodyPreprocessed);
+  // 図解マーカー `:::figure{id="..."}` をプレースホルダーに変換
+  // （SVGをそのままmarkdown-itに通すと整形で壊れるため、レンダリング後に差し込む）
+  const figureMap = new Map<string, string>();
+  let figureIndex = 0;
+  const bodyWithFigures = bodyPreprocessed.replace(
+    FIGURE_PATTERN,
+    (marker: string, id: string) => {
+      const figureHtml = renderFigure(id);
+      if (!figureHtml) return marker; // 未定義のidはマーカーを残す（記事側の誤記に気づけるように）
+      const placeholder = `FIGURE_PLACEHOLDER_${figureIndex++}`;
+      figureMap.set(placeholder, figureHtml);
+      return placeholder;
+    }
+  );
+
+  const html = md.render(bodyWithFigures);
 
   // プレースホルダーをcallout HTMLに置換
   let processedHtml = html;
+
+  figureMap.forEach((figureHtml, placeholder) => {
+    processedHtml = processedHtml.replace(
+      new RegExp(`<p>${placeholder}</p>|${placeholder}`, 'g'),
+      figureHtml
+    );
+  });
   calloutMap.forEach(({ icon, color, text }, placeholder) => {
     // テキスト先頭の絵文字がiconと重複する場合は除去
     const cleanText = text.replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]+\s*/u, '').trim();
