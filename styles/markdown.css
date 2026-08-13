@@ -2,10 +2,14 @@
    以前は赤み寄りのグレーで、サイト全体の slate（青みグレー）と並ぶと色が濁って見えていた。 */
 :root {
   --md-code-bg-light: 241 245 249; /* slate-100 */
-  --md-table-th-light: #f8fafc; /* slate-50 */
+  /* 見出し行は本文の地とはっきり差をつける。slate-50 では白背景との差が
+     ほとんどなく、ヘッダーがどこまでか分からなくなっていた */
+  --md-table-th-light: #eef2f7;
   --md-table-td-light: transparent;
   --md-code-bg-dark: 51 65 85; /* slate-700 */
-  --md-table-th-dark: #1e293b; /* slate-800 */
+  /* ダークは特に差が出にくい。本文の地(slate-900系)に対して #1e293b では
+     ほぼ同色に見え、表全体が背景に溶けて崩れているように見えていた */
+  --md-table-th-dark: #253349;
   --md-table-td-dark: transparent;
 }
 
@@ -721,24 +725,27 @@
   padding: 0.625rem 0.875rem;
   text-align: left;
   font-weight: 600;
-  border-bottom: 1px solid #e2e8f0;
+  /* 見出し行と本文の境目は他の罫線より太くする。同じ太さだと
+     どこまでがヘッダーなのか読み取れない */
+  border-bottom: 2px solid #cbd5e1;
 }
 
 .dark .znc th {
   background: var(--md-table-th-dark);
-  border-bottom-color: #334155;
+  border-bottom-color: #3b4d6b;
 }
 
 .znc td {
   padding: 0.625rem 0.875rem;
   background: var(--md-table-td-light);
   color: hsl(var(--foreground));
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .dark .znc td {
   background: var(--md-table-td-dark);
-  border-bottom-color: #1e293b;
+  /* 罫線が縞模様の背景と同色だと線として見えない */
+  border-bottom-color: #2b3a52;
 }
 
 .znc tbody tr:last-child td {
@@ -750,7 +757,8 @@
   background: #f8fafc;
 }
 .dark .znc tbody tr:nth-child(even) td {
-  background: rgba(30, 41, 59, 0.5);
+  /* 半透明だと下の地の色に左右されて、縞が出たり出なかったりする */
+  background: #1a2434;
 }
 .znc tbody tr:hover td {
   background: #f1f5f9;
