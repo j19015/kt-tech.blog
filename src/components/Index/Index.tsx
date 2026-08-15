@@ -14,11 +14,21 @@ export const Index = ({ contents }: BlogProps) => {
   return (
     <div>
       <div className='space-y-4'>
-        {contents.map((blog) => (
-          <FadeIn key={blog.id}>
-            <PostCard blog={blog} />
-          </FadeIn>
-        ))}
+        {/*
+          先頭2件はファーストビューに入るので、遅延読み込みもフェードインもしない。
+          FadeIn は opacity-0 から始まるため、包んだままだと中の画像が LCP 候補から
+          外れ、IntersectionObserver が発火するまで «何も描かれていない» 扱いになる。
+          画像の priority と合わせて、ここだけ素通しにしている。
+        */}
+        {contents.map((blog, index) =>
+          index < 2 ? (
+            <PostCard key={blog.id} blog={blog} priority />
+          ) : (
+            <FadeIn key={blog.id}>
+              <PostCard blog={blog} />
+            </FadeIn>
+          )
+        )}
       </div>
 
       {contents.length === 0 && (

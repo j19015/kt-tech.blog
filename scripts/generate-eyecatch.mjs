@@ -110,6 +110,22 @@ async function uploadToR2(buffer, filename) {
     ContentType: 'image/webp',
   }));
   console.log(`  Converted: PNG ${(buffer.length / 1024).toFixed(0)}KB → WebP ${(webpBuffer.length / 1024).toFixed(0)}KB`);
+
+  // 一覧カード用のサムネイルも同時に作る。ここで作り忘れると、カード側
+  // （src/lib/eyecatch.ts の thumbnailUrl）が 404 の URL を指すことになる。
+  const thumbBuffer = await sharp(webpBuffer)
+    .resize({ width: 320, withoutEnlargement: true })
+    .webp({ quality: 80 })
+    .toBuffer();
+  await s3.send(new PutObjectCommand({
+    Bucket: BUCKET_NAME,
+    Key: `images/eyecatch/thumb/${webpFilename}`,
+    Body: thumbBuffer,
+    ContentType: 'image/webp',
+    CacheControl: 'public, max-age=31536000, immutable',
+  }));
+  console.log(`  Thumbnail: ${(thumbBuffer.length / 1024).toFixed(0)}KB (320px)`);
+
   return `${BUCKET_URL}/${key}`;
 }
 
