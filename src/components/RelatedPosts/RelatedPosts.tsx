@@ -62,7 +62,7 @@ export const RelatedPosts = ({ posts, currentPostId }: RelatedPostsProps) => {
                   <CategoryChip name={post.category.name} size='sm' />
                 </div>
               )}
-              <h3 className='text-sm font-medium text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 mb-2'>
+              <h3 className='text-sm font-normal text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 mb-2'>
                 {post.title}
               </h3>
 

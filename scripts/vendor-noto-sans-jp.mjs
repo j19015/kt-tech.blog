@@ -20,8 +20,11 @@ import { mkdir, readdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 // next/font/google が組み立てるURLと同じもの。
-// src/app/layout.tsx の Noto_Sans_JP({ weight: ['400','500','700'], display: 'swap' }) に対応する。
-const CSS_URL = 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap';
+// 使うのは 400 と 700 の2つだけ。500 も読ませていた頃は日本語ページで
+// 32ファイル 646KB を落としており、その3分の1が 500 のブロックだった。
+// CSS の font matching では 500 の指定は 400 にフォールバックするので、
+// 見た目を変えずに読み込み量だけ減らせる。
+const CSS_URL = 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap';
 
 // woff2 を返させるための UA。next/font と同じものを使う
 // （fetch-css-from-google-fonts.js が指定しているのと同じ Chrome 104）。

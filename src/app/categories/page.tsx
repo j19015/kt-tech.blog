@@ -50,7 +50,7 @@ export default async function CategoriesPage() {
                 className='group flex items-center gap-3 p-4 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all'
               >
                 <FolderOpen className='w-4 h-4 flex-shrink-0 text-slate-400 dark:text-slate-500 group-hover:text-blue-500 transition-colors' />
-                <span className='flex-1 min-w-0 text-sm font-medium text-slate-700 dark:text-slate-200 truncate'>
+                <span className='flex-1 min-w-0 text-sm font-normal text-slate-700 dark:text-slate-200 truncate'>
                   {category.name}
                 </span>
                 <span className='text-xs text-slate-500 dark:text-slate-400'>{category.count}記事</span>

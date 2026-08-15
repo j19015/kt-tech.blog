@@ -17,7 +17,7 @@ export const Title = (props: { title: string; type?: TitleType; count?: number }
     // 一覧（Index）と左端を揃える
     <div className='max-w-3xl mx-auto px-4 pt-2 pb-6'>
       {label && (
-        <p className='text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5'>
+        <p className='text-xs font-normal uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5'>
           {label}
         </p>
       )}

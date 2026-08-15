@@ -20,7 +20,7 @@ export default function Error({
         <div className='flex flex-col sm:flex-row gap-3 justify-center'>
           <button
             onClick={reset}
-            className='px-5 py-2.5 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-300 transition-colors text-sm font-medium'
+            className='px-5 py-2.5 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-300 transition-colors text-sm font-normal'
           >
             再読み込み
           </button>
