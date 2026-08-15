@@ -10,7 +10,10 @@
     "lint:fix": "yarn lint --fix",
     "format": "prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json}'",
     "pages:build": "npx @cloudflare/next-on-pages",
-    "pages:deploy": "npx wrangler pages deploy .vercel/output/static --project-name=kt-tech-blog"
+    "pages:deploy": "npx wrangler pages deploy .vercel/output/static --project-name=kt-tech-blog",
+    "preview": "npm run preview:env && npm run pages:build && npm run preview:serve",
+    "preview:env": "node scripts/sync-dev-vars.mjs",
+    "preview:serve": "wrangler pages dev .vercel/output/static --port 8788 --compatibility-date 2026-08-15 --compatibility-flags nodejs_compat"
   },
   "dependencies": {
     "@cloudflare/next-on-pages": "^1.13.16",

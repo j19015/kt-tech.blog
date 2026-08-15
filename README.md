@@ -43,6 +43,30 @@ npm install --legacy-peer-deps
 npm run dev
 ```
 
+### 本番と同じ状態で確認する
+
+```bash
+npm run preview   # → http://localhost:8788
+```
+
+**`npm run start` は本番の再現にならない。** `next start` は Node.js サーバーとして動くが、
+本番は Cloudflare Pages（`@cloudflare/next-on-pages` が生成する Worker）で動いており、
+CSS のバンドル結果もページごとの読み込みも別物になる。実際 `next start` では
+
+- 記事ページに layout の CSS が読み込まれず、`--font-noto-sans-jp` が未定義になる
+- ソースを変えてビルドし直しても、古い出力を返し続けることがある
+
+といった食い違いが出る。フォントや画像 URL のように「本番でどう配信されるか」が
+問われる変更は、必ず `npm run preview` で確認すること。
+
+`preview` は次の3つをまとめて実行する。
+
+| | 内容 |
+|---|---|
+| `preview:env` | `.env.local` → `.dev.vars` を同期。wrangler は `.env.local` を読まないので、無いと全ページ 503 |
+| `pages:build` | `@cloudflare/next-on-pages` で本番と同じビルド |
+| `preview:serve` | `wrangler pages dev`。`nodejs_compat` フラグが無いと Worker が起動せず 503 |
+
 ## ビルド・デプロイ
 
 ```bash
