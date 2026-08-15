@@ -31,9 +31,16 @@ import path from 'node:path';
 // 列挙をやめても落とすファイルは増えない（同じ woff2 を weight ごとに重複して
 // 宣言していただけなので、@font-face の数はむしろ 249 → 124 に減る）。
 //
-// display=optional にしているのは CLS 対策。swap だとフォールバックから Noto Sans JP に
-// 差し替わるときに日本語の行数が変わり、フッターが押し下げられて CLS 0.219 が出ていた。
-const CSS_URL = 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=optional';
+// display は swap。一度 optional にしたことがあるが戻している。
+// optional は「100ms 以内に使用可能にならなければ、そのページロードでは使わない」挙動で、
+// 初回訪問に日本語サブセットを 100ms で用意するのは回線速度に関係なく不可能なため、
+// 検索から初めて来た読者は全員システムフォントで読むことになっていた
+// （Playwright の初回ロードで Noto Sans JP が一切適用されないことを確認）。
+// optional を入れた狙いは CLS 0.219 の抑制だったが、CLS は「改善が必要」レベルで
+// 表示が壊れるわけではないので、字面が出ないほうが損が大きいと判断した。
+// CLS 側はフォールバックのメトリクスで別途対処する。今の local('Arial') + size-adjust は
+// ラテン向けの調整で、Arial にグリフの無い日本語には効いていない。
+const CSS_URL = 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap';
 
 // woff2 を返させるための UA。next/font と同じものを使う
 // （fetch-css-from-google-fonts.js が指定しているのと同じ Chrome 104）。
