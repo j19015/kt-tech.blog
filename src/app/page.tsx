@@ -4,6 +4,7 @@ import { getList, getCategoryList } from '../../libs/notion';
 import { Blog } from '../../libs/notion';
 import Index from '@/components/Index/Index';
 import HeroSection from '@/components/HeroSection/HeroSection';
+import { mediumUrl } from '@/lib/eyecatch';
 import { ArrowRight, FolderOpen } from 'lucide-react';
 import { isPublic } from '@/lib/blog';
 import { isRecentlyUpdated } from '@/lib/articleStatus';
@@ -95,7 +96,7 @@ export default async function StaticPage() {
               <Link href={`/blogs/${latestBlogs[0].id}`} className='group block'>
                 <div className='relative aspect-[16/9] lg:aspect-auto lg:h-full lg:min-h-[420px] rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800'>
                   <Image
-                    src={latestBlogs[0].eyecatch?.url || '/images/no_image_generated.png'}
+                    src={mediumUrl(latestBlogs[0].eyecatch?.url) || '/images/no_image_generated.png'}
                     alt=''
                     fill
                     sizes='(max-width: 1024px) 100vw, 600px'
@@ -127,7 +128,7 @@ export default async function StaticPage() {
                 <Link key={blog.id} href={`/blogs/${blog.id}`} className='group block flex-1'>
                   <div className='relative h-full aspect-[16/9] lg:aspect-auto lg:min-h-0 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800'>
                     <Image
-                      src={blog.eyecatch?.url || '/images/no_image_generated.png'}
+                      src={mediumUrl(blog.eyecatch?.url) || '/images/no_image_generated.png'}
                       alt=''
                       fill
                       sizes='(max-width: 1024px) 100vw, 600px'

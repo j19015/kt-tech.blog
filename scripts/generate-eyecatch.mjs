@@ -111,20 +111,26 @@ async function uploadToR2(buffer, filename) {
   }));
   console.log(`  Converted: PNG ${(buffer.length / 1024).toFixed(0)}KB → WebP ${(webpBuffer.length / 1024).toFixed(0)}KB`);
 
-  // 一覧カード用のサムネイルも同時に作る。ここで作り忘れると、カード側
-  // （src/lib/eyecatch.ts の thumbnailUrl）が 404 の URL を指すことになる。
-  const thumbBuffer = await sharp(webpBuffer)
-    .resize({ width: 320, withoutEnlargement: true })
-    .webp({ quality: 80 })
-    .toBuffer();
-  await s3.send(new PutObjectCommand({
-    Bucket: BUCKET_NAME,
-    Key: `images/eyecatch/thumb/${webpFilename}`,
-    Body: thumbBuffer,
-    ContentType: 'image/webp',
-    CacheControl: 'public, max-age=31536000, immutable',
-  }));
-  console.log(`  Thumbnail: ${(thumbBuffer.length / 1024).toFixed(0)}KB (320px)`);
+  // 表示サイズ別の版も同時に作る。ここで作り忘れると、参照側
+  // （src/lib/eyecatch.ts の thumbnailUrl / mediumUrl）が 404 の URL を指すことになる。
+  // 幅は scripts/generate-eyecatch-thumbnails.mjs の VARIANTS と揃えること。
+  for (const variant of [
+    { name: 'thumb', width: 320, quality: 80 },
+    { name: 'medium', width: 768, quality: 82 },
+  ]) {
+    const buf = await sharp(webpBuffer)
+      .resize({ width: variant.width, withoutEnlargement: true })
+      .webp({ quality: variant.quality })
+      .toBuffer();
+    await s3.send(new PutObjectCommand({
+      Bucket: BUCKET_NAME,
+      Key: `images/eyecatch/${variant.name}/${webpFilename}`,
+      Body: buf,
+      ContentType: 'image/webp',
+      CacheControl: 'public, max-age=31536000, immutable',
+    }));
+    console.log(`  ${variant.name}: ${(buf.length / 1024).toFixed(0)}KB (${variant.width}px)`);
+  }
 
   return `${BUCKET_URL}/${key}`;
 }
