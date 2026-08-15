@@ -41,7 +41,7 @@ export const HeroSection = () => {
             </Link>
             <Link
               href='/about'
-              className='text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors'
+              className='text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors'
             >
               About →
             </Link>

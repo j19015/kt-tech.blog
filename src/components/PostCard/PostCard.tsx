@@ -5,6 +5,7 @@ import { Library } from 'lucide-react';
 import type { Blog } from '../../../libs/notion';
 import { TagChip } from '../Chip/Chip';
 import { getArticleBadge } from '@/lib/articleStatus';
+import { thumbnailUrl } from '@/lib/eyecatch';
 
 /**
  * 記事一覧のカード。
@@ -53,9 +54,15 @@ type Props = {
   terms?: string[];
   /** カードの下に添える補足（検索結果の一致箇所など） */
   footer?: React.ReactNode;
+  /**
+   * ファーストビューに入るカードだけ true にする。
+   * 既定の遅延読み込みのままだと、一覧ページで LCP になるこの画像の
+   * リクエスト開始が 5.5 秒遅れていた（Lighthouse の Load Delay が LCP の53%）。
+   */
+  priority?: boolean;
 };
 
-export const PostCard = ({ blog, terms, footer }: Props) => {
+export const PostCard = ({ blog, terms, footer, priority = false }: Props) => {
   const badge = getArticleBadge(blog);
 
   return (
@@ -66,19 +73,21 @@ export const PostCard = ({ blog, terms, footer }: Props) => {
         <div className='flex gap-4 p-4 rounded-xl bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-lg hover:border-slate-200 dark:hover:border-slate-600 hover:-translate-y-0.5 transition-all duration-300'>
           <div className='flex-shrink-0 relative w-24 sm:w-32 aspect-[4/3] rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-700'>
             <Image
-              src={blog.eyecatch?.url || '/images/no_image_generated.png'}
+              src={thumbnailUrl(blog.eyecatch?.url) || '/images/no_image_generated.png'}
               alt=''
               fill
               // 実表示は96〜128px。sizes がないと 100vw 扱いになり原寸が配信される
               sizes='(max-width: 640px) 96px, 128px'
+              priority={priority}
               className='object-cover group-hover:scale-105 transition-transform duration-300'
             />
+            {/* 白文字を載せるので 500 番だとコントラスト比が 3.7 前後で 4.5 に届かない */}
             {badge === 'new' ? (
-              <span className='absolute top-1.5 left-1.5 px-1.5 py-0.5 text-[10px] font-bold bg-red-500 text-white rounded'>
+              <span className='absolute top-1.5 left-1.5 px-1.5 py-0.5 text-[10px] font-bold bg-red-600 text-white rounded'>
                 NEW
               </span>
             ) : badge === 'updated' ? (
-              <span className='absolute top-1.5 left-1.5 px-1.5 py-0.5 text-[10px] font-bold bg-blue-500 text-white rounded'>
+              <span className='absolute top-1.5 left-1.5 px-1.5 py-0.5 text-[10px] font-bold bg-blue-600 text-white rounded'>
                 更新
               </span>
             ) : null}
@@ -92,7 +101,7 @@ export const PostCard = ({ blog, terms, footer }: Props) => {
                 <Library className='h-3 w-3 shrink-0' aria-hidden='true' />
                 <span className='truncate'>{blog.series.name}</span>
                 {blog.series.order > 0 && (
-                  <span className='shrink-0 tabular-nums text-slate-400 dark:text-slate-500'>
+                  <span className='shrink-0 tabular-nums text-slate-600 dark:text-slate-400'>
                     #{blog.series.order}
                   </span>
                 )}
@@ -105,12 +114,12 @@ export const PostCard = ({ blog, terms, footer }: Props) => {
 
             {/* 抜粋。タイトルだけでは中身が判断できず、一覧で開くかどうかを決められなかった */}
             {blog.ogpDescription && (
-              <p className='text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed'>
+              <p className='text-xs text-slate-600 dark:text-slate-300 line-clamp-2 leading-relaxed'>
                 <HighlightText text={blog.ogpDescription} terms={terms} />
               </p>
             )}
 
-            <div className='flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400'>
+            <div className='flex items-center gap-1.5 text-[11px] text-slate-600 dark:text-slate-400'>
               {/* 相対表記だと「いつの記事か」が直感的に分かる。技術記事は鮮度が重要 */}
               <time
                 className='whitespace-nowrap'
@@ -138,7 +147,7 @@ export const PostCard = ({ blog, terms, footer }: Props) => {
                   <TagChip key={tag.id} name={tag.name} />
                 ))}
                 {blog.tags.length > 3 && (
-                  <span className='self-center text-[11px] text-slate-500 dark:text-slate-400'>
+                  <span className='self-center text-[11px] text-slate-600 dark:text-slate-400'>
                     +{blog.tags.length - 3}
                   </span>
                 )}
