@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Blog } from '../../../libs/notion';
 import { Clock, ArrowRight } from 'lucide-react';
 import { CategoryChip } from '../Chip/Chip';
+import { mediumUrl } from '@/lib/eyecatch';
 
 interface RelatedPostsProps {
   posts: Blog[];
@@ -45,7 +46,7 @@ export const RelatedPosts = ({ posts, currentPostId }: RelatedPostsProps) => {
               {/* Thumbnail */}
               <div className='relative aspect-[16/9] mb-3 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800'>
                 <Image
-                  src={post.eyecatch?.url || '/images/no_image_generated.png'}
+                  src={mediumUrl(post.eyecatch?.url) || '/images/no_image_generated.png'}
                   alt=''
                   fill
                   sizes='(max-width: 640px) 100vw, 250px'

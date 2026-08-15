@@ -11,6 +11,18 @@
      ほぼ同色に見え、表全体が背景に溶けて崩れているように見えていた */
   --md-table-th-dark: #253349;
   --md-table-td-dark: transparent;
+
+  /* 本文と強調の色。
+     以前は本文も見出しも太字もすべて --foreground（ほぼ純黒 #0f1729）で、
+     強調はウェイトの差だけで作っていた。日本語のゴシックは 400 と 700 の
+     面積差が欧文よりずっと大きいので、純黒のまま 700 にすると強調が
+     「黒い帯」になって段落の流れを切ってしまう。
+     本文を一段落として、見出しと太字だけを黒に置き、
+     「太さ」ではなく「濃さ」で強調を作る。 */
+  --md-body-light: #334155; /* slate-700 */
+  --md-emphasis-light: #0f172a; /* slate-900 */
+  --md-body-dark: #cbd5e1; /* slate-300 */
+  --md-emphasis-dark: #f1f5f9; /* slate-100 */
 }
 
 /* zncクラス内のスタイル - グローバルCSS変数を上書きしない */
@@ -21,6 +33,44 @@
   /* 1行が長すぎると行末から次の行頭への視線移動が大きくなり読み疲れる。
      日本語で35〜45文字/行に収まる幅に制限する。 */
   max-width: 44rem;
+  /* 本文の地の色。個別に色を持つ要素（引用・コード・脚注など）は
+     それぞれのルールで上書きする */
+  color: var(--md-body-light);
+}
+.dark .znc {
+  color: var(--md-body-dark);
+}
+
+/* 見出しは本文より濃く置いて、階層を色でも示す */
+.znc h2,
+.znc h3,
+.znc h4,
+.znc h5,
+.znc summary {
+  color: var(--md-emphasis-light);
+}
+.dark .znc h2,
+.dark .znc h3,
+.dark .znc h4,
+.dark .znc h5,
+.dark .znc summary {
+  color: var(--md-emphasis-dark);
+}
+
+/* 太字。
+   Noto Sans JP は 400 / 500 / 700 の3ウェイトしか読み込んでいないため、
+   600 以上を指定しても実際には 700 のフェイスが使われる（実測で
+   600/700/800/900 の描画幅が一致）。使える段は 400・500・700 の3つだけ。
+   本文中の強調に 700 を当てると、長い強調がそのまま黒い塊になるので、
+   ウェイトは 500 に留めて、色を濃くすることで差をつける。 */
+.znc strong,
+.znc b {
+  font-weight: 500;
+  color: var(--md-emphasis-light);
+}
+.dark .znc strong,
+.dark .znc b {
+  color: var(--md-emphasis-dark);
 }
 
 /* 見出しの直後の要素は上マージンを詰める（見出しと本文がくっついて見えるのを防ぎつつ、余白の二重取りを避ける） */
@@ -36,7 +86,9 @@
    見た目が変わらないようにスタイルも1段ずらしてある。 */
 .znc h2 {
   font-size: 1.75rem;
-  font-weight: 800;
+  /* 800 と書いても読み込んでいる 700 のフェイスが使われるだけなので、
+     実態に合わせて 700 と書く。h3 との差はサイズと余白で付ける */
+  font-weight: 700;
   margin-top: 3.5rem;
   margin-bottom: 1.5rem;
   padding-top: 0.2rem;
@@ -204,11 +256,12 @@
   background-color: rgb(var(--md-code-bg-light));
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
-  color: hsl(var(--foreground));
+  color: var(--md-body-light);
 }
 
 .dark .znc code {
   background-color: rgb(var(--md-code-bg-dark));
+  color: var(--md-body-dark);
 }
 /* コードブロック
    ヘッダー（ファイル名 / 言語 / コピー）+ 本体 のラッパー構造。
@@ -497,7 +550,8 @@
 .dark .znc blockquote {
   border-left-color: #475569;
   background: rgba(30, 41, 59, 0.6);
-  color: #cbd5e1;
+  /* 本文が #cbd5e1 になったので、引用は一段落として「地の文ではない」ことを保つ */
+  color: #94a3b8;
 }
 .znc blockquote > :first-child {
   margin-top: 0;
@@ -721,7 +775,8 @@
 
 .znc th {
   background: var(--md-table-th-light);
-  color: hsl(var(--foreground));
+  /* 見出し行なので本文より濃く。td は本文と同じ濃さに置く */
+  color: var(--md-emphasis-light);
   padding: 0.625rem 0.875rem;
   text-align: left;
   font-weight: 600;
@@ -732,18 +787,20 @@
 
 .dark .znc th {
   background: var(--md-table-th-dark);
+  color: var(--md-emphasis-dark);
   border-bottom-color: #3b4d6b;
 }
 
 .znc td {
   padding: 0.625rem 0.875rem;
   background: var(--md-table-td-light);
-  color: hsl(var(--foreground));
+  color: var(--md-body-light);
   border-bottom: 1px solid #e2e8f0;
 }
 
 .dark .znc td {
   background: var(--md-table-td-dark);
+  color: var(--md-body-dark);
   /* 罫線が縞模様の背景と同色だと線として見えない */
   border-bottom-color: #2b3a52;
 }
@@ -990,7 +1047,8 @@
 }
 .dark .znc .footnotes {
   border-top-color: #334155;
-  color: #cbd5e1;
+  /* 引用と同じ理由で、本文より一段薄く置く */
+  color: #94a3b8;
 }
 /* プラグインが出す <hr> は上の border-top と二重になる */
 .znc .footnotes-sep {

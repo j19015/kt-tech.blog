@@ -522,7 +522,10 @@ export default async function StaticDetailPage({
             {/* モバイルの目次は右下のFABに一本化した。
                 以前は本文上のアコーディオンとFABが同時に存在し、
                 同じものが2つ出ていたうえ、アコーディオンは本文の先頭を占有していた。 */}
-            <div className='p-4 znc text-foreground'>
+            {/* 本文の色は markdown.css の .znc が持つ（--md-body-*）。
+                text-foreground と詳細度が同じで、どちらが勝つかが
+                CSSの読み込み順に依存してしまうため、ここでは指定しない。 */}
+            <div className='p-4 znc'>
               {/* 技術記事は古くなるのが早い。本文に入る直前で知らせる。
                   日付はタイトルの上にあるが、読み始めると画面外に出てしまう。 */}
               {isStale(blog) && (
