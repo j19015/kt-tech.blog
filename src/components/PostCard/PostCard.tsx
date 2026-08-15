@@ -71,7 +71,13 @@ export const PostCard = ({ blog, terms, footer, priority = false }: Props) => {
         {/* 固定高をやめ、内容に応じて伸びるようにした。
             短いタイトルでは余白が間延びし、長いタイトルは切れていた。 */}
         <div className='flex gap-4 p-4 rounded-xl bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-lg hover:border-slate-200 dark:hover:border-slate-600 hover:-translate-y-0.5 transition-all duration-300'>
-          <div className='flex-shrink-0 relative w-24 sm:w-32 aspect-[4/3] rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-700'>
+          {/* self-start が要る。flex の既定 align-items: stretch は高さ auto の子を
+              親いっぱいに伸ばし、そこで height が確定するため aspect-ratio は無視される。
+              以前は aspect-[4/3] と書いてあるのに、カードの中身（タイトルの行数・抜粋・
+              タグの数）に引きずられて画像が縦に伸び、記事ごとに 120px〜165px とバラついていた。
+              比率は正方形。アイキャッチ(1200x630)の左右は切れるが、カードの高さとほぼ揃うので
+              画像の下に余白が出ない。 */}
+          <div className='flex-shrink-0 self-start relative w-24 sm:w-32 aspect-square rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-700'>
             <Image
               src={thumbnailUrl(blog.eyecatch?.url) || '/images/no_image_generated.png'}
               alt=''
