@@ -124,7 +124,7 @@ export default async function StaticPage() {
 
             {/* サブ記事2件（右縦並び） */}
             <div className='flex flex-col gap-4 lg:h-full'>
-              {latestBlogs.slice(1, 3).map((blog, index) => (
+              {latestBlogs.slice(1, 3).map((blog) => (
                 <Link key={blog.id} href={`/blogs/${blog.id}`} className='group block flex-1'>
                   <div className='relative h-full aspect-[16/9] lg:aspect-auto lg:min-h-0 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800'>
                     <Image
@@ -132,8 +132,6 @@ export default async function StaticPage() {
                       alt=''
                       fill
                       sizes='(max-width: 1024px) 100vw, 600px'
-                      // モバイルではフィーチャーの直下に積まれてファーストビューに入る
-                      priority={index === 0}
                       className='object-cover group-hover:scale-105 transition-transform duration-500'
                     />
                     <div className='absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10' />

@@ -57,7 +57,7 @@ export default async function ArchivePaginationPage({ params }: Props) {
       <BreadcrumbNav items={[{ label: formatArchive(archive), current: true }]} />
       <Title title={formatArchive(archive)} type='archive' count={filteredContents.length} />
       <div className='max-w-3xl mx-auto px-4'>
-        <Index contents={contentSlice} />
+        <Index contents={contentSlice} priorityCount={1} />
       </div>
       <Paginate currentPage={currentPage} totalPage={totalPage} kind={`/archives/${archive}`} />
     </WithSidebar>

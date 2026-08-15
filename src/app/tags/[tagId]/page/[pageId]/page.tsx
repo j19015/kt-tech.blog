@@ -62,7 +62,7 @@ export default async function TagPaginationPage({ params }: Props) {
       />
       <Title title={tag.name} type='tag' count={filteredContents.length} />
       <div className='max-w-3xl mx-auto px-4'>
-        <Index contents={contentSlice} />
+        <Index contents={contentSlice} priorityCount={1} />
       </div>
       <Paginate currentPage={currentPage} totalPage={totalPage} kind={`/tags/${tagId}`} />
     </WithSidebar>

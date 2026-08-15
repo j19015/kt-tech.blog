@@ -24,7 +24,9 @@ import path from 'node:path';
 // 32ファイル 646KB を落としており、その3分の1が 500 のブロックだった。
 // CSS の font matching では 500 の指定は 400 にフォールバックするので、
 // 見た目を変えずに読み込み量だけ減らせる。
-const CSS_URL = 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap';
+// display=optional にしているのは CLS 対策。swap だとフォールバックから Noto Sans JP に
+// 差し替わるときに日本語の行数が変わり、フッターが押し下げられて CLS 0.219 が出ていた。
+const CSS_URL = 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=optional';
 
 // woff2 を返させるための UA。next/font と同じものを使う
 // （fetch-css-from-google-fonts.js が指定しているのと同じ Chrome 104）。
