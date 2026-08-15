@@ -80,7 +80,7 @@ export default async function StaticPaginationPage({
       />
       <Title title={category.name} type='category' count={filteredContents.length} />
       <div className='max-w-3xl mx-auto px-4'>
-        <Index contents={contentSlice} />
+        <Index contents={contentSlice} priorityCount={1} />
       </div>
       <Paginate
         currentPage={currentPage}

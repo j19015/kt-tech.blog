@@ -10,18 +10,24 @@ import { PostCard } from '../PostCard/PostCard';
  * 持っていたため、`max-w-6xl` のセクションの中で勝手に細くなり、
  * 見出しとカードの左端がズレていた（トップページ）。
  */
-export const Index = ({ contents }: BlogProps) => {
+/**
+ * @param priorityCount 先頭から何件をファーストビュー扱いにするか。
+ *   一覧ページのように最初に目に入る場所では 1 を渡す。
+ *   トップの「最新記事」のように画面下部に置かれる場合は 0（既定）のまま。
+ *   ここを増やしすぎると eager な画像が CSS やフォントと帯域を奪い合い、
+ *   トップの FCP が 1.3s → 5.9s に落ちた。
+ */
+export const Index = ({ contents, priorityCount = 0 }: BlogProps & { priorityCount?: number }) => {
   return (
     <div>
       <div className='space-y-4'>
         {/*
-          先頭2件はファーストビューに入るので、遅延読み込みもフェードインもしない。
+          ファーストビューに入る分は遅延読み込みもフェードインもしない。
           FadeIn は opacity-0 から始まるため、包んだままだと中の画像が LCP 候補から
           外れ、IntersectionObserver が発火するまで «何も描かれていない» 扱いになる。
-          画像の priority と合わせて、ここだけ素通しにしている。
         */}
         {contents.map((blog, index) =>
-          index < 2 ? (
+          index < priorityCount ? (
             <PostCard key={blog.id} blog={blog} priority />
           ) : (
             <FadeIn key={blog.id}>
