@@ -97,7 +97,7 @@ export const Header = () => {
                 aria-current={isActive(item.href) ? 'page' : undefined}
                 className={`text-sm transition-colors ${
                   isActive(item.href)
-                    ? 'text-slate-900 dark:text-slate-100 font-normal'
+                    ? 'text-slate-900 dark:text-slate-100 font-medium'
                     : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100'
                 }`}
               >
@@ -162,7 +162,7 @@ export const Header = () => {
                     }`}
                   >
                     <Icon className='w-5 h-5 text-slate-400 dark:text-slate-500' aria-hidden='true' />
-                    <span className='text-lg font-normal'>{item.name}</span>
+                    <span className='text-lg font-medium'>{item.name}</span>
                   </Link>
                 );
               })}
@@ -171,7 +171,7 @@ export const Header = () => {
                 className='flex items-center gap-4 px-4 py-4 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors w-full'
               >
                 <Search className='w-5 h-5 text-slate-400 dark:text-slate-500' aria-hidden='true' />
-                <span className='text-lg font-normal'>Search</span>
+                <span className='text-lg font-medium'>Search</span>
               </button>
               {/* 「あとで読む」で保存した記事の置き場。
                   デスクトップのヘッダーは項目を増やしたくないのでモバイルとフッターに置く */}
@@ -186,7 +186,7 @@ export const Header = () => {
                 }`}
               >
                 <Bookmark className='w-5 h-5 text-slate-400 dark:text-slate-500' aria-hidden='true' />
-                <span className='text-lg font-normal'>Bookmarks</span>
+                <span className='text-lg font-medium'>Bookmarks</span>
               </Link>
             </nav>
 
@@ -202,7 +202,7 @@ export const Header = () => {
                     className='rounded-full object-cover'
                   />
                   <div>
-                    <p className='text-sm font-normal text-slate-900 dark:text-slate-100'>Koki</p>
+                    <p className='text-sm font-medium text-slate-900 dark:text-slate-100'>Koki</p>
                     <p className='text-xs text-slate-500 dark:text-slate-400'>Full Stack Engineer</p>
                   </div>
                 </Link>

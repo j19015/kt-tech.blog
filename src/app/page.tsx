@@ -106,7 +106,7 @@ export default async function StaticPage() {
                   <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent' />
                   <div className='absolute bottom-0 left-0 right-0 p-5 sm:p-6 lg:p-8 overflow-hidden'>
                     {latestBlogs[0].category && (
-                      <span className='inline-block px-3 py-1 mb-3 text-sm font-normal bg-white/20 backdrop-blur-sm text-white rounded-full'>
+                      <span className='inline-block px-3 py-1 mb-3 text-sm font-medium bg-white/20 backdrop-blur-sm text-white rounded-full'>
                         {latestBlogs[0].category.name}
                       </span>
                     )}
@@ -137,7 +137,7 @@ export default async function StaticPage() {
                     <div className='absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10' />
                     <div className='absolute bottom-0 left-0 right-0 p-5'>
                       {blog.category && (
-                        <span className='inline-block px-2.5 py-0.5 mb-2 text-xs font-normal bg-white/20 backdrop-blur-sm text-white rounded-full'>
+                        <span className='inline-block px-2.5 py-0.5 mb-2 text-xs font-medium bg-white/20 backdrop-blur-sm text-white rounded-full'>
                           {blog.category.name}
                         </span>
                       )}
@@ -185,7 +185,7 @@ export default async function StaticPage() {
                 >
                   <FolderOpen className='w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-blue-500 transition-colors' />
                   <div className='min-w-0'>
-                    <p className='text-sm font-normal text-slate-700 dark:text-slate-300 truncate'>{cat.name}</p>
+                    <p className='text-sm font-medium text-slate-700 dark:text-slate-300 truncate'>{cat.name}</p>
                     <p className='text-xs text-slate-400 dark:text-slate-500'>{count}記事</p>
                   </div>
                 </Link>

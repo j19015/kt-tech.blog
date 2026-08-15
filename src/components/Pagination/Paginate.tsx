@@ -35,7 +35,7 @@ const Paginate = ({ currentPage, totalPage, kind }: PaginateProps) => {
                 <span
                   key={page}
                   aria-current="page"
-                  className={`${base} bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-normal`}
+                  className={`${base} bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-medium`}
                 >
                   {page}
                 </span>

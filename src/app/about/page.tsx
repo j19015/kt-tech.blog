@@ -199,7 +199,7 @@ export default function About() {
             alt='Koki'
             className='mb-8 h-24 w-24 rounded-full object-cover'
           />
-          <h1 className='font-serif text-5xl font-normal tracking-tight text-slate-900 dark:text-slate-100 sm:text-6xl'>
+          <h1 className='font-serif text-5xl font-medium tracking-tight text-slate-900 dark:text-slate-100 sm:text-6xl'>
             Koki
           </h1>
           <p className='mt-4 max-w-xl text-lg leading-relaxed text-slate-600 dark:text-slate-300'>
@@ -415,7 +415,7 @@ export default function About() {
                 href='https://x.com/tech_koki'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='group mt-5 inline-flex min-h-[44px] items-center gap-2 text-[15px] font-normal text-slate-900 dark:text-slate-100'
+                className='group mt-5 inline-flex min-h-[44px] items-center gap-2 text-[15px] font-medium text-slate-900 dark:text-slate-100'
               >
                 <XIcon className='h-4 w-4' />
                 <span className='border-b border-slate-900 pb-0.5 transition-colors group-hover:border-transparent dark:border-slate-100'>

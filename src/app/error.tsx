@@ -26,7 +26,7 @@ export default function Error({
         <div className='flex flex-col sm:flex-row gap-4 justify-center pt-4'>
           <button
             onClick={reset}
-            className='px-6 py-3 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-300 transition-colors font-normal'
+            className='px-6 py-3 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-300 transition-colors font-medium'
           >
             もう一度試す
           </button>

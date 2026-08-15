@@ -20,13 +20,12 @@ import { mkdir, readdir, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 // next/font/google が組み立てるURLと同じもの。
-// 使うのは 400 と 700 の2つだけ。500 も読ませていた頃は日本語ページで
-// 32ファイル 646KB を落としており、その3分の1が 500 のブロックだった。
-// CSS の font matching では 500 の指定は 400 にフォールバックするので、
-// 見た目を変えずに読み込み量だけ減らせる。
-// display=optional にしているのは CLS 対策。swap だとフォールバックから Noto Sans JP に
-// 差し替わるときに日本語の行数が変わり、フッターが押し下げられて CLS 0.219 が出ていた。
-const CSS_URL = 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=optional';
+// weight は 400/500/700 の3つ。Noto Sans JP は可変フォント（wght 軸）で、
+// 124個の woff2 を3つの weight が共有している。同じ URL を指しているからといって
+// 実体が無いわけではなく、削ると 500 の指定が 400 で描画されてしまう
+// （#530 でそれをやって記事本文の太字が本文と同じ太さになった）。
+// display=optional は #531 の CLS 対策。差し替えが起きないようにしている。
+const CSS_URL = 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=optional';
 
 // woff2 を返させるための UA。next/font と同じものを使う
 // （fetch-css-from-google-fonts.js が指定しているのと同じ Chrome 104）。
