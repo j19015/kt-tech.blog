@@ -62,6 +62,7 @@ import { SeriesNav } from '@/components/Series/SeriesNav';
 import { SeriesCarousel } from '@/components/Series/SeriesCarousel';
 import { ArticleAside } from '@/components/ArticleAside/ArticleAside';
 import { ArticleSummary } from '@/components/ArticleSummary/ArticleSummary';
+import { toCustomHost } from '@/lib/eyecatch';
 import { ArticleChangelog } from '@/components/ArticleSummary/ArticleChangelog';
 import { findSeriesOf } from '@/lib/series';
 import { isPublic } from '@/lib/blog';
@@ -102,7 +103,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     blog.ogpDescription ||
     (blog.summary?.length ? blog.summary.join('、').slice(0, 120) : '') ||
     text.slice(0, 120).replace(/\n/g, ' ').trim();
-  const ogImage = blog.eyecatch?.url;
+  const ogImage = toCustomHost(blog.eyecatch?.url);
   const pageUrl = `${process.env.SITE_URL}/blogs/${blogId}`;
 
   // 検索結果のタイトルは日本語で30文字ほどで切られる。そこに
@@ -374,7 +375,7 @@ export default async function StaticDetailPage({
     // レンダリング後のHTMLから起こした平文を使えば、記法は残らない。
     description: (blog.ogpDescription || plainText).replace(/\s+/g, ' ').slice(0, 160).trim(),
     ...(blog.summary?.length ? { abstract: blog.summary.join(' / ') } : {}),
-    image: blog.eyecatch?.url || `${process.env.SITE_URL}/opengraph-image`,
+    image: toCustomHost(blog.eyecatch?.url) || `${process.env.SITE_URL}/opengraph-image`,
     datePublished: new Date(blog.publishedAt).toISOString(),
     dateModified: new Date(blog.updatedAt).toISOString(),
     inLanguage: 'ja',
@@ -398,7 +399,7 @@ export default async function StaticDetailPage({
     },
     keywords: blog.tags?.map(t => t.name).join(', '),
     articleSection: blog.category?.name,
-    thumbnailUrl: blog.eyecatch?.url,
+    thumbnailUrl: toCustomHost(blog.eyecatch?.url),
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['[data-article-title]', '[data-article-description]'],
@@ -493,7 +494,7 @@ export default async function StaticDetailPage({
               {/* アイキャッチは自動生成の抽象画像で内容を説明しないため、
                   高さを抑えて本文までの距離を縮める */}
               <Image
-                src={blog.eyecatch?.url || '/images/no_image_generated.png'}
+                src={toCustomHost(blog.eyecatch?.url) || '/images/no_image_generated.png'}
                 alt=''
                 width={1200}
                 height={630}
