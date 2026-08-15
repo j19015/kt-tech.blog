@@ -243,6 +243,79 @@ export const figures: Record<string, Figure> = {
       <text x="24" y="234" font-size="12" class="fig-t-deny">→ 5秒待つつもりが、実行前に「完了」が返る</text>
     </svg>`,
   },
+
+  'ghostty-gap': {
+    caption:
+      'Ghostty はタブも分割も持っているので、見た目の用途ではマルチプレクサが要らない。足りないのは「閉じても生き残ること」と「外から操作できること」の2つで、tmux と herdr はここを埋めるために乗せる。',
+    svg: `<svg viewBox="0 0 760 296" role="img" aria-label="Ghosttyが持つ描画・タブ・分割と、持っていないプロセス永続化・外部からの制御・エージェント状態監視を対比し、後者をtmuxやherdrが埋めることを示す図">
+      ${arrowDefs('gg')}
+
+      <text x="24" y="20" font-size="12.5" fill="currentColor" class="fig-label">Ghostty が持っているもの</text>
+      <rect x="24" y="32" width="330" height="150" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="189" y="58" text-anchor="middle" font-size="13" fill="currentColor">Ghostty</text>
+      <text x="44" y="86" font-size="12" fill="currentColor" opacity=".8">・GPU による高速描画</text>
+      <text x="44" y="110" font-size="12" fill="currentColor" opacity=".8">・タブ</text>
+      <text x="44" y="134" font-size="12" fill="currentColor" opacity=".8">・ペイン分割</text>
+      <text x="44" y="158" font-size="12" fill="currentColor" opacity=".8">・フォント / テーマ / 設定</text>
+
+      <text x="24" y="206" font-size="11.5" fill="currentColor" opacity=".7">画面を分けるだけなら、これで足りる</text>
+
+      <text x="400" y="20" font-size="12.5" class="fig-t-accent fig-label">Ghostty の外にあるもの</text>
+
+      <rect x="400" y="32" width="336" height="42" rx="4" fill="none" class="fig-s-accent" stroke-width="2"></rect>
+      <text x="416" y="58" font-size="12.5" class="fig-t-accent">プロセスの永続化（閉じると中身も死ぬ）</text>
+
+      <rect x="400" y="86" width="336" height="42" rx="4" fill="none" class="fig-s-accent" stroke-width="2"></rect>
+      <text x="416" y="112" font-size="12.5" class="fig-t-accent">外からの操作（入力を送る / 画面を読む）</text>
+
+      <rect x="400" y="140" width="336" height="42" rx="4" fill="none" class="fig-s-accent" stroke-width="2"></rect>
+      <text x="416" y="166" font-size="12.5" class="fig-t-accent">エージェントの状態を知る</text>
+
+      <line x1="568" y1="182" x2="568" y2="216" class="fig-s-accent" stroke-width="2" marker-end="url(#gg-accent)"></line>
+      <text x="568" y="240" text-anchor="middle" font-size="12.5" class="fig-t-accent">この3つを埋めるために tmux / herdr を乗せる</text>
+      <text x="568" y="262" text-anchor="middle" font-size="11.5" fill="currentColor" opacity=".7">（3つ目まで要るなら herdr、1つ目だけなら tmux で足りる）</text>
+    </svg>`,
+  },
+
+  'terminal-stack-layout': {
+    caption:
+      'Ghostty はウィンドウを描くだけで、中身は herdr が持つ。Claude Code を herdr のペイン内で起動すると HERDR_ENV=1 が入り、エージェント自身が隣のペインを作って開発サーバーを走らせたり、その出力を読んだりできるようになる。',
+    svg: `<svg viewBox="0 0 760 300" role="img" aria-label="Ghosttyのウィンドウの中でherdrが動き、サイドバーにエージェント状態、ペインにClaude Codeと開発サーバーとログが並ぶ実際の画面構成図">
+      ${arrowDefs('tl')}
+
+      <text x="24" y="20" font-size="12.5" fill="currentColor" class="fig-label">Ghostty のウィンドウ（描画だけを担当）</text>
+      <rect x="24" y="30" width="712" height="196" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+
+      <text x="40" y="52" font-size="11.5" class="fig-t-accent">herdr（この中身ぜんぶ。Ghostty を閉じても生きている）</text>
+      <rect x="40" y="60" width="680" height="152" rx="3" fill="none" class="fig-s-accent" stroke-width="2"></rect>
+
+      <rect x="52" y="72" width="118" height="128" rx="3" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".6"></rect>
+      <text x="111" y="92" text-anchor="middle" font-size="11" fill="currentColor" opacity=".75">サイドバー</text>
+      <text x="64" y="116" font-size="11" class="fig-t-allow">● working</text>
+      <text x="64" y="138" font-size="11" class="fig-t-deny">● blocked</text>
+      <text x="64" y="160" font-size="11" fill="currentColor" opacity=".6">● idle</text>
+      <text x="111" y="186" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".6">状態が一目で分かる</text>
+
+      <rect x="182" y="72" width="252" height="128" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="308" y="120" text-anchor="middle" font-size="13" fill="currentColor">claude</text>
+      <text x="308" y="142" text-anchor="middle" font-size="11" class="fig-t-accent">HERDR_ENV=1</text>
+      <text x="308" y="164" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".65">ここで起動するのが肝</text>
+
+      <rect x="446" y="72" width="262" height="58" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="577" y="97" text-anchor="middle" font-size="12" fill="currentColor">npm run dev</text>
+      <text x="577" y="116" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".65">エージェントが自分で立てた</text>
+
+      <rect x="446" y="142" width="262" height="58" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="577" y="167" text-anchor="middle" font-size="12" fill="currentColor">shell / ログ</text>
+      <text x="577" y="186" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".65">人が見る用</text>
+
+      <path d="M 434 110 L 444 110" stroke="currentColor" stroke-width="1.5" marker-end="url(#tl-ink)"></path>
+      <path d="M 434 130 C 440 130, 440 168, 444 168" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#tl-ink)"></path>
+
+      <text x="24" y="252" font-size="11.5" fill="currentColor" opacity=".8">エージェントが自分でペインを割り、コマンドを流し、出力を文字列で待って読む</text>
+      <text x="24" y="274" font-size="11.5" fill="currentColor" opacity=".8">→ SSH 先など herdr が無い環境では、同じ役割を tmux が担う（send-keys / capture-pane）</text>
+    </svg>`,
+  },
 };
 
 /**
