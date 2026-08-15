@@ -126,7 +126,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : blog.title;
 
   return {
-    title: metaTitle,
+    // absolute にしてサイト名のサフィックス（" | kt-tech.blog" = 15字）を付けない。
+    // 検索結果に出るのは日本語で全角30字前後までで、記事タイトルは中央値59字あり、
+    // 89本中40本が60字を超えて途中で切れていた。外すと 40本 → 11本になる。
+    // サイト名は WebSite / Organization の構造化データで別途伝えているので、
+    // タイトル側で重ねて名乗る必要はない。
+    title: { absolute: metaTitle },
     description,
     alternates: {
       canonical: pageUrl,
