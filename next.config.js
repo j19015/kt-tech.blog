@@ -9,6 +9,8 @@ const nextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.microcms-assets.io' },
       { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'img.kt-tech.blog' },
+      // 旧配信元。Notion に保存済みの URL がそのまま渡ることがあるので残す
       { protocol: 'https', hostname: 'pub-9d03846db4364486bb0806774184931a.r2.dev' },
       { protocol: 'https', hostname: 'www.notion.so' },
       { protocol: 'https', hostname: 'prod-files-secure.s3.us-west-2.amazonaws.com' },
@@ -79,7 +81,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "font-src 'self' data:",
               // R2 のアイキャッチ / Notion の署名付き画像 / favicon / YouTube のサムネイル
-              "img-src 'self' data: blob: https://pub-9d03846db4364486bb0806774184931a.r2.dev https://prod-files-secure.s3.us-west-2.amazonaws.com https://www.notion.so https://i.ytimg.com https://www.google.com https://*.googlesyndication.com https://*.google-analytics.com",
+              "img-src 'self' data: blob: https://img.kt-tech.blog https://pub-9d03846db4364486bb0806774184931a.r2.dev https://prod-files-secure.s3.us-west-2.amazonaws.com https://www.notion.so https://i.ytimg.com https://www.google.com https://*.googlesyndication.com https://*.google-analytics.com",
               "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
               // 記事内の埋め込み
               "frame-src https://www.youtube-nocookie.com https://codesandbox.io https://stackblitz.com https://speakerdeck.com https://www.figma.com https://www.google.com https://*.googlesyndication.com",

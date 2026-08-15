@@ -7,7 +7,7 @@ export const contentType = 'image/png';
 
 export default async function Image() {
   // 幾何学的背景画像をR2から取得してbase64化
-  const bgUrl = 'https://pub-9d03846db4364486bb0806774184931a.r2.dev/images/site-ogp.png';
+  const bgUrl = 'https://img.kt-tech.blog/images/site-ogp.png';
 
   return new ImageResponse(
     (
