@@ -12,8 +12,10 @@ export default function Loading() {
           </div>
           <div className='space-y-4'>
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className='flex gap-5 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50'>
-                <div className='flex-shrink-0 w-28 sm:w-36 aspect-[1200/630] rounded-lg bg-slate-200 dark:bg-slate-700'></div>
+              <div key={i} className='flex gap-4 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50'>
+                {/* 実物の PostCard と同じ寸法にする。以前は幅も比率も違ったため、
+                    読み込み完了の瞬間にサムネイルの大きさが変わっていた */}
+                <div className='flex-shrink-0 self-start w-24 sm:w-32 aspect-square rounded-lg bg-slate-200 dark:bg-slate-700'></div>
                 <div className='flex-1 flex flex-col justify-center gap-2.5'>
                   <div className='h-5 bg-slate-200 dark:bg-slate-700 rounded w-[85%]'></div>
                   <div className='h-5 bg-slate-200 dark:bg-slate-700 rounded w-[60%]'></div>
