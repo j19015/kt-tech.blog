@@ -182,7 +182,7 @@ const TocLink = ({
         aria-current={isActive ? 'location' : undefined}
         className={`min-w-0 flex-1 py-1.5 pr-1 leading-snug ${INDENT[depth]} ${
           depth === 0 ? 'text-[13px]' : 'text-xs'
-        } ${isActive ? 'font-medium' : ''}`}
+        } ${isActive ? 'font-normal' : ''}`}
       >
         {/* 2行までに収める。3行以上の見出しが並ぶと目次が本文より長くなる */}
         <span className='line-clamp-2'>{item.text}</span>

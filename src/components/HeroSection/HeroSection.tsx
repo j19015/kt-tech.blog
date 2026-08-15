@@ -14,7 +14,7 @@ export const HeroSection = () => {
       <div className='max-w-6xl mx-auto px-4 py-10 lg:py-14'>
         <div className='space-y-6'>
           {/* Greeting */}
-          <p className='text-sm font-medium text-blue-600 dark:text-blue-400 tracking-wide'>
+          <p className='text-sm font-normal text-blue-600 dark:text-blue-400 tracking-wide'>
             TECH BLOG
           </p>
 
@@ -34,7 +34,7 @@ export const HeroSection = () => {
           <div className='flex items-center gap-4 pt-2'>
             <Link
               href='/blogs/page/1'
-              className='inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-300 transition-colors text-sm font-medium'
+              className='inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-300 transition-colors text-sm font-normal'
             >
               記事を読む
               <ArrowRight className='w-4 h-4' />

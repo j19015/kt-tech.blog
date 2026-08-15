@@ -67,7 +67,7 @@ export const ClientIndex = ({ contents }: BlogProps) => {
           />
           <button
             type='submit'
-            className='px-4 py-2.5 text-sm font-medium bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-300 transition-colors'
+            className='px-4 py-2.5 text-sm font-normal bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-300 transition-colors'
           >
             検索
           </button>
@@ -79,7 +79,7 @@ export const ClientIndex = ({ contents }: BlogProps) => {
 
         {text && (
           <p className='mt-4 text-slate-600 dark:text-slate-400'>
-            「<span className='font-medium text-slate-900 dark:text-slate-100'>{text}</span>」の検索結果
+            「<span className='font-normal text-slate-900 dark:text-slate-100'>{text}</span>」の検索結果
             {hits && <span className='ml-2 text-sm'>({hits.length}件)</span>}
           </p>
         )}
@@ -111,7 +111,7 @@ export const ClientIndex = ({ contents }: BlogProps) => {
       ) : hits ? (
         <div className='max-w-3xl mx-auto text-center py-16'>
           <Search className='w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-4' aria-hidden='true' />
-          <h2 className='text-lg font-medium text-slate-900 dark:text-slate-100 mb-2'>
+          <h2 className='text-lg font-normal text-slate-900 dark:text-slate-100 mb-2'>
             検索結果が見つかりませんでした
           </h2>
           <p className='text-slate-500 dark:text-slate-400 mb-6'>
@@ -120,7 +120,7 @@ export const ClientIndex = ({ contents }: BlogProps) => {
           </p>
           <Link
             href='/blogs/page/1'
-            className='inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors'
+            className='inline-flex items-center gap-2 px-4 py-2 text-sm font-normal text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors'
           >
             ブログ一覧を見る
             <ArrowRight className='w-4 h-4' aria-hidden='true' />
@@ -129,7 +129,7 @@ export const ClientIndex = ({ contents }: BlogProps) => {
       ) : (
         <div className='max-w-3xl mx-auto text-center py-16'>
           <Search className='w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-4' aria-hidden='true' />
-          <h2 className='text-lg font-medium text-slate-900 dark:text-slate-100 mb-2'>
+          <h2 className='text-lg font-normal text-slate-900 dark:text-slate-100 mb-2'>
             キーワードを入力してください
           </h2>
           <p className='text-slate-500 dark:text-slate-400'>
