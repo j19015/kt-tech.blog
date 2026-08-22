@@ -421,9 +421,12 @@ async function pageToBlog(page: any, fetchBody: boolean = false): Promise<Blog> 
   // 「この記事でわかること」と更新履歴。連載と同じく、プロパティが未作成の
   // データベースでも落ちないよう全て省略可能に扱う。
   // 書き手が埋めていない記事はこれまで通りの表示になる。
+  // 行頭の箇条書き記号だけを剥がす。`-` / `*` は後ろに空白がある場合のみ記号とみなす。
+  // `\s*` にすると `--spawn=worktree` のような行の1本目のハイフンまで 食われる
+  // （`・` は「・項目」と空白なしで書くのが普通なので、こちらは空白を必須にしない）。
   const summary = richTextToPlain(props.Summary?.rich_text || [])
     .split('\n')
-    .map((line: string) => line.replace(/^[-・*]\s*/, '').trim())
+    .map((line: string) => line.replace(/^(?:[-*]\s+|・\s*)/, '').trim())
     .filter(Boolean);
   const prerequisites = richTextToPlain(props.Prerequisites?.rich_text || []).trim();
   const changelog = parseChangelog(richTextToPlain(props.Changelog?.rich_text || []));
