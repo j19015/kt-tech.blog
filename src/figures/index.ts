@@ -316,6 +316,99 @@ export const figures: Record<string, Figure> = {
       <text x="24" y="274" font-size="11.5" fill="currentColor" opacity=".8">→ SSH 先など herdr が無い環境では、同じ役割を tmux が担う（send-keys / capture-pane）</text>
     </svg>`,
   },
+
+  'rc-where-it-runs': {
+    caption:
+      '同じ claude.ai/code の画面でも、実行される場所が違う。Remote Control は手元の claude プロセスがそのまま動き続け、スマホやブラウザはその窓になる。接続は手元から外向きに張るので、マシン側でポートを開ける必要はない。',
+    svg: `<svg viewBox="0 0 760 320" role="img" aria-label="Remote Controlはスマホやブラウザからの操作をAnthropic API経由で手元のマシンのclaudeプロセスに届けて実行するのに対し、Claude Code on the webはAnthropicのクラウド上で実行され手元のマシンを必要としないという対比図">
+      ${arrowDefs('rcw')}
+      <line x1="384" y1="14" x2="384" y2="300" stroke="currentColor" stroke-width="1" stroke-dasharray="3 5" opacity=".3"></line>
+
+      <text x="24" y="22" font-size="12.5" class="fig-t-accent fig-label">Remote Control</text>
+
+      <rect x="24" y="34" width="344" height="44" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="196" y="61" text-anchor="middle" font-size="12.5" fill="currentColor">スマホ / ブラウザ（claude.ai/code）</text>
+
+      <line x1="196" y1="78" x2="196" y2="102" stroke="currentColor" stroke-width="1.5" marker-end="url(#rcw-ink)"></line>
+
+      <rect x="24" y="104" width="344" height="44" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="196" y="131" text-anchor="middle" font-size="12.5" fill="currentColor">Anthropic API（中継するだけ）</text>
+
+      <line x1="196" y1="182" x2="196" y2="150" class="fig-s-accent" stroke-width="2" marker-end="url(#rcw-ink)"></line>
+      <text x="208" y="170" font-size="11" class="fig-t-accent">接続は手元から張る</text>
+
+      <rect x="24" y="184" width="344" height="80" rx="3" fill="none" class="fig-s-accent" stroke-width="2"></rect>
+      <text x="196" y="210" text-anchor="middle" font-size="13" class="fig-t-accent">手元のマシン（claude プロセス）</text>
+      <text x="196" y="231" text-anchor="middle" font-size="11" fill="currentColor" opacity=".72">ファイルシステム・MCP・プロジェクト設定</text>
+      <text x="196" y="250" text-anchor="middle" font-size="11" fill="currentColor" opacity=".72">コマンドが実際に走るのはここ</text>
+
+      <text x="24" y="288" font-size="11.5" fill="currentColor" opacity=".8">外向き HTTPS だけ。マシンでポートは開かない</text>
+
+      <text x="400" y="22" font-size="12.5" fill="currentColor" class="fig-label">Claude Code on the web</text>
+
+      <rect x="400" y="34" width="336" height="44" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="568" y="61" text-anchor="middle" font-size="12.5" fill="currentColor">スマホ / ブラウザ（claude.ai/code）</text>
+
+      <line x1="568" y1="78" x2="568" y2="102" stroke="currentColor" stroke-width="1.5" marker-end="url(#rcw-ink)"></line>
+
+      <rect x="400" y="104" width="336" height="80" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="568" y="130" text-anchor="middle" font-size="13" fill="currentColor">Anthropic のクラウド環境</text>
+      <text x="568" y="151" text-anchor="middle" font-size="11" fill="currentColor" opacity=".72">コンテナを立ててリポジトリを clone</text>
+      <text x="568" y="170" text-anchor="middle" font-size="11" fill="currentColor" opacity=".72">コマンドが実際に走るのはここ</text>
+
+      <rect x="400" y="204" width="336" height="60" rx="3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4" opacity=".45"></rect>
+      <text x="568" y="230" text-anchor="middle" font-size="12" fill="currentColor" opacity=".55">手元のマシン</text>
+      <text x="568" y="249" text-anchor="middle" font-size="11" fill="currentColor" opacity=".5">起動していなくてよい</text>
+
+      <text x="400" y="288" font-size="11.5" fill="currentColor" opacity=".8">ローカルの MCP や未コミットの変更には届かない</text>
+    </svg>`,
+  },
+
+  'rc-server-spawn': {
+    caption:
+      'サーバーモードは1つのプロセスが複数セッションを抱える。--spawn=worktree なら、スマホから増やしたセッションはそれぞれ別の git worktree に降りるので、同じリポジトリを並行で触っても衝突しない。',
+    svg: `<svg viewBox="0 0 760 336" role="img" aria-label="claude.ai/codeやClaudeアプリから作った複数のセッションが、手元の1つのclaude remote-controlプロセスにぶら下がり、spawnがworktreeモードのときはそれぞれ独立したgit worktreeに割り当てられることを示す図">
+      ${arrowDefs('rcs')}
+
+      <text x="24" y="22" font-size="12.5" fill="currentColor" class="fig-label">claude.ai/code・Claude アプリから増やす</text>
+
+      <rect x="60" y="34" width="180" height="40" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="150" y="59" text-anchor="middle" font-size="12" fill="currentColor">セッション A</text>
+
+      <rect x="290" y="34" width="180" height="40" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="380" y="59" text-anchor="middle" font-size="12" fill="currentColor">セッション B</text>
+
+      <rect x="520" y="34" width="180" height="40" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="610" y="59" text-anchor="middle" font-size="12" fill="currentColor">セッション C</text>
+
+      <line x1="150" y1="74" x2="150" y2="112" stroke="currentColor" stroke-width="1.5" marker-end="url(#rcs-ink)"></line>
+      <line x1="380" y1="74" x2="380" y2="112" stroke="currentColor" stroke-width="1.5" marker-end="url(#rcs-ink)"></line>
+      <line x1="610" y1="74" x2="610" y2="112" stroke="currentColor" stroke-width="1.5" marker-end="url(#rcs-ink)"></line>
+
+      <rect x="60" y="114" width="640" height="66" rx="3" fill="none" class="fig-s-accent" stroke-width="2"></rect>
+      <text x="380" y="141" text-anchor="middle" font-size="13" class="fig-t-accent">claude remote-control --spawn=worktree</text>
+      <text x="380" y="164" text-anchor="middle" font-size="11" fill="currentColor" opacity=".72">手元のマシンで動く1プロセス／既定で最大32セッションまで</text>
+
+      <line x1="150" y1="180" x2="150" y2="216" class="fig-s-accent" stroke-width="1.5" marker-end="url(#rcs-ink)"></line>
+      <line x1="380" y1="180" x2="380" y2="216" class="fig-s-accent" stroke-width="1.5" marker-end="url(#rcs-ink)"></line>
+      <line x1="610" y1="180" x2="610" y2="216" class="fig-s-accent" stroke-width="1.5" marker-end="url(#rcs-ink)"></line>
+
+      <rect x="60" y="218" width="180" height="66" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="150" y="243" text-anchor="middle" font-size="11.5" fill="currentColor">worktrees/bridge-A</text>
+      <text x="150" y="264" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".65">専用ブランチで作業</text>
+
+      <rect x="290" y="218" width="180" height="66" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="380" y="243" text-anchor="middle" font-size="11.5" fill="currentColor">worktrees/bridge-B</text>
+      <text x="380" y="264" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".65">専用ブランチで作業</text>
+
+      <rect x="520" y="218" width="180" height="66" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="610" y="243" text-anchor="middle" font-size="11.5" fill="currentColor">worktrees/bridge-C</text>
+      <text x="610" y="264" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".65">専用ブランチで作業</text>
+
+      <text x="60" y="310" font-size="11.5" fill="currentColor" opacity=".8">起動時に作られる1つ目のセッションだけは、worktree ではなくカレントディレクトリに残る</text>
+      <text x="60" y="330" font-size="11.5" fill="currentColor" opacity=".8">--spawn=same-dir なら全セッションが同じディレクトリを共有する（衝突しうる）</text>
+    </svg>`,
+  },
 };
 
 /**
