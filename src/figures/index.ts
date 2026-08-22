@@ -409,6 +409,75 @@ export const figures: Record<string, Figure> = {
       <text x="60" y="330" font-size="11.5" fill="currentColor" opacity=".8">--spawn=same-dir なら全セッションが同じディレクトリを共有する（衝突しうる）</text>
     </svg>`,
   },
+
+  'herdr-agent-state': {
+    caption:
+      'herdr が持っているのは、ペインごとの agent_status という1つの値。これがタブ・ワークスペースへと「一番強い状態」で集約されるので、サイドバーを見れば手を止めているエージェントが一目で分かる。tmux にはこの層が無いので、同じことをやるには画面の静止などから自分で推測することになる。',
+    svg: `<svg viewBox="0 -18 760 358" role="img" aria-label="herdrのagent_statusがunknownからidle・working・done・blockedへ遷移する様子と、ペインの状態がタブそしてワークスペースへ集約される構造を示した図">
+      ${arrowDefs('has')}
+
+      <text x="24" y="22" font-size="12.5" fill="currentColor" class="fig-label">ペインごとに付く状態</text>
+
+      <rect x="24" y="34" width="104" height="38" rx="3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4" opacity=".6"></rect>
+      <text x="76" y="58" text-anchor="middle" font-size="12" fill="currentColor" opacity=".7">unknown</text>
+
+      <line x1="128" y1="53" x2="164" y2="53" stroke="currentColor" stroke-width="1.5" marker-end="url(#has-ink)"></line>
+      <text x="146" y="44" text-anchor="middle" font-size="10" fill="currentColor" opacity=".6">起動</text>
+
+      <rect x="166" y="34" width="104" height="38" rx="3" fill="none" class="fig-s-allow" stroke-width="2"></rect>
+      <text x="218" y="58" text-anchor="middle" font-size="12.5" class="fig-t-allow">idle</text>
+
+      <line x1="270" y1="53" x2="306" y2="53" stroke="currentColor" stroke-width="1.5" marker-end="url(#has-ink)"></line>
+      <text x="288" y="44" text-anchor="middle" font-size="10" fill="currentColor" opacity=".6">投げる</text>
+
+      <rect x="308" y="34" width="104" height="38" rx="3" fill="none" class="fig-s-accent" stroke-width="2"></rect>
+      <text x="360" y="58" text-anchor="middle" font-size="12.5" class="fig-t-accent">working</text>
+
+      <line x1="412" y1="53" x2="448" y2="53" stroke="currentColor" stroke-width="1.5" marker-end="url(#has-ink)"></line>
+
+      <rect x="450" y="34" width="104" height="38" rx="3" fill="none" class="fig-s-allow" stroke-width="2"></rect>
+      <text x="502" y="58" text-anchor="middle" font-size="12.5" class="fig-t-allow">done</text>
+
+      <path d="M 502 34 C 502 -2, 218 -2, 218 34" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".55" marker-end="url(#has-ink)"></path>
+      <text x="360" y="-6" text-anchor="middle" font-size="10" fill="currentColor" opacity=".6">読み終えたら idle に戻る</text>
+
+      <line x1="360" y1="72" x2="360" y2="132" class="fig-s-deny" stroke-width="2" marker-end="url(#has-deny)"></line>
+      <text x="372" y="106" font-size="10.5" class="fig-t-deny">許可待ち・ダイアログ</text>
+
+      <rect x="308" y="134" width="104" height="38" rx="3" fill="none" class="fig-s-deny" stroke-width="2"></rect>
+      <text x="360" y="158" text-anchor="middle" font-size="12.5" class="fig-t-deny">blocked</text>
+
+      <text x="450" y="152" font-size="11" fill="currentColor" opacity=".78">人が答えるまで進まない</text>
+      <text x="450" y="169" font-size="11" fill="currentColor" opacity=".6">＝ 通知して呼ぶべき状態</text>
+
+      <line x1="24" y1="196" x2="736" y2="196" stroke="currentColor" stroke-width="1" stroke-dasharray="3 5" opacity=".3"></line>
+
+      <text x="24" y="222" font-size="12.5" fill="currentColor" class="fig-label">上位へ集約される</text>
+
+      <rect x="24" y="236" width="150" height="44" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="99" y="255" text-anchor="middle" font-size="11.5" fill="currentColor">pane（1エージェント）</text>
+      <text x="99" y="272" text-anchor="middle" font-size="10.5" class="fig-t-deny">blocked</text>
+
+      <rect x="196" y="236" width="150" height="44" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="271" y="255" text-anchor="middle" font-size="11.5" fill="currentColor">pane</text>
+      <text x="271" y="272" text-anchor="middle" font-size="10.5" class="fig-t-accent">working</text>
+
+      <line x1="356" y1="258" x2="392" y2="258" stroke="currentColor" stroke-width="1.5" marker-end="url(#has-ink)"></line>
+
+      <rect x="394" y="236" width="150" height="44" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="469" y="255" text-anchor="middle" font-size="11.5" fill="currentColor">tab</text>
+      <text x="469" y="272" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".7">配下の状態をまとめる</text>
+
+      <line x1="554" y1="258" x2="590" y2="258" stroke="currentColor" stroke-width="1.5" marker-end="url(#has-ink)"></line>
+
+      <rect x="592" y="236" width="144" height="44" rx="3" fill="none" class="fig-s-accent" stroke-width="2"></rect>
+      <text x="664" y="255" text-anchor="middle" font-size="11.5" class="fig-t-accent">workspace</text>
+      <text x="664" y="272" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".7">サイドバーに出る</text>
+
+      <text x="24" y="308" font-size="11.5" fill="currentColor" opacity=".8">herdr agent list / herdr agent wait は、この状態をそのまま返す</text>
+      <text x="24" y="328" font-size="11.5" fill="currentColor" opacity=".8">herdr agent explain は「どのルールで・何を根拠に」その状態にしたかを返す</text>
+    </svg>`,
+  },
 };
 
 /**
