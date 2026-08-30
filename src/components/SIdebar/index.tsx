@@ -1,4 +1,4 @@
-import { getList, getTagList, getCategoryList } from '../../../libs/notion';
+import { getList, getTagList, getCategoryList } from '../../../libs/notionCache';
 import { isPublic } from '@/lib/blog';
 import SidebarClient from './Sidebar';
 

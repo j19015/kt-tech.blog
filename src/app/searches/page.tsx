@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import ClientIndex from './client_index';
-import { getList } from '../../../libs/notion';
+import { getList } from '../../../libs/notionCache';
 import { Metadata } from 'next';
 import { WithSidebar } from '@/components/WithSidebar/WithSidebar';
 import { isPublic } from '@/lib/blog';

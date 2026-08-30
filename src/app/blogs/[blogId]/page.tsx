@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getDetail, getList, Blog } from '../../../../libs/notion';
+import { getDetail, getList, Blog } from '../../../../libs/notionCache';
 import { md, escapeHtml } from '@/lib/markdown';
 import { stripEmoji } from '@/lib/emoji';
 import { FIGURE_PATTERN, renderFigure } from '@/figures';
