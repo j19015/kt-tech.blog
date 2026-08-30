@@ -1,10 +1,12 @@
-import { getList } from '../../../libs/notion';
+import { BOT_RETRY_WAIT_MS, getList } from '../../../libs/notion';
 
 export const runtime = 'edge';
 
 export async function GET() {
   const siteUrl = process.env.SITE_URL || 'https://kt-tech.blog';
-  const { contents } = await getList();
+  // 読むのはRSSリーダーと GitHub Actions だけで、誰も画面の前で待っていない。
+  // Notion が 429 を返したら、言われたとおり待って引き直す。
+  const { contents } = await getList(BOT_RETRY_WAIT_MS);
 
   const items = contents.slice(0, 20).map((post) => `
     <item>
@@ -32,7 +34,11 @@ export async function GET() {
   return new Response(xml, {
     headers: {
       'Content-Type': 'application/xml',
-      'Cache-Control': 'public, s-maxage=3600',
+      // 記事ページと同じく stale を許す。Notion が 429 を返した回だけ 500 になるが、
+      // 日に1度しか読まないRSSリーダーや GitHub Actions がそれを踏むと
+      // 「フィードが壊れている」ようにしか見えない。
+      // 直前の正常なフィードを配れるなら、多少古くてもそのほうがよい。
+      'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400, stale-if-error=86400',
     },
   });
 }
