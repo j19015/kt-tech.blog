@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { getList, getCategoryList, getTagList } from '../../libs/notion';
+import { BOT_RETRY_WAIT_MS, getList, getCategoryList, getTagList } from '../../libs/notion';
 import { ITEMS_PER_PAGE, isPublic } from '@/lib/blog';
 import { groupBySeries } from '@/lib/series';
 
@@ -7,10 +7,13 @@ export const runtime = 'edge';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.SITE_URL || 'https://kt-tech.blog';
-  const [{ contents }, categoryData, tagData] = await Promise.all([
-    getList(),
-    getCategoryList(),
-    getTagList(),
+  // 3本まとめて投げると Notion の「平均3リクエスト/秒」に一度で触れて 429 を貰う。
+  // sitemap はクローラしか読まないので、直列にして山を低くするほうが得。
+  // （getCategoryList と getTagList は同じスキーマ取得を共有するので実質1リクエスト）
+  const { contents } = await getList(BOT_RETRY_WAIT_MS);
+  const [categoryData, tagData] = await Promise.all([
+    getCategoryList(BOT_RETRY_WAIT_MS),
+    getTagList(BOT_RETRY_WAIT_MS),
   ]);
 
   const allBlogs = contents.filter(isPublic);

@@ -5,19 +5,70 @@ import { embedToHtml } from '../src/lib/embed';
 const NOTION_API_BASE = 'https://api.notion.com/v1';
 const NOTION_VERSION = '2022-06-28';
 
+// Notion の公開APIは「平均3リクエスト/秒」で絞られる。このブログはページを描くたびに
+// Notion を叩くので、クローラや連続アクセスが重なるとすぐ 429 に触れる。
+// 1回きりの失敗で throw すると、それがそのまま feed.xml / sitemap.xml の 500 になる。
+// （記事ページは CDN の stale-while-revalidate に守られて表面化しないので気付きにくい）
+const MAX_ATTEMPTS = 3;
+
+/**
+ * 1回の待ちの上限。
+ *
+ * Notion は Retry-After に 9〜30 秒を返してくる。人が画面を見ている描画で
+ * その通り待つわけにはいかないので、既定は短く切って諦める（従来どおり throw する）。
+ *
+ * 一方 feed.xml / sitemap.xml を読むのはクローラと GitHub Actions だけで、
+ * 誰も待っていない。そちらは `BOT_RETRY_WAIT_MS` を渡して Notion の言い値どおり待たせる。
+ * 待てば通るものを 500 で返すと、1日1回しか読まない相手には
+ * 「フィードが壊れている」としか見えない。
+ */
+const DEFAULT_RETRY_WAIT_MS = 2000;
+export const BOT_RETRY_WAIT_MS = 20000;
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/** 429 と 5xx だけ引き直す。401/404 のような直しようのない失敗は即座に諦める */
+function isRetriable(status: number) {
+  return status === 429 || status >= 500;
+}
+
+function retryWaitMs(res: Response, attempt: number, capMs: number) {
+  const retryAfter = Number(res.headers.get('Retry-After'));
+  const advised = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : 0;
+  // Retry-After が無ければ 250ms から倍々にする
+  return Math.min(advised || 250 * 2 ** attempt, capMs);
+}
+
+type NotionFetchOptions = {
+  method?: string;
+  body?: any;
+  revalidate?: number;
+  /** 1回の待ちの上限。クローラ向けの経路だけ長くする */
+  retryWaitCapMs?: number;
+};
+
 // Notion API fetch（Edge Runtimeではリクエスト毎に新インスタンスのためグローバルレート制限不要）
-async function notionFetch(path: string, options: { method?: string; body?: any; revalidate?: number } = {}) {
-  const res = await fetch(`${NOTION_API_BASE}${path}`, {
-    method: options.method || 'GET',
-    headers: {
-      'Authorization': `Bearer ${process.env.NOTION_API_KEY}`,
-      'Notion-Version': NOTION_VERSION,
-      'Content-Type': 'application/json',
-    },
-    body: options.body ? JSON.stringify(options.body) : undefined,
-  });
-  if (!res.ok) throw new Error(`Notion API error: ${res.status} ${await res.text()}`);
-  return res.json();
+async function notionFetch(path: string, options: NotionFetchOptions = {}) {
+  const capMs = options.retryWaitCapMs ?? DEFAULT_RETRY_WAIT_MS;
+
+  for (let attempt = 0; ; attempt++) {
+    const res = await fetch(`${NOTION_API_BASE}${path}`, {
+      method: options.method || 'GET',
+      headers: {
+        'Authorization': `Bearer ${process.env.NOTION_API_KEY}`,
+        'Notion-Version': NOTION_VERSION,
+        'Content-Type': 'application/json',
+      },
+      body: options.body ? JSON.stringify(options.body) : undefined,
+    });
+    if (res.ok) return res.json();
+
+    if (attempt < MAX_ATTEMPTS - 1 && isRetriable(res.status)) {
+      await sleep(retryWaitMs(res, attempt, capMs));
+      continue;
+    }
+    throw new Error(`Notion API error: ${res.status} ${await res.text()}`);
+  }
 }
 
 // 既存のmicrocms.tsと同じ型インターフェースを維持
@@ -465,7 +516,9 @@ async function pageToBlog(page: any, fetchBody: boolean = false): Promise<Blog> 
 // cache() で同一リクエスト内のみメモ化する。
 // 以前はモジュールスコープの変数に貯めていたが、Cloudflare Workers の isolate は
 // 複数リクエストで再利用されるため、生きている isolate では古い一覧が返り続けていた。
-export const getList = cache(async () => {
+// `retryWaitCapMs` は引数なので cache() のメモ化はその値ごとに効く。
+// 同じリクエスト内で違う値を混ぜて呼ばない限り、往復の回数は今までどおり1回。
+export const getList = cache(async (retryWaitCapMs?: number) => {
   const allPages: any[] = [];
   let cursor: string | undefined;
 
@@ -476,7 +529,7 @@ export const getList = cache(async () => {
       sorts: [{ property: 'Created', direction: 'descending' }],
     };
     if (cursor) body.start_cursor = cursor;
-    const response: any = await notionFetch(`/databases/${DATABASE_ID}/query`, { method: 'POST', body });
+    const response: any = await notionFetch(`/databases/${DATABASE_ID}/query`, { method: 'POST', body, retryWaitCapMs });
     allPages.push(...response.results);
     cursor = response.has_more ? response.next_cursor : undefined;
   } while (cursor);
@@ -511,11 +564,12 @@ export const getDetail = cache(async (slug: string) => {
 // データベースのスキーマ（タグ・カテゴリの選択肢）を取得
 // getTagList / getCategoryList / それぞれのDetail から呼ばれるので、
 // メモ化しないと1ページの描画で同じスキーマを4回取りに行くことになる
-const getDatabaseSchema = cache(async () => notionFetch(`/databases/${DATABASE_ID}`));
+const getDatabaseSchema = cache(async (retryWaitCapMs?: number) =>
+  notionFetch(`/databases/${DATABASE_ID}`, { retryWaitCapMs }));
 
 // タグ一覧を取得
-export const getTagList = cache(async () => {
-  const db = await getDatabaseSchema();
+export const getTagList = cache(async (retryWaitCapMs?: number) => {
+  const db = await getDatabaseSchema(retryWaitCapMs);
   const options = (db.properties as any).Tags?.multi_select?.options || [];
 
   const contents: Tag[] = options.map((opt: any) => pageToTag(opt.name));
@@ -532,8 +586,8 @@ export const getTagDetail = async (tagId: string) => {
 };
 
 // カテゴリ一覧を取得
-export const getCategoryList = cache(async () => {
-  const db = await getDatabaseSchema();
+export const getCategoryList = cache(async (retryWaitCapMs?: number) => {
+  const db = await getDatabaseSchema(retryWaitCapMs);
   const options = (db.properties as any).Category?.select?.options || [];
 
   const contents: Category[] = options.map((opt: any) => pageToCategory(opt.name));
