@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { Library, BookOpen } from 'lucide-react';
-import { getList } from '../../../../libs/notion';
+import { getList } from '../../../../libs/notionCache';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 import { groupBySeries } from '@/lib/series';
 import { seriesMetaOf } from '@/lib/seriesMeta';

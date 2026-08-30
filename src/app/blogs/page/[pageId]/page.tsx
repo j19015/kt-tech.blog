@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getList, Blog } from '../../../../../libs/notion';
+import { getList, Blog } from '../../../../../libs/notionCache';
 import Paginate from '@/components/Pagination/Paginate';
 import Index from '@/components/Index/Index';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';

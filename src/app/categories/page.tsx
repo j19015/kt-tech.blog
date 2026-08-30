@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { FolderOpen } from 'lucide-react';
-import { getList, getCategoryList } from '../../../libs/notion';
+import { getList, getCategoryList } from '../../../libs/notionCache';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 import { isPublic } from '@/lib/blog';
 

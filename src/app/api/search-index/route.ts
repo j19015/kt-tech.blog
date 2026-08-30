@@ -1,4 +1,4 @@
-import { getList } from '../../../../libs/notion';
+import { getList } from '../../../../libs/notionCache';
 import { isPublic } from '@/lib/blog';
 
 export const runtime = 'edge';

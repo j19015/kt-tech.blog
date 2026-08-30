@@ -1,4 +1,4 @@
-import { BOT_RETRY_WAIT_MS, getList } from '../../../libs/notion';
+import { BOT_RETRY_WAIT_MS, getList } from '../../../libs/notionCache';
 
 export const runtime = 'edge';
 

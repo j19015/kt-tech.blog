@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { getList, getCategoryList } from '../../libs/notion';
+import { getList, getCategoryList } from '../../libs/notionCache';
 import { Blog } from '../../libs/notion';
 import Index from '@/components/Index/Index';
 import HeroSection from '@/components/HeroSection/HeroSection';

@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { BOT_RETRY_WAIT_MS, getList, getCategoryList, getTagList } from '../../libs/notion';
+import { BOT_RETRY_WAIT_MS, getList, getCategoryList, getTagList } from '../../libs/notionCache';
 import { ITEMS_PER_PAGE, isPublic } from '@/lib/blog';
 import { groupBySeries } from '@/lib/series';
 

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { Library } from 'lucide-react';
-import { getList } from '../../../libs/notion';
+import { getList } from '../../../libs/notionCache';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 import { groupBySeries } from '@/lib/series';
 import { seriesMetaOf } from '@/lib/seriesMeta';

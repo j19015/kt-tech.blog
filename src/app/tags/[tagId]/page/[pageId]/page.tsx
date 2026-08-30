@@ -1,6 +1,6 @@
 import { WithSidebar } from '@/components/WithSidebar/WithSidebar';
 import { notFound } from 'next/navigation';
-import { getList, getTagDetail, Blog } from '../../../../../../libs/notion';
+import { getList, getTagDetail, Blog } from '../../../../../../libs/notionCache';
 import Paginate from '@/components/Pagination/Paginate';
 import Index from '@/components/Index/Index';
 import Title from '@/components/Title/Title';

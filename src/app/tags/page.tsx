@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { getList, getTagList } from '../../../libs/notion';
+import { getList, getTagList } from '../../../libs/notionCache';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 import { isPublic } from '@/lib/blog';
 
