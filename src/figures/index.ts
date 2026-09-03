@@ -478,6 +478,63 @@ export const figures: Record<string, Figure> = {
       <text x="24" y="328" font-size="11.5" fill="currentColor" opacity=".8">herdr agent explain は「どのルールで・何を根拠に」その状態にしたかを返す</text>
     </svg>`,
   },
+  'gh-attach-before-after': {
+    caption:
+      'やっていること自体は変わらない。画像を GitHub のストレージに上げて、返ってきた URL を本文に埋める。違うのは、上段ではその往復をこちらで組み立てる必要があり、ブラウザと GitHub の DOM に依存していたところ。--attach は同じ往復を CLI の中で閉じてしまうので、本文の Markdown をそのまま書いて、同じパスをフラグに渡すだけで済む。',
+    svg: `<svg viewBox="0 0 760 300" role="img" aria-label="8月まではブラウザを開いてコメント欄に画像をアップロードしURLを読み取ってからgh pr editで本文を更新していたのに対し、9月以降はgh issue createに--attachを付けるだけで本文のローカルパスがそのままアップロード先のURLに置き換わることを示した対比図">
+      ${arrowDefs('gha')}
+
+      <text x="24" y="24" font-size="12.5" fill="currentColor" class="fig-label">〜2026年8月　ブラウザ経由の回り道</text>
+
+      <rect x="24" y="40" width="148" height="52" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="98" y="71" text-anchor="middle" font-size="11.5" fill="currentColor">ローカルの画像</text>
+
+      <line x1="172" y1="66" x2="206" y2="66" stroke="currentColor" stroke-width="1.5" marker-end="url(#gha-ink)"></line>
+      <text x="189" y="58" text-anchor="middle" font-size="10" fill="currentColor" opacity=".6">渡す</text>
+
+      <rect x="208" y="40" width="148" height="52" rx="3" fill="none" class="fig-s-accent" stroke-width="2"></rect>
+      <text x="282" y="62" text-anchor="middle" font-size="11.5" class="fig-t-accent">ブラウザで開いた</text>
+      <text x="282" y="79" text-anchor="middle" font-size="11.5" class="fig-t-accent">PR のコメント欄</text>
+
+      <line x1="356" y1="66" x2="390" y2="66" stroke="currentColor" stroke-width="1.5" marker-end="url(#gha-ink)"></line>
+      <text x="373" y="58" text-anchor="middle" font-size="10" fill="currentColor" opacity=".6">待つ</text>
+
+      <rect x="392" y="40" width="148" height="52" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="466" y="62" text-anchor="middle" font-size="11.5" fill="currentColor">textarea に入る</text>
+      <text x="466" y="79" text-anchor="middle" font-size="11" fill="currentColor" opacity=".75">user-attachments の URL</text>
+
+      <line x1="540" y1="66" x2="574" y2="66" stroke="currentColor" stroke-width="1.5" marker-end="url(#gha-ink)"></line>
+      <text x="557" y="58" text-anchor="middle" font-size="10" fill="currentColor" opacity=".6">読む</text>
+
+      <rect x="576" y="40" width="156" height="52" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="654" y="62" text-anchor="middle" font-size="11.5" fill="currentColor">gh pr edit</text>
+      <text x="654" y="79" text-anchor="middle" font-size="11.5" fill="currentColor">で本文を差し替え</text>
+
+      <text x="24" y="114" font-size="11" fill="currentColor" opacity=".78">ログイン済みセッションと、GitHub の DOM（new_comment_field）に依存する</text>
+      <text x="24" y="132" font-size="11" fill="currentColor" opacity=".78">コメントは投稿しないので、残った下書きを自分で消す</text>
+
+      <line x1="24" y1="154" x2="736" y2="154" stroke="currentColor" stroke-width="1" stroke-dasharray="3 5" opacity=".3"></line>
+
+      <text x="24" y="184" font-size="12.5" fill="currentColor" class="fig-label">2026年9月〜　gh --attach</text>
+
+      <rect x="24" y="200" width="180" height="52" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="114" y="222" text-anchor="middle" font-size="11.5" fill="currentColor">本文の Markdown</text>
+      <text x="114" y="239" text-anchor="middle" font-size="11.5" fill="currentColor">＋ ローカルの画像</text>
+
+      <line x1="204" y1="226" x2="238" y2="226" class="fig-s-allow" stroke-width="2" marker-end="url(#gha-allow)"></line>
+
+      <rect x="240" y="200" width="300" height="52" rx="3" fill="none" class="fig-s-allow" stroke-width="2"></rect>
+      <text x="390" y="231" text-anchor="middle" font-size="12" class="fig-t-allow">gh issue create --attach ./shot.png</text>
+
+      <line x1="540" y1="226" x2="574" y2="226" class="fig-s-allow" stroke-width="2" marker-end="url(#gha-allow)"></line>
+
+      <rect x="576" y="200" width="156" height="52" rx="3" fill="none" class="fig-s-allow" stroke-width="2"></rect>
+      <text x="654" y="222" text-anchor="middle" font-size="11.5" class="fig-t-allow">本文のパスが</text>
+      <text x="654" y="239" text-anchor="middle" font-size="11.5" class="fig-t-allow">その場で URL に変わる</text>
+
+      <text x="24" y="274" font-size="11" fill="currentColor" opacity=".78">1コマンドで完結。50ファイルまで。GitHub Enterprise Server では使えない</text>
+    </svg>`,
+  },
 };
 
 /**
