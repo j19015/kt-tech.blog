@@ -535,6 +535,47 @@ export const figures: Record<string, Figure> = {
       <text x="24" y="274" font-size="11" fill="currentColor" opacity=".78">1コマンドで完結。50ファイルまで。GitHub Enterprise Server では使えない</text>
     </svg>`,
   },
+
+  'cross-account-watchtower': {
+    caption:
+      'Remote Control はアカウントの内側までしか届かない。herdr は PTY を掴んでいるだけでアカウントを知らないので、個人アカウントで番犬セッションを1つ開けておけば、そこから境界の向こうのセッションまで手が伸びる。',
+    svg: `<svg viewBox="0 0 760 346" role="img" aria-label="個人アカウントと会社アカウントを縦の境界線で左右に分けた図。スマホからの Remote Control は個人アカウント側の番犬セッションには届くが、会社アカウント側のセッションへ向かう線は境界で止められる。番犬セッションは PTY 層で動く herdr を経由し、境界の下をくぐって会社アカウントのセッションに届く">
+      ${arrowDefs('xw')}
+      <line x1="384" y1="12" x2="384" y2="244" stroke="currentColor" stroke-width="1" stroke-dasharray="3 5" opacity=".3"></line>
+
+      <text x="24" y="26" font-size="12.5" fill="currentColor" class="fig-label">個人アカウント</text>
+      <text x="400" y="26" font-size="12.5" fill="currentColor" class="fig-label">会社アカウント</text>
+
+      <rect x="24" y="40" width="154" height="64" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="101" y="68" text-anchor="middle" font-size="13" fill="currentColor">📱 スマホ</text>
+      <text x="101" y="88" text-anchor="middle" font-size="11" fill="currentColor" opacity=".72">claude.ai/code</text>
+
+      <rect x="400" y="40" width="336" height="64" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="568" y="68" text-anchor="middle" font-size="13" fill="currentColor">会社アカウントのセッション</text>
+      <text x="568" y="88" text-anchor="middle" font-size="11" fill="currentColor" opacity=".72">Claude Code が複数走っている</text>
+
+      <line x1="178" y1="72" x2="366" y2="72" class="fig-s-deny" stroke-width="2" marker-end="url(#xw-deny)"></line>
+      <text x="272" y="60" text-anchor="middle" font-size="11.5" class="fig-t-deny">Remote Control</text>
+      <text x="384" y="78" text-anchor="middle" font-size="16" class="fig-t-deny">✕</text>
+      <text x="272" y="94" text-anchor="middle" font-size="11" class="fig-t-deny">アカウント境界を越えられない</text>
+
+      <line x1="101" y1="104" x2="101" y2="146" class="fig-s-allow" stroke-width="2" marker-end="url(#xw-allow)"></line>
+      <text x="113" y="130" font-size="11" class="fig-t-allow">Remote Control（1つだけ開ける）</text>
+
+      <rect x="24" y="148" width="336" height="70" rx="3" fill="none" class="fig-s-accent" stroke-width="2"></rect>
+      <text x="192" y="177" text-anchor="middle" font-size="13" class="fig-t-accent">番犬セッション</text>
+      <text x="192" y="199" text-anchor="middle" font-size="11" fill="currentColor" opacity=".72">個人アカウントで常駐させておく</text>
+
+      <rect x="24" y="250" width="712" height="80" rx="3" fill="none" class="fig-s-accent" stroke-width="2"></rect>
+      <text x="380" y="276" text-anchor="middle" font-size="13" class="fig-t-accent">herdr（ターミナルマルチプレクサ）</text>
+      <text x="380" y="296" text-anchor="middle" font-size="11" fill="currentColor" opacity=".72">PTY 層で動く ＝ アカウントの区別を持たない</text>
+
+      <path d="M 192 218 L 192 312 L 568 312 L 568 110" fill="none" class="fig-s-allow" stroke-width="2" marker-end="url(#xw-allow)"></path>
+      <text x="204" y="240" font-size="11" class="fig-t-allow">herdr を叩く</text>
+      <text x="580" y="172" font-size="11" class="fig-t-allow">境界を越えて</text>
+      <text x="580" y="190" font-size="11" class="fig-t-allow">全セッションに届く</text>
+    </svg>`,
+  },
 };
 
 /**
