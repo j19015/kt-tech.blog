@@ -266,6 +266,11 @@ export const md: MarkdownIt = new MarkdownIt({
   // 技術記事ではコマンドやJSONの引用符が壊れるため無効にする。
   typographer: false,
 });
+// スキームの無い文字列（`example.com` など）はリンクにしない。
+// `.md` はモルドバのドメインなので、`CLAUDE.md` や `SKILL.md` のような
+// ファイル名が http://CLAUDE.md への壊れたリンクになっていた。
+// 見出しは装飾を落とした素のテキストで渡すため、Notion 側でコードにしても防げない。
+md.linkify.set({ fuzzyLink: false });
 md.renderer.rules.fence = (tokens, idx) => `${renderFence(tokens[idx].info || '', tokens[idx].content)}\n`;
 // インデント（半角スペース4つ）で書かれたコードも同じ見た目にそろえる。
 // 情報文字列を持てないので言語なし扱い。
