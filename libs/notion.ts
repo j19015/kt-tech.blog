@@ -548,17 +548,26 @@ export const getDetail = cache(async (slug: string) => {
     body: { filter: { property: 'Slug', rich_text: { equals: slug } } },
   });
 
+  // 一覧は Published だけに絞っているが、ここで絞らないと Draft も URL を知っていれば
+  // 誰でも読めてしまう（slug を推測するか、page ID を知っていれば届く）。
+  // 見つからなかった場合と区別せず 404 にする。
+  const isPublished = (page: any) => page?.properties?.Status?.select?.name === 'Published';
+
   if (response.results.length === 0) {
     // Slugが見つからない場合はNotionのpage IDで検索
+    let page: any;
     try {
-      const page = await notionFetch(`/pages/${slug}`);
-      return pageToBlog(page, true);
+      page = await notionFetch(`/pages/${slug}`);
     } catch {
       throw new Error(`Blog not found: ${slug}`);
     }
+    if (!isPublished(page)) throw new Error(`Blog not found: ${slug}`);
+    return pageToBlog(page, true);
   }
 
-  return pageToBlog(response.results[0], true);
+  const page = response.results.find(isPublished);
+  if (!page) throw new Error(`Blog not found: ${slug}`);
+  return pageToBlog(page, true);
 });
 
 // データベースのスキーマ（タグ・カテゴリの選択肢）を取得
