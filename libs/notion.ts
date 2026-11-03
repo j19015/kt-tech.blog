@@ -87,6 +87,8 @@ export type ChangelogEntry = {
 
 export type Blog = {
   id: string; // Slug (microCMS IDまたはNotion page ID)
+  /** Notion のページID（ハイフン付き）。本文画像の公開確認（/api/notion-image）で使う */
+  pageId: string;
   title: string;
   body: string;
   ogpDescription?: string;
@@ -133,6 +135,35 @@ const DATABASE_ID = process.env.NOTION_DATABASE_ID || '2eca0ffb73d181ffba0aecf7c
 
 if (!process.env.NOTION_API_KEY) {
   throw new Error('NOTION_API_KEY is required');
+}
+
+/** Notion のページ・ブロックID（UUID。ハイフンの有無は問わない） */
+const NOTION_ID_RE = /^[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}$/i;
+
+export function isNotionId(value: string): boolean {
+  return NOTION_ID_RE.test(value);
+}
+
+/** ハイフンの有無と大文字小文字を揃えて ID を比べられるようにする */
+export function normalizeNotionId(id: string): string {
+  return id.replace(/-/g, '').toLowerCase();
+}
+
+/**
+ * 記事DBに属していて、Status が Published のページか。
+ *
+ * page ID を直接渡す経路（`/pages/{id}`）は DB を経由しないので、Status だけでなく
+ * 「記事DBのページであること」も確かめる。インテグレーションに共有された
+ * 別のページが、たまたま Status=Published を持っていても記事として扱わない。
+ */
+export function isPublishedArticlePage(page: any): boolean {
+  return (
+    page?.object === 'page' &&
+    page?.archived !== true &&
+    page?.parent?.type === 'database_id' &&
+    normalizeNotionId(String(page.parent.database_id)) === normalizeNotionId(DATABASE_ID) &&
+    page?.properties?.Status?.select?.name === 'Published'
+  );
 }
 
 // Notionのrich_textからプレーンテキストを取得
@@ -209,16 +240,21 @@ async function blockToMarkdown(block: any, indent: string): Promise<string | nul
     // Notion heading_1 をそのまま # にすると h1 が複数になり、
     // 「どれが記事タイトルか」がスクリーンリーダーにも検索エンジンにも
     // 判別できなくなる。見た目は markdown.css 側を1段ずらして合わせてある。
+    //
+    // 本文と同じく `escapeInlineText` を通す。markdown-it は html: true なので、
+    // 見出しに書いた `<img onerror=...>` がそのままタグになってしまう。
+    // 絵文字や日本語には触れないので、表示・アンカーID・目次は変わらない
+    // （& や < は markdown-it が実体参照を解いてから slugify に渡す）。
     case 'heading_1':
-      return `${indent}## ${richTextToPlain(block.heading_1.rich_text)}`;
+      return `${indent}## ${escapeInlineText(richTextToPlain(block.heading_1.rich_text))}`;
     case 'heading_2': {
       const h2Text = richTextToPlain(block.heading_2.rich_text).trim();
       // 「目次」見出しはスキップ（ブログ側で自動生成するため）
       if (h2Text === '目次') return null;
-      return `${indent}### ${h2Text}`;
+      return `${indent}### ${escapeInlineText(h2Text)}`;
     }
     case 'heading_3':
-      return `${indent}#### ${richTextToPlain(block.heading_3.rich_text)}`;
+      return `${indent}#### ${escapeInlineText(richTextToPlain(block.heading_3.rich_text))}`;
     case 'paragraph': {
       // 目次はブログ側で自動生成するので、目印として書かれた `[toc]` の段落は落とす。
       // 以前はレンダリング後のHTMLに対して4本の正規表現を当てていたため、
@@ -495,6 +531,7 @@ async function pageToBlog(page: any, fetchBody: boolean = false): Promise<Blog> 
 
   return {
     id,
+    pageId: page.id,
     title,
     body,
     ogpDescription: ogpDescription || undefined,
@@ -585,21 +622,22 @@ export const getDetail = cache(async (slug: string) => {
   // 一覧は Published だけに絞っているが、ここで絞らないと Draft も URL を知っていれば
   // 誰でも読めてしまう（slug を推測するか、page ID を知っていれば届く）。
   // 見つからなかった場合と区別せず 404 にする。
-  const isPublished = (page: any) => page?.properties?.Status?.select?.name === 'Published';
-
   if (response.results.length === 0) {
-    // Slugが見つからない場合はNotionのpage IDで検索
+    // Slugが見つからない場合はNotionのpage IDで検索する。
+    // UUID の形でないものは API に渡さない。`/pages/${slug}` に `../` などが
+    // 混ざると、Notion API の別のエンドポイントを叩けてしまう。
+    if (!isNotionId(slug)) throw new Error(`Blog not found: ${slug}`);
     let page: any;
     try {
       page = await notionFetch(`/pages/${slug}`);
     } catch {
       throw new Error(`Blog not found: ${slug}`);
     }
-    if (!isPublished(page)) throw new Error(`Blog not found: ${slug}`);
+    if (!isPublishedArticlePage(page)) throw new Error(`Blog not found: ${slug}`);
     return pageToBlog(page, true);
   }
 
-  const page = response.results.find(isPublished);
+  const page = response.results.find(isPublishedArticlePage);
   if (!page) throw new Error(`Blog not found: ${slug}`);
   return pageToBlog(page, true);
 });

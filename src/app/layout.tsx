@@ -7,6 +7,7 @@ import './globals.css';
 // 更新は node scripts/vendor-noto-sans-jp.mjs で行う。
 import '../../styles/noto-sans-jp.css';
 import { NOTO_SANS_JP_PRELOAD } from '@/lib/font-preload';
+import { safeJsonLd } from '@/lib/jsonld';
 import { Header } from '../../src/components/Header/Header';
 import { Footer } from '../../src/components/Footer/Footer';
 import GoogleAnalytics from '@/components/GoogleAnalytics/GoogleAnalytics';
@@ -141,7 +142,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name='thumbnail' content={`${url}${Favicon.src}`}></meta>
         <script
           type='application/ld+json'
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
         />
         <link rel='dns-prefetch' href='https://img.kt-tech.blog' />
         <link rel='preconnect' href='https://img.kt-tech.blog' crossOrigin='anonymous' />

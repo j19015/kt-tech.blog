@@ -1,3 +1,6 @@
+import { getList } from '../../../../../libs/notionCache';
+import { isNotionId, isPublishedArticlePage, normalizeNotionId } from '../../../../../libs/notion';
+
 export const runtime = 'edge';
 
 const NOTION_API_BASE = 'https://api.notion.com/v1';
@@ -18,6 +21,13 @@ const NOTION_VERSION = '2022-06-28';
  */
 const REDIRECT_TTL_SECONDS = 1800; // 30分。署名の寿命(1時間)の半分に留める
 
+/**
+ * 画像ブロックからページまでの親をたどる上限。
+ * toggle / callout / column_list > column の中など、入れ子は実際には2〜3段。
+ * 余裕を持たせつつ、でたらめな入力で Notion を叩き続けないように切る。
+ */
+const MAX_PARENT_HOPS = 6;
+
 function extractImageUrl(block: any): string | null {
   const image = block?.image;
   if (!image) return null;
@@ -25,25 +35,75 @@ function extractImageUrl(block: any): string | null {
   return image.file?.url ?? null;
 }
 
+class UpstreamError extends Error {}
+
+/** 4xx（存在しない・共有されていない）は null、5xx や通信失敗は UpstreamError */
+async function notionGet(path: string): Promise<any | null> {
+  const res = await fetch(`${NOTION_API_BASE}${path}`, {
+    headers: {
+      Authorization: `Bearer ${process.env.NOTION_API_KEY}`,
+      'Notion-Version': NOTION_VERSION,
+    },
+  });
+  if (res.ok) return res.json();
+  if (res.status >= 500 || res.status === 429) throw new UpstreamError(`Notion API error: ${res.status}`);
+  return null;
+}
+
+/** ブロックが載っているページの ID。親をたどりきれなければ null */
+async function findPageId(block: any): Promise<string | null> {
+  let parent = block?.parent;
+  for (let hop = 0; parent?.type === 'block_id'; hop++) {
+    if (hop >= MAX_PARENT_HOPS || !isNotionId(String(parent.block_id))) return null;
+    const parentBlock = await notionGet(`/blocks/${parent.block_id}`);
+    if (!parentBlock) return null;
+    parent = parentBlock.parent;
+  }
+  return parent?.type === 'page_id' && isNotionId(String(parent.page_id)) ? String(parent.page_id) : null;
+}
+
+/**
+ * そのページが公開中の記事か。
+ *
+ * まずキャッシュ済みの記事一覧（Published だけ、notionCache で5分）から探す。
+ * 公開記事の画像ならほぼここで決まり、Notion への往復は増えない。
+ * 一覧に無いときだけページを直接引いて確かめる。公開した直後で一覧のキャッシュが
+ * まだ古い記事を 404 にしないため。
+ */
+async function isPublishedArticle(pageId: string): Promise<boolean> {
+  const wanted = normalizeNotionId(pageId);
+  try {
+    const { contents } = await getList();
+    if (contents.some((post) => post.pageId && normalizeNotionId(post.pageId) === wanted)) return true;
+  } catch {
+    // 一覧が取れなくても、下で直接確かめる
+  }
+  const page = await notionGet(`/pages/${pageId}`);
+  return isPublishedArticlePage(page);
+}
+
+const notFound = () => new Response('Not found', { status: 404 });
+
 export async function GET(_request: Request, { params }: { params: Promise<{ blockId: string }> }) {
   const { blockId } = await params;
 
   // ブロックIDはUUID。想定外の値でNotionへリクエストを飛ばさない
-  if (!/^[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}$/i.test(blockId)) {
+  if (!isNotionId(blockId)) {
     return new Response('Invalid block id', { status: 400 });
   }
 
   try {
-    const res = await fetch(`${NOTION_API_BASE}/blocks/${blockId}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.NOTION_API_KEY}`,
-        'Notion-Version': NOTION_VERSION,
-      },
-    });
-    if (!res.ok) return new Response('Not found', { status: 404 });
+    const block = await notionGet(`/blocks/${blockId}`);
+    if (!block) return notFound();
 
-    const url = extractImageUrl(await res.json());
-    if (!url) return new Response('Not an image block', { status: 404 });
+    const url = extractImageUrl(block);
+    if (!url) return notFound();
+
+    // インテグレーションが読めるブロックなら何でも署名付きURLを返せてしまうので、
+    // 公開中の記事の本文にある画像だけに絞る。Draft の記事や記事DB以外のページの
+    // 画像は、存在しない場合と区別せず 404 にする。
+    const pageId = await findPageId(block);
+    if (!pageId || !(await isPublishedArticle(pageId))) return notFound();
 
     return new Response(null, {
       status: 302,

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { Library, BookOpen } from 'lucide-react';
 import { getList } from '../../../../libs/notionCache';
+import { safeJsonLd } from '@/lib/jsonld';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 import { groupBySeries } from '@/lib/series';
 import { seriesMetaOf } from '@/lib/seriesMeta';
@@ -88,7 +89,7 @@ export default async function SeriesDetailPage({ params }: Props) {
       <script
         type='application/ld+json'
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: safeJsonLd({
             '@context': 'https://schema.org',
             '@type': 'ItemList',
             name: series.name,
