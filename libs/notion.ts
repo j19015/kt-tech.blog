@@ -87,6 +87,8 @@ export type ChangelogEntry = {
 
 export type Blog = {
   id: string; // Slug (microCMS IDまたはNotion page ID)
+  /** Notion のページID（ハイフン付き）。本文画像の公開確認（/api/notion-image）で使う */
+  pageId: string;
   title: string;
   body: string;
   ogpDescription?: string;
@@ -524,6 +526,7 @@ async function pageToBlog(page: any, fetchBody: boolean = false): Promise<Blog> 
 
   return {
     id,
+    pageId: page.id,
     title,
     body,
     ogpDescription: ogpDescription || undefined,

@@ -99,8 +99,11 @@ const CACHE_ORIGIN = (() => {
   }
 })();
 
-/** 中身の形を変えたときはここを上げる。古いエントリを読まずに済む */
-const CACHE_VERSION = 'v1';
+/**
+ * 中身の形を変えたときはここを上げる。古いエントリを読まずに済む。
+ * v2: Blog に pageId を足した（/api/notion-image の公開確認が一覧の pageId を見る）
+ */
+const CACHE_VERSION = 'v2';
 
 type Envelope<T> = { storedAt: number; notFound?: true; value?: T };
 
