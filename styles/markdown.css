@@ -235,8 +235,15 @@
   opacity: 0.6;
   vertical-align: super;
 }
-.znc .link-card a::after {
+/* 上のセレクタは詳細度 (0,3,2) あり、`.znc .link-card a::after` (0,2,2) では打ち消せず
+   リンクカードの下端に ↗ だけが1行ぶん出ていた。同じ属性セレクタを重ねて詳細度を揃え、
+   後に書いたこちらを勝たせる。 */
+.znc .link-card a[href^="http"]::after {
   content: none;
+}
+/* 本文画像の hover 時の薄化（.znc img:hover）をカード内の画像には当てない */
+.znc .link-card img:hover {
+  opacity: 1;
 }
 
 
