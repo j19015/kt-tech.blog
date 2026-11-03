@@ -539,10 +539,39 @@ export const getList = cache(async (retryWaitCapMs?: number) => {
     cursor = response.has_more ? response.next_cursor : undefined;
   } while (cursor);
 
-  const contents = await Promise.all(allPages.map((page) => pageToBlog(page, false)));
+  const contents = orderSeriesWithinSameDay(await Promise.all(allPages.map((page) => pageToBlog(page, false))));
 
   return { contents, totalCount: contents.length, offset: 0, limit: contents.length };
 });
+
+// 同じ日に公開した連載の記事は、作成日時の新しい順だと最終話が先頭に来てしまう。
+// 「公開日 × 連載名」が同じ記事同士だけ、占めている位置の中で SeriesOrder の昇順
+// （第1話が上）に並べ替える。ほかの記事の位置と日付をまたぐ順番は動かさない。
+// SeriesOrder が未設定（0）の記事が混ざる組は、並べようがないのでそのままにする。
+export function orderSeriesWithinSameDay<T extends { createdAt: string; series?: { name: string; order: number } }>(
+  posts: T[],
+): T[] {
+  const groups = new Map<string, number[]>();
+  posts.forEach((post, i) => {
+    if (!post.series) return;
+    const key = `${post.createdAt}\u0000${post.series.name}`;
+    const indices = groups.get(key);
+    if (indices) indices.push(i);
+    else groups.set(key, [i]);
+  });
+
+  const result = posts.slice();
+  groups.forEach((indices) => {
+    if (indices.length < 2) return;
+    const members = indices.map((i) => posts[i]);
+    if (members.some((post) => !post.series?.order)) return;
+    members.sort((a, b) => a.series!.order - b.series!.order);
+    indices.forEach((pos, k) => {
+      result[pos] = members[k];
+    });
+  });
+  return result;
+}
 
 // ブログの詳細を取得 (slugで検索)
 // generateMetadata と本体の両方から呼ばれるため、メモ化しないとNotion APIを2往復する
