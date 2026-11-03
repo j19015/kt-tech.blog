@@ -135,6 +135,35 @@ if (!process.env.NOTION_API_KEY) {
   throw new Error('NOTION_API_KEY is required');
 }
 
+/** Notion のページ・ブロックID（UUID。ハイフンの有無は問わない） */
+const NOTION_ID_RE = /^[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}$/i;
+
+export function isNotionId(value: string): boolean {
+  return NOTION_ID_RE.test(value);
+}
+
+/** ハイフンの有無と大文字小文字を揃えて ID を比べられるようにする */
+export function normalizeNotionId(id: string): string {
+  return id.replace(/-/g, '').toLowerCase();
+}
+
+/**
+ * 記事DBに属していて、Status が Published のページか。
+ *
+ * page ID を直接渡す経路（`/pages/{id}`）は DB を経由しないので、Status だけでなく
+ * 「記事DBのページであること」も確かめる。インテグレーションに共有された
+ * 別のページが、たまたま Status=Published を持っていても記事として扱わない。
+ */
+export function isPublishedArticlePage(page: any): boolean {
+  return (
+    page?.object === 'page' &&
+    page?.archived !== true &&
+    page?.parent?.type === 'database_id' &&
+    normalizeNotionId(String(page.parent.database_id)) === normalizeNotionId(DATABASE_ID) &&
+    page?.properties?.Status?.select?.name === 'Published'
+  );
+}
+
 // Notionのrich_textからプレーンテキストを取得
 function richTextToPlain(richText: any[]): string {
   return richText?.map((t: any) => t.plain_text).join('') || '';
@@ -585,21 +614,22 @@ export const getDetail = cache(async (slug: string) => {
   // 一覧は Published だけに絞っているが、ここで絞らないと Draft も URL を知っていれば
   // 誰でも読めてしまう（slug を推測するか、page ID を知っていれば届く）。
   // 見つからなかった場合と区別せず 404 にする。
-  const isPublished = (page: any) => page?.properties?.Status?.select?.name === 'Published';
-
   if (response.results.length === 0) {
-    // Slugが見つからない場合はNotionのpage IDで検索
+    // Slugが見つからない場合はNotionのpage IDで検索する。
+    // UUID の形でないものは API に渡さない。`/pages/${slug}` に `../` などが
+    // 混ざると、Notion API の別のエンドポイントを叩けてしまう。
+    if (!isNotionId(slug)) throw new Error(`Blog not found: ${slug}`);
     let page: any;
     try {
       page = await notionFetch(`/pages/${slug}`);
     } catch {
       throw new Error(`Blog not found: ${slug}`);
     }
-    if (!isPublished(page)) throw new Error(`Blog not found: ${slug}`);
+    if (!isPublishedArticlePage(page)) throw new Error(`Blog not found: ${slug}`);
     return pageToBlog(page, true);
   }
 
-  const page = response.results.find(isPublished);
+  const page = response.results.find(isPublishedArticlePage);
   if (!page) throw new Error(`Blog not found: ${slug}`);
   return pageToBlog(page, true);
 });
