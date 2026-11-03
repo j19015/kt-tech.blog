@@ -526,7 +526,12 @@ export const getList = cache(async (retryWaitCapMs?: number) => {
     const body: any = {
       page_size: 100,
       filter: { property: 'Status', select: { equals: 'Published' } },
-      sorts: [{ property: 'Created', direction: 'descending' }],
+      // Created は日付だけなので、同じ日に公開した記事の並びが Notion 任せになる。
+      // ページの作成日時を第2キーにして順番を固定する
+      sorts: [
+        { property: 'Created', direction: 'descending' },
+        { timestamp: 'created_time', direction: 'descending' },
+      ],
     };
     if (cursor) body.start_cursor = cursor;
     const response: any = await notionFetch(`/databases/${DATABASE_ID}/query`, { method: 'POST', body, retryWaitCapMs });
