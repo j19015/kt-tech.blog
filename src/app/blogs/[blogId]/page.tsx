@@ -180,6 +180,38 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+// リンクカードのために外部ページを読む量の上限。OGP は <head> にあるので先頭だけで足りる。
+const OGP_MAX_BYTES = 64 * 1024;
+// content-length がこれを超えるものは HTML ページではない（ファイルのダウンロード等）とみなして読まない。
+const OGP_MAX_CONTENT_LENGTH = 5 * 1024 * 1024;
+
+/**
+ * レスポンス本文を先頭 maxBytes まで読んで文字列にする。
+ * `</head>` が見えた時点か上限に達した時点で読むのをやめ、残りは cancel() で捨てる。
+ */
+async function readHead(response: Response, maxBytes: number): Promise<string> {
+  if (!response.body) return '';
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let html = '';
+  let bytes = 0;
+  try {
+    while (bytes < maxBytes) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = value.byteLength > maxBytes - bytes ? value.subarray(0, maxBytes - bytes) : value;
+      bytes += chunk.byteLength;
+      html += decoder.decode(chunk, { stream: true });
+      if (/<\/head>/i.test(html)) break;
+    }
+    html += decoder.decode();
+  } finally {
+    // 読み終えていない残りを捨てる（読み切っていても害はない）
+    reader.cancel().catch(() => {});
+  }
+  return html;
+}
+
 async function fetchOGPData(url: string) {
   // 無効なURLや内部リンクをスキップ
   if (url.includes('localhost') || !url.startsWith('https://')) {
@@ -188,7 +220,12 @@ async function fetchOGPData(url: string) {
 
   try {
     const response = await fetch(url, { signal: AbortSignal.timeout(1500) });
-    const html = await response.text();
+    const contentLength = Number(response.headers.get('content-length'));
+    if (contentLength > OGP_MAX_CONTENT_LENGTH) {
+      response.body?.cancel().catch(() => {});
+      return null;
+    }
+    const html = await readHead(response, OGP_MAX_BYTES);
 
     const title = extractMetaContent(html, ['og:title', 'twitter:title', 'title']) ||
       decodeHtmlEntities(html.match(/<title[^>]*>(.*?)<\/title>/i)?.[1] || '').trim();
