@@ -25,7 +25,11 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
+.env
+.env*
 .env*.local
+# 見本ファイルはコミットしてよい
+!.env.example
 
 # wrangler pages dev が読む環境変数。.env.local から生成するのでコミットしない
 .dev.vars
