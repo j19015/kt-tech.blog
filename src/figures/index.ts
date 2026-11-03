@@ -29,6 +29,9 @@ const arrowDefs = (idPrefix: string) => `
     <marker id="${idPrefix}-allow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 z" class="fig-f-allow"></path>
     </marker>
+    <marker id="${idPrefix}-accent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" class="fig-f-accent"></path>
+    </marker>
   </defs>`;
 
 export const figures: Record<string, Figure> = {

@@ -1241,7 +1241,8 @@
 .znc .figure .fig-f-deny {
   fill: var(--fig-deny);
 }
-.znc .figure .fig-t-accent {
+.znc .figure .fig-t-accent,
+.znc .figure .fig-f-accent {
   fill: var(--fig-accent);
 }
 .znc .figure .fig-s-allow {
