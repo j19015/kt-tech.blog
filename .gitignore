@@ -43,6 +43,7 @@ next-env.d.ts
 # Screenshots
 *.png
 !public/**/*.png
+!docs/*.png
 
 # OpenNext build
 .open-next/
