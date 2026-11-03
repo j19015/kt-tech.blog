@@ -240,16 +240,21 @@ async function blockToMarkdown(block: any, indent: string): Promise<string | nul
     // Notion heading_1 をそのまま # にすると h1 が複数になり、
     // 「どれが記事タイトルか」がスクリーンリーダーにも検索エンジンにも
     // 判別できなくなる。見た目は markdown.css 側を1段ずらして合わせてある。
+    //
+    // 本文と同じく `escapeInlineText` を通す。markdown-it は html: true なので、
+    // 見出しに書いた `<img onerror=...>` がそのままタグになってしまう。
+    // 絵文字や日本語には触れないので、表示・アンカーID・目次は変わらない
+    // （& や < は markdown-it が実体参照を解いてから slugify に渡す）。
     case 'heading_1':
-      return `${indent}## ${richTextToPlain(block.heading_1.rich_text)}`;
+      return `${indent}## ${escapeInlineText(richTextToPlain(block.heading_1.rich_text))}`;
     case 'heading_2': {
       const h2Text = richTextToPlain(block.heading_2.rich_text).trim();
       // 「目次」見出しはスキップ（ブログ側で自動生成するため）
       if (h2Text === '目次') return null;
-      return `${indent}### ${h2Text}`;
+      return `${indent}### ${escapeInlineText(h2Text)}`;
     }
     case 'heading_3':
-      return `${indent}#### ${richTextToPlain(block.heading_3.rich_text)}`;
+      return `${indent}#### ${escapeInlineText(richTextToPlain(block.heading_3.rich_text))}`;
     case 'paragraph': {
       // 目次はブログ側で自動生成するので、目印として書かれた `[toc]` の段落は落とす。
       // 以前はレンダリング後のHTMLに対して4本の正規表現を当てていたため、

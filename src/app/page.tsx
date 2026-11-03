@@ -5,6 +5,7 @@ import { Blog } from '../../libs/notion';
 import Index from '@/components/Index/Index';
 import HeroSection from '@/components/HeroSection/HeroSection';
 import { mediumUrl } from '@/lib/eyecatch';
+import { safeJsonLd } from '@/lib/jsonld';
 import { ArrowRight, FolderOpen } from 'lucide-react';
 import { isPublic } from '@/lib/blog';
 import { isRecentlyUpdated } from '@/lib/articleStatus';
@@ -84,7 +85,7 @@ export default async function StaticPage() {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }} />
       <HeroSection />
 
       <div className='max-w-6xl mx-auto px-4'>

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getDetail, getList, Blog } from '../../../../libs/notionCache';
 import { md, escapeHtml } from '@/lib/markdown';
+import { safeJsonLd } from '@/lib/jsonld';
 import { stripEmoji } from '@/lib/emoji';
 import { FIGURE_PATTERN, renderFigure } from '@/figures';
 import '../../../../styles/markdown.css';
@@ -464,8 +465,8 @@ export default async function StaticDetailPage({
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbJsonLd) }} />
       {/* 最後をタイトルではなくカテゴリにする。
           タイトルは直下の <h1> にあるので重複するうえ、
           モバイルでは max-w-[200px] に切られて13文字程度しか読めなかった。
