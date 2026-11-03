@@ -80,8 +80,10 @@ const nextConfig = {
               // Tailwind とコンポーネントのインラインスタイル
               "style-src 'self' 'unsafe-inline'",
               "font-src 'self' data:",
-              // R2 のアイキャッチ / Notion の署名付き画像 / favicon / YouTube のサムネイル
-              "img-src 'self' data: blob: https://img.kt-tech.blog https://pub-9d03846db4364486bb0806774184931a.r2.dev https://prod-files-secure.s3.us-west-2.amazonaws.com https://www.notion.so https://i.ytimg.com https://www.google.com https://*.googlesyndication.com https://*.google-analytics.com",
+              // 画像は https なら配信元を問わない。リンクカードは外部サイトの og:image を
+              // そのまま表示するので、配信元を列挙すると載せたリンクごとに許可が漏れる。
+              // 画像はスクリプトを実行しないので、広げても XSS の防御は弱まらない
+              "img-src 'self' data: blob: https:",
               "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
               // 記事内の埋め込み
               "frame-src https://www.youtube-nocookie.com https://codesandbox.io https://stackblitz.com https://speakerdeck.com https://www.figma.com https://www.google.com https://*.googlesyndication.com",
