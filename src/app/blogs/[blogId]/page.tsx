@@ -240,7 +240,8 @@ async function fetchOGPData(url: string) {
     if (rawImage) {
       try {
         const resolved = new URL(rawImage, url);
-        if (resolved.protocol === 'https:' || resolved.protocol === 'http:') image = resolved.href;
+        // https の画像だけ使う。http は混在コンテンツになり、CSP（img-src https:）でも弾かれる
+        if (resolved.protocol === 'https:') image = resolved.href;
       } catch {
         image = null;
       }
