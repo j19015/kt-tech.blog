@@ -192,28 +192,34 @@ body {
   background: rgb(71 85 105);
 }
 
-/* 0.3px はサブピクセルで端末により消える/濃く出るうえ、
+/* リンクカード（本文中で URL だけを置いた段落から作る）。
+   左に タイトル / 説明 / favicon+ドメイン、右に OGP 画像を置き、高さは 120px に固定する。
+
+   記事本文の `.znc img`（styles/markdown.css）は display:block と上下 2rem の margin を持つ。
+   以前はこれが favicon にも当たり、favicon が左カラム中央に浮いてカードが縦に間延びしていた。
+   本文の画像用スタイルに勝つよう、カード内の画像は `.link-card .xxx`（クラス2つ）で指定する。
+
+   0.3px はサブピクセルで端末により消える/濃く出るうえ、
    枠色に本文色をそのまま使っていたため記事の中で必要以上に主張していた。 */
 .link-card {
-  -webkit-box-align: center;
-  border: 1px solid rgb(226 232 240);
+  --link-card-border: rgb(226 232 240);
+  --link-card-height: 120px;
+  border: 1px solid var(--link-card-border);
   border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
   overflow: hidden;
-  text-decoration: none;
   overflow-wrap: anywhere;
   margin: 1.5rem 0;
+  background: hsl(var(--background));
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
 }
 .dark .link-card {
-  border-color: rgb(51 65 85);
+  --link-card-border: rgb(51 65 85);
 }
 
 .link-card > a {
+  display: block;
   color: hsl(var(--foreground)) !important;
-  width: 100%;
   text-decoration: none !important;
 }
 
@@ -223,74 +229,102 @@ body {
   transform: translateY(-2px);
 }
 
-.link-card-favicon {
-  width: 14px;
-  height: 14px;
-  display: inline-block;
-  vertical-align: -2px;
-  margin-right: 0.4em;
-  border-radius: 2px;
-}
-
 .link-card-body {
   display: flex;
-  justify-content: space-between;
+  align-items: stretch;
+  height: var(--link-card-height);
 }
 
 .link-card-info {
-  padding: 1rem;
+  flex: 1;
+  min-width: 0; /* 長いタイトルで画像側を押し出さない */
+  padding: 0.75rem 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  font-size: 1rem;
-  flex: 1; /* 情報セクションが残りのスペースを埋める */
+  gap: 0.25rem;
 }
 
 .link-card-title {
-  color: var(--color-text-high-emphasis);
   display: -webkit-box;
   font-weight: 600;
-  font-size: 1rem;
-  line-height: 1.5;
+  font-size: 0.95rem;
+  line-height: 1.4;
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
 
-.link-card-url {
-  color: var(--color-text-high-emphasis);
+.link-card-description {
   display: -webkit-box;
-  font-size: 12px;
-  line-height: 1.8;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.8rem;
+  line-height: 1.5;
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
 }
 
-.link-card-thumbnail {
-  border-left: 1px solid var(--color-divider);
+.link-card-url {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  min-width: 0;
+  color: hsl(var(--muted-foreground));
+  font-size: 12px;
+  line-height: 1.5;
+}
+.link-card-url > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ここから下はカード内の画像。`.znc img` の margin / 角丸 / 影 / zoom-in カーソルを打ち消す */
+.link-card .link-card-favicon,
+.link-card .link-card-thumbnail {
+  margin: 0;
+  max-width: none;
+  border-radius: 0;
+  box-shadow: none;
+  cursor: pointer;
+  opacity: 1;
+}
+
+.link-card .link-card-favicon {
+  display: block;
   flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+}
+
+/* 画像はカードの高さいっぱいに合わせ、OGP の 1.91:1 に近い幅で切り抜く */
+.link-card .link-card-thumbnail {
+  display: block;
+  flex-shrink: 0;
+  width: 230px;
+  height: 100%;
   object-fit: cover;
-  width: 200px;
-  margin: 0 !important;
+  border-left: 1px solid var(--link-card-border);
 }
 
-.link-card-body > img {
-  border-radius: 0px !important;
-  border-top-right-radius: 5px !important;
-  border-bottom-right-radius: 5px !important;
-  height: 110px !important;
-}
-
-@media (max-width: 768px) {
-  .link-card-thumbnail {
-    width: 220px;
+@media (max-width: 640px) {
+  .link-card {
+    --link-card-height: 96px;
   }
-}
-
-@media (max-width: 479px) {
-  .link-card-thumbnail {
-    width: 110px;
+  .link-card-info {
+    padding: 0.625rem 0.75rem;
+  }
+  .link-card-title {
+    font-size: 0.875rem;
+  }
+  /* 狭い幅では説明まで入れるとタイトルが1行で切れるので出さない */
+  .link-card-description {
+    display: none;
+  }
+  .link-card .link-card-thumbnail {
+    width: 96px;
   }
 }
 

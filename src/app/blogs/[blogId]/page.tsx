@@ -18,11 +18,28 @@ function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").trim();
 }
 
+// meta の content 属性は HTML としてエスケープされている（x.com の og:image は
+// `?format=webp&amp;name=large`）。デコードせずに escapeHtml へ渡すと `&amp;amp;` に
+// 二重エスケープされ、画像URLが壊れて 404 になっていた。
+function decodeHtmlEntities(str: string): string {
+  return str
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(parseInt(dec, 10)))
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&');
+}
+
 function extractMetaContent(html: string, patterns: string[]): string | undefined {
   for (const pattern of patterns) {
-    const regex = new RegExp(`<meta[^>]*(?:name|property)=["']${pattern}["'][^>]*content=["']([^"']*)["']|<meta[^>]*content=["']([^"']*)["'][^>]*(?:name|property)=["']${pattern}["']`, 'i');
+    // content="..." の中にもう一方の引用符（タイトル中の ' など）があっても途中で切れないよう、
+    // 開き引用符と同じ文字で閉じる
+    const regex = new RegExp(`<meta[^>]*(?:name|property)=["']${pattern}["'][^>]*content=(["'])(.*?)\\1|<meta[^>]*content=(["'])(.*?)\\3[^>]*(?:name|property)=["']${pattern}["']`, 'i');
     const match = html.match(regex);
-    if (match) return match[1] || match[2];
+    const value = match?.[2] ?? match?.[4];
+    if (value) return decodeHtmlEntities(value).trim();
   }
   return undefined;
 }
@@ -58,6 +75,7 @@ import { ImageLightbox } from '@/components/ImageLightbox/ImageLightbox';
 import { KeyboardNav } from '@/components/KeyboardNav/KeyboardNav';
 import { FloatingTocButton } from '@/components/TableOfContents/FloatingTocButton';
 import { BookmarkButton } from '@/components/Bookmark/BookmarkButton';
+import { LinkCardImageFallback } from '@/components/LinkCard/LinkCardImageFallback';
 import { SeriesNav } from '@/components/Series/SeriesNav';
 import { SeriesCarousel } from '@/components/Series/SeriesCarousel';
 import { ArticleAside } from '@/components/ArticleAside/ArticleAside';
@@ -172,17 +190,25 @@ async function fetchOGPData(url: string) {
     const html = await response.text();
 
     const title = extractMetaContent(html, ['og:title', 'twitter:title', 'title']) ||
-      (html.match(/<title[^>]*>(.*?)<\/title>/i)?.[1] || '').trim();
+      decodeHtmlEntities(html.match(/<title[^>]*>(.*?)<\/title>/i)?.[1] || '').trim();
     const description = extractMetaContent(html, ['og:description', 'description', 'twitter:description']);
-    const image = extractMetaContent(html, ['og:image', 'twitter:image', 'image']);
-    const faviconUrl = `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=128`;
-    const main_image = image
-      ? image.includes('https')
-        ? image
-        : `${url}${image[0] == '/' ? image.substring(1) : image}`
-      : faviconUrl;
+    const rawImage = extractMetaContent(html, ['og:image', 'twitter:image', 'image']);
 
-    return { title, description, image: main_image };
+    // OGP画像が無いときは画像を出さない。以前は favicon（128px の正方形）を
+    // 代わりにサムネイル枠へ引き伸ばしていた。
+    // 相対パスはページURLを基準に解決する（以前は `${url}${path}` と連結していたため
+    // `https://example.com/post` + `/og.png` が `https://example.com/postog.png` になっていた）。
+    let image: string | null = null;
+    if (rawImage) {
+      try {
+        const resolved = new URL(rawImage, url);
+        if (resolved.protocol === 'https:' || resolved.protocol === 'http:') image = resolved.href;
+      } catch {
+        image = null;
+      }
+    }
+
+    return { title, description, image };
   } catch (error) {
     console.error(`Error fetching OGP for ${url}:`, error);
     return null;
@@ -351,12 +377,16 @@ export default async function StaticDetailPage({
     }
     // 外部サイトから取ってきた値なので必ずエスケープする
     const title = escapeHtml(meta?.title || hostname);
+    const description = meta?.description
+      ? `<div class="link-card-description">${escapeHtml(meta.description)}</div>`
+      : '';
     const safeHref = escapeHtml(href);
     const favicon = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(hostname)}&sz=128`;
+    // 読み込みに失敗したサムネイルは LinkCardImageFallback が枠ごと取り除く
     const thumbnail = meta?.image
-      ? `<img src="${escapeHtml(meta.image)}" alt="" class="link-card-thumbnail" loading="lazy" />`
+      ? `<img src="${escapeHtml(meta.image)}" alt="" class="link-card-thumbnail" loading="lazy" decoding="async" />`
       : '';
-    return `<div class="link-card${thumbnail ? '' : ' link-card--no-image'}"><a href="${safeHref}" target="_blank" rel="noopener noreferrer"><div class="link-card-body"><div class="link-card-info"><div class="link-card-title">${title}</div><div class="link-card-url"><img src="${favicon}" alt="" class="link-card-favicon" loading="lazy" />${escapeHtml(hostname)}</div></div>${thumbnail}</div></a></div>`;
+    return `<div class="link-card${thumbnail ? '' : ' link-card--no-image'}"><a href="${safeHref}" target="_blank" rel="noopener noreferrer"><div class="link-card-body"><div class="link-card-info"><div class="link-card-title">${title}</div>${description}<div class="link-card-url"><img src="${favicon}" alt="" class="link-card-favicon" width="14" height="14" loading="lazy" decoding="async" /><span>${escapeHtml(hostname)}</span></div></div>${thumbnail}</div></a></div>`;
   });
 
   // 目次生成（正規表現ベース）
@@ -550,6 +580,7 @@ export default async function StaticDetailPage({
               <MermaidLoader />
               <EmbedPlayer />
               <ImageLightbox />
+              <LinkCardImageFallback />
               <ReadingTracker articleId={blogId} />
             </div>
             {blog.changelog && <ArticleChangelog entries={blog.changelog} />}
