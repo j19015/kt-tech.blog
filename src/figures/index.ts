@@ -576,6 +576,156 @@ export const figures: Record<string, Figure> = {
       <text x="580" y="190" font-size="11" class="fig-t-allow">全セッションに届く</text>
     </svg>`,
   },
+
+  'herdr-cli-vs-app': {
+    caption:
+      '名前は似ているが別の製品。CLI は Ghostty の中で動く TUI で、app はウィンドウを持つアプリ。ターミナルを動かす本体も、設定の場所も、操作用のコマンド名も分かれている。app のインストーラは herdr コマンドを触らないので、両方を同時に入れておける。',
+    svg: `<svg viewBox="0 0 760 352" role="img" aria-label="左はGhosttyの中でherdrを起動するherdr CLIで、ターミナルはherdrのサーバーが動かし、設定は~/.config/herdr/config.toml、操作用CLIはherdr。右はHerdr.appで、ウィンドウはサイドバーとターミナルを並べるだけ、ターミナルはherdr-core（hc）が動かし、設定は~/.config/herdr-app/以下のJSON、操作用CLIはherdr-app。2つはエージェントを共有しないことを示す対比図">
+      ${arrowDefs('hca')}
+      <line x1="384" y1="14" x2="384" y2="300" stroke="currentColor" stroke-width="1" stroke-dasharray="3 5" opacity=".3"></line>
+
+      <text x="24" y="22" font-size="12.5" fill="currentColor" class="fig-label">herdr CLI（TUI）</text>
+
+      <rect x="24" y="34" width="344" height="112" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="40" y="54" font-size="11.5" fill="currentColor" opacity=".72">Ghostty（ターミナル）</text>
+      <rect x="40" y="64" width="312" height="68" rx="3" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".6"></rect>
+      <text x="196" y="92" text-anchor="middle" font-size="13" fill="currentColor">herdr</text>
+      <text x="196" y="114" text-anchor="middle" font-size="11" fill="currentColor" opacity=".72">ターミナルの中で herdr と打って起動</text>
+
+      <line x1="196" y1="146" x2="196" y2="178" stroke="currentColor" stroke-width="1.5" marker-end="url(#hca-ink)"></line>
+      <text x="208" y="167" font-size="10.5" fill="currentColor" opacity=".6">ターミナルを動かすもの</text>
+
+      <rect x="24" y="180" width="344" height="44" rx="3" fill="none" class="fig-s-accent" stroke-width="2"></rect>
+      <text x="196" y="207" text-anchor="middle" font-size="12.5" class="fig-t-accent">herdr のサーバー</text>
+
+      <text x="24" y="272" font-size="11.5" fill="currentColor" opacity=".6">設定</text>
+      <text x="100" y="272" font-size="12" fill="currentColor">~/.config/herdr/config.toml</text>
+      <text x="24" y="296" font-size="11.5" fill="currentColor" opacity=".6">操作用 CLI</text>
+      <text x="100" y="296" font-size="12" fill="currentColor">herdr</text>
+
+      <text x="400" y="22" font-size="12.5" fill="currentColor" class="fig-label">herdr app</text>
+
+      <rect x="400" y="34" width="336" height="112" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="416" y="54" font-size="11.5" fill="currentColor" opacity=".72">Herdr.app（ウィンドウのアプリ）</text>
+      <rect x="416" y="64" width="96" height="68" rx="3" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".6"></rect>
+      <text x="464" y="86" text-anchor="middle" font-size="11" fill="currentColor" opacity=".8">サイドバー</text>
+      <text x="464" y="106" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".65">space と</text>
+      <text x="464" y="122" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".65">エージェント</text>
+      <rect x="524" y="64" width="196" height="68" rx="3" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".6"></rect>
+      <text x="622" y="92" text-anchor="middle" font-size="13" fill="currentColor">ターミナル</text>
+      <text x="622" y="114" text-anchor="middle" font-size="11" fill="currentColor" opacity=".72">ウィンドウは並べるだけ</text>
+
+      <line x1="568" y1="146" x2="568" y2="178" stroke="currentColor" stroke-width="1.5" marker-end="url(#hca-ink)"></line>
+      <text x="580" y="167" font-size="10.5" fill="currentColor" opacity=".6">ターミナルを動かすもの</text>
+
+      <rect x="400" y="180" width="336" height="44" rx="3" fill="none" class="fig-s-accent" stroke-width="2"></rect>
+      <text x="568" y="207" text-anchor="middle" font-size="12.5" class="fig-t-accent">herdr-core（コマンドは hc）</text>
+      <text x="400" y="244" font-size="11" fill="currentColor" opacity=".72">ウィンドウを閉じても、ターミナルは動き続ける</text>
+
+      <text x="400" y="272" font-size="11.5" fill="currentColor" opacity=".6">設定</text>
+      <text x="476" y="272" font-size="12" fill="currentColor">~/.config/herdr-app/ 以下の JSON</text>
+      <text x="400" y="296" font-size="11.5" fill="currentColor" opacity=".6">操作用 CLI</text>
+      <text x="476" y="296" font-size="12" fill="currentColor">herdr-app</text>
+
+      <line x1="24" y1="314" x2="736" y2="314" stroke="currentColor" stroke-width="1" stroke-dasharray="3 5" opacity=".3"></line>
+      <text x="380" y="340" text-anchor="middle" font-size="12" class="fig-t-deny">✕ エージェントは共有しない（片方で動いているものは、もう片方に出てこない）</text>
+    </svg>`,
+  },
+
+  'herdr-mod-duplicate': {
+    caption:
+      '同梱の mod とレイアウトは読み取り専用で、app を起動するたびに丸ごと置き換えられる。なので mod.clone と layout.clone で複製を作り、複製したレイアウトの "mod": "files" を "my-files" に書き換えて自分の mod を参照させる。複製は自分の管理になるので、同梱の Files が更新されても反映されない。',
+    svg: `<svg viewBox="0 0 760 358" role="img" aria-label="同梱のmods/filesをmod.cloneでmods/my-filesに、layouts/main.jsonをlayout.cloneでlayouts/my-layout.jsonに複製し、my-layout.jsonの参照先をfilesからmy-filesに書き換える流れ。同梱のmods/files/main.jsを直接編集すると、次の起動で名前-editedに退避されて同梱版に戻ることも示す図">
+      ${arrowDefs('hmd')}
+
+      <text x="24" y="22" font-size="12.5" fill="currentColor" class="fig-label">同梱（起動のたびに置き換わる）</text>
+      <text x="476" y="22" font-size="12.5" class="fig-t-allow fig-label">自分の複製</text>
+
+      <rect x="24" y="38" width="260" height="56" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="154" y="62" text-anchor="middle" font-size="12.5" fill="currentColor">mods/files/</text>
+      <text x="154" y="81" text-anchor="middle" font-size="11" fill="currentColor" opacity=".72">同梱の Files パネル</text>
+
+      <line x1="284" y1="66" x2="474" y2="66" stroke="currentColor" stroke-width="1.5" marker-end="url(#hmd-ink)"></line>
+      <text x="379" y="57" text-anchor="middle" font-size="11" fill="currentColor">herdr-app do mod.clone</text>
+
+      <rect x="476" y="38" width="260" height="56" rx="3" fill="none" class="fig-s-allow" stroke-width="2"></rect>
+      <text x="606" y="62" text-anchor="middle" font-size="12.5" class="fig-t-allow">mods/my-files/</text>
+      <text x="606" y="81" text-anchor="middle" font-size="11" fill="currentColor" opacity=".72">自分の Files パネル</text>
+
+      <line x1="154" y1="150" x2="154" y2="96" stroke="currentColor" stroke-width="1.5" opacity=".5" marker-end="url(#hmd-ink)"></line>
+      <text x="166" y="127" font-size="10.5" fill="currentColor" opacity=".6">参照</text>
+
+      <line x1="606" y1="150" x2="606" y2="96" class="fig-s-allow" stroke-width="2" marker-end="url(#hmd-allow)"></line>
+      <text x="618" y="127" font-size="10.5" class="fig-t-allow">書き換えて参照</text>
+
+      <rect x="24" y="150" width="260" height="60" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+      <text x="154" y="175" text-anchor="middle" font-size="12.5" fill="currentColor">layouts/main.json</text>
+      <text x="154" y="196" text-anchor="middle" font-size="11" fill="currentColor" opacity=".72">"mod": "files"</text>
+
+      <line x1="284" y1="176" x2="474" y2="176" stroke="currentColor" stroke-width="1.5" marker-end="url(#hmd-ink)"></line>
+      <text x="379" y="167" text-anchor="middle" font-size="11" fill="currentColor">herdr-app do layout.clone</text>
+      <text x="379" y="194" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".65">my-layout に切り替わる</text>
+
+      <rect x="476" y="150" width="260" height="60" rx="3" fill="none" class="fig-s-allow" stroke-width="2"></rect>
+      <text x="606" y="175" text-anchor="middle" font-size="12.5" class="fig-t-allow">layouts/my-layout.json</text>
+      <text x="606" y="196" text-anchor="middle" font-size="11" class="fig-t-allow">"mod": "files" → "my-files"</text>
+
+      <line x1="24" y1="236" x2="736" y2="236" stroke="currentColor" stroke-width="1" stroke-dasharray="3 5" opacity=".3"></line>
+
+      <text x="24" y="262" font-size="12.5" class="fig-t-deny fig-label">直接いじると</text>
+
+      <rect x="24" y="274" width="260" height="50" rx="3" fill="none" class="fig-s-deny" stroke-width="2"></rect>
+      <text x="154" y="304" text-anchor="middle" font-size="12" class="fig-t-deny">mods/files/main.js を編集</text>
+
+      <line x1="284" y1="299" x2="474" y2="299" class="fig-s-deny" stroke-width="2" marker-end="url(#hmd-deny)"></line>
+      <text x="379" y="290" text-anchor="middle" font-size="11" class="fig-t-deny">次に app を起動</text>
+
+      <rect x="476" y="274" width="260" height="50" rx="3" fill="none" class="fig-s-deny" stroke-width="2"></rect>
+      <text x="606" y="294" text-anchor="middle" font-size="11.5" class="fig-t-deny">&lt;name&gt;-edited に退避され</text>
+      <text x="606" y="313" text-anchor="middle" font-size="11.5" class="fig-t-deny">同梱版に戻る</text>
+
+      <text x="24" y="348" font-size="11" fill="currentColor" opacity=".78">複製は自分の管理になる。同梱の Files が更新されても反映されない</text>
+    </svg>`,
+  },
+
+  'herdr-sidebar-collapse-width': {
+    caption:
+      '折りたたみかどうかはフラグではなく、サイドバーの幅が 160px 未満かどうかで決まる。開閉ボタンは広いときの幅を覚えてから、macOS では 76px、それ以外では 44px まで縮める。macOS だけ広いのは、左上のウィンドウボタン（赤・黄・緑）を収めるため。',
+    svg: `<svg viewBox="0 0 760 306" role="img" aria-label="サイドバーの幅の数直線。160pxを境に、未満なら折りたたみ表示、以上なら広い表示になる。開閉ボタンで縮めたときの幅はmacOSが76px、それ以外が44pxであることを示す図">
+      ${arrowDefs('hsw')}
+
+      <text x="24" y="22" font-size="12.5" fill="currentColor" class="fig-label">サイドバーの幅で表示が決まる</text>
+
+      <rect x="60" y="38" width="320" height="88" rx="3" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 4" opacity=".45"></rect>
+      <text x="220" y="76" text-anchor="middle" font-size="13" fill="currentColor">折りたたみ表示</text>
+      <text x="220" y="98" text-anchor="middle" font-size="11.5" fill="currentColor" opacity=".72">幅 160px 未満</text>
+
+      <rect x="380" y="38" width="320" height="88" rx="3" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 4" opacity=".45"></rect>
+      <text x="540" y="76" text-anchor="middle" font-size="13" fill="currentColor">広い表示</text>
+      <text x="540" y="98" text-anchor="middle" font-size="11.5" fill="currentColor" opacity=".72">幅 160px 以上</text>
+
+      <line x1="60" y1="150" x2="712" y2="150" stroke="currentColor" stroke-width="1.5" opacity=".55" marker-end="url(#hsw-ink)"></line>
+      <line x1="380" y1="32" x2="380" y2="156" class="fig-s-accent" stroke-width="2"></line>
+
+      <circle cx="148" cy="150" r="4" fill="currentColor"></circle>
+      <circle cx="212" cy="150" r="4" fill="currentColor"></circle>
+      <circle cx="380" cy="150" r="5" class="fig-t-accent"></circle>
+
+      <text x="60" y="172" text-anchor="middle" font-size="11" fill="currentColor" opacity=".6">0</text>
+      <text x="148" y="172" text-anchor="middle" font-size="11.5" fill="currentColor">44</text>
+      <text x="212" y="172" text-anchor="middle" font-size="11.5" fill="currentColor">76</text>
+      <text x="380" y="174" text-anchor="middle" font-size="12.5" class="fig-t-accent">160</text>
+      <text x="712" y="172" text-anchor="end" font-size="11" fill="currentColor" opacity=".6">px</text>
+
+      <line x1="212" y1="180" x2="212" y2="198" stroke="currentColor" stroke-width="1" opacity=".5"></line>
+      <text x="222" y="202" font-size="11.5" fill="currentColor">76px：macOS。左上のウィンドウボタン（赤・黄・緑）を収める分</text>
+      <line x1="148" y1="180" x2="148" y2="224" stroke="currentColor" stroke-width="1" opacity=".5"></line>
+      <text x="158" y="228" font-size="11.5" fill="currentColor">44px：macOS 以外</text>
+
+      <text x="24" y="266" font-size="11.5" fill="currentColor" opacity=".8">開閉ボタン：広いときの幅を覚えてから 76px / 44px に縮める。広げるときは覚えた幅に戻す</text>
+      <text x="24" y="290" font-size="11.5" fill="currentColor" opacity=".8">端をドラッグして 160px 未満まで狭めても、同じ折りたたみ表示になる</text>
+    </svg>`,
+  },
 };
 
 /**
