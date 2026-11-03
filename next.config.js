@@ -95,6 +95,11 @@ const nextConfig = {
           },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          // クリックジャッキング対策。CSP の frame-ancestors 'none' と同じ意味だが、
+          // CSP はまだ Report-Only なので、こちらで先に強制しておく
+          { key: 'X-Frame-Options', value: 'DENY' },
+          // このサイトはカメラ・マイク・位置情報を使わない。埋め込み先にも使わせない
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
         ],
       },
     ];
