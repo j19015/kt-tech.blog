@@ -12,6 +12,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { BlogProps } from '../../../libs/notion';
 import { Search, ArrowRight } from 'lucide-react';
 import { PostCard } from '@/components/PostCard/PostCard';
+import { pickEyecatchLabels } from '@/components/PostCard/EyecatchLabel';
 import { parseQuery, searchBlogs, MATCH_LABELS } from '@/lib/search';
 
 export const ClientIndex = ({ contents }: BlogProps) => {
@@ -30,6 +31,7 @@ export const ClientIndex = ({ contents }: BlogProps) => {
   // 全件を舐めるだけなので同期で済む。以前は useEffect + ローディング状態で
   // 非同期処理のように扱っていたが、待つものが何もなかった。
   const hits = useMemo(() => (text ? searchBlogs(contents, text) : null), [contents, text]);
+  const labels = useMemo(() => pickEyecatchLabels((hits ?? []).map((h) => h.blog)), [hits]);
 
   useEffect(() => {
     if (!hits || !text) return;
@@ -96,6 +98,7 @@ export const ClientIndex = ({ contents }: BlogProps) => {
               <PostCard
                 key={blog.id}
                 blog={blog}
+                label={labels.get(blog.id)}
                 terms={terms}
                 footer={
                   // なぜこの記事が出てきたのかを示す。

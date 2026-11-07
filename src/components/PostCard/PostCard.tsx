@@ -6,6 +6,7 @@ import type { Blog } from '../../../libs/notion';
 import { TagChip } from '../Chip/Chip';
 import { getArticleBadge } from '@/lib/articleStatus';
 import { thumbnailUrl } from '@/lib/eyecatch';
+import { EyecatchLabel } from './EyecatchLabel';
 
 /**
  * 記事一覧のカード。
@@ -60,9 +61,11 @@ type Props = {
    * リクエスト開始が 5.5 秒遅れていた（Lighthouse の Load Delay が LCP の53%）。
    */
   priority?: boolean;
+  /** アイキャッチに重ねる語。一覧側で `pickEyecatchLabels` を使って決める */
+  label?: string;
 };
 
-export const PostCard = ({ blog, terms, footer, priority = false }: Props) => {
+export const PostCard = ({ blog, terms, footer, priority = false, label }: Props) => {
   const badge = getArticleBadge(blog);
 
   return (
@@ -87,6 +90,7 @@ export const PostCard = ({ blog, terms, footer, priority = false }: Props) => {
               priority={priority}
               className='object-cover group-hover:scale-105 transition-transform duration-300'
             />
+            <EyecatchLabel label={label} />
             {/* 白文字を載せるので 500 番だとコントラスト比が 3.7 前後で 4.5 に届かない */}
             {badge === 'new' ? (
               <span className='absolute top-1.5 left-1.5 px-1.5 py-0.5 text-[10px] font-bold bg-red-600 text-white rounded'>
