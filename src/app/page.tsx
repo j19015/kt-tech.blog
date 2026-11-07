@@ -60,8 +60,11 @@ export default async function StaticPage() {
   // 以前はここだけ期間の上限が無く、1年前に更新した記事がずっと居座り、
   // しかもカード側には（7日を過ぎているので）更新バッジが出ない、という
   // 矛盾した見え方になっていた。
+  // 上の新着に並んでいる記事は除く。公開直後に手を入れた記事が新着と
+  // 更新の両方に出て、同じカードが1ページに2回並んでいた（#557）。
+  const latestIds = new Set(latestBlogs.map((b) => b.id));
   const recentlyUpdated = allBlogs
-    .filter((b) => isRecentlyUpdated(b))
+    .filter((b) => !latestIds.has(b.id) && isRecentlyUpdated(b))
     .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
     .slice(0, 3);
 
