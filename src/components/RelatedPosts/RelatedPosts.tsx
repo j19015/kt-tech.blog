@@ -5,6 +5,7 @@ import { Blog } from '../../../libs/notion';
 import { Clock, ArrowRight } from 'lucide-react';
 import { CategoryChip } from '../Chip/Chip';
 import { mediumUrl } from '@/lib/eyecatch';
+import { EyecatchLabel, pickEyecatchLabels } from '@/components/PostCard/EyecatchLabel';
 
 interface RelatedPostsProps {
   posts: Blog[];
@@ -15,6 +16,7 @@ export const RelatedPosts = ({ posts, currentPostId }: RelatedPostsProps) => {
   const relatedPosts = posts.filter(post => post.id !== currentPostId).slice(0, 3);
 
   if (relatedPosts.length === 0) return null;
+  const labels = pickEyecatchLabels(relatedPosts);
 
   return (
     <div className='mt-16 pt-8 pb-8 px-4 border-t border-slate-200 dark:border-slate-700'>
@@ -52,6 +54,7 @@ export const RelatedPosts = ({ posts, currentPostId }: RelatedPostsProps) => {
                   sizes='(max-width: 640px) 100vw, 250px'
                   className='object-cover group-hover:scale-105 transition-transform duration-300'
                 />
+                <EyecatchLabel label={labels.get(post.id)} size='md' />
               </div>
 
               {/* Content */}

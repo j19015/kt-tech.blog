@@ -2,6 +2,7 @@
 import { BlogProps } from '../../../libs/notion';
 import { FadeIn } from '../FadeIn/FadeIn';
 import { PostCard } from '../PostCard/PostCard';
+import { pickEyecatchLabels } from '../PostCard/EyecatchLabel';
 
 /**
  * 記事一覧。
@@ -18,6 +19,8 @@ import { PostCard } from '../PostCard/PostCard';
  *   トップの FCP が 1.3s → 5.9s に落ちた。
  */
 export const Index = ({ contents, priorityCount = 0 }: BlogProps & { priorityCount?: number }) => {
+  const labels = pickEyecatchLabels(contents);
+
   return (
     <div>
       <div className='space-y-4'>
@@ -28,10 +31,10 @@ export const Index = ({ contents, priorityCount = 0 }: BlogProps & { priorityCou
         */}
         {contents.map((blog, index) =>
           index < priorityCount ? (
-            <PostCard key={blog.id} blog={blog} priority />
+            <PostCard key={blog.id} blog={blog} label={labels.get(blog.id)} priority />
           ) : (
             <FadeIn key={blog.id}>
-              <PostCard blog={blog} />
+              <PostCard blog={blog} label={labels.get(blog.id)} />
             </FadeIn>
           )
         )}
