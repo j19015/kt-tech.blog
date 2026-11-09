@@ -2,15 +2,7 @@
    以前は赤み寄りのグレーで、サイト全体の slate（青みグレー）と並ぶと色が濁って見えていた。 */
 :root {
   --md-code-bg-light: 241 245 249; /* slate-100 */
-  /* 見出し行は本文の地とはっきり差をつける。slate-50 では白背景との差が
-     ほとんどなく、ヘッダーがどこまでか分からなくなっていた */
-  --md-table-th-light: #eef2f7;
-  --md-table-td-light: transparent;
   --md-code-bg-dark: 51 65 85; /* slate-700 */
-  /* ダークは特に差が出にくい。本文の地(slate-900系)に対して #1e293b では
-     ほぼ同色に見え、表全体が背景に溶けて崩れているように見えていた */
-  --md-table-th-dark: #253349;
-  --md-table-td-dark: transparent;
 
   /* 本文と強調の色。
      以前は本文も見出しも太字もすべて --foreground（ほぼ純黒 #0f1729）で、
@@ -728,107 +720,92 @@
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* 横スクロールできることを端のフェードで示す。
-   background-attachment: local を使うと、スクロール位置に応じて影が自動で出入りする（JS不要）。 */
+/* 表はラッパー（.table-scroll）をカードにして、枠線・角丸・地の色をそこで持つ。
+   以前は table 自体に border + border-radius を付けていたが、border-collapse: collapse
+   と角丸は両立せず外枠が描かれなかった。そのうえ奇数行の地が透明だったため、
+   ダークでは行の端がページの背景に溶けて、表の輪郭が途切れて見えていた。 */
 .znc .table-scroll {
-  --table-scroll-bg: #ffffff;
+  --table-surface: #ffffff;
+  --table-head: #f1f5f9; /* slate-100 */
+  --table-border: #e2e8f0; /* slate-200 */
+  --table-rule: #edf1f6;
+  --table-hover: #f8fafc; /* slate-50 */
+  --table-shadow: rgba(15, 23, 42, 0.12);
   overflow-x: auto;
   margin: 1.75rem 0;
+  border: 1px solid var(--table-border);
+  border-radius: 10px;
+  /* 横スクロールできることを端の影で示す。background-attachment: local の覆いが
+     スクロール位置に応じて影を出し入れする（JS不要）。覆いの色はカードの地と揃える */
   background:
-    linear-gradient(90deg, var(--table-scroll-bg) 30%, rgba(255, 255, 255, 0)) left / 40px 100%
+    linear-gradient(90deg, var(--table-surface) 30%, transparent) left / 40px 100% no-repeat,
+    linear-gradient(270deg, var(--table-surface) 30%, transparent) right / 40px 100% no-repeat,
+    radial-gradient(farthest-side at 0 50%, var(--table-shadow), transparent) left / 14px 100%
       no-repeat,
-    linear-gradient(270deg, var(--table-scroll-bg) 30%, rgba(255, 255, 255, 0)) right / 40px 100%
+    radial-gradient(farthest-side at 100% 50%, var(--table-shadow), transparent) right / 14px 100%
       no-repeat,
-    radial-gradient(farthest-side at 0 50%, rgba(15, 23, 42, 0.12), rgba(15, 23, 42, 0)) left / 14px
-      100% no-repeat,
-    radial-gradient(farthest-side at 100% 50%, rgba(15, 23, 42, 0.12), rgba(15, 23, 42, 0)) right /
-      14px 100% no-repeat;
-  background-attachment: local, local, scroll, scroll;
+    var(--table-surface);
+  background-attachment: local, local, scroll, scroll, scroll;
 }
 .dark .znc .table-scroll {
-  --table-scroll-bg: #0f172a;
-  background:
-    linear-gradient(90deg, var(--table-scroll-bg) 30%, rgba(15, 23, 42, 0)) left / 40px 100%
-      no-repeat,
-    linear-gradient(270deg, var(--table-scroll-bg) 30%, rgba(15, 23, 42, 0)) right / 40px 100%
-      no-repeat,
-    radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0)) left / 14px 100%
-      no-repeat,
-    radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0)) right / 14px
-      100% no-repeat;
-  background-attachment: local, local, scroll, scroll;
-}
-.znc .table-scroll > table {
-  margin: 0;
+  /* ページの地（#0f172a）より一段明るくして、表の範囲が分かるようにする */
+  --table-surface: #152033;
+  --table-head: #1c2a41;
+  --table-border: #2b3a52;
+  --table-rule: #223048;
+  --table-hover: #1a273c;
+  --table-shadow: rgba(0, 0, 0, 0.45);
 }
 
-/* 表は全セルを罫線で囲むと「Excelの表」に見えて、周囲の角丸カードや
-   柔らかい影と質感が合わない。横罫のみにして余白で構造を見せる。 */
+/* 全セルを罫線で囲むと「Excelの表」に見えるので、横罫だけにして余白で構造を見せる。
+   縞模様はやめた。カードの地が付いたので、行は罫線とホバーで追える */
 .znc table {
   width: 100%;
   /* セルが潰れるより横スクロールさせたい。ラッパー側で overflow-x: auto している */
   min-width: max-content;
   border-collapse: collapse;
-  margin: 1.75rem 0;
+  margin: 0;
   font-size: 0.925em;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  /* 角丸をセルにも効かせる */
-  overflow: hidden;
-}
-.dark .znc table {
-  border-color: #334155;
 }
 
 .znc th {
-  background: var(--md-table-th-light);
-  /* 見出し行なので本文より濃く。td は本文と同じ濃さに置く */
+  background: var(--table-head, #f1f5f9);
   color: var(--md-emphasis-light);
-  padding: 0.625rem 0.875rem;
+  padding: 0.6rem 1rem;
   text-align: left;
+  font-size: 0.9em;
   font-weight: 600;
-  /* 見出し行と本文の境目は他の罫線より太くする。同じ太さだと
-     どこまでがヘッダーなのか読み取れない */
-  border-bottom: 2px solid #cbd5e1;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid var(--table-border, #e2e8f0);
 }
-
 .dark .znc th {
-  background: var(--md-table-th-dark);
   color: var(--md-emphasis-dark);
-  border-bottom-color: #3b4d6b;
 }
 
 .znc td {
-  padding: 0.625rem 0.875rem;
-  background: var(--md-table-td-light);
+  padding: 0.7rem 1rem;
   color: var(--md-body-light);
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--table-rule, #edf1f6);
+  vertical-align: top;
+}
+.dark .znc td {
+  color: var(--md-body-dark);
 }
 
-.dark .znc td {
-  background: var(--md-table-td-dark);
-  color: var(--md-body-dark);
-  /* 罫線が縞模様の背景と同色だと線として見えない */
-  border-bottom-color: #2b3a52;
+/* 1列目は行の見出しになっていることが多いので、色だけ少し濃くする。
+   太字にすると日本語では黒い帯になって、値の列より目立ってしまう */
+.znc td:first-child {
+  color: var(--md-emphasis-light);
+}
+.dark .znc td:first-child {
+  color: var(--md-emphasis-dark);
 }
 
 .znc tbody tr:last-child td {
   border-bottom: none;
 }
-
-/* 列が多い表で行を見失わないようにする */
-.znc tbody tr:nth-child(even) td {
-  background: #f8fafc;
-}
-.dark .znc tbody tr:nth-child(even) td {
-  /* 半透明だと下の地の色に左右されて、縞が出たり出なかったりする */
-  background: #1a2434;
-}
 .znc tbody tr:hover td {
-  background: #f1f5f9;
-}
-.dark .znc tbody tr:hover td {
-  background: rgba(51, 65, 85, 0.6);
+  background: var(--table-hover, #f8fafc);
 }
 
 /* Markdownの :---: / ---: によるアラインメント指定を効かせる。
