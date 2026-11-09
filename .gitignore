@@ -55,3 +55,9 @@ next-env.d.ts
 
 # wrangler / next-on-pages の作業ディレクトリ
 .wrangler
+
+# Terraform
+infra/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
