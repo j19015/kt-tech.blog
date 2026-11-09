@@ -30,6 +30,8 @@ jobs:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
+          # 「参考になった」の Turnstile。未設定ならボタンが出ないだけで、ビルドは通る
+          NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
           SITE_URL: ${{ secrets.SITE_URL }}
 
       - name: Deploy to Cloudflare Pages

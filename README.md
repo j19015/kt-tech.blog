@@ -95,6 +95,7 @@ CSS のバンドル結果もページごとの読み込みも別物になる。�
 | `npm run lint` | ESLint |
 | `npm run preview` | 本番と同じビルドをローカルで起動 |
 | `npm run pages:build` | Cloudflare Pages 用ビルド |
+| `npm run db:migrate:local` | ローカルの D1 にスキーマを適用 |
 | `node scripts/generate-eyecatch.mjs` | アイキャッチ未設定の記事に画像を生成（`--dry-run` で対象確認のみ） |
 | `node scripts/lint-content.mjs` | Notion の記事を品質チェック |
 
@@ -151,6 +152,20 @@ R2_SECRET_KEY=
 NEXT_PUBLIC_BUCKET_NAME=
 NEXT_PUBLIC_R2_BUCKET_URL=
 ```
+
+</details>
+
+<details>
+<summary>「参考になった」ボタン（D1 + Turnstile）</summary>
+
+```env
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=   # ビルド時に埋まる。GitHub Secrets にも置く。未設定ならボタンを出さない
+TURNSTILE_SECRET_KEY=             # Pages の Secret
+```
+
+件数は D1（`kt-tech-blog-reactions`、Pages のバインディング名 `DB`）に持つ。
+ローカルでは `npm run db:migrate:local` のあと `npm run dev` で、`wrangler.dev.toml` のローカル D1 につながる。
+詳しくは [claude.md](claude.md#参考になったd1の運用)。
 
 </details>
 

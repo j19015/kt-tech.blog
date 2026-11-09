@@ -13,7 +13,8 @@
     "pages:deploy": "npx wrangler pages deploy .vercel/output/static --project-name=kt-tech-blog",
     "preview": "npm run preview:env && npm run pages:build && npm run preview:serve",
     "preview:env": "node scripts/sync-dev-vars.mjs",
-    "preview:serve": "wrangler pages dev .vercel/output/static --port 8788 --compatibility-date 2026-08-15 --compatibility-flags nodejs_compat"
+    "preview:serve": "wrangler pages dev .vercel/output/static --port 8788 --compatibility-date 2026-08-15 --compatibility-flags nodejs_compat",
+    "db:migrate:local": "wrangler d1 migrations apply kt-tech-blog-reactions --local -c wrangler.dev.toml"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.1",
