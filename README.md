@@ -223,7 +223,7 @@ cd infra
 | 「参考になった」の連打・bot | Turnstile のトークンをサーバー側で siteverify に投げて検証する。あわせて Origin が自サイトか、記事が公開中か（Notion で確認）を見てから加算する |
 | 本文の生 HTML | CSP を入れている（今は `Report-Only`。違反が出なくなったら強制に切り替える）。`X-Frame-Options: DENY` などは強制済み |
 | 秘密情報 | ローカルは 1Password から `op run` で実行中のプロセスにだけ渡す。CI は GitHub Secrets、Pages は Secret。リポジトリには参照（`.env.op`）しか置かない |
-| 費用 | Budget alerts で、請求額が $10 を超えたらメールで通知する |
+| 費用 | Cloudflare の Budget alerts で、請求期間内の従量課金（月額の基本料は含まない）が $10 を超えたらメールで通知する。通知だけで利用は止まらない |
 
 ## ディレクトリ構成
 
