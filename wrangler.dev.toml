@@ -1,0 +1,18 @@
+# `npm run dev`（next dev）でだけ使う設定。本番のデプロイは読まない。
+#
+# あえて wrangler.toml という名前にしていない。Pages プロジェクトに wrangler.toml を置くと
+# `wrangler pages deploy` がそれを設定の正として読み、ダッシュボードのバインディングや
+# 互換性フラグ（nodejs_compat）が上書きされる。本番の設定はダッシュボードに置いたままにし、
+# このファイルはローカルの D1（.wrangler/ 以下の SQLite）を `DB` として生やすためだけに使う。
+#
+# database_id は本番の ID ではなく、ローカルの保存先を区別する名前。本番の D1 にはつながらない。
+# テーブルの作成: npm run db:migrate:local
+name = "kt-tech-blog"
+compatibility_date = "2026-08-15"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "kt-tech-blog-reactions"
+database_id = "local-kt-tech-blog-reactions"
+migrations_dir = "migrations"

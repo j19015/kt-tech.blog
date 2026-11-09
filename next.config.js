@@ -1,3 +1,13 @@
+// next dev でも Cloudflare のバインディング（D1 の `DB`）を使えるようにする。
+// 本番のビルドとデプロイには関係しない。wrangler.dev.toml の冒頭も参照。
+if (process.env.NODE_ENV === 'development') {
+  const { setupDevPlatform } = require('@cloudflare/next-on-pages/next-dev');
+  setupDevPlatform({ configPath: './wrangler.dev.toml' }).catch((error) => {
+    // 起動できなくてもサイトは見られる。「参考になった」が出ないだけにする
+    console.warn(`[next.config] setupDevPlatform に失敗したので D1 なしで起動する: ${error}`);
+  });
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
@@ -75,8 +85,8 @@ const nextConfig = {
             key: 'Content-Security-Policy-Report-Only',
             value: [
               "default-src 'self'",
-              // Next.js のインラインスクリプトと GA / AdSense
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://*.google.com",
+              // Next.js のインラインスクリプトと GA / AdSense、「参考になった」の Turnstile
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://*.google.com https://challenges.cloudflare.com",
               // Tailwind とコンポーネントのインラインスタイル
               "style-src 'self' 'unsafe-inline'",
               "font-src 'self' data:",
@@ -84,9 +94,9 @@ const nextConfig = {
               // そのまま表示するので、配信元を列挙すると載せたリンクごとに許可が漏れる。
               // 画像はスクリプトを実行しないので、広げても XSS の防御は弱まらない
               "img-src 'self' data: blob: https:",
-              "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
-              // 記事内の埋め込み
-              "frame-src https://www.youtube-nocookie.com https://codesandbox.io https://stackblitz.com https://speakerdeck.com https://www.figma.com https://www.google.com https://*.googlesyndication.com",
+              "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://challenges.cloudflare.com",
+              // 記事内の埋め込みと、「参考になった」の Turnstile
+              "frame-src https://www.youtube-nocookie.com https://codesandbox.io https://stackblitz.com https://speakerdeck.com https://www.figma.com https://www.google.com https://*.googlesyndication.com https://challenges.cloudflare.com",
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self'",

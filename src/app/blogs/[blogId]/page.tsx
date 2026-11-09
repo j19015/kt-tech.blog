@@ -76,6 +76,7 @@ import { ImageLightbox } from '@/components/ImageLightbox/ImageLightbox';
 import { KeyboardNav } from '@/components/KeyboardNav/KeyboardNav';
 import { FloatingTocButton } from '@/components/TableOfContents/FloatingTocButton';
 import { BookmarkButton } from '@/components/Bookmark/BookmarkButton';
+import { ReactionButton } from '@/components/Reaction/ReactionButton';
 import { LinkCardImageFallback } from '@/components/LinkCard/LinkCardImageFallback';
 import { SeriesNav } from '@/components/Series/SeriesNav';
 import { SeriesCarousel } from '@/components/Series/SeriesCarousel';
@@ -639,6 +640,8 @@ export default async function StaticDetailPage({
             )}
 
             <div className='mt-8 mx-4 p-6 bg-slate-50 dark:bg-slate-800/50 rounded-lg space-y-6'>
+              {/* キーは Blog.id。/blogs/{page-id} から来ても slug の記事と同じ件数を数える */}
+              <ReactionButton slug={blog.id} />
               <div className='text-center'>
                 <p className='text-sm text-slate-600 dark:text-slate-300 mb-3'>この記事が役に立ったら共有しよう</p>
                 <ShareButtons title={blog.title} url={`${process.env.SITE_URL}/blogs/${blog.id}`} />
