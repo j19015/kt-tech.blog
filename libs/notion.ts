@@ -102,7 +102,16 @@ export type Blog = {
   category?: Category;
   tags?: Tag[];
   series?: Series;
+  /**
+   * 読了の目安（分）。Notion の ReadingTime。CI（scripts/sync-article-meta.mjs）が本文から計算して書く。
+   * 一覧は本文を取得しないので、ここが無いと読了時間を出せない（#498）
+   */
+  readingMinutes?: number;
   createdAt: string;
+  /**
+   * 本文が最後に変わった日時（Notion の ContentUpdated）。未設定なら last_edited_time。
+   * last_edited_time はタグの変更や CI によるプロパティの書き込みでも動くので、そのままでは使えない（#458）
+   */
   updatedAt: string;
   publishedAt: string;
   revisedAt: string;
@@ -522,6 +531,11 @@ async function pageToBlog(page: any, fetchBody: boolean = false): Promise<Blog> 
   const seriesName = (props.Series?.select?.name || '').trim();
   const seriesOrder = typeof props.SeriesOrder?.number === 'number' ? props.SeriesOrder.number : 0;
 
+  // CI が書き戻す値。プロパティが未作成・未計算の記事では undefined / last_edited_time に落とす
+  const readingMinutes =
+    typeof props.ReadingTime?.number === 'number' && props.ReadingTime.number > 0 ? props.ReadingTime.number : undefined;
+  const updatedAt: string = props.ContentUpdated?.date?.start || page.last_edited_time;
+
   let body = '';
   if (fetchBody) {
     body = await blocksToMarkdown(page.id);
@@ -542,10 +556,11 @@ async function pageToBlog(page: any, fetchBody: boolean = false): Promise<Blog> 
     category: categoryName ? pageToCategory(categoryName) : undefined,
     tags,
     series: seriesName ? { name: seriesName, order: seriesOrder } : undefined,
+    readingMinutes,
     createdAt,
-    updatedAt: page.last_edited_time,
+    updatedAt,
     publishedAt: createdAt,
-    revisedAt: page.last_edited_time,
+    revisedAt: updatedAt,
   };
 }
 

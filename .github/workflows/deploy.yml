@@ -24,6 +24,17 @@ jobs:
 
       - run: npm ci --legacy-peer-deps
 
+      # 読了時間と「本文が変わった日時」を Notion のプロパティに書き戻す（#498 / #458）。
+      # 前回から編集された記事だけ本文を読む。失敗してもデプロイは止めない
+      # （その記事の読了時間が出ない・更新日が last_edited_time になるだけ）
+      - name: Sync article metadata to Notion
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+        run: node scripts/sync-article-meta.mjs
+        timeout-minutes: 10
+        continue-on-error: true
+
       - name: Build for Cloudflare Pages
         run: npx @cloudflare/next-on-pages
         env:

@@ -102,8 +102,20 @@ const CACHE_ORIGIN = (() => {
 /**
  * 中身の形を変えたときはここを上げる。古いエントリを読まずに済む。
  * v2: Blog に pageId を足した（/api/notion-image の公開確認が一覧の pageId を見る）
+ * v3: Blog に readingMinutes を足し、updatedAt を ContentUpdated 優先にした
  */
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v3';
+
+/**
+ * ビルドごとに変わる ID。キーに混ぜて、デプロイのたびに Notion を読み直させる。
+ *
+ * Cache API は CDN のパージでは消えない。以前はデプロイ直前に Notion を直すと、
+ * ウォームがこの層に残った編集前の本文で CDN を埋め直し、古い版が7日残っていた
+ * （そのため「編集から15分空けてデプロイ」という運用で避けていた）。
+ * デプロイ前に CI が Notion のプロパティを書き戻す（scripts/sync-article-meta.mjs）ので、
+ * その値もすぐ反映させたい。値は next.config.js がビルド時に埋める。
+ */
+const BUILD_ID = process.env.NOTION_CACHE_BUILD_ID || 'dev';
 
 type Envelope<T> = { storedAt: number; notFound?: true; value?: T };
 
@@ -137,7 +149,7 @@ function edgeCache(): { match(req: Request): Promise<Response | undefined>; put(
 }
 
 function cacheRequest(key: string): Request {
-  return new Request(`${CACHE_ORIGIN}/${CACHE_VERSION}/${encodeURIComponent(key)}`);
+  return new Request(`${CACHE_ORIGIN}/${CACHE_VERSION}-${BUILD_ID}/${encodeURIComponent(key)}`);
 }
 
 async function edgeGet<T>(key: string): Promise<Envelope<T> | undefined> {

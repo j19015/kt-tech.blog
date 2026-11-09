@@ -75,7 +75,13 @@ export default async function SeriesDetailPage({ params }: Props) {
           {seriesMetaOf(series.name)!.tagline}
         </p>
       )}
-      <p className='mt-2 px-2 text-sm text-slate-500 dark:text-slate-400'>全{series.posts.length}回</p>
+      <p className='mt-2 px-2 text-sm text-slate-500 dark:text-slate-400'>
+        全{series.posts.length}回
+        {/* 全記事の読了時間がそろっているときだけ合計を出す。欠けがあると少なく見えてしまう */}
+        {series.posts.every((p) => p.readingMinutes) && (
+          <> ・ 合計 約{series.posts.reduce((n, p) => n + (p.readingMinutes ?? 0), 0)}分</>
+        )}
+      </p>
 
       <Link
         href={`/blogs/${series.posts[0].id}`}
