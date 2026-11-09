@@ -1,20 +1,12 @@
 // 既存のeyecatch画像をPNG→WebPに変換してR2に再アップロードし、Notionを更新するスクリプト
-// 使い方: node scripts/convert-eyecatch-webp.mjs [--dry-run]
+// 使い方: op run --env-file=.env.op -- node scripts/convert-eyecatch-webp.mjs [--dry-run]
 import { Client } from '@notionhq/client';
 import { S3Client, PutObjectCommand, GetObjectCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
 import sharp from 'sharp';
-import { readFileSync } from 'fs';
+import { loadEnv } from './load-env.mjs';
 
-// .env.local を手動パース
-const envFile = readFileSync('.env.local', 'utf-8');
-envFile.split('\n').forEach(line => {
-  const idx = line.indexOf('=');
-  if (idx > 0) {
-    const key = line.slice(0, idx).trim();
-    const val = line.slice(idx + 1).trim();
-    if (key && val) process.env[key] = val;
-  }
-});
+// process.env（op run で渡した値）を優先し、無いキーだけ .env.local から補う
+loadEnv();
 
 const NOTION_API_KEY = process.env.NOTION_API_KEY;
 const DATABASE_ID = '2eca0ffb-73d1-811b-aa8e-000bb9c14a3c';
