@@ -132,6 +132,7 @@ async function main() {
   const pages = await publishedPages();
   let checked = 0;
   let changed = 0;
+  let initialized = 0;
 
   for (const page of pages) {
     const props = page.properties;
@@ -162,13 +163,14 @@ async function main() {
       ContentChecked: { date: { start: startedAt } },
     };
     const label = !prevHash ? 'init' : bodyChanged ? 'BODY CHANGED' : 'same';
-    if (bodyChanged) changed++;
+    if (!prevHash) initialized++;
+    else if (bodyChanged) changed++;
     console.log(`${label.padEnd(12)} ${String(minutes).padStart(3)}分 ${title}`);
 
     if (!DRY_RUN) await notion(`/pages/${page.id}`, { method: 'PATCH', body: { properties: update } });
   }
 
-  console.log(`\n${pages.length}本中 ${checked}本を確認、本文の変更 ${changed}本${DRY_RUN ? '（dry-run: 書き込みなし）' : ''}`);
+  console.log(`\n${pages.length}本中 ${checked}本を確認、初回の記録 ${initialized}本、本文の変更 ${changed}本${DRY_RUN ? '（dry-run: 書き込みなし）' : ''}`);
 }
 
 main().catch((e) => {
