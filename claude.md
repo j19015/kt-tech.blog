@@ -81,6 +81,7 @@ kt-tech.blog/
 │   └── gtag.ts                # Google Analytics
 ├── migrations/
 │   └── 0001_reactions.sql     # D1 のスキーマ（reactions）
+├── infra/                     # Terraform（D1・Turnstile）。手順は infra/README.md
 ├── env.d.ts                   # CloudflareEnv（D1 バインディングなど）の型
 ├── wrangler.dev.toml          # next dev 専用。ローカルの D1 を DB として生やす（本番は読まない）
 ├── scripts/

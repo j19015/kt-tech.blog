@@ -82,7 +82,7 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 
 
 .scroller { overflow-x: auto; border: 1px solid var(--color-rule-2); border-radius: var(--radius-card); }
 /* CANVAS SIZE: set width/height here AND on svg.edges AND its viewBox — keep the three in sync */
-.canvas { position: relative; width: 880px; height: 800px; background: var(--color-paper);
+.canvas { position: relative; width: 1020px; height: 800px; background: var(--color-paper);
   background-image:
     linear-gradient(var(--color-rule) 1px, transparent 1px),
     linear-gradient(90deg, var(--color-rule) 1px, transparent 1px);
@@ -106,6 +106,8 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 
 .group.gb { border:1.5px solid var(--color-accent-soft); background: var(--color-accent-tint); }
 .group.ga > .g-label, .group.ga-nested > .g-label { color: var(--color-g1-ink); }
 .group.gb > .g-label { color: var(--color-accent); }
+.group.gc { border:1.5px solid var(--color-neutral); }   /* developer's machine */
+.group.gc > .g-label { color: var(--color-ink-2); }
 .group.aws { border:1.5px solid var(--color-ink); border-radius:0; }
 .group.aws > .g-label { top:-1.5px; left:-1.5px; gap:8px; color: var(--color-ink); }
 .group.aws > .g-label img { width:30px; height:30px; }
@@ -145,7 +147,7 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 
 .node .name span, .node .role span { background: var(--color-veil); backdrop-filter: blur(1.5px);
   padding: 0 var(--space-xs); border-radius: 3px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 
-svg.edges { position:absolute; inset:0; width:880px; height:800px; pointer-events:none; }
+svg.edges { position:absolute; inset:0; width:1020px; height:800px; pointer-events:none; }
 .e  { stroke: var(--color-accent); stroke-width:1.6; fill:none; }   /* primary flow */
 .n  { stroke: var(--color-neutral); stroke-width:1.4; fill:none; }  /* internal */
 path.aws { stroke: var(--color-ink); stroke-width:1.6; fill:none; }
@@ -175,11 +177,11 @@ path.aws { stroke: var(--color-ink); stroke-width:1.6; fill:none; }
       <div class="kicker">kt-tech.blog / architecture / 2026-11</div>
       <h1>kt-tech.blog のシステム構成</h1>
     </div>
-    <p class="lede">Notion で書いた記事を Cloudflare Pages の Edge で描画し、CDN で 7 日間キャッシュして配信する。</p>
+    <p class="lede">Notion で書いた記事を Cloudflare Pages の Edge で描画し、CDN で 7 日間キャッシュして配信する。「参考になった」の件数は D1 に持ち、Turnstile で bot を弾く。</p>
   </header>
   <div class="scroller">
   <div class="canvas">
-    <div class="group ga" style="left:220px; top:42px; width:384px; height:488px;">
+    <div class="group ga" style="left:220px; top:42px; width:620px; height:488px;">
       <div class="g-label"><img src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjU2IDExNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjU2IiBoZWlnaHQ9IjExNiIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQiPjxwYXRoIGZpbGw9IiNGRkYiIGQ9Im0yMDIuMzU3IDQ5LjM5NC01LjMxMS0yLjEyNEMxNzIuMDg1IDEwMy40MzQgNzIuNzg2IDY5LjI4OSA2Ni44MSA4NS45OTdjLS45OTYgMTEuMjg2IDU0LjIyNyAyLjE0NiA5My43MDYgNC4wNTkgMTIuMDM5LjU4MyAxOC4wNzYgOS42NzEgMTIuOTY0IDI0LjQ4NGwxMC4wNjkuMDMxYzExLjYxNS0zNi4yMDkgNDguNjgzLTE3LjczIDUwLjIzMi0yOS42OC0yLjU0NS03Ljg1Ny00Mi42MDEgMC0zMS40MjUtMzUuNDk3WiIvPjxwYXRoIGZpbGw9IiNGNDgxMUYiIGQ9Ik0xNzYuMzMyIDEwOC4zNDhjMS41OTMtNS4zMSAxLjA2Mi0xMC42MjItMS41OTMtMTMuODA5LTIuNjU2LTMuMTg3LTYuMzc0LTUuMzEtMTEuMTU0LTUuODQyTDcxLjE3IDg3LjYzNGMtLjUzMSAwLTEuMDYyLS41My0xLjU5My0uNTMtLjUzMS0uNTMyLS41MzEtMS4wNjMgMC0xLjU5NC41MzEtMS4wNjIgMS4wNjItMS41OTQgMi4xMjQtMS41OTRsOTIuOTQ2LTEuMDYyYzExLjE1NC0uNTMgMjIuODM5LTkuNTYgMjcuMDg3LTIwLjE4Mmw1LjMxMi0xMy44MDljMC0uNTMyLjUzMS0xLjA2MyAwLTEuNTk0QzE5MS4yMDMgMjAuMTgyIDE2Ni43NzIgMCAxMzguMDkxIDAgMTExLjUzNSAwIDg4LjY5NyAxNi45OTUgODAuNzMgNDAuODk2Yy01LjMxMS0zLjcxOC0xMS42ODQtNS44NDMtMTkuMTItNS4zMS0xMi43NDcgMS4wNjEtMjIuODM4IDExLjY4My0yNC40MzIgMjQuNDMtLjUzMSAzLjE4NyAwIDYuMzc0LjUzMiA5LjU2QzE2Ljk5NiA3MC4xMDcgMCA4Ny4xMDMgMCAxMDguMzQ4YzAgMi4xMjQgMCAzLjcxOC41MzEgNS44NDIgMCAxLjA2MyAxLjA2MiAxLjU5NCAxLjU5NCAxLjU5NGgxNzAuNDg5YzEuMDYyIDAgMi4xMjUtLjUzIDIuMTI1LTEuNTk0bDEuNTkzLTUuODQyWiIvPjxwYXRoIGZpbGw9IiNGQUFEM0YiIGQ9Ik0yMDUuNTQ0IDQ4Ljg2M2gtMi42NTZjLS41MzEgMC0xLjA2Mi41My0xLjU5MyAxLjA2MmwtMy43MTggMTIuNzQ3Yy0xLjU5MyA1LjMxLTEuMDYyIDEwLjYyMyAxLjU5NCAxMy44MDkgMi42NTUgMy4xODcgNi4zNzMgNS4zMSAxMS4xNTMgNS44NDNsMTkuNjUyIDEuMDYyYy41MyAwIDEuMDYyLjUzIDEuNTkzLjUzLjUzLjUzMi41MyAxLjA2MyAwIDEuNTk0LS41MzEgMS4wNjMtMS4wNjIgMS41OTQtMi4xMjUgMS41OTRsLTIwLjE4MiAxLjA2MmMtMTEuMTU0LjUzLTIyLjgzOCA5LjU2LTI3LjA4NyAyMC4xODJsLTEuMDYzIDQuNzhjLS41MzEuNTMyIDAgMS41OTQgMS4wNjMgMS41OTRoNzAuMTA4YzEuMDYyIDAgMS41OTMtLjUzMSAxLjU5My0xLjU5MyAxLjA2Mi00LjI1IDIuMTI0LTkuMDMgMi4xMjQtMTMuODEgMC0yNy42MTgtMjIuODM4LTUwLjQ1Ni01MC40NTYtNTAuNDU2Ii8+PC9zdmc+" alt="">Cloudflare</div>
     </div>
     <div class="group ga-nested" style="left:400px; top:90px; width:180px; height:210px;">
@@ -188,8 +190,11 @@ path.aws { stroke: var(--color-ink); stroke-width:1.6; fill:none; }
     <div class="group gb" style="left:400px; top:560px; width:180px; height:210px;">
       <div class="g-label"><img class="lt" src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTAyNCAxMDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDI0IiBoZWlnaHQ9IjEwMjQiIGZpbGw9Im5vbmUiPjxwYXRoIGZpbGw9IiMxYjFmMjMiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTUxMiAwQzIyOS4xMiAwIDAgMjI5LjEyIDAgNTEyYzAgMjI2LjU2IDE0Ni41NiA0MTcuOTIgMzUwLjA4IDQ4NS43NiAyNS42IDQuNDggMzUuMi0xMC44OCAzNS4yLTI0LjMyIDAtMTIuMTYtLjY0LTUyLjQ4LS42NC05NS4zNi0xMjguNjQgMjMuNjgtMTYxLjkyLTMxLjM2LTE3Mi4xNi02MC4xNi01Ljc2LTE0LjcyLTMwLjcyLTYwLjE2LTUyLjQ4LTcyLjMyLTE3LjkyLTkuNi00My41Mi0zMy4yOC0uNjQtMzMuOTIgNDAuMzItLjY0IDY5LjEyIDM3LjEyIDc4LjcyIDUyLjQ4IDQ2LjA4IDc3LjQ0IDExOS42OCA1NS42OCAxNDkuMTIgNDIuMjQgNC40OC0zMy4yOCAxNy45Mi01NS42OCAzMi42NC02OC40OC0xMTMuOTItMTIuOC0yMzIuOTYtNTYuOTYtMjMyLjk2LTI1Mi44IDAtNTUuNjggMTkuODQtMTAxLjc2IDUyLjQ4LTEzNy42LTUuMTItMTIuOC0yMy4wNC02NS4yOCA1LjEyLTEzNS42OCAwIDAgNDIuODgtMTMuNDQgMTQwLjggNTIuNDggNDAuOTYtMTEuNTIgODQuNDgtMTcuMjggMTI4LTE3LjI4czg3LjA0IDUuNzYgMTI4IDE3LjI4Yzk3LjkyLTY2LjU2IDE0MC44LTUyLjQ4IDE0MC44LTUyLjQ4IDI4LjE2IDcwLjQgMTAuMjQgMTIyLjg4IDUuMTIgMTM1LjY4IDMyLjY0IDM1Ljg0IDUyLjQ4IDgxLjI4IDUyLjQ4IDEzNy42IDAgMTk2LjQ4LTExOS42OCAyNDAtMjMzLjYgMjUyLjggMTguNTYgMTYgMzQuNTYgNDYuNzIgMzQuNTYgOTQuNzIgMCA2OC40OC0uNjQgMTIzLjUyLS42NCAxNDAuOCAwIDEzLjQ0IDkuNiAyOS40NCAzNS4yIDI0LjMyQzg3Ny40NCA5MjkuOTIgMTAyNCA3MzcuOTIgMTAyNCA1MTIgMTAyNCAyMjkuMTIgNzk0Ljg4IDAgNTEyIDAiIGNsaXAtcnVsZT0iZXZlbm9kZCIvPjwvc3ZnPg==" alt=""><img class="dk" src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTAyNCAxMDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTggMEMzLjU4IDAgMCAzLjU4IDAgOEMwIDExLjU0IDIuMjkgMTQuNTMgNS40NyAxNS41OUM1Ljg3IDE1LjY2IDYuMDIgMTUuNDIgNi4wMiAxNS4yMUM2LjAyIDE1LjAyIDYuMDEgMTQuMzkgNi4wMSAxMy43MkM0IDE0LjA5IDMuNDggMTMuMjMgMy4zMiAxMi43OEMzLjIzIDEyLjU1IDIuODQgMTEuODQgMi41IDExLjY1QzIuMjIgMTEuNSAxLjgyIDExLjEzIDIuNDkgMTEuMTJDMy4xMiAxMS4xMSAzLjU3IDExLjcgMy43MiAxMS45NEM0LjQ0IDEzLjE1IDUuNTkgMTIuODEgNi4wNSAxMi42QzYuMTIgMTIuMDggNi4zMyAxMS43MyA2LjU2IDExLjUzQzQuNzggMTEuMzMgMi45MiAxMC42NCAyLjkyIDcuNThDMi45MiA2LjcxIDMuMjMgNS45OSAzLjc0IDUuNDNDMy42NiA1LjIzIDMuMzggNC40MSAzLjgyIDMuMzFDMy44MiAzLjMxIDQuNDkgMy4xIDYuMDIgNC4xM0M2LjY2IDMuOTUgNy4zNCAzLjg2IDguMDIgMy44NkM4LjcgMy44NiA5LjM4IDMuOTUgMTAuMDIgNC4xM0MxMS41NSAzLjA5IDEyLjIyIDMuMzEgMTIuMjIgMy4zMUMxMi42NiA0LjQxIDEyLjM4IDUuMjMgMTIuMyA1LjQzQzEyLjgxIDUuOTkgMTMuMTIgNi43IDEzLjEyIDcuNThDMTMuMTIgMTAuNjUgMTEuMjUgMTEuMzMgOS40NyAxMS41M0M5Ljc2IDExLjc4IDEwLjAxIDEyLjI2IDEwLjAxIDEzLjAxQzEwLjAxIDE0LjA4IDEwIDE0Ljk0IDEwIDE1LjIxQzEwIDE1LjQyIDEwLjE1IDE1LjY3IDEwLjU1IDE1LjU5QzEzLjcxIDE0LjUzIDE2IDExLjUzIDE2IDhDMTYgMy41OCAxMi40MiAwIDggMFoiIHRyYW5zZm9ybT0ic2NhbGUoNjQpIiBmaWxsPSIjZmZmZiIvPgo8L3N2Zz4K" alt="">GitHub</div>
     </div>
+    <div class="group gc" style="left:610px; top:560px; width:386px; height:210px;">
+      <div class="g-label"><img class="lt" src="data:image/svg+xml;base64,PCEtLSBAbGljZW5zZSBsdWNpZGUtc3RhdGljIHYwLjQ0MS4wIC0gSVNDIC0tPgo8c3ZnCiAgY2xhc3M9Imx1Y2lkZSBsdWNpZGUtbGFwdG9wIgogIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICB3aWR0aD0iMjQiCiAgaGVpZ2h0PSIyNCIKICB2aWV3Qm94PSIwIDAgMjQgMjQiCiAgZmlsbD0ibm9uZSIKICBzdHJva2U9IiMzZDQ2NjAiCiAgc3Ryb2tlLXdpZHRoPSIyIgogIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIKICBzdHJva2UtbGluZWpvaW49InJvdW5kIgo+CiAgPHBhdGggZD0iTTIwIDE2VjdhMiAyIDAgMCAwLTItMkg2YTIgMiAwIDAgMC0yIDJ2OW0xNiAwSDRtMTYgMCAxLjI4IDIuNTVhMSAxIDAgMCAxLS45IDEuNDVIMy42MmExIDEgMCAwIDEtLjktMS40NUw0IDE2IiAvPgo8L3N2Zz4K" alt=""><img class="dk" src="data:image/svg+xml;base64,PCEtLSBAbGljZW5zZSBsdWNpZGUtc3RhdGljIHYwLjQ0MS4wIC0gSVNDIC0tPgo8c3ZnCiAgY2xhc3M9Imx1Y2lkZSBsdWNpZGUtbGFwdG9wIgogIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICB3aWR0aD0iMjQiCiAgaGVpZ2h0PSIyNCIKICB2aWV3Qm94PSIwIDAgMjQgMjQiCiAgZmlsbD0ibm9uZSIKICBzdHJva2U9IiNkNWRhZTQiCiAgc3Ryb2tlLXdpZHRoPSIyIgogIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIKICBzdHJva2UtbGluZWpvaW49InJvdW5kIgo+CiAgPHBhdGggZD0iTTIwIDE2VjdhMiAyIDAgMCAwLTItMkg2YTIgMiAwIDAgMC0yIDJ2OW0xNiAwSDRtMTYgMCAxLjI4IDIuNTVhMSAxIDAgMCAxLS45IDEuNDVIMy42MmExIDEgMCAwIDEtLjktMS40NUw0IDE2IiAvPgo8L3N2Zz4K" alt="">Local</div>
+    </div>
 
-    <svg class="edges" viewBox="0 0 880 800" aria-hidden="true">
+    <svg class="edges" viewBox="0 0 1020 800" aria-hidden="true">
       <defs>
         <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
           <path d="M0 0 L10 5 L0 10 z" fill="context-stroke"/>
@@ -199,20 +204,32 @@ path.aws { stroke: var(--color-ink); stroke-width:1.6; fill:none; }
       <text class="el a" x="205" y="172" text-anchor="middle">HTTPS</text>
       <path class="e" d="M346 180 H454" marker-end="url(#ar)"/>
       <text class="el a" x="372" y="172" text-anchor="middle">miss</text>
-      <path class="e" d="M526 180 H724" marker-end="url(#ar)"/>
-      <text class="el a" x="655" y="172" text-anchor="middle">REST API</text>
+      <path class="e" d="M526 180 H894" marker-end="url(#ar)"/>
+      <text class="el a" x="800" y="172" text-anchor="middle">REST API</text>
+
+      <path class="n" d="M526 198 H760 V374" marker-end="url(#ar)"/>
+      <text class="el" x="750" y="292" text-anchor="end">binding DB</text>
+      <path class="n" d="M510 256 V410 H584" marker-end="url(#ar)"/>
+      <text class="el" x="520" y="336">siteverify</text>
 
       <path class="n" d="M120 256 V410 H274" marker-end="url(#ar)"/>
       <text class="el" x="130" y="336">images</text>
       <path class="n" d="M80 256 V614" marker-end="url(#ar)"/>
-      <path class="n" d="M760 374 V256" marker-end="url(#ar)"/>
-      <text class="el" x="770" y="318">write</text>
+      <path class="n" d="M930 374 V256" marker-end="url(#ar)"/>
+      <text class="el" x="940" y="318">write</text>
 
       <path class="n dash" d="M310 614 V486" marker-end="url(#ar)"/>
       <text class="el" x="320" y="549">eyecatch</text>
       <path class="n dash" d="M490 614 V256" marker-end="url(#ar)"/>
-      <text class="el" x="500" y="436">deploy</text>
-      <text class="el" x="500" y="452">purge · warm</text>
+      <text class="el" x="500" y="500">deploy</text>
+      <text class="el" x="500" y="516">purge · warm</text>
+
+      <path class="n dash" d="M690 614 V545"/>
+      <path class="n dash" d="M690 545 H620 V486" marker-end="url(#ar)"/>
+      <path class="n dash" d="M690 545 H760 V486" marker-end="url(#ar)"/>
+      <text class="el" x="700" y="600">apply</text>
+      <path class="n dash" d="M864 650 H726" marker-end="url(#ar)"/>
+      <text class="el" x="795" y="642" text-anchor="middle">op run</text>
     </svg>
 
     <div class="node" style="left:34px;top:150px">
@@ -227,15 +244,23 @@ path.aws { stroke: var(--color-ink); stroke-width:1.6; fill:none; }
       <div class="tile"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIj48bWFzayBoZWlnaHQ9IjE4MCIgaWQ9IjpyODptYXNrMF80MDhfMTM0IiBtYXNrVW5pdHM9InVzZXJTcGFjZU9uVXNlIiB3aWR0aD0iMTgwIiB4PSIwIiB5PSIwIiBzdHlsZT0ibWFzay10eXBlOiBhbHBoYTsiPjxjaXJjbGUgY3g9IjkwIiBjeT0iOTAiIGZpbGw9ImJsYWNrIiByPSI5MCI+PC9jaXJjbGU+PC9tYXNrPjxnIG1hc2s9InVybCgjOnI4Om1hc2swXzQwOF8xMzQpIj48Y2lyY2xlIGN4PSI5MCIgY3k9IjkwIiBkYXRhLWNpcmNsZT0idHJ1ZSIgZmlsbD0iYmxhY2siIHI9IjkwIj48L2NpcmNsZT48cGF0aCBkPSJNMTQ5LjUwOCAxNTcuNTJMNjkuMTQyIDU0SDU0VjEyNS45N0g2Ni4xMTM2VjY5LjM4MzZMMTM5Ljk5OSAxNjQuODQ1QzE0My4zMzMgMTYyLjYxNCAxNDYuNTA5IDE2MC4xNjUgMTQ5LjUwOCAxNTcuNTJaIiBmaWxsPSJ1cmwoIzpyODpwYWludDBfbGluZWFyXzQwOF8xMzQpIj48L3BhdGg+PHJlY3QgZmlsbD0idXJsKCM6cjg6cGFpbnQxX2xpbmVhcl80MDhfMTM0KSIgaGVpZ2h0PSI3MiIgd2lkdGg9IjEyIiB4PSIxMTUiIHk9IjU0Ij48L3JlY3Q+PC9nPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgaWQ9IjpyODpwYWludDBfbGluZWFyXzQwOF8xMzQiIHgxPSIxMDkiIHgyPSIxNDQuNSIgeTE9IjExNi41IiB5Mj0iMTYwLjUiPjxzdG9wIHN0b3AtY29sb3I9IndoaXRlIj48L3N0b3A+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSJ3aGl0ZSIgc3RvcC1vcGFjaXR5PSIwIj48L3N0b3A+PC9saW5lYXJHcmFkaWVudD48bGluZWFyR3JhZGllbnQgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiIGlkPSI6cjg6cGFpbnQxX2xpbmVhcl80MDhfMTM0IiB4MT0iMTIxIiB4Mj0iMTIwLjc5OSIgeTE9IjU0IiB5Mj0iMTA2Ljg3NSI+PHN0b3Agc3RvcC1jb2xvcj0id2hpdGUiPjwvc3RvcD48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IndoaXRlIiBzdG9wLW9wYWNpdHk9IjAiPjwvc3RvcD48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48L3N2Zz4=" alt=""></div>
       <div class="name"><span>Next.js 15</span></div><div class="role"><span>edge runtime</span></div>
     </div>
-    <div class="node" style="left:694px;top:150px">
+    <div class="node" style="left:864px;top:150px">
       <div class="tile"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNTYiIGhlaWdodD0iMjY4IiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWlkWU1pZCIgdmlld0JveD0iMCAwIDI1NiAyNjgiPjxwYXRoIGZpbGw9IiNGRkYiIGQ9Ik0xNi4wOTIgMTEuNTM4IDE2NC4wOS42MDhjMTguMTc5LTEuNTYgMjIuODUtLjUwOCAzNC4yOCA3LjgwMWw0Ny4yNDMgMzMuMjgyQzI1My40MDYgNDcuNDE0IDI1NiA0OC45NzUgMjU2IDU1LjIwN3YxODIuNTI3YzAgMTEuNDM5LTQuMTU1IDE4LjIwNS0xOC42OTYgMTkuMjRMNjUuNDQgMjY3LjM3OGMtMTAuOTEzLjUxNy0xNi4xMS0xLjA0My0yMS44MjUtOC4zMjdMOC44MjYgMjEzLjgxNEMyLjU4NiAyMDUuNDg3IDAgMTk5LjI1NCAwIDE5MS45N1YyOS43MjZjMC05LjM1MiA0LjE1NS0xNy4xNTMgMTYuMDkyLTE4LjE4OFoiLz48cGF0aCBkPSJNMTY0LjA5LjYwOCAxNi4wOTIgMTEuNTM4QzQuMTU1IDEyLjU3MyAwIDIwLjM3NCAwIDI5LjcyNnYxNjIuMjQ1YzAgNy4yODQgMi41ODUgMTMuNTE2IDguODI2IDIxLjg0M2wzNC43ODkgNDUuMjM3YzUuNzE1IDcuMjg0IDEwLjkxMiA4Ljg0NCAyMS44MjUgOC4zMjdsMTcxLjg2NC0xMC40MDRjMTQuNTMyLTEuMDM1IDE4LjY5Ni03LjgwMSAxOC42OTYtMTkuMjRWNTUuMjA3YzAtNS45MTEtMi4zMzYtNy42MTQtOS4yMS0xMi42NmwtMS4xODUtLjg1NkwxOTguMzcgOC40MDlDMTg2Ljk0LjEgMTgyLjI3LS45NTIgMTY0LjA5LjYwOFpNNjkuMzI3IDUyLjIyYy0xNC4wMzMuOTQ1LTE3LjIxNiAxLjE1OS0yNS4xODYtNS4zMjNMMjMuODc2IDMwLjc3OGMtMi4wNi0yLjA4Ni0xLjAyNi00LjY5IDQuMTYzLTUuMjA3bDE0Mi4yNzQtMTAuMzk1YzExLjk0Ny0xLjA0MyAxOC4xNyAzLjEyIDIyLjg0MiA2Ljc1OGwyNC40MDEgMTcuNjhjMS4wNDMuNTI1IDMuNjM4IDMuNjM3LjUxNyAzLjYzN0w3MS4xNDYgNTIuMDk1bC0xLjgxOS4xMjVabS0xNi4zNiAxODMuOTU0VjgxLjIyMmMwLTYuNzY3IDIuMDc3LTkuODg3IDguMy0xMC40MTNMMjMwLjAyIDYwLjkzYzUuNzI0LS41MTcgOC4zMSAzLjEyIDguMzEgOS44Nzl2MTUzLjkxN2MwIDYuNzY3LTEuMDQ0IDEyLjQ5LTEwLjM4NyAxMy4wMDhsLTE2MS40ODcgOS4zNjFjLTkuMzQzLjUxNy0xMy40ODktMi41OTQtMTMuNDg5LTEwLjkyMVpNMjEyLjM3NyA4OS41M2MxLjAzNCA0LjY4MSAwIDkuMzYyLTQuNjgxIDkuODk3bC03Ljc4MyAxLjU0MnYxMTQuNDA0Yy02Ljc1OCAzLjYzNy0xMi45ODEgNS43MTUtMTguMTggNS43MTUtOC4zMDggMC0xMC4zODYtMi42MDQtMTYuNjA5LTEwLjM5NmwtNTAuODk4LTgwLjA3OXY3Ny40NzZsMTYuMSAzLjY0NnMwIDkuMzYyLTEyLjk4OSA5LjM2MmwtMzUuODE0IDIuMDc3Yy0xLjA0My0yLjA4NiAwLTcuMjg0IDMuNjMtOC4zMThsOS4zNTEtMi41OTVWMTA5LjgyM2wtMTIuOTgtMS4wNTJjLTEuMDQ0LTQuNjggMS41NS0xMS40MzkgOC44MjYtMTEuOTY1bDM4LjQyNi0yLjU4NSA1Mi45NTggODEuMTEzdi03MS43NmwtMTMuNDk4LTEuNTUyYy0xLjA0My01LjczMyAzLjExMS05Ljg5NiA4LjMtMTAuNDA0bDM1Ljg0LTIuMDg3WiIvPjwvc3ZnPg==" alt=""></div>
       <div class="name"><span>Notion</span></div><div class="role"><span>headless cms</span></div>
     </div>
     <div class="node" style="left:244px;top:380px">
       <div class="tile"><img src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjU2IDExNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjU2IiBoZWlnaHQ9IjExNiIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQiPjxwYXRoIGZpbGw9IiNGRkYiIGQ9Im0yMDIuMzU3IDQ5LjM5NC01LjMxMS0yLjEyNEMxNzIuMDg1IDEwMy40MzQgNzIuNzg2IDY5LjI4OSA2Ni44MSA4NS45OTdjLS45OTYgMTEuMjg2IDU0LjIyNyAyLjE0NiA5My43MDYgNC4wNTkgMTIuMDM5LjU4MyAxOC4wNzYgOS42NzEgMTIuOTY0IDI0LjQ4NGwxMC4wNjkuMDMxYzExLjYxNS0zNi4yMDkgNDguNjgzLTE3LjczIDUwLjIzMi0yOS42OC0yLjU0NS03Ljg1Ny00Mi42MDEgMC0zMS40MjUtMzUuNDk3WiIvPjxwYXRoIGZpbGw9IiNGNDgxMUYiIGQ9Ik0xNzYuMzMyIDEwOC4zNDhjMS41OTMtNS4zMSAxLjA2Mi0xMC42MjItMS41OTMtMTMuODA5LTIuNjU2LTMuMTg3LTYuMzc0LTUuMzEtMTEuMTU0LTUuODQyTDcxLjE3IDg3LjYzNGMtLjUzMSAwLTEuMDYyLS41My0xLjU5My0uNTMtLjUzMS0uNTMyLS41MzEtMS4wNjMgMC0xLjU5NC41MzEtMS4wNjIgMS4wNjItMS41OTQgMi4xMjQtMS41OTRsOTIuOTQ2LTEuMDYyYzExLjE1NC0uNTMgMjIuODM5LTkuNTYgMjcuMDg3LTIwLjE4Mmw1LjMxMi0xMy44MDljMC0uNTMyLjUzMS0xLjA2MyAwLTEuNTk0QzE5MS4yMDMgMjAuMTgyIDE2Ni43NzIgMCAxMzguMDkxIDAgMTExLjUzNSAwIDg4LjY5NyAxNi45OTUgODAuNzMgNDAuODk2Yy01LjMxMS0zLjcxOC0xMS42ODQtNS44NDMtMTkuMTItNS4zMS0xMi43NDcgMS4wNjEtMjIuODM4IDExLjY4My0yNC40MzIgMjQuNDMtLjUzMSAzLjE4NyAwIDYuMzc0LjUzMiA5LjU2QzE2Ljk5NiA3MC4xMDcgMCA4Ny4xMDMgMCAxMDguMzQ4YzAgMi4xMjQgMCAzLjcxOC41MzEgNS44NDIgMCAxLjA2MyAxLjA2MiAxLjU5NCAxLjU5NCAxLjU5NGgxNzAuNDg5YzEuMDYyIDAgMi4xMjUtLjUzIDIuMTI1LTEuNTk0bDEuNTkzLTUuODQyWiIvPjxwYXRoIGZpbGw9IiNGQUFEM0YiIGQ9Ik0yMDUuNTQ0IDQ4Ljg2M2gtMi42NTZjLS41MzEgMC0xLjA2Mi41My0xLjU5MyAxLjA2MmwtMy43MTggMTIuNzQ3Yy0xLjU5MyA1LjMxLTEuMDYyIDEwLjYyMyAxLjU5NCAxMy44MDkgMi42NTUgMy4xODcgNi4zNzMgNS4zMSAxMS4xNTMgNS44NDNsMTkuNjUyIDEuMDYyYy41MyAwIDEuMDYyLjUzIDEuNTkzLjUzLjUzLjUzMi41MyAxLjA2MyAwIDEuNTk0LS41MzEgMS4wNjMtMS4wNjIgMS41OTQtMi4xMjUgMS41OTRsLTIwLjE4MiAxLjA2MmMtMTEuMTU0LjUzLTIyLjgzOCA5LjU2LTI3LjA4NyAyMC4xODJsLTEuMDYzIDQuNzhjLS41MzEuNTMyIDAgMS41OTQgMS4wNjMgMS41OTRoNzAuMTA4YzEuMDYyIDAgMS41OTMtLjUzMSAxLjU5My0xLjU5MyAxLjA2Mi00LjI1IDIuMTI0LTkuMDMgMi4xMjQtMTMuODEgMC0yNy42MTgtMjIuODM4LTUwLjQ1Ni01MC40NTYtNTAuNDU2Ii8+PC9zdmc+" alt=""></div>
-      <div class="name"><span>Cloudflare R2</span></div><div class="role"><span>images (webp)</span></div>
+      <div class="name"><span>Cloudflare R2</span></div><div class="role"><span>images · tfstate</span></div>
+    </div>
+    <div class="node" style="left:554px;top:380px">
+      <div class="tile"><img src="data:image/svg+xml;base64,PCEtLSBAbGljZW5zZSBsdWNpZGUtc3RhdGljIHYwLjQ0MS4wIC0gSVNDIC0tPgo8c3ZnCiAgY2xhc3M9Imx1Y2lkZSBsdWNpZGUtc2hpZWxkLWNoZWNrIgogIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICB3aWR0aD0iMjQiCiAgaGVpZ2h0PSIyNCIKICB2aWV3Qm94PSIwIDAgMjQgMjQiCiAgZmlsbD0ibm9uZSIKICBzdHJva2U9IiNGMzgwMjAiCiAgc3Ryb2tlLXdpZHRoPSIxLjYiCiAgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIgogIHN0cm9rZS1saW5lam9pbj0icm91bmQiCj4KICA8cGF0aCBkPSJNMjAgMTNjMCA1LTMuNSA3LjUtNy42NiA4Ljk1YTEgMSAwIDAgMS0uNjctLjAxQzcuNSAyMC41IDQgMTggNCAxM1Y2YTEgMSAwIDAgMSAxLTFjMiAwIDQuNS0xLjIgNi4yNC0yLjcyYTEuMTcgMS4xNyAwIDAgMSAxLjUyIDBDMTQuNTEgMy44MSAxNyA1IDE5IDVhMSAxIDAgMCAxIDEgMXoiIC8+CiAgPHBhdGggZD0ibTkgMTIgMiAyIDQtNCIgLz4KPC9zdmc+Cg==" alt=""></div>
+      <div class="name"><span>Turnstile</span></div><div class="role"><span>bot check</span></div>
     </div>
     <div class="node" style="left:694px;top:380px">
+      <div class="tile"><img src="data:image/svg+xml;base64,PCEtLSBAbGljZW5zZSBsdWNpZGUtc3RhdGljIHYwLjQ0MS4wIC0gSVNDIC0tPgo8c3ZnCiAgY2xhc3M9Imx1Y2lkZSBsdWNpZGUtZGF0YWJhc2UiCiAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogIHdpZHRoPSIyNCIKICBoZWlnaHQ9IjI0IgogIHZpZXdCb3g9IjAgMCAyNCAyNCIKICBmaWxsPSJub25lIgogIHN0cm9rZT0iI0YzODAyMCIKICBzdHJva2Utd2lkdGg9IjEuNiIKICBzdHJva2UtbGluZWNhcD0icm91bmQiCiAgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIKPgogIDxlbGxpcHNlIGN4PSIxMiIgY3k9IjUiIHJ4PSI5IiByeT0iMyIgLz4KICA8cGF0aCBkPSJNMyA1VjE5QTkgMyAwIDAgMCAyMSAxOVY1IiAvPgogIDxwYXRoIGQ9Ik0zIDEyQTkgMyAwIDAgMCAyMSAxMiIgLz4KPC9zdmc+Cg==" alt=""></div>
+      <div class="name"><span>Cloudflare D1</span></div><div class="role"><span>reactions</span></div>
+    </div>
+    <div class="node" style="left:864px;top:380px">
       <div class="tile"><img src="data:image/svg+xml;base64,PCEtLSBAbGljZW5zZSBsdWNpZGUtc3RhdGljIHYwLjQ0MS4wIC0gSVNDIC0tPgo8c3ZnCiAgY2xhc3M9Imx1Y2lkZSBsdWNpZGUtcGVuLWxpbmUiCiAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogIHdpZHRoPSIyNCIKICBoZWlnaHQ9IjI0IgogIHZpZXdCb3g9IjAgMCAyNCAyNCIKICBmaWxsPSJub25lIgogIHN0cm9rZT0iIzNkNDY2MCIKICBzdHJva2Utd2lkdGg9IjIiCiAgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIgogIHN0cm9rZS1saW5lam9pbj0icm91bmQiCj4KICA8cGF0aCBkPSJNMTIgMjBoOSIgLz4KICA8cGF0aCBkPSJNMTYuMzc2IDMuNjIyYTEgMSAwIDAgMSAzLjAwMiAzLjAwMkw3LjM2OCAxOC42MzVhMiAyIDAgMCAxLS44NTUuNTA2bC0yLjg3Mi44MzhhLjUuNSAwIDAgMS0uNjItLjYybC44MzgtMi44NzJhMiAyIDAgMCAxIC41MDYtLjg1NHoiIC8+Cjwvc3ZnPgo=" alt=""></div>
       <div class="name"><span>Author</span></div><div class="role"><span>writes posts</span></div>
     </div>
@@ -251,12 +276,20 @@ path.aws { stroke: var(--color-ink); stroke-width:1.6; fill:none; }
       <div class="tile"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cGF0aCBmaWxsPSIjMjA4OGZmIiBkPSJNMjYuNjY2IDBDMTEuOTcgMCAwIDExLjk3IDAgMjYuNjY2YzAgMTIuODcgOS4xODEgMjMuNjUxIDIxLjMzNCAyNi4xM3YzNy44N2MwIDExLjc3IDkuNjggMjEuMzM0IDIxLjMzMiAyMS4zMzRoLjE5NWMxLjMwMiA5LjAyMyA5LjEgMTYgMTguNDczIDE2QzcxLjYxMiAxMjggODAgMTE5LjYxMiA4MCAxMDkuMzM0cy04LjM4OC0xOC42NjgtMTguNjY2LTE4LjY2OGMtOS4zNzIgMC0xNy4xNyA2Ljk3Ny0xOC40NzMgMTZoLS4xOTVjLTguNzM3IDAtMTYtNy4xNTItMTYtMTZWNjMuNzc5YTE4LjUxNCAxOC41MTQgMCAwIDAgMTMuMjQgNS41NTVoMi45NTVjMS4zMDMgOS4wMjMgOS4xIDE2IDE4LjQ3MyAxNiA5LjM3MiAwIDE3LjE2OS02Ljk3NyAxOC40Ny0xNmgxMS4wNTdjMS4zMDMgOS4wMjMgOS4xIDE2IDE4LjQ3MyAxNiAxMC4yNzggMCAxOC42NjYtOC4zOSAxOC42NjYtMTguNjY4QzEyOCA1Ni4zODggMTE5LjYxMiA0OCAxMDkuMzM0IDQ4Yy05LjM3MyAwLTE3LjE3MSA2Ljk3Ny0xOC40NzMgMTZINzkuODA1Yy0xLjMwMS05LjAyMy05LjA5OC0xNi0xOC40NzEtMTZzLTE3LjE3MSA2Ljk3Ny0xOC40NzMgMTZoLTIuOTU1Yy02LjQzMyAwLTExLjc5My00LjU4OS0xMi45ODgtMTAuNjcyIDE0LjU4LS4xMzYgMjYuNDE2LTEyLjA1IDI2LjQxNi0yNi42NjJDNTMuMzM0IDExLjk3IDQxLjM2MiAwIDI2LjY2NiAwem0wIDUuMzM0QTIxLjI5MiAyMS4yOTIgMCAwIDEgNDggMjYuNjY2IDIxLjI5NCAyMS4yOTQgMCAwIDEgMjYuNjY2IDQ4IDIxLjI5MiAyMS4yOTIgMCAwIDEgNS4zMzQgMjYuNjY2IDIxLjI5IDIxLjI5IDAgMCAxIDI2LjY2NiA1LjMzNHptLTUuMjE1IDcuNTQxQzE4LjY3IDEyLjg4OSAxNiAxNS4xMjMgMTYgMTguMTY2djE3LjA0M2MwIDQuMDQzIDQuNzA5IDYuNjYzIDguMTQ1IDQuNTMzbDEzLjYzNC04LjQ1NWMzLjI1Ny0yLjAyIDMuMjc0LTcuMDAyLjAzMi05LjA0NWwtMTMuNjM1LTguNTlhNS4wMjQgNS4wMjQgMCAwIDAtMi43MjUtLjc3N3ptLS4xMTcgNS4yOTEgMTMuNjM1IDguNTg4LTEzLjYzNSA4LjQ1NVYxOC4xNjZ6bTQwIDM1LjE2OGExMy4yOSAxMy4yOSAwIDAgMSAxMy4zMzIgMTMuMzMyQTEzLjI5MyAxMy4yOTMgMCAwIDEgNjEuMzM0IDgwIDEzLjI5NCAxMy4yOTQgMCAwIDEgNDggNjYuNjY2YTEzLjI5MyAxMy4yOTMgMCAwIDEgMTMuMzM0LTEzLjMzMnptNDggMGExMy4yOSAxMy4yOSAwIDAgMSAxMy4zMzIgMTMuMzMyQTEzLjI5MyAxMy4yOTMgMCAwIDEgMTA5LjMzNCA4MCAxMy4yOTQgMTMuMjk0IDAgMCAxIDk2IDY2LjY2NmExMy4yOTMgMTMuMjkzIDAgMCAxIDEzLjMzNC0xMy4zMzJ6bS00Mi41NjggNi45NTFhMi42NjcgMi42NjcgMCAwIDAtMS44ODcuNzhsLTYuMyA2LjI5NC0yLjA5My0yLjA4NGEyLjY2NyAyLjY2NyAwIDAgMC0zLjc3MS4wMDYgMi42NjcgMi42NjcgMCAwIDAgLjAwOCAzLjc3MmwzLjk3NCAzLjk2YTIuNjY3IDIuNjY3IDAgMCAwIDMuNzY2LS4wMDFsOC4xODUtOC4xNzRhMi42NjcgMi42NjcgMCAwIDAgLjAwMi0zLjc3MiAyLjY2NyAyLjY2NyAwIDAgMC0xLjg4NC0uNzh6bTQ4IDBhMi42NjcgMi42NjcgMCAwIDAtMS44ODcuNzhsLTYuMyA2LjI5NC0yLjA5My0yLjA4NGEyLjY2NyAyLjY2NyAwIDAgMC0zLjc3MS4wMDYgMi42NjcgMi42NjcgMCAwIDAgLjAwOCAzLjc3MmwzLjk3NCAzLjk2YTIuNjY3IDIuNjY3IDAgMCAwIDMuNzY2LS4wMDFsOC4xODUtOC4xNzRhMi42NjcgMi42NjcgMCAwIDAgLjAwMi0zLjc3MiAyLjY2NyAyLjY2NyAwIDAgMC0xLjg4NC0uNzh6TTYxLjMzNCA5NmExMy4yOTMgMTMuMjkzIDAgMCAxIDEzLjMzMiAxMy4zMzQgMTMuMjkgMTMuMjkgMCAwIDEtMTMuMzMyIDEzLjMzMkExMy4yOTMgMTMuMjkzIDAgMCAxIDQ4IDEwOS4zMzQgMTMuMjk0IDEzLjI5NCAwIDAgMSA2MS4zMzQgOTZ6TTU2IDEwNS4zMzRjLTIuMTkzIDAtNCAxLjgwNy00IDQgMCAyLjE5NSAxLjgwOCA0IDQgNHM0LTEuODA1IDQtNGMwLTIuMTkzLTEuODA3LTQtNC00em0xMC42NjYgMGMtMi4xOTMgMC00IDEuODA3LTQgNCAwIDIuMTk1IDEuODA4IDQgNCA0czQtMS44MDUgNC00YzAtMi4xOTMtMS44MDctNC00LTR6TTU2IDEwOGMuNzUgMCAxLjMzNC41ODUgMS4zMzQgMS4zMzQgMCAuNzUzLS41ODMgMS4zMzItMS4zMzQgMS4zMzItLjc1IDAtMS4zMzQtLjU4LTEuMzM0LTEuMzMyIDAtLjc1LjU4NS0xLjMzNCAxLjMzNC0xLjMzNHptMTAuNjY2IDBjLjc1IDAgMS4zMzQuNTg1IDEuMzM0IDEuMzM0IDAgLjc1My0uNTgzIDEuMzMyLTEuMzM0IDEuMzMyLS43NSAwLTEuMzMyLS41OC0xLjMzMi0xLjMzMiAwLS43NS41ODMtMS4zMzQgMS4zMzItMS4zMzR6Ii8+PHBhdGggZmlsbD0iIzc5YjhmZiIgZD0iTTEwOS4zMzQgOTAuNjY2Yy05LjM4MyAwLTE3LjE4OCA2Ljk5My0xOC40NzcgMTYuMDMxYTIuNjY3IDIuNjY3IDAgMCAwLS4yNjUtLjAxMWwtMi43LjA5YTIuNjY3IDIuNjY3IDAgMCAwLTIuNTc4IDIuNzUxIDIuNjY3IDIuNjY3IDAgMCAwIDIuNzUyIDIuNTc4bDIuNy0uMDg3YTIuNjY3IDIuNjY3IDAgMCAwIC4wOTctLjAwNkM5Mi4xNyAxMjEuMDI5IDk5Ljk2NSAxMjggMTA5LjMzNCAxMjhjMTAuMjc4IDAgMTguNjY2LTguMzg4IDE4LjY2Ni0xOC42NjZzLTguMzg4LTE4LjY2OC0xOC42NjYtMTguNjY4em0wIDUuMzM0YTEzLjI5MyAxMy4yOTMgMCAwIDEgMTMuMzMyIDEzLjMzNCAxMy4yOSAxMy4yOSAwIDAgMS0xMy4zMzIgMTMuMzMyQTEzLjI5MyAxMy4yOTMgMCAwIDEgOTYgMTA5LjMzNCAxMy4yOTQgMTMuMjk0IDAgMCAxIDEwOS4zMzQgOTZ6Ii8+PC9zdmc+Cg==" alt=""></div>
       <div class="name"><span>GitHub Actions</span></div><div class="role"><span>ci / deploy</span></div>
     </div>
+    <div class="node" style="left:624px;top:620px">
+      <div class="tile"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJMb2dvcyIgd2lkdGg9IjUwIiBoZWlnaHQ9IjcyIiB2aWV3Qm94PSIwIDAgNTAgNzIiPjxkZWZzPjxzdHlsZT4uY2xzLTF7ZmlsbDojYTA2N2RhO2ZpbGwtcnVsZTpldmVub2RkO3N0cm9rZS13aWR0aDowfTwvc3R5bGU+PC9kZWZzPjxwYXRoIGQ9Im0xNy4yIDE3LjUgMTUuNSA5djE4bC0xNS41LTl2LTE4Wk0zNC41IDI2LjV2MThsMTUuNS05di0xOGwtMTUuNSA5Wk0wIDcuNXYxOGwxNS41IDl2LTE4TDAgNy41Wk0xNy4yIDU1LjVsMTUuNSA5di0xOGwtMTUuNS05djE4WiIgY2xhc3M9ImNscy0xIi8+PC9zdmc+" alt=""></div>
+      <div class="name"><span>Terraform</span></div><div class="role"><span>iac · infra/</span></div>
+    </div>
+    <div class="node" style="left:834px;top:620px">
+      <div class="tile"><img src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMzIgMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiICB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIGZpbGw9Im5vbmUiPjxnIGNsaXAtcGF0aD0idXJsKCNhKSI+PHBhdGggZmlsbD0iYmxhY2siIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMzIgMTZjMC04LjgzNi03LjE2NC0xNi0xNi0xNlMwIDcuMTY0IDAgMTZjMCA4LjgzNyA3LjE2NCAxNiAxNiAxNnMxNi03LjE2MyAxNi0xNlpNMTMuMDYzIDYuOTg5Yy0uMTAxLjE5OS0uMTAxLjQ1OS0uMTAxLjk4djQuMTA3YzAgLjEzIDAgLjE5NS4wMTcuMjU2YS40NjQuNDY0IDAgMCAwIC4wNy4xNDhjLjAzNi4wNS4wODcuMDkyLjE4OC4xNzRsMS4wNzkuODc2Yy4xMjEuMDk5LjE4Mi4xNDguMjA0LjIwOC4wMi4wNTIuMDIuMTEgMCAuMTYyLS4wMjIuMDU5LS4wODMuMTA4LS4yMDQuMjA3bC0xLjA4Ljg3N2MtLjEuMDgyLS4xNS4xMjMtLjE4Ny4xNzNhLjQ2My40NjMgMCAwIDAtLjA3LjE0OWMtLjAxNy4wNi0uMDE3LjEyNS0uMDE3LjI1NXY4LjQ3YzAgLjUyMSAwIC43ODIuMTAxLjk4YS45My45MyAwIDAgMCAuNDA3LjQwN2MuMTk4LjEwMS40NTkuMTAxLjk4LjEwMWgzLjFjLjUyMSAwIC43ODEgMCAuOTgtLjEwMWEuOTMuOTMgMCAwIDAgLjQwNy0uNDA3Yy4xMDEtLjE5OC4xMDEtLjQ1OS4xMDEtLjk4di00LjEwN2MwLS4xMyAwLS4xOTUtLjAxNi0uMjU1YS40NjUuNDY1IDAgMCAwLS4wNzEtLjE0OSAxLjAxOSAxLjAxOSAwIDAgMC0uMTg4LS4xNzRsLTEuMDc5LS44NzZjLS4xMjEtLjA5OS0uMTgyLS4xNDgtLjIwNC0uMjA4YS4yMzIuMjMyIDAgMCAxIDAtLjE2MWMuMDIyLS4wNi4wODMtLjExLjIwNC0uMjA4bDEuMDgtLjg3N2MuMS0uMDgxLjE1LS4xMjIuMTg3LS4xNzNhLjQ2Ni40NjYgMCAwIDAgLjA3LS4xNDljLjAxNy0uMDYuMDE3LS4xMjUuMDE3LS4yNTVWNy45N2MwLS41MjEgMC0uNzgxLS4xMDEtLjk4YS45My45MyAwIDAgMC0uNDA3LS40MDdjLS4xOTktLjEwMS0uNDU5LS4xMDEtLjk4LS4xMDFoLTMuMWMtLjUyMSAwLS43ODEgMC0uOTguMTAxYS45My45MyAwIDAgMC0uNDA3LjQwN1oiIC8+PC9nPjxkZWZzPjxjbGlwUGF0aCBpZD0iYSI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTAgMGgzMnYzMkgweiIvPjwvY2xpcFBhdGg+PC9kZWZzPjwvc3ZnPg==" alt=""></div>
+      <div class="name"><span>1Password</span></div><div class="role"><span>secrets</span></div>
+    </div>
   </div>
   </div>
   <div class="legend">
     <span><span class="sw"></span>request path</span>
     <span><span class="sw n"></span>runtime</span>
-    <span><span class="sw n dash"></span>build / deploy</span>
+    <span><span class="sw n dash"></span>build / deploy / iac</span>
   </div>
   <div class="foot">
     <span>kt-tech.blog</span>
