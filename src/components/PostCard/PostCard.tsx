@@ -148,6 +148,13 @@ export const PostCard = ({ blog, terms, footer, priority = false, label }: Props
                   <span className='whitespace-nowrap truncate'>{blog.category.name}</span>
                 </>
               )}
+              {/* 一覧は本文を取得しないので、CI が Notion に書いた値だけを使う（#498） */}
+              {blog.readingMinutes && (
+                <>
+                  <span className='text-slate-300 dark:text-slate-600'>|</span>
+                  <span className='whitespace-nowrap'>{blog.readingMinutes}分</span>
+                </>
+              )}
             </div>
 
             {blog.tags && blog.tags.length > 0 && (

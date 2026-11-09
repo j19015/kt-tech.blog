@@ -438,7 +438,8 @@ export default async function StaticDetailPage({
 
   // 読了時間は本文・JSON-LDで同じ値を使う
   const plainText = stripHtml(processedHtml);
-  const readingMinutes = Math.max(1, Math.ceil(plainText.length / 600));
+  // 一覧のカードと値をそろえるため、CI が Notion に書いた値があればそちらを使う
+  const readingMinutes = blog.readingMinutes ?? Math.max(1, Math.ceil(plainText.length / 600));
 
   // JSON-LD 構造化データ
   const jsonLd = {

@@ -10,6 +10,13 @@ if (process.env.NODE_ENV === 'development') {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // ビルドごとに変わる ID。libs/notionCache.ts が Cache API のキーに混ぜて、
+  // デプロイのたびに Notion を読み直す（CDN のパージでは Cache API が消えないため）
+  env: {
+    NOTION_CACHE_BUILD_ID: process.env.GITHUB_RUN_ID
+      ? `${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT || 1}`
+      : String(Date.now()),
+  },
   experimental: {
     cpus: 1,
     workerThreads: false,
