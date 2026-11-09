@@ -69,12 +69,20 @@ kt-tech.blog/
 │   │   ├── tags/              # タグ別記事（Edge Runtime + loading.tsx）
 │   │   ├── archives/          # アーカイブ（Edge Runtime + loading.tsx）
 │   │   ├── searches/          # 検索機能
-│   │   └── about/             # Aboutページ
+│   │   ├── about/             # Aboutページ
+│   │   └── api/
+│   │       ├── notion-image/[blockId]/ # Notion画像の署名URLを取り直す
+│   │       └── reactions/[slug]/       # 「参考になった」の件数（D1）
 │   ├── components/            # 再利用可能コンポーネント
+│   │   └── Reaction/          # 「参考になった」ボタン（Turnstile）
 │   └── lib/
 ├── libs/
 │   ├── notion.ts              # Notion REST API クライアント（直接fetch）
 │   └── gtag.ts                # Google Analytics
+├── migrations/
+│   └── 0001_reactions.sql     # D1 のスキーマ（reactions）
+├── env.d.ts                   # CloudflareEnv（D1 バインディングなど）の型
+├── wrangler.dev.toml          # next dev 専用。ローカルの D1 を DB として生やす（本番は読まない）
 ├── scripts/
 │   ├── generate-eyecatch.mjs      # eyecatch生成（未設定のみ、WebP出力）
 │   └── generate-eyecatch-all.mjs  # eyecatch全記事生成（WebP出力）
@@ -115,6 +123,16 @@ NOTION_DATABASE_ID=xxx           # Notion Database ID (REST API用)
 NEXT_PUBLIC_GA_ID=G-xxx          # Google Analytics
 SITE_URL=https://kt-tech.blog   # サイトURL
 ```
+
+### 「参考になった」（Issue #455）
+```env
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=xxx  # Turnstile のサイトキー。ビルド時に埋まるので GitHub Secrets と Pages の両方に。未設定ならボタンを出さない
+TURNSTILE_SECRET_KEY=xxx            # Turnstile のシークレット。Pages の Secret のみ（ランタイムで使う）
+```
+
+D1 はバインディングで渡す（環境変数ではない）。Pages の Settings → Bindings で
+D1 データベース `kt-tech-blog-reactions` を変数名 `DB` で Production / Preview に追加する。
+バインディングが無い環境では `/api/reactions/*` が 503 を返し、ボタンは出ない。
 
 ### CI/CD用（GitHub Secretsのみ）
 ```env
@@ -191,6 +209,19 @@ NEXT_PUBLIC_R2_BUCKET_URL=xxx    # R2パブリックURL
 13. **CSP**: `next.config.js` に Report-Only で入れてある。配信環境の Console に違反が
     出なくなったら `Content-Security-Policy` にキー名を変えて有効化する
 
+## 「参考になった」（D1）の運用
+
+- 件数は D1 `kt-tech-blog-reactions` の `reactions` テーブルに1記事1行（キーは `Blog.id`）
+- **wrangler.toml は置かない。** Pages に wrangler.toml があると `wrangler pages deploy` が
+  それを設定の正とし、ダッシュボードのバインディングや `nodejs_compat` を上書きする。
+  バインディングはダッシュボードで管理し、ローカル用の設定は `wrangler.dev.toml` に分けてある
+- 本番へのスキーマ適用（初回・変更時。ファイル名で DB を引くので ID は書かなくてよい）:
+  `npx wrangler d1 execute kt-tech-blog-reactions --remote --file=migrations/0001_reactions.sql`
+- ローカルで試す: `npm run db:migrate:local` → `.env.local` に Turnstile のテスト用キー
+  （サイトキー `1x00000000000000000000AA` / シークレット `1x0000000000000000000000000000000AA`、
+  必ず通る公開のダミー）を入れて `npm run dev`。データは `.wrangler/` に残る
+- `npm run preview`（wrangler pages dev）には D1 を渡していないので、ボタンは出ない
+
 ## 重要なコマンド
 
 | コマンド | 説明 |
@@ -199,6 +230,7 @@ NEXT_PUBLIC_R2_BUCKET_URL=xxx    # R2パブリックURL
 | `npm run dev:op` | 開発サーバー起動（1Password から環境変数を渡す） |
 | `npm run build` | プロダクションビルド |
 | `npm run lint` | ESLint実行 |
+| `npm run db:migrate:local` | ローカルの D1 に migrations/ を適用 |
 | `npx @cloudflare/next-on-pages` | Cloudflare Pages用ビルド |
 | `op run --env-file=.env.op -- node scripts/generate-eyecatch.mjs` | eyecatch未設定記事に画像生成（WebP） |
 | `op run --env-file=.env.op -- node scripts/generate-eyecatch.mjs --dry-run` | 対象記事の確認のみ |
