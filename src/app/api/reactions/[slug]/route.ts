@@ -73,8 +73,14 @@ async function verifyTurnstile(secret: string, token: string, ip: string | null)
   try {
     const res = await fetch(SITEVERIFY_URL, { method: 'POST', body: form });
     if (!res.ok) return false;
-    const data = (await res.json()) as { success?: boolean };
-    return data.success === true;
+    const data = (await res.json()) as { success?: boolean; hostname?: string };
+    if (data.success !== true) return false;
+    // 自サイトで発行されたトークンかも確かめる（Cloudflare の推奨）。
+    // ウィジェットの許可ドメインを広げたときに、別ホストのトークンを通さないため。
+    // 開発中は Turnstile のテスト用キーが hostname を "example.com" で返すので照合しない
+    if (process.env.NODE_ENV !== 'production') return true;
+    const expected = process.env.SITE_URL ? new URL(process.env.SITE_URL).hostname : null;
+    return expected !== null && data.hostname === expected;
   } catch {
     return false;
   }
