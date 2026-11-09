@@ -90,6 +90,24 @@ kt-tech.blog/
 
 ## 環境変数
 
+ローカルの秘密情報は **1Password**（保管庫 `Private` / アイテム `kt-tech.blog`）に置き、
+`op run` で実行時にだけプロセスへ渡す。参照の一覧はリポジトリ直下の `.env.op`
+（`KEY=op://Private/kt-tech.blog/KEY`、値は入っていないのでコミット済み）。
+Terraform 用は `infra/.env.op` に分けてある（`infra/tf.sh` が自分で `op run` する）。
+
+| 用途 | コマンド |
+|---|---|
+| 開発サーバー | `npm run dev:op` |
+| 本番相当の確認 | `npm run preview:op`（`.dev.vars` を生成する。平文なので使い終わったら消してよい） |
+| スクリプト | `op run --env-file=.env.op -- node scripts/xxx.mjs` |
+| Terraform | `cd infra && ./tf.sh plan` |
+
+- `.env.local` も引き続き使える（互換）。`npm run dev` / `npm run preview` / `node scripts/...` は
+  `.env.local` を読む。両方ある場合は `op run` で渡した値が優先される
+- **値を画面やログに出さないこと。** 確認するときはキー名だけを出す
+- GitHub Actions は GitHub Secrets のまま（1Password は使っていない）
+- 1Password の `CLOUDFLARE_API_TOKEN` は Terraform 用のトークンで、GitHub Secrets の同名の値とは別物
+
 ### ビルド時 + ランタイム（Cloudflare Pages Settings + GitHub Secrets 両方に設定）
 ```env
 NOTION_API_KEY=ntn_xxx           # Notion APIトークン（Secret）
@@ -105,7 +123,7 @@ CLOUDFLARE_ACCOUNT_ID=xxx        # Cloudflare アカウントID
 CLOUDFLARE_ZONE_ID=xxx           # キャッシュパージ用
 ```
 
-### eyecatch生成スクリプト用（.env.localのみ）
+### eyecatch生成スクリプト用（ローカルのみ。1Password の `.env.op` 経由）
 ```env
 GEMINI_API_KEY=xxx               # Gemini API
 R2_ENDPOINT=xxx                  # Cloudflare R2
@@ -178,8 +196,9 @@ NEXT_PUBLIC_R2_BUCKET_URL=xxx    # R2パブリックURL
 | コマンド | 説明 |
 |---------|------|
 | `npm run dev` | 開発サーバー起動 |
+| `npm run dev:op` | 開発サーバー起動（1Password から環境変数を渡す） |
 | `npm run build` | プロダクションビルド |
 | `npm run lint` | ESLint実行 |
 | `npx @cloudflare/next-on-pages` | Cloudflare Pages用ビルド |
-| `node scripts/generate-eyecatch.mjs` | eyecatch未設定記事に画像生成（WebP） |
-| `node scripts/generate-eyecatch.mjs --dry-run` | 対象記事の確認のみ |
+| `op run --env-file=.env.op -- node scripts/generate-eyecatch.mjs` | eyecatch未設定記事に画像生成（WebP） |
+| `op run --env-file=.env.op -- node scripts/generate-eyecatch.mjs --dry-run` | 対象記事の確認のみ |

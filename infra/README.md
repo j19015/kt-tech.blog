@@ -21,23 +21,38 @@ state は非公開の R2 バケット `kt-tech-blog-tfstate` に置いている�
    - Account / Account Settings / Read
    - Account / Cloudflare Pages / Edit（シークレットを Pages に入れるときに使う）
    - Account / Workers R2 Storage / Edit（state 用のバケットを作るときに使う）
-2. `../.env.local` に `CLOUDFLARE_API_TOKEN=...` を1行足す（gitignore 済み。
-   GitHub Actions の同名シークレットとは別物）。シェルで export した値があればそちらが優先される
+2. トークンを 1Password の保管庫 `Private` / アイテム `kt-tech.blog` に `CLOUDFLARE_API_TOKEN`
+   として入れる。アカウント ID も `CLOUDFLARE_ACCOUNT_ID` として入れる。
+   GitHub Actions の同名シークレットとは別物なので混ぜないこと
 3. state 用のバケットを作る（非公開。独自ドメインや公開アクセスは付けない）
 
    ```bash
-   CLOUDFLARE_API_TOKEN=$(grep '^CLOUDFLARE_API_TOKEN=' ../.env.local | cut -d= -f2-) \
-     npx wrangler r2 bucket create kt-tech-blog-tfstate
+   op run --env-file=.env.op -- npx wrangler r2 bucket create kt-tech-blog-tfstate
    ```
-
-4. state 用の認証は `../.env.local` の `R2_ACCESS_KEY` / `R2_SECRET_KEY` / `R2_ENDPOINT` を
-   `tf.sh` が読む。このキー（R2 の API トークン `kt-blog-api-token`）は `microcms-image` だけに
-   絞ってあるので、R2 → API トークンの編集で `kt-tech-blog-tfstate` も対象に加える。
 
 ```bash
 cd infra
 ./tf.sh init
 ```
+
+### 認証の仕組み
+
+`tf.sh` は [`.env.op`](.env.op) の参照を `op run` で解決して Terraform を動かす（実行時に
+1Password の承認を求められる）。値は環境変数として Terraform のプロセスに渡るだけで、
+ファイルには残らない。1Password から取るのは `CLOUDFLARE_API_TOKEN` と
+`CLOUDFLARE_ACCOUNT_ID` の2つだけ。
+
+state を置く R2 の認証（S3 互換キー）は、同じ API トークンから `tf.sh` が導出する。
+R2 の権限を持つ API トークンはそのまま S3 互換キーとして使える仕様で、
+
+- Access Key ID = トークン ID（`/user/tokens/verify` で取る）
+- Secret Access Key = トークン値の SHA-256（16進）
+- エンドポイント = `https://<CLOUDFLARE_ACCOUNT_ID>.r2.cloudflarestorage.com`（`init` の `-backend-config` で渡す）
+
+なので、R2 専用のキーを別に持たなくてよい。
+
+1Password を使わない場合は、`CLOUDFLARE_API_TOKEN` と `CLOUDFLARE_ACCOUNT_ID` を
+シェルで export してから `./tf.sh` を実行する。両方あれば `op` は呼ばれない。
 
 ## 変更するとき
 
@@ -51,14 +66,14 @@ cd infra
 1. テーブルを作る
 
    ```bash
-   npx wrangler d1 execute kt-tech-blog-reactions --remote --file=../migrations/0001_reactions.sql
+   op run --env-file=.env.op -- npx wrangler d1 execute kt-tech-blog-reactions --remote --file=../migrations/0001_reactions.sql
    ```
 
 2. Pages（kt-tech-blog → 設定 → バインディング）に D1 を変数名 `DB` で追加する（Production）
 3. Turnstile のシークレットを Pages の Secret に入れる。値は画面に出さずにそのまま渡す
 
    ```bash
-   ./tf.sh output -raw turnstile_secret | npx wrangler pages secret put TURNSTILE_SECRET_KEY --project-name kt-tech-blog
+   ./tf.sh output -raw turnstile_secret | op run --env-file=.env.op -- npx wrangler pages secret put TURNSTILE_SECRET_KEY --project-name kt-tech-blog
    ```
 
 4. サイトキー（`./tf.sh output -raw turnstile_sitekey`、公開してよい値）を

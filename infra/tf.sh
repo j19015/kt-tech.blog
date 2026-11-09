@@ -1,47 +1,58 @@
 #!/usr/bin/env bash
 # Terraform を R2 の state で動かすラッパー。使い方: ./tf.sh plan / ./tf.sh apply など
 #
-# state 用の認証は、アイキャッチ生成と同じ R2 のキーを ../.env.local から読む。
-# 値は画面に出さない。Cloudflare 本体の操作は CLOUDFLARE_API_TOKEN を使う。
+# 秘密情報は 1Password から op run で受け取る（参照は .env.op）。ファイルには残らない。
+# CLOUDFLARE_API_TOKEN と CLOUDFLARE_ACCOUNT_ID が既に環境にあれば op は呼ばない。
+#
+# state 用の R2 の認証は CLOUDFLARE_API_TOKEN から導出する。R2 の権限を持つ API トークンは
+# そのまま S3 互換キーとして使える（Access Key ID = トークン ID、
+# Secret Access Key = トークン値の SHA-256 の16進）。R2 専用のキーを別に持たなくてよい。
+# 値は画面に出さない。
 set -euo pipefail
 cd "$(dirname "$0")"
 
-ENV_FILE=../.env.local
-if [[ ! -f $ENV_FILE ]]; then
-  echo "$ENV_FILE がありません" >&2
-  exit 1
-fi
-
-# KEY=value の value だけを取り出す（前後の引用符は外す）
-read_env() {
-  local line
-  line=$(grep -E "^$1=" "$ENV_FILE" | tail -n1 || true)
-  line=${line#*=}
-  line=${line%\"}; line=${line#\"}
-  line=${line%\'}; line=${line#\'}
-  printf '%s' "$line"
-}
-
-export AWS_ACCESS_KEY_ID="$(read_env R2_ACCESS_KEY)"
-export AWS_SECRET_ACCESS_KEY="$(read_env R2_SECRET_KEY)"
-R2_ENDPOINT="$(read_env R2_ENDPOINT)"
-
-for v in AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY R2_ENDPOINT; do
-  if [[ -z ${!v} ]]; then
-    echo "$ENV_FILE から $v に当たる値を読めませんでした" >&2
+if [[ -z ${CLOUDFLARE_API_TOKEN:-} || -z ${CLOUDFLARE_ACCOUNT_ID:-} ]]; then
+  # op run の中で自分を呼び直す。呼び直したのにまだ空なら .env.op か 1Password 側の問題
+  if [[ -n ${KT_TF_UNDER_OP:-} ]]; then
+    echo "CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID を 1Password から受け取れませんでした（.env.op を確認）" >&2
     exit 1
   fi
-done
-
-# シェルで export していなければ .env.local の CLOUDFLARE_API_TOKEN を使う
-if [[ -z ${CLOUDFLARE_API_TOKEN:-} ]]; then
-  CLOUDFLARE_API_TOKEN="$(read_env CLOUDFLARE_API_TOKEN)"
-  export CLOUDFLARE_API_TOKEN
+  if ! command -v op >/dev/null 2>&1; then
+    echo "1Password CLI（op）がありません。CLOUDFLARE_API_TOKEN と CLOUDFLARE_ACCOUNT_ID を export して実行してください" >&2
+    exit 1
+  fi
+  export KT_TF_UNDER_OP=1
+  exec op run --env-file=.env.op -- "./$(basename "$0")" "$@"
 fi
-if [[ ${1:-} != init && -z ${CLOUDFLARE_API_TOKEN:-} ]]; then
-  echo "CLOUDFLARE_API_TOKEN が設定されていません（README.md 参照）" >&2
+
+# トークン ID を取る。トークンはコマンドライン引数に載せず（ps で見える）、ヘッダーを標準入力から渡す
+if ! verify_json=$(printf 'Authorization: Bearer %s\n' "$CLOUDFLARE_API_TOKEN" |
+  curl -sS -H @- https://api.cloudflare.com/client/v4/user/tokens/verify); then
+  echo "Cloudflare の API に接続できませんでした" >&2
   exit 1
 fi
+if ! token_id=$(printf '%s' "$verify_json" | python3 -c '
+import json, sys
+try:
+    d = json.load(sys.stdin)
+except ValueError:
+    sys.exit(1)
+r = d.get("result") or {}
+if d.get("success") and r.get("status") == "active" and r.get("id"):
+    print(r["id"])
+else:
+    sys.exit(1)
+'); then
+  echo "CLOUDFLARE_API_TOKEN の検証に失敗しました（無効・失効・期限切れの可能性）" >&2
+  exit 1
+fi
+unset verify_json
+
+# s3 backend は init 以外（plan / apply / output など）でも state を読むので、常に設定する
+export AWS_ACCESS_KEY_ID="$token_id"
+AWS_SECRET_ACCESS_KEY=$(printf '%s' "$CLOUDFLARE_API_TOKEN" | shasum -a 256 | cut -d' ' -f1)
+export AWS_SECRET_ACCESS_KEY
+R2_ENDPOINT="https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com"
 
 if [[ ${1:-} == init ]]; then
   shift

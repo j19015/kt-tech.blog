@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:op": "op run --env-file=.env.op -- next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -12,6 +13,7 @@
     "pages:build": "npx @cloudflare/next-on-pages",
     "pages:deploy": "npx wrangler pages deploy .vercel/output/static --project-name=kt-tech-blog",
     "preview": "npm run preview:env && npm run pages:build && npm run preview:serve",
+    "preview:op": "op run --env-file=.env.op -- npm run preview",
     "preview:env": "node scripts/sync-dev-vars.mjs",
     "preview:serve": "wrangler pages dev .vercel/output/static --port 8788 --compatibility-date 2026-08-15 --compatibility-flags nodejs_compat"
   },

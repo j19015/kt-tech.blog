@@ -5,26 +5,17 @@
 // 一覧カードは 96〜128px、トップのフィーチャーでも 600px しか使わないため、
 // Lighthouse の "Properly size images" が 426KB の削減余地を出していた。
 //
-//   node scripts/generate-eyecatch-thumbnails.mjs [--dry-run] [--force]
+//   op run --env-file=.env.op -- node scripts/generate-eyecatch-thumbnails.mjs [--dry-run] [--force]
 //
 // --dry-run: 生成せず対象だけ表示する
 // --force  : 既に生成済みでも作り直す
 
 import { S3Client, ListObjectsV2Command, PutObjectCommand } from '@aws-sdk/client-s3';
 import sharp from 'sharp';
-import { readFileSync } from 'fs';
+import { loadEnv } from './load-env.mjs';
 
-// .env.local を手動パース（generate-eyecatch.mjs と同じ方式）
-const envFile = readFileSync('.env.local', 'utf-8');
-envFile.split('\n').forEach((line) => {
-  const trimmed = line.trim();
-  if (!trimmed || trimmed.startsWith('#')) return;
-  const idx = trimmed.indexOf('=');
-  if (idx === -1) return;
-  const key = trimmed.slice(0, idx).trim();
-  const val = trimmed.slice(idx + 1).trim();
-  if (key && val) process.env[key] = val;
-});
+// process.env（op run で渡した値）を優先し、無いキーだけ .env.local から補う
+loadEnv();
 
 const R2_ENDPOINT = process.env.R2_ENDPOINT;
 const R2_ACCESS_KEY = process.env.R2_ACCESS_KEY;
@@ -34,7 +25,7 @@ const BUCKET_URL = process.env.NEXT_PUBLIC_R2_BUCKET_URL;
 
 for (const [name, value] of Object.entries({ R2_ENDPOINT, R2_ACCESS_KEY, R2_SECRET_KEY, BUCKET, BUCKET_URL })) {
   if (!value) {
-    console.error(`.env.local に ${name} がありません`);
+    console.error(`${name} がありません（op run --env-file=.env.op -- で実行するか .env.local に書く）`);
     process.exit(1);
   }
 }

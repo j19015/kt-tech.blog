@@ -30,8 +30,10 @@ yarn-error.log*
 .env*.local
 # 見本ファイルはコミットしてよい
 !.env.example
+# 1Password の参照（op://...）だけで値は入っていない。op run が読む
+!.env.op
 
-# wrangler pages dev が読む環境変数。.env.local から生成するのでコミットしない
+# wrangler pages dev が読む環境変数。.env.local / 1Password（op run）から生成するのでコミットしない
 .dev.vars
 
 # vercel

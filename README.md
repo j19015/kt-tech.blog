@@ -59,14 +59,14 @@ Node.js 22 を使う（CI と同じ）。
 
 ```bash
 npm install --legacy-peer-deps
-# .env.local を作る（下の「環境変数」を参照）
-npm run dev                        # → http://localhost:3000
+npm run dev:op                     # → http://localhost:3000（1Password から環境変数を渡す）
+# .env.local を使う場合は npm run dev（下の「環境変数」を参照）
 ```
 
 ### 本番と同じ状態で確認する
 
 ```bash
-npm run preview   # → http://localhost:8788
+npm run preview:op   # → http://localhost:8788（.env.local を使う場合は npm run preview）
 ```
 
 **`npm run start` は本番の再現にならない。** `next start` は Node.js サーバーとして動くが、
@@ -83,7 +83,7 @@ CSS のバンドル結果もページごとの読み込みも別物になる。�
 
 | | 内容 |
 |---|---|
-| `preview:env` | `.env.local` → `.dev.vars` を同期。wrangler は `.env.local` を読まないので、無いと全ページ 503 |
+| `preview:env` | `.env.local` と（`preview:op` のときは）1Password の値から `.dev.vars` を作る。wrangler は `.env.local` も環境変数も読まないので、無いと全ページ 503。`.dev.vars` は平文なので、使い終わったら消してよい |
 | `pages:build` | `@cloudflare/next-on-pages` で本番と同じビルド |
 | `preview:serve` | `wrangler pages dev`。`nodejs_compat` フラグが無いと Worker が起動せず 503 |
 
@@ -91,12 +91,14 @@ CSS のバンドル結果もページごとの読み込みも別物になる。�
 
 | コマンド | 内容 |
 |---|---|
-| `npm run dev` | 開発サーバー |
+| `npm run dev:op` | 開発サーバー（1Password から環境変数を渡す） |
+| `npm run dev` | 開発サーバー（`.env.local` を読む） |
 | `npm run lint` | ESLint |
-| `npm run preview` | 本番と同じビルドをローカルで起動 |
+| `npm run preview:op` | 本番と同じビルドをローカルで起動（1Password） |
+| `npm run preview` | 同上（`.env.local`） |
 | `npm run pages:build` | Cloudflare Pages 用ビルド |
-| `node scripts/generate-eyecatch.mjs` | アイキャッチ未設定の記事に画像を生成（`--dry-run` で対象確認のみ） |
-| `node scripts/lint-content.mjs` | Notion の記事を品質チェック |
+| `op run --env-file=.env.op -- node scripts/generate-eyecatch.mjs` | アイキャッチ未設定の記事に画像を生成（`--dry-run` で対象確認のみ） |
+| `op run --env-file=.env.op -- node scripts/lint-content.mjs` | Notion の記事を品質チェック |
 
 ## デプロイ
 
@@ -121,7 +123,17 @@ PR では [`pr-check.yml`](.github/workflows/pr-check.yml) が lint とビルド
 
 ## 環境変数
 
-`.env.local`（Cloudflare Pages の Settings と GitHub Secrets にも同じものを設定する）:
+ローカルの秘密情報は 1Password（保管庫 `Private` / アイテム `kt-tech.blog`）に置いている。
+[`.env.op`](.env.op) に `KEY=op://Private/kt-tech.blog/KEY` 形式の参照だけを並べてあり
+（値は入っていないのでコミットしてある）、`op run --env-file=.env.op -- <コマンド>` で
+実行中のプロセスにだけ値が渡る。`dev:op` / `preview:op` はこれを包んだもの。
+Terraform 用の参照は [`infra/.env.op`](infra/.env.op) に分けてある。
+
+`.env.local` に書いても動く（`npm run dev` などはこれを読む）。両方ある場合は `op run` で
+渡した値が優先される。`dev` を `op run` に置き換えずに `dev:op` を足したのは、1Password を
+使わない環境（CI や別のマシン）でも今までどおり `npm run dev` で動くようにするため。
+
+アプリが使う値（Cloudflare Pages の Settings と GitHub Secrets にも同じものを設定する）:
 
 ```env
 NOTION_API_KEY=          # Notion インテグレーションのトークン
@@ -141,7 +153,7 @@ CLOUDFLARE_ACCOUNT_ID=
 CLOUDFLARE_ZONE_ID=      # キャッシュパージ用
 ```
 
-アイキャッチ生成スクリプト用（`.env.local` のみ）:
+アイキャッチ生成スクリプト用（ローカルのみ。`.env.op` に入っている）:
 
 ```env
 GEMINI_API_KEY=
