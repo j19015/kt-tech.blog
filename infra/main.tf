@@ -57,3 +57,53 @@ output "turnstile_secret" {
   value       = cloudflare_turnstile_widget.reactions.secret
   sensitive   = true
 }
+
+# ------------------------------------------------------------- レート制限（#570）
+
+variable "zone_name" {
+  description = "サイトのゾーン"
+  type        = string
+  default     = "kt-tech.blog"
+}
+
+variable "api_rate_limit_per_10s" {
+  description = "同じ IP・同じ colo から /api/ に10秒間で通すリクエスト数"
+  type        = number
+  # 画像の多い記事（本文画像は1枚ごとに /api/notion-image を通る）を開いても
+  # 引っかからず、連打だけを止める値。普通の閲覧では1ページで数回しか叩かない
+  default = 60
+}
+
+data "cloudflare_zone" "site" {
+  filter = {
+    name = var.zone_name
+  }
+}
+
+# /api/ への連打を IP 単位で止める。
+# /api/notion-image は1回ごとに Notion API を呼ぶので、連打されると記事の描画と共有している
+# Notion の枠（平均3リクエスト/秒）を使い切られる。記事ページ（/blogs/）は CDN から返り、
+# 存在しない slug も Notion を呼ばない（#575）ので対象にしない。
+#
+# Free プランの制約: ルールは1本、期間とブロック時間は10秒、キーは IP + colo のみ。
+# ゾーンに http_ratelimit の ruleset は1つしか持てないので、ダッシュボードで足さないこと。
+resource "cloudflare_ruleset" "rate_limit" {
+  zone_id     = data.cloudflare_zone.site.zone_id
+  name        = "kt-tech.blog rate limit"
+  description = "Terraform で管理（infra/main.tf）"
+  kind        = "zone"
+  phase       = "http_ratelimit"
+
+  rules = [{
+    ref         = "api_burst"
+    description = "/api/ への連打を IP 単位で10秒止める"
+    expression  = "(starts_with(http.request.uri.path, \"/api/\"))"
+    action      = "block"
+    ratelimit = {
+      characteristics     = ["cf.colo.id", "ip.src"]
+      period              = 10
+      requests_per_period = var.api_rate_limit_per_10s
+      mitigation_timeout  = 10
+    }
+  }]
+}
