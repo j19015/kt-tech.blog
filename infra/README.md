@@ -6,6 +6,7 @@ kt-tech.blog の Cloudflare リソースのうち、Terraform で管理してい
 |---|---|
 | D1 `kt-tech-blog-reactions` | Terraform（`main.tf`） |
 | Turnstile ウィジェット `kt-tech.blog reactions` | Terraform（`main.tf`） |
+| WAF のレート制限（`/api/*`、http_ratelimit） | Terraform（`main.tf`） |
 | D1 のテーブル | `migrations/*.sql` を wrangler で流す |
 | Pages プロジェクト（バインディング・環境変数） | ダッシュボード（理由は `main.tf` の冒頭） |
 | Cache Rule・R2 のアイキャッチ用バケットなど | ダッシュボード（未移行） |
@@ -21,6 +22,7 @@ state は非公開の R2 バケット `kt-tech-blog-tfstate` に置いている�
    - Account / Account Settings / Read
    - Account / Cloudflare Pages / Edit（シークレットを Pages に入れるときに使う）
    - Account / Workers R2 Storage / Edit（state 用のバケットを作るときに使う）
+   - Zone / Zone / Read と Zone / Zone WAF / Edit（レート制限。Zone Resources は kt-tech.blog だけ）
 2. トークンを 1Password の保管庫 `Private` / アイテム `kt-tech.blog` に `CLOUDFLARE_API_TOKEN`
    として入れる。アカウント ID も `CLOUDFLARE_ACCOUNT_ID` として入れる。
    GitHub Actions の同名シークレットとは別物なので混ぜないこと
