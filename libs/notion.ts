@@ -1,4 +1,5 @@
 import { cache } from 'react';
+import { signImageBlockId } from './imageSignature';
 import { embedToHtml } from '../src/lib/embed';
 
 // Notion REST API を直接fetch（Edge Runtime互換、@notionhq/client不使用）
@@ -306,9 +307,10 @@ async function blockToMarkdown(block: any, indent: string): Promise<string | nul
       // Notion がアップロード画像に返す URL は署名付きで、有効期限が1時間しかない。
       // 記事HTMLは CDN に最大24時間残るので、そのまま埋めると画像が404になる。
       // 失効しない自前のURLを挟み、実際の署名付きURLはリクエスト時に取り直す。
+      // `?s=` は blockId の署名。本文に載せたブロック以外で Notion を叩かせない（#570）
       const url = block.image.type === 'external'
         ? block.image.external.url
-        : `/api/notion-image/${block.id}`;
+        : `/api/notion-image/${block.id}?s=${await signImageBlockId(block.id)}`;
       const caption = block.image.caption ? richTextToPlain(block.image.caption) : '';
       return `${indent}![${caption}](${url})`;
     }

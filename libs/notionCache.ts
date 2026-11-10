@@ -39,6 +39,8 @@
  */
 import { cache } from 'react';
 import {
+  isNotionId,
+  normalizeNotionId,
   getList as loadList,
   getDetail as loadDetail,
   getTagList as loadTagList,
@@ -148,15 +150,25 @@ function edgeCache(): { match(req: Request): Promise<Response | undefined>; put(
   return store && typeof store.match === 'function' ? store : null;
 }
 
-function cacheRequest(key: string): Request {
-  return new Request(`${CACHE_ORIGIN}/${CACHE_VERSION}-${BUILD_ID}/${encodeURIComponent(key)}`);
+function cacheRequest(key: string, scope: string = BUILD_ID): Request {
+  return new Request(`${CACHE_ORIGIN}/${CACHE_VERSION}-${scope}/${encodeURIComponent(key)}`);
 }
 
-async function edgeGet<T>(key: string): Promise<Envelope<T> | undefined> {
+/**
+ * ビルドをまたいで残す「最後に取れた値」の置き場（#570）。
+ *
+ * キーにビルド ID を入れたので、デプロイ直後は stale の代役が1つも無い。
+ * パージ→ウォームの最中に Notion が 429 を返すと、記事が「見つかりません」や
+ * エラーの内容のまま CDN に7日載ってしまう。取得に成功するたびにここにも書き、
+ * 代役が無いまま失敗したときだけ読む。普段の鮮度の判定には使わない。
+ */
+const LAST_GOOD_SCOPE = 'last-good';
+
+async function edgeGet<T>(key: string, scope?: string): Promise<Envelope<T> | undefined> {
   const store = edgeCache();
   if (!store) return undefined;
   try {
-    const hit = await store.match(cacheRequest(key));
+    const hit = await store.match(cacheRequest(key, scope));
     if (!hit) return undefined;
     return (await hit.json()) as Envelope<T>;
   } catch {
@@ -174,12 +186,12 @@ async function edgeGet<T>(key: string): Promise<Envelope<T> | undefined> {
  */
 let putFailureReported = false;
 
-async function edgePut<T>(key: string, entry: Envelope<T>): Promise<void> {
+async function edgePut<T>(key: string, entry: Envelope<T>, scope?: string): Promise<void> {
   const store = edgeCache();
   if (!store) return;
   try {
     await store.put(
-      cacheRequest(key),
+      cacheRequest(key, scope),
       new Response(JSON.stringify(entry), {
         headers: {
           'Content-Type': 'application/json',
@@ -260,7 +272,7 @@ async function withCache<T>(
       const value = await loader(hasStaleFallback);
       const fresh: Envelope<T> = { storedAt: Date.now(), value };
       memoSet(key, fresh);
-      await edgePut(key, fresh);
+      await Promise.all([edgePut(key, fresh), edgePut(key, fresh, LAST_GOOD_SCOPE)]);
       cooldownUntil.delete(key);
       return value;
     } catch (error) {
@@ -277,6 +289,14 @@ async function withCache<T>(
         cooldownUntil.set(key, Date.now() + FAILURE_COOLDOWN_MS);
         console.warn(`[notion-cache] ${key} の取得に失敗したので stale を返す: ${message}`);
         return entry.value as T;
+      }
+      // このビルドでの代役が無ければ、前のビルドまでに取れた値で凌ぐ
+      const lastGood = await edgeGet<T>(key, LAST_GOOD_SCOPE);
+      if (lastGood && !lastGood.notFound && Date.now() - lastGood.storedAt < STALE_MS) {
+        cooldownUntil.set(key, Date.now() + FAILURE_COOLDOWN_MS);
+        memoSet(key, lastGood);
+        console.warn(`[notion-cache] ${key} の取得に失敗したので前のビルドの値を返す: ${message}`);
+        return lastGood.value as T;
       }
       throw error;
     } finally {
@@ -321,10 +341,30 @@ export const getList = cache(
  * 元の `getDetail` は「DB検索1回 + 本文ブロックの取得（入れ子の数だけ追加）」で、
  * 1本あたり実測 3〜20 往復。ここが当たれば丸ごと 0 になる。
  */
-export const getDetail = cache(
-  (slug: string): Promise<Blog> =>
-    withCache(`detail:${slug}`, DETAIL_FRESH_MS, () => loadDetail(slug), 'Blog not found: ')
-);
+export const getDetail = cache(async (slug: string): Promise<Blog> => {
+  // 一覧（キャッシュ済み）に無い slug は、Notion に問い合わせずに「無い」とする。
+  // 以前は知らない slug ごとに DB 検索（UUID なら /pages も）が走り、でたらめな URL の
+  // 連打で Notion API の枠を外から使い切れた（#570）。キャッシュにも書かないので、
+  // 「無い」エントリで Cache API が埋まることもない。
+  // 公開直後で一覧のキャッシュがまだ古い記事も、公開時のデプロイで一覧が読み直される。
+  if (await isUnknownSlug(slug)) throw new Error(`Blog not found: ${slug}`);
+  return withCache(`detail:${slug}`, DETAIL_FRESH_MS, () => loadDetail(slug), 'Blog not found: ');
+});
+
+/** 一覧に無いことが確かなときだけ true。一覧が取れなければ判断せず false を返す */
+async function isUnknownSlug(slug: string): Promise<boolean> {
+  let contents: Blog[];
+  try {
+    ({ contents } = await getList());
+  } catch {
+    return false;
+  }
+  if (contents.length === 0) return false;
+  const wanted = isNotionId(slug) ? normalizeNotionId(slug) : null;
+  return !contents.some(
+    (post) => post.id === slug || (wanted !== null && !!post.pageId && normalizeNotionId(post.pageId) === wanted)
+  );
+}
 
 /**
  * タグ・カテゴリの選択肢。どちらも Notion の同じDBスキーマから作られるので

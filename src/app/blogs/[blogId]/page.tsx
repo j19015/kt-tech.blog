@@ -104,6 +104,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { blogId } = await params;
   // 記事が見つからない場合はここで例外を投げず、本体側の notFound() に任せる。
   // catch がないと、存在しないURLが404ではなく500として扱われてしまう。
+  // Notion 側のエラーも、ここでは null にしておき本体側でエラー画面を出す
   const blog = await getDetail(blogId).catch(() => null);
   if (!blog) {
     return { title: '記事が見つかりません', robots: { index: false, follow: false } };
@@ -262,7 +263,13 @@ export default async function StaticDetailPage({
 }) {
   const { blogId } = await params;
   const [blog, { contents }] = await Promise.all([
-    getDetail(blogId).catch(() => null),
+    // 「記事が無い」ときだけ null にして notFound() へ。Notion のエラー（429 など）まで
+    // 「見つかりません」にすると、実在する記事がその内容で CDN に載ってしまう（#570）。
+    // エラーは投げ直して error.tsx の「一時的な問題」を出す
+    getDetail(blogId).catch((error: unknown) => {
+      if (error instanceof Error && error.message.startsWith('Blog not found: ')) return null;
+      throw error;
+    }),
     getList().catch(() => ({ contents: [] as Blog[], totalCount: 0, offset: 0, limit: 0 })),
   ]);
   if (!blog) notFound();

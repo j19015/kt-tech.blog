@@ -27,9 +27,13 @@ jobs:
       # 読了時間と「本文が変わった日時」を Notion のプロパティに書き戻す（#498 / #458）。
       # 前回から編集された記事だけ本文を読む。失敗してもデプロイは止めない
       # （その記事の読了時間が出ない・更新日が last_edited_time になるだけ）
+      #
+      # 書き込みは専用のインテグレーション（NOTION_SYNC_API_KEY）で行う（#572）。
+      # 本番やビルドが使う NOTION_API_KEY は読み取り専用にしておき、漏れても記事を
+      # 書き換えられないようにする。NOTION_SYNC_API_KEY が未設定の間だけ従来のトークンを使う
       - name: Sync article metadata to Notion
         env:
-          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_API_KEY: ${{ secrets.NOTION_SYNC_API_KEY || secrets.NOTION_API_KEY }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
         run: node scripts/sync-article-meta.mjs
         timeout-minutes: 10

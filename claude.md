@@ -115,6 +115,9 @@ Terraform 用は `infra/.env.op` に分けてある（`infra/tf.sh` が自分で
   `.env.local` を読む。両方ある場合は `op run` で渡した値が優先される
 - **値を画面やログに出さないこと。** 確認するときはキー名だけを出す
 - GitHub Actions は GitHub Secrets のまま（1Password は使っていない）
+- Notion のトークンは2つ。`NOTION_API_KEY` は読み取り専用（本番・ビルド・ウォーム・ローカル）、
+  `NOTION_SYNC_API_KEY` は書き込みもできる別インテグレーションで、deploy.yml の
+  「Sync article metadata to Notion」ステップにだけ渡す（GitHub Secrets のみ。#572）
 - 1Password の `CLOUDFLARE_API_TOKEN` は Terraform 用のトークンで、GitHub Secrets の同名の値とは別物
 
 ### ビルド時 + ランタイム（Cloudflare Pages Settings + GitHub Secrets 両方に設定）
@@ -204,7 +207,11 @@ NEXT_PUBLIC_R2_BUCKET_URL=xxx    # R2パブリックURL
     クライアント専用の重いライブラリ（mermaid など）は `next/dynamic` の `ssr: false` で
     隔離しないと Worker のバンドルに載る（`src/components/Mermaid/MermaidLoader.tsx` 参照）
 11. **Notion画像の署名切れ**: アップロード画像のURLは1時間で失効するため、本文には
-    `/api/notion-image/[blockId]` を埋めてリクエスト時に取り直す
+    `/api/notion-image/[blockId]?s=署名` を埋めてリクエスト時に取り直す。署名
+    （`libs/imageSignature.ts`、NOTION_API_KEY から導出した HMAC）が合わない ID は
+    Notion に問い合わせずに 404 にする（#570）
+14. **存在しない記事**: `getDetail` は一覧（キャッシュ済み）に無い slug を Notion に問い合わせずに
+    「無い」とする。Notion のエラーは notFound にせず error.tsx に回す（#570）
 12. **色**: `--foreground` / `--background`（shadcn のトークン、値は slate）に一本化。
     `--foreground-rgb` 系は廃止済み
 13. **CSP**: `next.config.js` に Report-Only で入れてある。配信環境の Console に違反が

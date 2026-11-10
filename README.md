@@ -17,7 +17,7 @@ Notion で書いた記事を、Next.js 15 (Edge Runtime) + Cloudflare Pages で�
 | 描画 | キャッシュミス時だけ Cloudflare Pages の Worker (Next.js 15, Edge Runtime) が Notion REST API を叩いてページを組み立てる |
 | 執筆 | 記事は Notion のデータベースに書く。`Status` が `Published` のものだけ公開される |
 | 画像 | アイキャッチは Gemini で生成 → WebP に変換 → Cloudflare R2 に置いて直接配信。Notion にアップロードした本文画像は署名 URL が 1 時間で切れるので、`/api/notion-image/[blockId]` 経由で都度取り直す |
-| 「参考になった」 | 記事の HTML は CDN に置いたまま、件数だけをブラウザから `/api/reactions/[slug]` に取りに行く。件数は Cloudflare D1 に持ち、GET は CDN で 60 秒キャッシュする。押したとき（POST）は Turnstile のトークンをサーバー側で検証してから加算する |
+| 「参考になった」 | 記事の HTML は CDN に置いたまま、件数だけをブラウザから `/api/reactions/[slug]` に取りに行く。件数は Cloudflare D1 に持ち、GET は Worker の Cache API で 60 秒キャッシュする（`/api/` は CDN の Cache Rule の対象外のため）。押したとき（POST）は Turnstile のトークンをサーバー側で検証してから加算する |
 | デプロイ | `main` への push で GitHub Actions がビルド → デプロイ → CDN 全パージ → 全記事ウォームまで行う |
 | インフラ | D1 と Turnstile のウィジェットは Terraform（`infra/`）で管理する。秘密情報はローカルでは 1Password、CI では GitHub Secrets に置く |
 
