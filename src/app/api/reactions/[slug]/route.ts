@@ -20,10 +20,32 @@ const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverif
 const MAX_TOKEN_LENGTH = 2048;
 
 /**
- * 件数の CDN キャッシュ。押した本人の画面はレスポンスの件数で更新するので、
- * ほかの読者に1分遅れて見えるぶんには困らない。D1 の読み取りもこれで減る。
+ * 件数のキャッシュ。押した本人の画面はレスポンスの件数で更新するので、
+ * ほかの読者に1分遅れて見えるぶんには困らない。
+ *
+ * `/api/` は CDN の Cache Rule の対象外で、`s-maxage` を返しても CDN には載って
+ * いなかった（本番で cf-cache-status: DYNAMIC。#570）。そこで Worker の中で
+ * Cache API（colo ごと）に持つ。D1 の読み取りはこれで1分に1回まで減る。
  */
-const GET_CACHE_CONTROL = 'public, max-age=0, s-maxage=60';
+const COUNT_TTL_SECONDS = 60;
+const GET_CACHE_CONTROL = `public, max-age=0, s-maxage=${COUNT_TTL_SECONDS}`;
+
+function countCache(): Cache | null {
+  const store = (globalThis as any).caches?.default;
+  return store && typeof store.match === 'function' ? store : null;
+}
+
+/** キャッシュのキー。外から届く URL とは別にして、クエリ付きの URL でキャッシュを外されないようにする */
+const countCacheKey = (slug: string) =>
+  new Request(`https://reactions-cache.kt-tech.blog/v1/${encodeURIComponent(slug)}`);
+
+async function putCount(slug: string, count: number): Promise<void> {
+  try {
+    await countCache()?.put(countCacheKey(slug), json({ count }, 200, `public, max-age=${COUNT_TTL_SECONDS}`));
+  } catch {
+    // 書けなくても件数は返せる
+  }
+}
 
 const json = (body: unknown, status = 200, cacheControl = 'no-store') =>
   Response.json(body, { status, headers: { 'Cache-Control': cacheControl } });
@@ -125,8 +147,17 @@ export async function GET(_request: Request, { params }: { params: Promise<{ slu
   if (!db) return json({ error: 'unavailable' }, 503);
 
   try {
+    const hit = await countCache()?.match(countCacheKey(slug));
+    if (hit) return json(await hit.json(), 200, GET_CACHE_CONTROL);
+  } catch {
+    // キャッシュが読めなければ D1 から取る
+  }
+
+  try {
     const row = await db.prepare('SELECT count FROM reactions WHERE slug = ?').bind(slug).first<{ count: number }>();
-    return json({ count: row?.count ?? 0 }, 200, GET_CACHE_CONTROL);
+    const count = row?.count ?? 0;
+    await putCount(slug, count);
+    return json({ count }, 200, GET_CACHE_CONTROL);
   } catch (error) {
     console.error(`[reactions] 件数の取得に失敗: ${error}`);
     return json({ error: 'database error' }, 500);
@@ -178,7 +209,10 @@ export async function POST(request: Request, { params }: { params: Promise<{ slu
       )
       .bind(articleId, new Date().toISOString())
       .first<{ count: number }>();
-    return json({ count: row?.count ?? 1 });
+    const count = row?.count ?? 1;
+    // 押した直後に読み直した人が古い件数を見ないよう、キャッシュも新しい件数にする
+    await putCount(articleId, count);
+    return json({ count });
   } catch (error) {
     console.error(`[reactions] 件数の更新に失敗: ${error}`);
     return json({ error: 'database error' }, 500);

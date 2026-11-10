@@ -1,5 +1,6 @@
 import { getList } from '../../../../../libs/notionCache';
 import { isNotionId, isPublishedArticlePage, normalizeNotionId } from '../../../../../libs/notion';
+import { verifyImageBlockId } from '../../../../../libs/imageSignature';
 
 export const runtime = 'edge';
 
@@ -84,12 +85,18 @@ async function isPublishedArticle(pageId: string): Promise<boolean> {
 
 const notFound = () => new Response('Not found', { status: 404 });
 
-export async function GET(_request: Request, { params }: { params: Promise<{ blockId: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ blockId: string }> }) {
   const { blockId } = await params;
 
   // ブロックIDはUUID。想定外の値でNotionへリクエストを飛ばさない
   if (!isNotionId(blockId)) {
     return new Response('Invalid block id', { status: 400 });
+  }
+
+  // 本文を組み立てたときに付けた署名を確かめる。合わなければ Notion に問い合わせない。
+  // でたらめな UUID の連打で Notion API の枠を使い切られないようにするため（#570）
+  if (!(await verifyImageBlockId(blockId, new URL(request.url).searchParams.get('s')))) {
+    return notFound();
   }
 
   try {
