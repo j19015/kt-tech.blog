@@ -160,7 +160,9 @@ async function main() {
       ReadingTime: { number: minutes },
       BodyHash: { rich_text: [{ type: 'text', text: { content: hash } }] },
       ContentUpdated: { date: { start: contentUpdated } },
-      ContentChecked: { date: { start: startedAt } },
+      // 書き込む直前の時刻にする。開始時刻だと、1分以上たってから書いた記事は書き込みで動いた
+      // last_edited_time のほうが新しくなり、次の回に「編集された」と読み直してしまう
+      ContentChecked: { date: { start: new Date().toISOString() } },
     };
     const label = !prevHash ? 'init' : bodyChanged ? 'BODY CHANGED' : 'same';
     if (!prevHash) initialized++;
