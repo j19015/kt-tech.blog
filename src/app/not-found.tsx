@@ -1,5 +1,13 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { Home, BookOpen, Search } from 'lucide-react';
+
+// Edge Runtime ではヘッダーを先に送るので、ページの中で notFound() を呼んでもステータスは 200 のまま。
+// せめて noindex を付けて、「見つかりません」のページが検索結果に載らないようにする
+export const metadata: Metadata = {
+  title: 'ページが見つかりません',
+  robots: { index: false, follow: false },
+};
 
 export default function Custom404() {
   return (
