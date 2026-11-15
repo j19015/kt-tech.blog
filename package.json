@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "node scripts/patch-next-edge-metadata.mjs",
     "dev": "next dev",
     "dev:op": "op run --env-file=.env.op -- next dev",
     "build": "next build",

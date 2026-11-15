@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getDetail, getList, Blog } from '../../../../libs/notionCache';
@@ -100,15 +100,33 @@ type Props = {
   params: Promise<{ blogId: string }>;
 };
 
+/** URL の id が記事の正規の id（Slug。無ければページID）と同じか */
+function isCanonicalId(requested: string, canonical: string): boolean {
+  try {
+    return decodeURIComponent(requested) === canonical;
+  } catch {
+    return requested === canonical;
+  }
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { blogId } = await params;
-  // 記事が見つからない場合はここで例外を投げず、本体側の notFound() に任せる。
-  // catch がないと、存在しないURLが404ではなく500として扱われてしまう。
-  // Notion 側のエラーも、ここでは null にしておき本体側でエラー画面を出す
-  const blog = await getDetail(blogId).catch(() => null);
+  // メタデータは本文より先に、ストリームを始める前に解決される（next.config.js の
+  // htmlLimitedBots）。ここで notFound() / permanentRedirect() を呼べば、本当の
+  // 404 / 308 をステータスコードで返せる。本体側（loading.tsx の Suspense の中）で呼ぶと、
+  // ヘッダーを送ったあとなので 200 のまま「見つかりません」や meta refresh になっていた。
+  // Notion 側のエラー（429 など）は null にして、本体側で error.tsx を出す（#570）
+  const blog = await getDetail(blogId).catch((error: unknown) => {
+    if (error instanceof Error && error.message.startsWith('Blog not found: ')) notFound();
+    return null;
+  });
   if (!blog) {
     return { title: '記事が見つかりません', robots: { index: false, follow: false } };
   }
+  // Slug のある記事をページID（/blogs/329a0ffb...）で開いたら Slug の URL に寄せる。
+  // 以前はどちらも 200 で、canonical も開いた URL を指していたので、
+  // Google から見ると同じ記事が2つあった
+  if (!isCanonicalId(blogId, blog.id)) permanentRedirect(`/blogs/${encodeURIComponent(blog.id)}`);
 
   // markdown->平文（Edge互換）
   const cleanBody = blog.body
@@ -125,7 +143,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     (blog.summary?.length ? blog.summary.join('、').slice(0, 120) : '') ||
     text.slice(0, 120).replace(/\n/g, ' ').trim();
   const ogImage = toCustomHost(blog.eyecatch?.url);
-  const pageUrl = `${process.env.SITE_URL}/blogs/${blogId}`;
+  // 開いた URL ではなく記事の正規の id（Slug。無ければページID）で組む
+  const pageUrl = `${process.env.SITE_URL}/blogs/${encodeURIComponent(blog.id)}`;
 
   // 検索結果のタイトルは日本語で30文字ほどで切られる。そこに
   // 「| kt-tech.blog」（14文字）が後ろから食い込むので、先頭に使える幅は
@@ -273,6 +292,8 @@ export default async function StaticDetailPage({
     getList().catch(() => ({ contents: [] as Blog[], totalCount: 0, offset: 0, limit: 0 })),
   ]);
   if (!blog) notFound();
+  // 通常は generateMetadata 側で 308 を返している。ここは念のための保険
+  if (!isCanonicalId(blogId, blog.id)) permanentRedirect(`/blogs/${encodeURIComponent(blog.id)}`);
 
   // 前後記事・関連記事はPF記事を除いた一覧から選ぶ。
   // 一覧に出ていない記事へ飛ばされると導線が破綻するため。
@@ -478,7 +499,7 @@ export default async function StaticDetailPage({
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `${process.env.SITE_URL}/blogs/${blogId}`,
+      '@id': `${process.env.SITE_URL}/blogs/${encodeURIComponent(blog.id)}`,
     },
     keywords: blog.tags?.map(t => t.name).join(', '),
     articleSection: blog.category?.name,

@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 import { BOT_RETRY_WAIT_MS, getList, getCategoryList, getTagList } from '../../libs/notionCache';
-import { ITEMS_PER_PAGE, isPublic } from '@/lib/blog';
+import { isPublic } from '@/lib/blog';
 import { groupBySeries } from '@/lib/series';
 
 export const runtime = 'edge';
@@ -29,14 +29,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // Pagination pages（件数は一覧ページと同じ定数を使う）
-  const totalPages = Math.max(1, Math.ceil(allBlogs.length / ITEMS_PER_PAGE));
-  const paginationEntries: MetadataRoute.Sitemap = Array.from({ length: totalPages }, (_, i) => ({
-    url: `${siteUrl}/blogs/page/${i + 1}`,
-    lastModified: latestUpdated,
-    changeFrequency: 'daily' as const,
-    priority: i === 0 ? 0.9 : 0.6,
-  }));
+  // 一覧は1ページ目だけ載せる。2ページ目以降は noindex（blogs/page/[pageId]）なので、
+  // sitemap に載せると「送信したのに noindex」と食い違う。リンクはたどれるので記事は拾われる
+  const paginationEntries: MetadataRoute.Sitemap = [
+    {
+      url: `${siteUrl}/blogs/page/1`,
+      lastModified: latestUpdated,
+      changeFrequency: 'daily' as const,
+      priority: 0.9,
+    },
+  ];
 
   // Category pages
   const categories = categoryData.contents.filter((c) => c.name !== 'PF');
