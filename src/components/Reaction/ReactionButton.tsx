@@ -1,6 +1,7 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ThumbsUp } from 'lucide-react';
+import { event as gaEvent } from '@/../libs/gtag';
 
 /**
  * 記事末の「参考になった」ボタン（Issue #455）。
@@ -10,6 +11,9 @@ import { ThumbsUp } from 'lucide-react';
  * - 押したことは localStorage に残し、同じブラウザからは2回押せないようにする。
  *   厳密な1人1回はやらない（個人情報や IP を持たない方針）
  * - サイトキーが無い、または API が 503（D1 未バインド）なら何も出さない
+ * - GA4 に reaction_view / reaction_click / reaction_success / reaction_error を送る。
+ *   件数だけだと「ボタンまで来ていない」「来たが押さない」「押したが失敗した」の区別が
+ *   付かないため。記事ごとの比較は GA の page_path で行う
  */
 
 const SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
@@ -50,12 +54,12 @@ function loadTurnstile(): Promise<TurnstileApi> {
       const script = document.createElement('script');
       script.src = TURNSTILE_SRC;
       script.async = true;
-      script.onload = () => (window.turnstile ? resolve(window.turnstile) : reject(new Error('turnstile missing')));
+      script.onload = () => (window.turnstile ? resolve(window.turnstile) : reject(new Error('turnstile_missing')));
       script.onerror = () => {
         // 次に押したときに読み直せるよう、失敗した Promise を残さない
         turnstilePromise = null;
         script.remove();
-        reject(new Error('turnstile load failed'));
+        reject(new Error('turnstile_load'));
       };
       document.head.appendChild(script);
     });
@@ -86,6 +90,7 @@ export const ReactionButton = ({ slug }: { slug: string }) => {
   const [count, setCount] = useState<number | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const widgetRef = useRef<HTMLDivElement>(null);
+  const viewSentRef = useRef(false);
 
   // 記事末にあるので、近づくまで件数を取りに行かない。
   // 冒頭だけ読んで離れた人の分まで Worker と D1 を叩かないため
@@ -124,11 +129,31 @@ export const ReactionButton = ({ slug }: { slug: string }) => {
     };
   }, [slug]);
 
+  // ボタンが実際に読者の目に入ったか。上の先読み（600px 手前）とは別に、半分以上見えたときに1回だけ送る
+  const shown = status !== 'loading' && status !== 'unavailable';
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!shown || !root || viewSentRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          observer.disconnect();
+          viewSentRef.current = true;
+          gaEvent('reaction_view', { already_reacted: readReacted(slug) ? 1 : 0 });
+        }
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(root);
+    return () => observer.disconnect();
+  }, [shown, slug]);
+
   const handleClick = useCallback(async () => {
     if (!SITE_KEY || (status !== 'ready' && status !== 'error')) return;
     const container = widgetRef.current;
     if (!container) return;
     setStatus('sending');
+    gaEvent('reaction_click', { retry: status === 'error' ? 1 : 0 });
 
     let turnstile: TurnstileApi | undefined;
     let widgetId: string | undefined;
@@ -144,9 +169,9 @@ export const ReactionButton = ({ slug }: { slug: string }) => {
           language: 'ja',
           retry: 'never',
           callback: resolve,
-          'error-callback': () => reject(new Error('turnstile error')),
-          'expired-callback': () => reject(new Error('turnstile expired')),
-          'timeout-callback': () => reject(new Error('turnstile timeout')),
+          'error-callback': () => reject(new Error('turnstile_error')),
+          'expired-callback': () => reject(new Error('turnstile_expired')),
+          'timeout-callback': () => reject(new Error('turnstile_timeout')),
         });
       });
 
@@ -155,13 +180,17 @@ export const ReactionButton = ({ slug }: { slug: string }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token }),
       });
-      if (!res.ok) throw new Error(String(res.status));
+      if (!res.ok) throw new Error(`http_${res.status}`);
       const data = (await res.json()) as { count: number };
       setCount(data.count);
       writeReacted(slug);
       setStatus('done');
-    } catch {
+      gaEvent('reaction_success');
+    } catch (e) {
       setStatus('error');
+      // どこで失敗したか（Turnstile の読み込み・判定、API の応答）を送る。想定外の例外は unknown に丸める
+      const reason = e instanceof Error && /^(turnstile_[a-z]+|http_\d{3})$/.test(e.message) ? e.message : 'unknown';
+      gaEvent('reaction_error', { reason });
     } finally {
       if (turnstile && widgetId) turnstile.remove(widgetId);
     }
