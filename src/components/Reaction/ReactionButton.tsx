@@ -20,6 +20,9 @@ const SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
 const storageKey = (slug: string) => `kt-reaction:${slug}`;
 
+/** 押せたときに 👍 の周りに散らす粒の向き（度） */
+const BURST_ANGLES = [0, 60, 120, 180, 240, 300];
+
 type TurnstileApi = {
   render(
     container: HTMLElement,
@@ -91,6 +94,8 @@ export const ReactionButton = ({ slug }: { slug: string }) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const widgetRef = useRef<HTMLDivElement>(null);
   const viewSentRef = useRef(false);
+  // この画面で押して成功したときだけ演出する。開いた時点で押し済みの記事では動かさない
+  const [celebrate, setCelebrate] = useState(false);
 
   // 記事末にあるので、近づくまで件数を取りに行かない。
   // 冒頭だけ読んで離れた人の分まで Worker と D1 を叩かないため
@@ -184,6 +189,7 @@ export const ReactionButton = ({ slug }: { slug: string }) => {
       const data = (await res.json()) as { count: number };
       setCount(data.count);
       writeReacted(slug);
+      setCelebrate(true);
       setStatus('done');
       gaEvent('reaction_success');
     } catch (e) {
@@ -200,6 +206,7 @@ export const ReactionButton = ({ slug }: { slug: string }) => {
 
   const done = status === 'done';
   const busy = status === 'loading' || status === 'sending';
+  const pop = done && celebrate;
 
   return (
     <div ref={rootRef} className='text-center'>
@@ -208,21 +215,42 @@ export const ReactionButton = ({ slug }: { slug: string }) => {
         onClick={handleClick}
         disabled={done || busy}
         aria-pressed={done}
-        className={`inline-flex items-center gap-2 px-5 py-2 rounded-full border text-sm font-medium transition-colors disabled:cursor-default ${
+        className={`inline-flex items-center gap-2 px-5 py-2 rounded-full border text-sm font-medium transition-[color,background-color,border-color,transform] duration-200 enabled:active:scale-95 motion-reduce:transition-colors motion-reduce:active:scale-100 disabled:cursor-default ${pop ? 'animate-reaction-ring motion-reduce:animate-none' : ''} ${
           done
             ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400'
             : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-blue-300 hover:text-blue-600 dark:hover:border-blue-700 dark:hover:text-blue-400 disabled:opacity-60 disabled:hover:border-slate-200 disabled:hover:text-slate-700 dark:disabled:hover:border-slate-700 dark:disabled:hover:text-slate-200'
         }`}
       >
-        <ThumbsUp className={`w-4 h-4 ${done ? 'fill-current' : ''}`} aria-hidden='true' />
+        <span className='relative inline-flex' aria-hidden='true'>
+          <ThumbsUp
+            className={`w-4 h-4 transition-transform ${done ? 'fill-current' : ''} ${
+              pop ? 'animate-reaction-pop motion-reduce:animate-none' : ''
+            } ${status === 'sending' ? 'animate-pulse' : ''}`}
+          />
+          {pop &&
+            BURST_ANGLES.map((angle) => (
+              <span
+                key={angle}
+                className='absolute left-1/2 top-1/2 -ml-[2px] -mt-[2px] h-1 w-1 rounded-full bg-blue-400 animate-reaction-burst motion-reduce:hidden'
+                style={{ '--angle': `${angle}deg` } as React.CSSProperties}
+              />
+            ))}
+        </span>
         参考になった
         {/* 件数が届く前も幅を取っておき、届いた瞬間にボタンの幅が変わらないようにする */}
-        <span className='min-w-[2ch] tabular-nums text-slate-500 dark:text-slate-400' aria-label={count === null ? undefined : `${count}件`}>
-          {count ?? ''}
+        <span className='min-w-[2ch] overflow-hidden tabular-nums text-slate-500 dark:text-slate-400' aria-label={count === null ? undefined : `${count}件`}>
+          {/* 押せたら新しい件数を下からせり上げる。key を変えてアニメーションをやり直させる */}
+          <span key={pop ? 'after' : 'before'} className={`inline-block ${pop ? 'animate-reaction-count motion-reduce:animate-none' : ''}`}>
+            {count ?? ''}
+          </span>
         </span>
       </button>
       <p className='mt-2 min-h-[1.25rem] text-xs text-slate-500 dark:text-slate-400' aria-live='polite'>
-        {done && 'ありがとうございます！'}
+        {done && (
+          <span className={pop ? 'inline-block animate-in fade-in slide-in-from-bottom-1 duration-300 motion-reduce:animate-none' : undefined}>
+            ありがとうございます！
+          </span>
+        )}
         {status === 'error' && '送信できませんでした。時間をおいてもう一度お試しください。'}
       </p>
       {/* Turnstile の置き場所。確認が要るときだけここにチェックボックスが出る */}
