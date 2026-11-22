@@ -23,7 +23,7 @@ state は非公開の R2 バケット `kt-tech-blog-tfstate` に置いている�
    - Account / Cloudflare Pages / Edit（シークレットを Pages に入れるときに使う）
    - Account / Workers R2 Storage / Edit（state 用のバケットを作るときに使う）
    - Zone / Zone / Read と Zone / Zone WAF / Edit（レート制限。Zone Resources は kt-tech.blog だけ）
-2. トークンを 1Password の保管庫 `Private` / アイテム `kt-tech.blog` に `CLOUDFLARE_API_TOKEN`
+2. トークンを 1Password の保管庫 `Private` / アイテム `[Private] kt-tech.blog 認証情報`（ID `a2lul7aruumpg63hnrzzrkqlhi`。参照は名前の変更に強いよう ID で書く） に `CLOUDFLARE_API_TOKEN`
    として入れる。アカウント ID も `CLOUDFLARE_ACCOUNT_ID` として入れる。
    GitHub Actions の同名シークレットとは別物なので混ぜないこと
 3. state 用のバケットを作る（非公開。独自ドメインや公開アクセスは付けない）
