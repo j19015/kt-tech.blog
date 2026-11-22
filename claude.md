@@ -99,9 +99,9 @@ kt-tech.blog/
 
 ## 環境変数
 
-ローカルの秘密情報は **1Password**（保管庫 `Private` / アイテム `kt-tech.blog`）に置き、
+ローカルの秘密情報は **1Password**（保管庫 `Private` / アイテム `[Private] kt-tech.blog 認証情報`（ID `a2lul7aruumpg63hnrzzrkqlhi`。参照は名前の変更に強いよう ID で書く））に置き、
 `op run` で実行時にだけプロセスへ渡す。参照の一覧はリポジトリ直下の `.env.op`
-（`KEY=op://Private/kt-tech.blog/KEY`、値は入っていないのでコミット済み）。
+（`KEY=op://Private/a2lul7aruumpg63hnrzzrkqlhi/KEY`、値は入っていないのでコミット済み）。
 Terraform 用は `infra/.env.op` に分けてある（`infra/tf.sh` が自分で `op run` する）。
 
 | 用途 | コマンド |

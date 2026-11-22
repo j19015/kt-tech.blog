@@ -131,8 +131,8 @@ PR では [`pr-check.yml`](.github/workflows/pr-check.yml) が lint とビルド
 
 ## 環境変数
 
-ローカルの秘密情報は 1Password（保管庫 `Private` / アイテム `kt-tech.blog`）に置いている。
-[`.env.op`](.env.op) に `KEY=op://Private/kt-tech.blog/KEY` 形式の参照だけを並べてあり
+ローカルの秘密情報は 1Password（保管庫 `Private` / アイテム `[Private] kt-tech.blog 認証情報`（ID `a2lul7aruumpg63hnrzzrkqlhi`。参照は名前の変更に強いよう ID で書く））に置いている。
+[`.env.op`](.env.op) に `KEY=op://Private/a2lul7aruumpg63hnrzzrkqlhi/KEY` 形式の参照だけを並べてあり
 （値は入っていないのでコミットしてある）、`op run --env-file=.env.op -- <コマンド>` で
 実行中のプロセスにだけ値が渡る。`dev:op` / `preview:op` はこれを包んだもの。
 Terraform 用の参照は [`infra/.env.op`](infra/.env.op) に分けてある。
