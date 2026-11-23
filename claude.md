@@ -229,6 +229,26 @@ NEXT_PUBLIC_R2_BUCKET_URL=xxx    # R2パブリックURL
   （サイトキー `1x00000000000000000000AA` / シークレット `1x0000000000000000000000000000000AA`、
   必ず通る公開のダミー）を入れて `npm run dev`。データは `.wrangler/` に残る
 - `npm run preview`（wrangler pages dev）には D1 を渡していないので、ボタンは出ない
+- 本番の件数を見る: `cd infra && op run --env-file=.env.op -- npx wrangler d1 execute kt-tech-blog-reactions --remote --command "SELECT * FROM reactions ORDER BY count DESC"`
+  （Terraform 用トークンで読める。Analytics の読み取り権限は無いので Turnstile の統計は見られない）
+
+### 計測（GA4。#581）
+
+件数だけでは「ボタンまで来ていない／来たが押さない／押したが失敗」が区別できないので、
+`ReactionButton` から GA4 にイベントを送っている。記事ごとの比較は GA が自動で付ける `page_path` で行う。
+
+| イベント | タイミング | パラメータ |
+|---|---|---|
+| `reaction_view` | ボタンが半分以上画面に入った（1回だけ） | `already_reacted` |
+| `reaction_click` | 押した | `retry`（失敗後の再試行なら 1） |
+| `reaction_success` | 加算まで成功 | なし |
+| `reaction_error` | 失敗 | `reason`（`turnstile_load` / `turnstile_error` / `turnstile_timeout` / `turnstile_expired` / `turnstile_missing` / `http_NNN` / `unknown`） |
+
+- `reason` は GA のカスタムディメンション `reaction_error_reason`（イベントスコープ）として登録済み。
+  GA の表示名は英数字とアンダースコアしか使えない
+- 見る比率: 到達率 `reaction_view / page_view`、押下率 `reaction_click / reaction_view`、成功率 `reaction_success / reaction_click`
+- GA4 はアカウント `290079194` / プロパティ `412429977`（測定 ID `G-DSCWD1G3BR`）。管理者は本人の個人アカウントのみ
+- 自分の閲覧も数えられる（内部トラフィックの除外は未設定）。少ない件数のうちは自分の分に注意
 
 ## 重要なコマンド
 
