@@ -98,7 +98,7 @@ export const ShareButtons = ({ title, url }: ShareButtonsProps) => {
           <a href={shareLinks.line} target='_blank' rel='noopener noreferrer' onClick={() => trackShare('line')} className={`${btnBase} text-[#00B900] hover:bg-[#00B900] hover:text-white`} aria-label='Share on LINE'>
             <LineIcon className='w-4 h-4' />
           </a>
-          <a href={shareLinks.hatena} target='_blank' rel='noopener noreferrer' onClick={() => trackShare('hatena')} className={`${btnBase} text-[#00A4DE] hover:bg-[#00A4DE] hover:text-white text-xs font-bold`} aria-label='Bookmark on Hatena'>
+          <a href={shareLinks.hatena} target='_blank' rel='noopener noreferrer' onClick={() => trackShare('hatena')} className={`${btnBase} text-[#0077A3] dark:text-[#00A4DE] hover:bg-[#0077A3] hover:text-white text-xs font-bold`} aria-label='Bookmark on Hatena'>
             B!
           </a>
           <button onClick={handleCopyLink} className={`${btnBase} text-slate-500 dark:text-slate-400 hover:bg-slate-600 hover:text-white`} aria-label='Copy link'>
