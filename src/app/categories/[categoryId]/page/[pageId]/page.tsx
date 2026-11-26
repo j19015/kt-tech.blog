@@ -5,7 +5,7 @@ import Paginate from '@/components/Pagination/Paginate';
 import Index from '@/components/Index/Index';
 import Title from '@/components/Title/Title';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
-import { ITEMS_PER_PAGE, isPublic } from '@/lib/blog';
+import { ITEMS_PER_PAGE, isIndexableList, isPublic } from '@/lib/blog';
 import { Metadata } from 'next';
 
 const siteUrl = process.env.SITE_URL || 'https://kt-tech.blog';
@@ -16,16 +16,28 @@ export async function generateMetadata({
   params: Promise<{ categoryId: string; pageId: string }>;
 }): Promise<Metadata> {
   const { categoryId, pageId } = await params;
-  const category = await getCategoryDetail(decodeURIComponent(categoryId)).catch(() => null);
+  const currentPage = Number.parseInt(pageId, 10);
+  const [category, contents] = await Promise.all([
+    getCategoryDetail(decodeURIComponent(categoryId)).catch(() => null),
+    getList().then((r) => r.contents).catch(() => null),
+  ]);
   const name = category?.name || decodeURIComponent(categoryId);
-  const title = `${name}の記事一覧${Number(pageId) > 1 ? ` (${pageId}ページ目)` : ''}`;
+  const title = `${name}の記事一覧${currentPage > 1 ? ` (${currentPage}ページ目)` : ''}`;
   const description = `${name}に関する技術記事の一覧です。`;
-  const url = `${siteUrl}/categories/${categoryId}/page/${pageId}`;
+  // canonical はリクエストの文字列ではなくカテゴリの id から組む（sitemap と同じ書き方）
+  const url = `${siteUrl}/categories/${category ? encodeURIComponent(category.id) : categoryId}/page/${currentPage}`;
+  const postCount = category && contents
+    ? contents.filter(isPublic).filter((blog) => blog.category?.id === category.id).length
+    : null;
 
   return {
     title,
     description,
     alternates: { canonical: url },
+    // 記事が少ない一覧と2ページ目以降は noindex（#587）。件数が取れないときは何も足さない
+    ...(postCount !== null && !isIndexableList(postCount, currentPage)
+      ? { robots: { index: false, follow: true } }
+      : {}),
     openGraph: {
       title,
       description,

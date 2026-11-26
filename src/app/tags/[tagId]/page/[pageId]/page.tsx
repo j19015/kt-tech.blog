@@ -5,7 +5,7 @@ import Paginate from '@/components/Pagination/Paginate';
 import Index from '@/components/Index/Index';
 import Title from '@/components/Title/Title';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
-import { ITEMS_PER_PAGE, isPublic } from '@/lib/blog';
+import { ITEMS_PER_PAGE, isIndexableList, isPublic } from '@/lib/blog';
 import { Metadata } from 'next';
 
 const siteUrl = process.env.SITE_URL || 'https://kt-tech.blog';
@@ -14,16 +14,28 @@ type Props = { params: Promise<{ tagId: string; pageId: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { tagId, pageId } = await params;
-  const tag = await getTagDetail(decodeURIComponent(tagId)).catch(() => null);
+  const currentPage = Number.parseInt(pageId, 10);
+  const [tag, contents] = await Promise.all([
+    getTagDetail(decodeURIComponent(tagId)).catch(() => null),
+    getList().then((r) => r.contents).catch(() => null),
+  ]);
   const name = tag?.name || decodeURIComponent(tagId);
-  const title = `${name}の記事一覧${Number(pageId) > 1 ? ` (${pageId}ページ目)` : ''}`;
+  const title = `${name}の記事一覧${currentPage > 1 ? ` (${currentPage}ページ目)` : ''}`;
   const description = `${name}タグが付けられた技術記事の一覧です。`;
-  const url = `${siteUrl}/tags/${tagId}/page/${pageId}`;
+  // canonical はリクエストの文字列ではなくタグの id から組む（sitemap・リンクと同じ書き方）
+  const url = `${siteUrl}/tags/${tag ? encodeURIComponent(tag.id) : tagId}/page/${currentPage}`;
+  const postCount = tag && contents
+    ? contents.filter(isPublic).filter((blog) => blog.tags?.some((t) => t.id === tag.id)).length
+    : null;
 
   return {
     title,
     description,
     alternates: { canonical: url },
+    // 記事が少ない一覧と2ページ目以降は noindex（#587）。件数が取れないときは何も足さない
+    ...(postCount !== null && !isIndexableList(postCount, currentPage)
+      ? { robots: { index: false, follow: true } }
+      : {}),
     openGraph: { title, description, url, type: 'website' },
     twitter: { card: 'summary', title, description },
   };

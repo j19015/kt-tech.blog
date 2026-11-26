@@ -5,7 +5,7 @@ import Paginate from '@/components/Pagination/Paginate';
 import Index from '@/components/Index/Index';
 import Title from '@/components/Title/Title';
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
-import { ITEMS_PER_PAGE, isPublic, formatArchive } from '@/lib/blog';
+import { ITEMS_PER_PAGE, archiveKey, isIndexableList, isPublic, formatArchive } from '@/lib/blog';
 import { Metadata } from 'next';
 
 const siteUrl = process.env.SITE_URL || 'https://kt-tech.blog';
@@ -14,15 +14,24 @@ type Props = { params: Promise<{ archive: string; pageId: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { archive, pageId } = await params;
+  const currentPage = Number.parseInt(pageId, 10);
   const label = formatArchive(archive);
-  const title = `${label}のアーカイブ${Number(pageId) > 1 ? ` (${pageId}ページ目)` : ''}`;
+  const title = `${label}のアーカイブ${currentPage > 1 ? ` (${currentPage}ページ目)` : ''}`;
   const description = `${label}に公開された技術記事の一覧です。`;
-  const url = `${siteUrl}/archives/${archive}/page/${pageId}`;
+  const url = `${siteUrl}/archives/${archive}/page/${currentPage}`;
+  const contents = await getList().then((r) => r.contents).catch(() => null);
+  const postCount = contents
+    ? contents.filter(isPublic).filter((item) => archiveKey(item) === archive).length
+    : null;
 
   return {
     title,
     description,
     alternates: { canonical: url },
+    // 記事が少ない月と2ページ目以降は noindex（#587）。件数が取れないときは何も足さない
+    ...(postCount !== null && !isIndexableList(postCount, currentPage)
+      ? { robots: { index: false, follow: true } }
+      : {}),
     openGraph: { title, description, url, type: 'website' },
     twitter: { card: 'summary', title, description },
   };
@@ -44,7 +53,7 @@ export default async function ArchivePaginationPage({ params }: Props) {
 
   const filteredContents = contents
     .filter(isPublic)
-    .filter((item) => item.createdAt.slice(0, 7) === archive);
+    .filter((item) => archiveKey(item) === archive);
 
   const totalPage = Math.max(1, Math.ceil(filteredContents.length / ITEMS_PER_PAGE));
   if (filteredContents.length === 0 || currentPage > totalPage) notFound();
