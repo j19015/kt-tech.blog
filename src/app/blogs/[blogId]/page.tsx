@@ -561,7 +561,7 @@ export default async function StaticDetailPage({
                 以前はアイキャッチとメタ情報が先で、記事を開いた瞬間に
                 何の記事か分かるまでスクロールが必要だった。 */}
             <header className='px-4'>
-              <h1 data-article-title className='text-2xl lg:text-3xl font-bold text-foreground break-words leading-tight'>
+              <h1 data-article-title className='title-wrap text-2xl lg:text-3xl font-bold text-foreground break-words leading-tight'>
                 {blog.title}
               </h1>
 

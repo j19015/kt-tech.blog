@@ -33,6 +33,13 @@
   color: var(--md-body-dark);
 }
 
+/* 本文の見出しも、1文字だけの行が出ないよう行の長さを揃える（#601） */
+.znc h2,
+.znc h3 {
+  text-wrap: balance;
+  word-break: auto-phrase;
+}
+
 /* 見出しは本文より濃く置いて、階層を色でも示す */
 .znc h2,
 .znc h3,

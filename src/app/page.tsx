@@ -114,7 +114,7 @@ export default async function StaticPage() {
                         {latestBlogs[0].category.name}
                       </span>
                     )}
-                    <h2 className='text-lg sm:text-2xl lg:text-3xl font-bold text-white leading-tight group-hover:text-blue-200 transition-colors line-clamp-2'>
+                    <h2 className='title-wrap-pretty text-lg sm:text-2xl lg:text-3xl font-bold text-white leading-tight group-hover:text-blue-200 transition-colors line-clamp-2'>
                       {latestBlogs[0].title}
                     </h2>
                     {/* 明るいアイキャッチの上だと /50 では日付がほぼ消えていた */}
@@ -145,7 +145,7 @@ export default async function StaticPage() {
                           {blog.category.name}
                         </span>
                       )}
-                      <h3 className='text-base font-bold text-white leading-snug group-hover:text-blue-200 transition-colors line-clamp-2'>
+                      <h3 className='title-wrap-pretty text-base font-bold text-white leading-snug group-hover:text-blue-200 transition-colors line-clamp-2'>
                         {blog.title}
                       </h3>
                     </div>
