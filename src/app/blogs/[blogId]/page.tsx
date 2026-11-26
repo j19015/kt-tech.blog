@@ -605,6 +605,9 @@ export default async function StaticDetailPage({
                 sizes='(max-width: 1024px) 100vw, 700px'
                 className='mt-6 rounded-lg w-full aspect-[21/9] object-cover'
                 priority
+                // Next.js 15 の priority は preload を出すだけで fetchpriority 属性は付けない。
+                // このアイキャッチは記事ページの LCP 要素なので、明示して先に取りに行かせる（#591）
+                fetchPriority='high'
               />
             </header>
             {/* 連載の目次は本文より前。途中から流入した読者に、
