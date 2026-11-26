@@ -34,6 +34,19 @@ const nextConfig = {
       { protocol: 'https', hostname: 'www.google.com' },
     ],
   },
+  // 一覧の「1ページ目ではないURL」を /…/page/1 に寄せる。
+  // 以前はページ本体で redirect() を呼んでいたが、loading.tsx（Suspense）の内側なので
+  // ヘッダーを送ったあとになり、HTTP 200 の「読み込み中...」だけのページになっていた。
+  // Search Console では中身のない 200 として「クロール済み - インデックス未登録」に入る。
+  // ここで書けば描画の前に 308 を返せる（#586）
+  async redirects() {
+    return [
+      { source: '/blogs', destination: '/blogs/page/1', permanent: true },
+      { source: '/categories/:categoryId', destination: '/categories/:categoryId/page/1', permanent: true },
+      { source: '/tags/:tagId', destination: '/tags/:tagId/page/1', permanent: true },
+      { source: '/archives/:archive', destination: '/archives/:archive/page/1', permanent: true },
+    ];
+  },
   async headers() {
     return [
       {
