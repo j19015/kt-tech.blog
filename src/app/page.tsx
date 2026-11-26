@@ -9,6 +9,7 @@ import { safeJsonLd } from '@/lib/jsonld';
 import { ArrowRight, FolderOpen } from 'lucide-react';
 import { isPublic } from '@/lib/blog';
 import { isRecentlyUpdated } from '@/lib/articleStatus';
+import { authorJsonLd } from '@/lib/author';
 
 const siteUrl = process.env.SITE_URL || 'https://kt-tech.blog';
 const description = '実践的な技術記事とエンジニアリングの知見を発信。React, Next.js, TypeScript, Cloudflare, AIなどのモダン技術を中心に。';
@@ -74,11 +75,7 @@ export default async function StaticPage() {
     name: 'kt-tech.blog',
     url: siteUrl,
     description,
-    author: {
-      '@type': 'Person',
-      name: 'Koki',
-      url: `${siteUrl}/about`,
-    },
+    author: authorJsonLd(),
     potentialAction: {
       '@type': 'SearchAction',
       target: `${siteUrl}/searches?text={search_term_string}`,

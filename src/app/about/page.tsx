@@ -12,12 +12,14 @@ export const metadata: Metadata = {
 };
 import { BreadcrumbNav } from '@/components/Breadcrumb/BreadcrumbNav';
 import { Github } from 'lucide-react';
+import { safeJsonLd } from '@/lib/jsonld';
+import { AUTHOR_PROFILES, AUTHOR_URL, authorJsonLd } from '@/lib/author';
 import {
   SiNextdotjs, SiReact, SiTypescript, SiJavascript, SiRuby,
   SiRubyonrails, SiPostgresql, SiMysql, SiGooglecloud,
   SiTailwindcss, SiRedux, SiGit,
   SiPrisma, SiPython, SiGo, SiDocker, SiGithubactions,
-  SiCircleci, SiFirebase, SiFastapi, SiReactquery
+  SiCircleci, SiFirebase, SiFastapi, SiReactquery, SiQiita
 } from 'react-icons/si';
 import { FaAws } from 'react-icons/fa';
 import { VscVscode, VscAzure } from 'react-icons/vsc';
@@ -186,8 +188,18 @@ export default function About() {
   const socialLinkClass =
     'inline-flex min-h-[44px] items-center gap-2 border-b border-slate-300 px-1 text-sm text-slate-600 transition-colors hover:border-slate-900 hover:text-slate-900 dark:border-slate-600 dark:text-slate-300 dark:hover:border-slate-100 dark:hover:text-slate-100';
 
+  // 記事・トップの JSON-LD は著者を AUTHOR_ID（/about#person）で指している。
+  // その実体をこのページに置き、プロフィールページであることも示す（#594）
+  const profileJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    url: AUTHOR_URL,
+    mainEntity: authorJsonLd(),
+  };
+
   return (
     <>
+      <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: safeJsonLd(profileJsonLd) }} />
       <BreadcrumbNav items={[{ label: 'About', current: true }]} />
 
       {/* ヘッダー・フッター・記事ページと同じ max-w-6xl。ここだけ幅が違うと左端がずれる */}
@@ -207,13 +219,17 @@ export default function About() {
             静岡からフルリモートで働いています。
           </p>
           <div className='mt-8 flex flex-wrap items-center gap-6'>
-            <Link href='https://github.com/j19015' target='_blank' rel='noopener noreferrer' className={socialLinkClass}>
+            <Link href={AUTHOR_PROFILES.github} target='_blank' rel='noopener noreferrer' className={socialLinkClass}>
               <Github className='h-4 w-4' />
               GitHub
             </Link>
-            <Link href='https://x.com/tech_koki' target='_blank' rel='noopener noreferrer' className={socialLinkClass}>
+            <Link href={AUTHOR_PROFILES.x} target='_blank' rel='noopener noreferrer' className={socialLinkClass}>
               <XIcon className='h-4 w-4' />
               X
+            </Link>
+            <Link href={AUTHOR_PROFILES.qiita} target='_blank' rel='noopener noreferrer' className={socialLinkClass}>
+              <SiQiita className='h-4 w-4' />
+              Qiita
             </Link>
           </div>
         </header>
