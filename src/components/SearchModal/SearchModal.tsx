@@ -151,7 +151,7 @@ export const SearchModal = ({ isOpen, onClose }: Props) => {
           <button
             onClick={close}
             aria-label='閉じる'
-            className='p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
+            className='p-1 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
           >
             <X className='w-4 h-4' aria-hidden='true' />
           </button>

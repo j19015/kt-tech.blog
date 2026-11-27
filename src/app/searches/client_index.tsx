@@ -65,7 +65,7 @@ export const ClientIndex = ({ contents }: BlogProps) => {
             onChange={(e) => setDraft(e.target.value)}
             placeholder='キーワードで記事を検索'
             aria-label='検索キーワード'
-            className='flex-1 px-4 py-2.5 text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400'
+            className='flex-1 px-4 py-2.5 text-base sm:text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400'
           />
           <button
             type='submit'

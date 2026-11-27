@@ -53,7 +53,7 @@ export const ArticleAside = ({ blog, latest }: { blog: Blog; latest: Blog[] }) =
                   <span className='line-clamp-2 leading-snug'>{post.title}</span>
                   <time
                     dateTime={post.createdAt}
-                    className='mt-0.5 block text-xs text-slate-400 dark:text-slate-500'
+                    className='mt-0.5 block text-xs text-slate-500 dark:text-slate-400'
                   >
                     {post.createdAt.slice(0, 10).replace(/-/g, '/')}
                   </time>

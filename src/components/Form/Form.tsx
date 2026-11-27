@@ -18,7 +18,7 @@ export const Form = () => {
     <form onSubmit={handleSubmit}>
       <div className='flex items-center gap-2'>
         <input
-          className='flex-1 px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 dark:focus:border-blue-500 transition-all'
+          className='flex-1 px-3 py-2 text-base sm:text-sm bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 dark:focus:border-blue-500 transition-all'
           type='text'
           value={query}
           onChange={(e) => setQuery(e.target.value)}

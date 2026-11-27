@@ -194,7 +194,7 @@ const TocLink = ({
           aria-expanded={toggle.isOpen}
           aria-controls={toggle.panelId}
           aria-label={`${item.text} の小見出しを${toggle.isOpen ? '閉じる' : '開く'}`}
-          className='shrink-0 self-stretch px-1.5 text-slate-400 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-200'
+          className='shrink-0 self-stretch px-1.5 text-slate-500 hover:text-slate-700 dark:text-slate-500 dark:hover:text-slate-200'
         >
           <ChevronRight
             className={`h-3.5 w-3.5 transition-transform ${toggle.isOpen ? 'rotate-90' : ''}`}
