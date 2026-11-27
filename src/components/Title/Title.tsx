@@ -21,7 +21,7 @@ export const Title = (props: { title: string; type?: TitleType; count?: number }
           {label}
         </p>
       )}
-      <h1 className='text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-100 break-words'>
+      <h1 className='title-wrap text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-100 break-words'>
         {heading}
       </h1>
       {props.count !== undefined && props.count > 0 && (

@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { Github, Rss } from 'lucide-react';
+import { SiQiita } from 'react-icons/si';
+import { AUTHOR_PROFILES } from '@/lib/author';
 
 const XIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox='0 0 24 24' fill='currentColor' aria-hidden='true'>
@@ -64,7 +66,7 @@ export const Footer = () => {
           </div>
           <div className='flex items-center gap-3'>
             <a
-              href='https://github.com/j19015'
+              href={AUTHOR_PROFILES.github}
               target='_blank'
               rel='noopener noreferrer'
               className={SOCIAL_CLASS}
@@ -73,13 +75,23 @@ export const Footer = () => {
               <Github className='h-[18px] w-[18px]' aria-hidden='true' />
             </a>
             <a
-              href='https://x.com/tech_koki'
+              href={AUTHOR_PROFILES.x}
               target='_blank'
               rel='noopener noreferrer'
               className={SOCIAL_CLASS}
               aria-label='X (Twitter)'
             >
               <XIcon className='h-4 w-4' />
+            </a>
+            {/* Qiita からはこのブログへリンクしているのに、逆向きの導線が無かった（#594） */}
+            <a
+              href={AUTHOR_PROFILES.qiita}
+              target='_blank'
+              rel='noopener noreferrer'
+              className={SOCIAL_CLASS}
+              aria-label='Qiita'
+            >
+              <SiQiita className='h-4 w-4' aria-hidden='true' />
             </a>
             <a href='/feed.xml' className={SOCIAL_CLASS} aria-label='RSS'>
               <Rss className='h-[18px] w-[18px]' aria-hidden='true' />

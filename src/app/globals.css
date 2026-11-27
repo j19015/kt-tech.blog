@@ -396,3 +396,18 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* タイトルの折り返し（#601）
+   スマホで記事タイトルの最終行が「ぐ」1文字だけになる、などが起きていた。
+   - text-wrap: balance … 行の長さを揃える（見出し向け。長い本文には使わない）
+   - text-wrap: pretty  … 最終行が極端に短くなるのだけ防ぐ（2行で切るカード向け）
+   - word-break: auto-phrase … 日本語を文節で折り返す（<html lang="ja"> が前提）
+   どれも未対応のブラウザでは指定が無視され、今までどおりの表示になる。 */
+.title-wrap {
+  text-wrap: balance;
+  word-break: auto-phrase;
+}
+.title-wrap-pretty {
+  text-wrap: pretty;
+  word-break: auto-phrase;
+}

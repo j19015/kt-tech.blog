@@ -118,7 +118,7 @@ export const PostCard = ({ blog, terms, footer, priority = false, label }: Props
               </span>
             )}
 
-            <h2 className='text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 leading-snug'>
+            <h2 className='title-wrap-pretty text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 leading-snug'>
               <HighlightText text={blog.title} terms={terms} />
             </h2>
 

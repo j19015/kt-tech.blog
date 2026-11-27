@@ -8,10 +8,10 @@ import './globals.css';
 import '../../styles/noto-sans-jp.css';
 import { NOTO_SANS_JP_PRELOAD } from '@/lib/font-preload';
 import { safeJsonLd } from '@/lib/jsonld';
+import { AUTHOR_ID, AUTHOR_URL, authorJsonLd } from '@/lib/author';
 import { Header } from '../../src/components/Header/Header';
 import { Footer } from '../../src/components/Footer/Footer';
 import GoogleAnalytics from '@/components/GoogleAnalytics/GoogleAnalytics';
-import Favicon from './favicon.ico';
 import icon from './icon.png';
 import { Metadata } from 'next';
 import { ThemeProvider } from './providers/ThemeProvider/theme-provider';
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   },
   description,
   keywords: ['技術ブログ', 'React', 'Next.js', 'TypeScript', 'AWS', 'フルスタックエンジニア', 'Web開発', 'プログラミング'],
-  authors: [{ name: author, url: 'https://github.com/j19015' }],
+  authors: [{ name: author, url: AUTHOR_URL }],
   creator: author,
   publisher: author,
   formatDetection: {
@@ -76,9 +76,10 @@ export const metadata: Metadata = {
       'application/rss+xml': `${url}/feed.xml`,
     },
   },
+  // 記事ページは generateMetadata で other を上書きする（thumbnail をアイキャッチにする）。
+  // other は丸ごと置き換わるので、全ページに要る google-adsense-account は <head> に直接書く
   other: {
     thumbnail: `${url}${icon.src}`,
-    'google-adsense-account': 'ca-pub-9002778711554857',
   },
 };
 
@@ -89,30 +90,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     name: siteName,
     url: url,
     description: description,
-    author: {
-      '@type': 'Person',
-      name: author,
-      url: 'https://github.com/j19015',
-      sameAs: [
-        'https://x.com/tech_koki',
-        'https://github.com/j19015'
-      ]
-    },
-    publisher: {
-      '@type': 'Person',
-      name: author
-    },
+    // 著者はトップ・記事と同じ @id の Person にそろえる（#594）
+    author: authorJsonLd(),
+    publisher: { '@id': AUTHOR_ID },
     inLanguage: 'ja',
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        // サイト内の検索フォームは全て `text` を送る。ここだけ `keyword` になっており、
-        // 検索エンジン経由で来た人は空の検索ページに着地していた。
-        urlTemplate: `${url}/searches?text={search_term_string}`
-      },
-      'query-input': 'required name=search_term_string'
-    }
+    // SearchAction は WebSite に付けるもので、トップの WebSite JSON-LD に同じものがある。
+    // ここ（Blog）にも出していたため、トップでは2つ重なっていた（#594）
   };
 
   return (
@@ -137,9 +120,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name='theme-color' media='(prefers-color-scheme: light)' content='#ffffff' />
         <meta name='theme-color' media='(prefers-color-scheme: dark)' content='#0f172a' />
         <meta name='google-adsense-account' content='ca-pub-9002778711554857'></meta>
-        {/* SITE_URL が未設定だと "undefined/favicon.ico" という壊れたURLを出していた。
-            metadata 側と同じ既定値にそろえる */}
-        <meta name='thumbnail' content={`${url}${Favicon.src}`}></meta>
+        {/* thumbnail は metadata.other から出る（記事ページはアイキャッチ）。
+            ここにも favicon で手書きしていたため、thumbnail が2つ・別々の値で出ていた（#594） */}
         <script
           type='application/ld+json'
           dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}

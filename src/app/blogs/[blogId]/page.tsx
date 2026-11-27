@@ -88,10 +88,12 @@ import { findSeriesOf } from '@/lib/series';
 import { isPublic } from '@/lib/blog';
 import { calloutKindFromColor, CALLOUT_META } from '@/lib/callout';
 import { isStale } from '@/lib/articleStatus';
+import { AUTHOR_PROFILES, authorJsonLd } from '@/lib/author';
 import { relatedPosts, navigationScope } from '@/lib/related';
 import { CategoryChip, TagChip } from '@/components/Chip/Chip';
 // カレンダー・フォルダの3アイコンのために FontAwesome 一式を読み込んでいたので lucide に統一
-import { Calendar, Pencil, MessageCircle } from 'lucide-react';
+import { Calendar, Pencil, MessageCircle, Github, Rss } from 'lucide-react';
+import { SiQiita, SiX } from 'react-icons/si';
 
 
 export const runtime = 'edge';
@@ -483,15 +485,7 @@ export default async function StaticDetailPage({
     datePublished: new Date(blog.publishedAt).toISOString(),
     dateModified: new Date(blog.updatedAt).toISOString(),
     inLanguage: 'ja',
-    author: {
-      '@type': 'Person',
-      name: 'Koki',
-      url: 'https://kt-tech.blog/about',
-      sameAs: [
-        'https://github.com/j19015',
-        'https://x.com/tech_koki',
-      ],
-    },
+    author: authorJsonLd(),
     publisher: {
       '@type': 'Organization',
       name: 'kt-tech.blog',
@@ -561,7 +555,7 @@ export default async function StaticDetailPage({
                 以前はアイキャッチとメタ情報が先で、記事を開いた瞬間に
                 何の記事か分かるまでスクロールが必要だった。 */}
             <header className='px-4'>
-              <h1 data-article-title className='text-2xl lg:text-3xl font-bold text-foreground break-words leading-tight'>
+              <h1 data-article-title className='title-wrap text-2xl lg:text-3xl font-bold text-foreground break-words leading-tight'>
                 {blog.title}
               </h1>
 
@@ -605,6 +599,9 @@ export default async function StaticDetailPage({
                 sizes='(max-width: 1024px) 100vw, 700px'
                 className='mt-6 rounded-lg w-full aspect-[21/9] object-cover'
                 priority
+                // Next.js 15 の priority は preload を出すだけで fetchpriority 属性は付けない。
+                // このアイキャッチは記事ページの LCP 要素なので、明示して先に取りに行かせる（#591）
+                fetchPriority='high'
               />
             </header>
             {/* 連載の目次は本文より前。途中から流入した読者に、
@@ -677,23 +674,56 @@ export default async function StaticDetailPage({
               </div>
               <div className='border-t border-slate-200 dark:border-slate-700 pt-6'>
                 {/* 著者カードはどこにもリンクしておらず、行き止まりになっていた */}
-                <Link href='/about' className='group flex items-center gap-4'>
-                  <Image
-                    src='/images/meow_koki.webp'
-                    alt=''
-                    width={48}
-                    height={48}
-                    className='rounded-full object-cover'
-                  />
-                  <div>
-                    <p className='font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors'>
-                      Koki
-                    </p>
-                    <p className='text-xs text-slate-500 dark:text-slate-400'>
-                      フルスタックエンジニア / React, Next.js, TypeScript
-                    </p>
-                  </div>
-                </Link>
+                {/* 著者カードから外へ出る導線が /about しか無かった。
+                    Zenn の記事末のように、GitHub・X・Qiita と RSS をここに並べる（#594） */}
+                <div className='flex flex-wrap items-center justify-between gap-4'>
+                  <Link href='/about' className='group flex items-center gap-4'>
+                    <Image
+                      src='/images/meow_koki.webp'
+                      alt=''
+                      width={48}
+                      height={48}
+                      className='rounded-full object-cover'
+                    />
+                    <div>
+                      <p className='font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors'>
+                        Koki
+                      </p>
+                      <p className='text-xs text-slate-500 dark:text-slate-400'>
+                        フルスタックエンジニア / React, Next.js, TypeScript
+                      </p>
+                    </div>
+                  </Link>
+                  <ul className='flex items-center gap-2' aria-label='著者のほかの発信先'>
+                    {[
+                      { href: AUTHOR_PROFILES.github, label: 'GitHub', icon: <Github className='h-4 w-4' aria-hidden='true' /> },
+                      { href: AUTHOR_PROFILES.x, label: 'X (Twitter)', icon: <SiX className='h-3.5 w-3.5' aria-hidden='true' /> },
+                      { href: AUTHOR_PROFILES.qiita, label: 'Qiita', icon: <SiQiita className='h-4 w-4' aria-hidden='true' /> },
+                    ].map((profile) => (
+                      <li key={profile.href}>
+                        <a
+                          href={profile.href}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          aria-label={profile.label}
+                          className='flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition-colors hover:border-slate-400 hover:text-slate-900 dark:border-slate-700 dark:text-slate-300 dark:hover:border-slate-500 dark:hover:text-slate-100'
+                        >
+                          {profile.icon}
+                        </a>
+                      </li>
+                    ))}
+                    <li>
+                      {/* feed.xml はページではないので next/link を使わない */}
+                      <a
+                        href='/feed.xml'
+                        aria-label='RSS で新着記事を購読'
+                        className='flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition-colors hover:border-slate-400 hover:text-slate-900 dark:border-slate-700 dark:text-slate-300 dark:hover:border-slate-500 dark:hover:text-slate-100'
+                      >
+                        <Rss className='h-4 w-4' aria-hidden='true' />
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </div>
               {/* フィードバック導線。以前は text-slate-400 の極小文字で埋もれていた */}
               <div className='flex flex-wrap gap-4 pt-4 border-t border-slate-200 dark:border-slate-700 text-sm'>
