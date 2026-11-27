@@ -35,7 +35,7 @@ export default function Custom404() {
               placeholder='記事を検索...'
               className='flex-1 px-4 py-2.5 text-base sm:text-sm bg-transparent text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none'
             />
-            <button type='submit' className='px-4 py-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'>
+            <button type='submit' className='px-4 py-2.5 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'>
               <Search className='w-4 h-4' />
             </button>
           </div>

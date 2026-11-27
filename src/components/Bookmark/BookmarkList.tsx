@@ -64,7 +64,7 @@ export const BookmarkList = () => {
             <span className='block truncate font-semibold text-slate-900 group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400'>
               {bookmark.title}
             </span>
-            <time dateTime={bookmark.savedAt} className='mt-1 block text-xs text-slate-400 dark:text-slate-500'>
+            <time dateTime={bookmark.savedAt} className='mt-1 block text-xs text-slate-500 dark:text-slate-400'>
               {bookmark.savedAt.slice(0, 10).replace(/-/g, '/')} に保存
             </time>
           </Link>
