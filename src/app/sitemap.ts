@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 import { BOT_RETRY_WAIT_MS, getList, getCategoryList, getTagList } from '../../libs/notionCache';
-import { isPublic } from '@/lib/blog';
+import { archiveKey, isIndexableList, isPublic } from '@/lib/blog';
 import { groupBySeries } from '@/lib/series';
 
 export const runtime = 'edge';
@@ -40,8 +40,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
+  // タグ・カテゴリ・アーカイブは、一覧ページ側で index にするものだけ載せる。
+  // 記事が少ない一覧は noindex なので、載せると「送信したのに noindex」と食い違う（#587）
+  const countBy = (keysOf: (blog: (typeof allBlogs)[number]) => string[]) => {
+    const counts = new Map<string, number>();
+    for (const blog of allBlogs) {
+      for (const key of keysOf(blog)) counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+    return counts;
+  };
+  const categoryCounts = countBy((b) => (b.category ? [b.category.id] : []));
+  const tagCounts = countBy((b) => (b.tags ?? []).map((t) => t.id));
+  const archiveCounts = countBy((b) => [archiveKey(b)]);
+
   // Category pages
-  const categories = categoryData.contents.filter((c) => c.name !== 'PF');
+  const categories = categoryData.contents
+    .filter((c) => c.name !== 'PF')
+    .filter((c) => isIndexableList(categoryCounts.get(c.id) ?? 0, 1));
   const categoryEntries: MetadataRoute.Sitemap = categories.map((cat) => ({
     url: `${siteUrl}/categories/${encodeURIComponent(cat.id)}/page/1`,
     lastModified: latestUpdated,
@@ -50,12 +65,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // Tag pages（1ページ目のURLを正とする。/tags/{id} はそこへリダイレクトする）
-  const tagEntries: MetadataRoute.Sitemap = tagData.contents.map((tag) => ({
-    url: `${siteUrl}/tags/${encodeURIComponent(tag.id)}/page/1`,
-    lastModified: latestUpdated,
-    changeFrequency: 'weekly' as const,
-    priority: 0.5,
-  }));
+  const tagEntries: MetadataRoute.Sitemap = tagData.contents
+    .filter((tag) => isIndexableList(tagCounts.get(tag.id) ?? 0, 1))
+    .map((tag) => ({
+      url: `${siteUrl}/tags/${encodeURIComponent(tag.id)}/page/1`,
+      lastModified: latestUpdated,
+      changeFrequency: 'weekly' as const,
+      priority: 0.5,
+    }));
 
   // Series pages
   const seriesList = groupBySeries(contents);
@@ -66,14 +83,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  // Archive pages (unique year-month from articles)
-  const archiveMonths = new Set(
-    allBlogs.map((b) => {
-      const d = new Date(b.createdAt);
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-    })
+  // Archive pages（一覧の絞り込みと同じく createdAt の先頭7文字で月を切る。
+  // Date に通すと、タイムゾーン付きの日時で一覧と月がずれうる）
+  const archiveMonths = Array.from(archiveCounts.keys()).filter((month) =>
+    isIndexableList(archiveCounts.get(month) ?? 0, 1)
   );
-  const archiveEntries: MetadataRoute.Sitemap = Array.from(archiveMonths).map((month) => ({
+  const archiveEntries: MetadataRoute.Sitemap = archiveMonths.map((month) => ({
     url: `${siteUrl}/archives/${month}/page/1`,
     lastModified: latestUpdated,
     changeFrequency: 'monthly' as const,
