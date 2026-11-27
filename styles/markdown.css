@@ -21,7 +21,8 @@
 /* font-family は body の Noto Sans JP を継承する */
 .znc {
   line-height: 1.9;
-  font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1.0625rem);
+  /* 下限を 1rem にして、スマホでもブラウザ標準の 16px を下回らないようにする（#605） */
+  font-size: clamp(1rem, 0.9rem + 0.25vw, 1.0625rem);
   /* 1行が長すぎると行末から次の行頭への視線移動が大きくなり読み疲れる。
      日本語で35〜45文字/行に収まる幅に制限する。 */
   max-width: 44rem;
