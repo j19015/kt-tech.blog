@@ -61,10 +61,11 @@ export const ShareButtons = ({ title, url }: ShareButtonsProps) => {
   };
 
   const shareLinks = {
-    x: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
+    x: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}&via=tech_koki`,
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
     line: `https://line.me/R/msg/text/?${encodedTitle}%20${encodedUrl}`,
-    hatena: `https://b.hatena.ne.jp/entry/${shareUrl}`,
+    // エントリーページではなく、ブックマーク追加画面へ直接送る
+    hatena: `https://b.hatena.ne.jp/add?mode=confirm&url=${encodedUrl}&title=${encodedTitle}`,
     linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
     bluesky: `https://bsky.app/intent/compose?text=${encodedTitle}%20${encodedUrl}`,
   };
