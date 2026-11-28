@@ -738,7 +738,7 @@ export default async function StaticDetailPage({
                 </a>
                 {/* 検索結果ページ（多くの場合0件）ではなく、感想を書ける投稿画面に送る */}
                 <a
-                  href={`https://x.com/intent/tweet?text=${encodeURIComponent(blog.title)}&url=${encodeURIComponent(`${process.env.SITE_URL}/blogs/${blogId}`)}`}
+                  href={`https://x.com/intent/tweet?text=${encodeURIComponent(blog.title)}&url=${encodeURIComponent(`${process.env.SITE_URL}/blogs/${blogId}`)}&via=tech_koki`}
                   target='_blank'
                   rel='noopener noreferrer'
                   className='inline-flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors'
